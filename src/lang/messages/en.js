@@ -1,5 +1,5 @@
 const enMessages = {
-  'menu.dashboards': 'Dashboards',
+  'menu.dashboards': 'Calificaciones',
   'menu.default': 'Default',
   'menu.visual': 'Visual',
   'menu.analytic': 'Analytic',
@@ -161,7 +161,7 @@ const enMessages = {
   'menu.tickets': 'Tickets',
   'menu.tickets-detail': 'Teicket Detail',
 
-  'menu.elearning': 'Elearning',
+  'menu.elearning': 'Mis secciones',
   'menu.school': 'School',
   'menu.courses': 'Courses',
   'menu.explore': 'Explore',

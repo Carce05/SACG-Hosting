@@ -23,7 +23,7 @@ const ElearningDashboard = () => {
           {/* Title Start */}
           <Col md="7">
             <h1 className="mb-0 pb-0 display-4">{title}</h1>
-            <BreadcrumbList items={breadcrumbs} />
+            {/* <BreadcrumbList items={breadcrumbs} /> */}
           </Col>
           {/* Title End */}
         </Row>

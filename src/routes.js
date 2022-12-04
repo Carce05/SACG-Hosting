@@ -40,7 +40,7 @@ const routesAndMenuItems = {
       path: DEFAULT_PATHS.APP,
       exact: true,
       redirect: true,
-      to: `${appRoot}/dashboards/elearning`,
+      to: `${appRoot}/login`,
     },
     {
       path: `${appRoot}/dashboards`,

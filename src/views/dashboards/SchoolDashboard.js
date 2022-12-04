@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Button, Badge } from 'react-bootstrap';
+import { Row, Col, Card, Button, Badge, Dropdown, Form } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import Rating from 'react-rating';
 import HtmlHead from 'components/html-head/HtmlHead';
@@ -9,7 +9,7 @@ import ScrollByCount from 'components/scroll-by-count/ScrollByCount';
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-react';
 
 const SchoolDashboard = () => {
-  const title = 'School Dashboard';
+  const title = 'Mis Secciones';
   const description = 'Elearning Portal School Dashboard Page';
 
   const breadcrumbs = [{ to: '', text: 'Home' }];
@@ -22,7 +22,7 @@ const SchoolDashboard = () => {
           {/* Title Start */}
           <Col md="7">
             <h1 className="mb-0 pb-0 display-4">{title}</h1>
-            <BreadcrumbList items={breadcrumbs} />
+            {/* <BreadcrumbList items={breadcrumbs} /> */}
           </Col>
           {/* Title End */}
         </Row>
@@ -31,13 +31,21 @@ const SchoolDashboard = () => {
 
       {/* Timetable Start */}
       <h2 className="small-title">Timetable</h2>
+      
       <Row className="row-cols-1 row-cols-lg-5 g-2 mb-5">
         <Col>
           <Card className="h-100">
             <Card.Body className="d-flex flex-column align-items-lg-center text-center text-md-start text-lg-center">
-              <p className="text-primary heading mb-4">Monday</p>
+              <p className="text-primary heading mb-4">Materia</p>
+
               <div className="d-flex flex-column flex-md-row flex-lg-column align-items-center mb-n4 justify-content-md-between justify-content-center text-center text-md-start text-lg-center">
-                <div className="mb-4">
+                <Form.Select aria-label="Default select example">
+                  <option>Selecciona una materia</option>
+                  <option value="1">Español</option>
+                  <option value="2">Ciencias</option>
+                  <option value="3">Matemáticas</option>
+                </Form.Select>
+                {/* <div className="mb-4">
                   <p className="mb-0">Geometry</p>
                   <p className="text-small text-muted mb-0">10:00 - 11:00</p>
                 </div>
@@ -56,7 +64,7 @@ const SchoolDashboard = () => {
                 <div className="mb-4">
                   <p className="mb-0">Art</p>
                   <p className="text-small text-muted mb-0">13:00 - 14:00</p>
-                </div>
+                </div> */}
               </div>
             </Card.Body>
           </Card>
@@ -64,9 +72,20 @@ const SchoolDashboard = () => {
         <Col>
           <Card className="h-100">
             <Card.Body className="d-flex flex-column align-items-lg-center text-center text-md-start text-lg-center">
-              <p className="text-primary heading mb-4">Tuesday</p>
+              <p className="text-primary heading mb-4">Sección</p>
               <div className="d-flex flex-column flex-md-row flex-lg-column align-items-center mb-n4 justify-content-md-between justify-content-center text-center text-md-start text-lg-center">
-                <div className="mb-4">
+                <Dropdown>
+                  <Dropdown.Toggle variant="success" id="dropdown-basic">
+                    Dropdown Button
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu>
+                    <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                    <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+                    <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+                {/* <div className="mb-4">
                   <p className="mb-0">Chemistry</p>
                   <p className="text-small text-muted mb-0">10:00 - 11:00</p>
                 </div>
@@ -85,12 +104,12 @@ const SchoolDashboard = () => {
                 <div className="mb-4">
                   <p className="mb-0">History</p>
                   <p className="text-small text-muted mb-0">13:00 - 14:00</p>
-                </div>
+                </div> */}
               </div>
             </Card.Body>
           </Card>
         </Col>
-        <Col>
+        {/* <Col>
           <Card className="h-100">
             <Card.Body className="d-flex flex-column align-items-lg-center text-center text-md-start text-lg-center">
               <p className="text-primary heading mb-4">Wednesday</p>
@@ -176,13 +195,13 @@ const SchoolDashboard = () => {
               </div>
             </Card.Body>
           </Card>
-        </Col>
+        </Col> */}
       </Row>
       {/* Timetable End */}
 
       <Row>
         {/* Exam Results Start */}
-        <Col lg="6" className="mb-5">
+        <Col lg="12" className="mb-5">
           <div className="d-flex justify-content-between">
             <h2 className="small-title">Exam Results</h2>
             <NavLink to="/quiz/result" className="btn btn-icon btn-icon-end btn-xs btn-background-alternate p-0 text-small">
@@ -329,7 +348,7 @@ const SchoolDashboard = () => {
         {/* Exam Results End */}
 
         {/* Homework Start */}
-        <Col lg="6" className="mb-5">
+        {/* <Col lg="6" className="mb-5">
           <h2 className="small-title">Homework</h2>
           <Card className="sh-40 h-lg-100-card">
             <Card.Body className="d-flex align-items-center justify-content-center h-100">
@@ -343,7 +362,7 @@ const SchoolDashboard = () => {
               </div>
             </Card.Body>
           </Card>
-        </Col>
+        </Col> */}
         {/* Homework End */}
       </Row>
 
