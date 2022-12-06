@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
 import * as Yup from 'yup';
@@ -6,21 +6,29 @@ import { useFormik } from 'formik';
 import LayoutFullpage from 'layout/LayoutFullpage';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import HtmlHead from 'components/html-head/HtmlHead';
+import Select from 'react-select';
 
-const ResetPassword = () => {
-  const title = 'Reset Password';
-  const description = 'Reset Password Page';
+const SelectorEstudiante = () => {
+  const [value, setValue] = useState();
+
+  const estudiantes = [
+    { value: '1-1828-0064', label: 'Erick Guillen (1-1828-0064)' },
+    { value: '1-1221-4354', label: 'Christopher Arce (1-1221-4354)' },
+  ];
+
+
+  const title = 'Seleccionar Estudiante';
+  const description = 'Página para seleccionar un estudiante a cargo';
+
   const validationSchema = Yup.object().shape({
-    password: Yup.string().min(6, 'Must be at least 6 chars!').required('Password is required'),
-    passwordConfirm: Yup.string()
-      .required('Password Confirm is required')
-      .oneOf([Yup.ref('password'), null], 'Must be same with password!'),
+    email: Yup.string().email().required('Se requiere la identificación'),
   });
-  const initialValues = { password: '', passwordConfirm: '' };
+  const initialValues = { email: '' };
   const onSubmit = (values) => console.log('submit form', values);
 
   const formik = useFormik({ initialValues, validationSchema, onSubmit });
   const { handleSubmit, handleChange, values, touched, errors } = formik;
+
   const leftSide = (
     <div className="min-h-100 d-flex align-items-center">
       <div className="w-100 w-lg-75 w-xxl-60">
@@ -53,26 +61,23 @@ const ResetPassword = () => {
           </NavLink>
         </div>
         <div className="mb-5">
-          <h2 className="cta-1 mb-0 text-primary">¿Olvidó su contraseña?</h2>
-          <h2 className="cta-1 text-primary">¡Restablézcala aquí!</h2>
-        </div>
-        <div className="mb-5">
-          <p className="h6">Por favor ingrese su número de cédula para enviarle un correo y restablecer la contraseña.</p>
+          <h2 className="cta-1 mb-0 text-primary">Seleccione su estudiante a cargo</h2>
+          <h2 className="cta-1 text-primary">para ingresar al sistema.</h2>
         </div>
         <div>
-          <form id="resetForm" className="tooltip-end-bottom" onSubmit={handleSubmit}>
-            <div className="mb-3 filled">
-              <CsLineIcons icon="lock-off" />
-              <Form.Control type="password" name="password" onChange={handleChange} value={values.password} placeholder="Contraseña" />
-              {errors.password && touched.password && <div className="d-block invalid-tooltip">{errors.password}</div>}
-            </div>
-            <div className="mb-3 filled">
-              <CsLineIcons icon="lock-on" />
-              <Form.Control type="password" name="passwordConfirm" onChange={handleChange} value={values.passwordConfirm} placeholder="Confirmar Contraseña" />
-              {errors.passwordConfirm && touched.passwordConfirm && <div className="d-block invalid-tooltip">{errors.passwordConfirm}</div>}
+          <form id="forgotPasswordForm" className="tooltip-end-bottom" onSubmit={handleSubmit}>
+            <div className="mb-3 filled form-group tooltip-end-top">
+              <CsLineIcons icon="user" />
+                  <Select classNamePrefix="react-select" 
+                    options={estudiantes} 
+                    value={value} 
+                    onChange={setValue} 
+                    placeholder="Seleccione" 
+                  />
+              {errors.email && touched.email && <div className="d-block invalid-tooltip">{errors.email}</div>}
             </div>
             <Button size="lg" type="submit">
-              Reestablecer
+              Ingresar
             </Button>
           </form>
         </div>
@@ -88,4 +93,4 @@ const ResetPassword = () => {
   );
 };
 
-export default ResetPassword;
+export default SelectorEstudiante;

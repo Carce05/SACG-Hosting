@@ -91,7 +91,7 @@ const NavUserMenuContent = () => (
             </a>
           </li>
           <li>
-            <a href="#/!">
+            <a href="/login">
               <CsLineIcons icon="logout" className="me-2" size="17" /> <span className="align-middle">Logout</span>
             </a>
           </li>

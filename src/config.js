@@ -17,6 +17,7 @@ export const DEFAULT_PATHS = {
   REGISTER: '/register',
   FORGOT_PASSWORD: '/forgot-password',
   RESET_PASSWORD: '/reset-password',
+  SELECTOR_ESTUDIANTE: '/selector-estudiante',
   USER_WELCOME: '/dashboards/default',
   NOTFOUND: '/page-not-found',
   UNAUTHORIZED: '/unauthorized',

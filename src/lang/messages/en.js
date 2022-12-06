@@ -1,5 +1,5 @@
 const enMessages = {
-  'menu.dashboards': 'Calificaciones',
+  'menu.dashboards': 'Pantallas',
   'menu.default': 'Default',
   'menu.visual': 'Visual',
   'menu.analytic': 'Analytic',
@@ -161,7 +161,13 @@ const enMessages = {
   'menu.tickets': 'Tickets',
   'menu.tickets-detail': 'Teicket Detail',
 
-  'menu.elearning': 'Mis secciones',
+  'menu.secciones' : 'Mis Secciones',
+  'menu.usuarios' : 'Usuarios',
+  'menu.avisos' : 'Avisos',
+  'menu.calificacion' : 'Calificacion',
+  'menu.estudiantes' : 'Estudiantes Por Matricular',
+  'menu.elearning': 'Inicio',
+  'menu.perfil': 'Perfil',
   'menu.school': 'School',
   'menu.courses': 'Courses',
   'menu.explore': 'Explore',

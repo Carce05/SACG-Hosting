@@ -51,28 +51,28 @@ const ModalAddEdit = ({ tableInstance }) => {
   return (
     <Modal className=" modal-right fade" show={isOpenAddEditModal} onHide={() => setIsOpenAddEditModal(false)}>
       <Modal.Header>
-        <Modal.Title>{selectedFlatRows.length === 1 ? 'Edit' : 'Add'}</Modal.Title>
+        <Modal.Title>{selectedFlatRows.length === 1 ? 'Editar' : 'Agregar'}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
           <div className="mb-3">
-            <Form.Label>Name</Form.Label>
+            <Form.Label>Descripción</Form.Label>
             <Form.Control type="text" defaultValue={selectedItem ? selectedItem.name : ''} onChange={changeName} />
           </div>
-          <div className="mb-3">
+          {/* <div className="mb-3">
             <Form.Label>Sales</Form.Label>
             <Form.Control type="number" defaultValue={selectedItem ? selectedItem.sales : ''} onChange={changeSales} />
           </div>
           <div className="mb-3">
             <Form.Label>Stock</Form.Label>
             <Form.Control type="number" defaultValue={selectedItem ? selectedItem.stock : ''} onChange={changeStock} />
-          </div>
+          </div> */}
 
           <div className="mb-3">
-            <Form.Label>Category</Form.Label>
+            <Form.Label>Estado</Form.Label>
             <Form.Check
               type="radio"
-              label="Whole Wheat"
+              label="Activo"
               value="Whole Wheat"
               id="categoryRadio1"
               name="categoryRadio"
@@ -81,14 +81,14 @@ const ModalAddEdit = ({ tableInstance }) => {
             />
             <Form.Check
               type="radio"
-              label="Sourdough"
+              label="Inactivo"
               value="Sourdough"
               id="categoryRadio2"
               name="categoryRadio"
               checked={selectedItem && selectedItem.category === 'Sourdough'}
               onChange={changeCategory}
             />
-            <Form.Check
+            {/* <Form.Check
               type="radio"
               label="Multigrain"
               value="Multigrain"
@@ -96,10 +96,10 @@ const ModalAddEdit = ({ tableInstance }) => {
               name="categoryRadio"
               checked={selectedItem && selectedItem.category === 'Multigrain'}
               onChange={changeCategory}
-            />
+            /> */}
           </div>
 
-          <div className="mb-3">
+          {/* <div className="mb-3">
             <Form.Label>Tag</Form.Label>
             <Form.Check
               type="radio"
@@ -128,15 +128,15 @@ const ModalAddEdit = ({ tableInstance }) => {
               checked={selectedItem && selectedItem.tag === 'Done'}
               onChange={changeTag}
             />
-          </div>
+          </div> */}
         </Form>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="outline-primary" onClick={() => setIsOpenAddEditModal(false)}>
-          Cancel
+          Cancelar
         </Button>
         <Button variant="primary" onClick={saveItem}>
-          {selectedFlatRows.length === 1 ? 'Done' : 'Add'}
+          {selectedFlatRows.length === 1 ? 'Hecho' : 'Agregar'}
         </Button>
       </Modal.Footer>
     </Modal>

@@ -4,7 +4,7 @@ import { DEFAULT_PATHS } from 'config.js';
 const NotFound = lazy(() => import('views/default/NotFound'));
 const Login = lazy(() => import('views/default/Login'));
 const ForgotPassword = lazy(() => import('views/default/ForgotPassword'));
-const ProfileSettings = lazy(() => import('views/default/ProfileSettings'));
+const SelectorEstudiante = lazy(() => import('views/default/SelectorEstudiante'));
 const Register = lazy(() => import('views/default/Register'));
 const ResetPassword = lazy(() => import('views/default/ResetPassword'));
 const Unauthorized = lazy(() => import('views/default/Unauthorized'));
@@ -24,8 +24,8 @@ const defaultRoutes = [
   { path: DEFAULT_PATHS.LOGIN, exact: true, component: Login },
   { path: DEFAULT_PATHS.REGISTER, exact: true, component: Register },
   { path: DEFAULT_PATHS.FORGOT_PASSWORD, exact: true, component: ForgotPassword },
-  { path: DEFAULT_PATHS.PROFILE_SETTINGS, exact: true, component: ProfileSettings },
   { path: DEFAULT_PATHS.RESET_PASSWORD, exact: true, component: ResetPassword },
+  { path: DEFAULT_PATHS.SELECTOR_ESTUDIANTE, exact: true, component: SelectorEstudiante },
   { path: DEFAULT_PATHS.UNAUTHORIZED, exact: true, component: Unauthorized },
   { path: DEFAULT_PATHS.INVALID_ACCESS, exact: true, component: InvalidAccess },
   { path: DEFAULT_PATHS.APP, component: App },

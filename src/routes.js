@@ -7,6 +7,10 @@ const dashboards = {
   elearning: lazy(() => import('views/dashboards/ElearningDashboard')),
   school: lazy(() => import('views/dashboards/SchoolDashboard')),
   usuarios: lazy(() => import('views/dashboards/Usuarios')),
+  estudiantes: lazy(() => import('views/dashboards/Estudiantes')),
+  perfil: lazy(() => import('views/dashboards/ProfileSettings')),
+  avisos: lazy(() => import('views/dashboards/Avisos')),
+  calificacion: lazy(() => import('views/dashboards/Calificacion')),
 };
 const courses = {
   explore: lazy(() => import('views/courses/CoursesExplore')),
@@ -52,8 +56,12 @@ const routesAndMenuItems = {
       to: `${appRoot}/dashboards/elearning`,
       subs: [
         { path: '/elearning', label: 'menu.elearning', component: dashboards.elearning },
-        { path: '/school', label: 'Mis Secciones', component: dashboards.school },
+        { path: '/school', label: 'menu.secciones', component: dashboards.school },
         { path: '/usuarios', label: 'menu.usuarios', component: dashboards.usuarios },
+        { path: '/estudiantes', label: 'menu.estudiantes', component: dashboards.estudiantes },
+        { path: '/perfil', label: 'menu.perfil', component: dashboards.perfil },
+        { path: '/avisos', label: 'menu.avisos', component: dashboards.avisos },
+        { path: '/calificacion', label: 'menu.calificacion', component: dashboards.calificacion },
       ],
     },
     {

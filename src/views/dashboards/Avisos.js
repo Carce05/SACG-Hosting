@@ -21,52 +21,38 @@ import ModalAddEdit from 'views/interface/plugins/datatables/EditableRows/compon
 import TablePagination from 'views/interface/plugins/datatables/EditableRows/components/TablePagination';
 
 const dummyData = [
-  { id: 1, name: 'Basler Brot', sales: 21, stock: 392310440, category: 'Sourdough@gmail.com', tag: 'New' },
-  { id: 2, name: 'Bauernbrot', sales: 63, stock: 129234013, category: 'Multigrain@gmail.com', tag: 'Done' },
-  { id: 3, name: 'Kommissbrot', sales: 23, stock: 561017657, category: 'Whole Wheat@gmail.com', tag: '' },
-  { id: 4, name: 'Lye Roll', sales: 97, stock: 127580420, category: 'Sourdough@gmail.com', tag: '' },
-  { id: 5, name: 'Panettone', sales: 56, stock: 789313762, category: 'Sourdough@gmail.com', tag: 'Done' },
-  { id: 6, name: 'Saffron Bun', sales: 98, stock: 129074548, category: 'Whole Wheat@gmail.com', tag: '' },
-  { id: 7, name: 'Ruisreikäleipä', sales: 45, stock: 904716276, category: 'Whole Wheat@gmail.com', tag: '' },
-  { id: 8, name: 'Rúgbrauð', sales: 80, stock: 797307649, category: 'Whole Wheat@gmail.com', tag: '' },
-  { id: 9, name: 'Yeast Karavai', sales: 34, stock: 680078801, category: 'Multigrain@gmail.com', tag: '' },
-  { id: 10, name: 'Brioche', sales: 33, stock: 378937746, category: 'Sourdough@gmail.com', tag: '' },
-  { id: 11, name: 'Pullman Loaf', sales: 45, stock: 461638720, category: 'Multigrain@gmail.com', tag: '' },
-  { id: 12, name: 'Soda Bread', sales: 11, stock: 348536477, category: 'Whole Wheat@gmail.com', tag: '' },
-  { id: 13, name: 'Barmbrack', sales: 85, stock: 591276986, category: 'Sourdough@gmail.com', tag: '' },
-  { id: 14, name: 'Buccellato di Lucca', sales: 12, stock: 980925057, category: 'Multigrain@gmail.com', tag: '' },
-  { id: 15, name: 'Toast Bread', sales: 21, stock: 220171422, category: 'Multigrain@gmail.com', tag: '' },
-  { id: 16, name: 'Cheesymite Scroll', sales: 45, stock: 545847219, category: 'Sourdough@gmail.com', tag: '' },
-  { id: 17, name: 'Baguette', sales: 45, stock: 553121944, category: 'Sourdough@gmail.com', tag: '' },
-  { id: 18, name: 'Guernsey Gâche', sales: 19, stock: 371226430, category: 'Multigrain@gmail.com', tag: '' },
-  { id: 19, name: 'Bazlama', sales: 85, stock: 384036275, category: 'Whole Wheat@gmail.com', tag: '' },
-  { id: 20, name: 'Bolillo', sales: 33, stock: 484876903, category: 'Whole Wheat@gmail.com', tag: '' },
+  { id: 1, name: 'Basler Brot', sales: 213, stock: 392310440, category: 'Sourdough', tag: 'Activo' },
+  { id: 2, name: 'Bauernbrot', sales: 633, stock: 129234013, category: 'Multigrain', tag: 'Inactivo' },
+  { id: 3, name: 'Kommissbrot', sales: 2321, stock: 561017657, category: 'Whole Wheat', tag: '' },
+  { id: 4, name: 'Lye Roll', sales: 973, stock: 127580420, category: 'Sourdough', tag: '' },
+  { id: 5, name: 'Panettone', sales: 563, stock: 789313762, category: 'Sourdough', tag: 'Activo' },
+  { id: 6, name: 'Saffron Bun', sales: 98, stock: 129074548, category: 'Whole Wheat', tag: '' },
+  { id: 7, name: 'Ruisreikäleipä', sales: 459, stock: 904716276, category: 'Whole Wheat', tag: '' },
+  { id: 8, name: 'Rúgbrauð', sales: 802, stock: 797307649, category: 'Whole Wheat', tag: '' },
+  { id: 9, name: 'Yeast Karavai', sales: 345, stock: 680078801, category: 'Multigrain', tag: '' },
+  { id: 10, name: 'Brioche', sales: 334, stock: 378937746, category: 'Sourdough', tag: '' },
+  { id: 11, name: 'Pullman Loaf', sales: 456, stock: 461638720, category: 'Multigrain', tag: 'Inactivo' },
+  { id: 12, name: 'Soda Bread', sales: 1152, stock: 348536477, category: 'Whole Wheat', tag: '' },
+  { id: 13, name: 'Barmbrack', sales: 854, stock: 591276986, category: 'Sourdough', tag: '' },
+  { id: 14, name: 'Buccellato di Lucca', sales: 1298, stock: 980925057, category: 'Multigrain', tag: '' },
+  { id: 15, name: 'Toast Bread', sales: 2156, stock: 220171422, category: 'Multigrain', tag: '' },
+  { id: 16, name: 'Cheesymite Scroll', sales: 452, stock: 545847219, category: 'Sourdough', tag: '' },
+  { id: 17, name: 'Baguette', sales: 456, stock: 553121944, category: 'Sourdough', tag: '' },
+  { id: 18, name: 'Guernsey Gâche', sales: 1958, stock: 371226430, category: 'Multigrain', tag: '' },
+  { id: 19, name: 'Bazlama', sales: 858, stock: 384036275, category: 'Whole Wheat', tag: '' },
+  { id: 20, name: 'Bolillo', sales: 333, stock: 484876903, category: 'Whole Wheat', tag: '' },
 ];
 
 const SchoolDashboard = () => {
-  const [value, setValue] = useState();
 
-  const materias = [
-    { value: 'Español', label: 'Español' },
-    { value: 'Matemática', label: 'Matemática' },
-    { value: 'Ciencias', label: 'Ciencias' },
-  ];
-
-  const secciones = [
-    { value: '7-3', label: '7-3' },
-    { value: '11-3', label: '11-3' },
-    { value: '9-1', label: '9-1' },
-  ];
-
-
-  const title = 'Mis Secciones';
+  const title = 'Avisos';
   const description = 'Elearning Portal School Dashboard Page';
 
   const columns = React.useMemo(() => {
     return [
-      { Header: 'Cédula', accessor: 'stock', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
+      { Header: 'ID', accessor: 'id', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       {
-        Header: 'Nombre',
+        Header: 'Descripción',
         accessor: 'name',
         sortable: true,
         headerClassName: 'text-muted text-small text-uppercase w-30',
@@ -84,11 +70,8 @@ const SchoolDashboard = () => {
           );
         },
       },    
-      { Header: 'Nota', accessor: 'sales', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
-      { Header: 'Correo', accessor: 'category', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-20' },
-      /*
       {
-        Header: 'Tag',
+        Header: 'Estado',
         accessor: 'tag',
         sortable: true,
         headerClassName: 'text-muted text-small text-uppercase w-10',
@@ -96,14 +79,13 @@ const SchoolDashboard = () => {
           return <Badge bg="outline-primary">{cell.value}</Badge>;
         },
       },
-      */
       {
         Header: '',
         id: 'action',
         headerClassName: 'empty w-10',
         Cell: ({ row }) => {
           const { checked, onChange } = row.getToggleRowSelectedProps();
-          return <Button variant="outline-primary">Nota</Button>;
+          return <Form.Check className="form-check float-end mt-1" type="checkbox" checked={checked} onChange={onChange} />;
         },
       },
     ];
@@ -141,170 +123,6 @@ const SchoolDashboard = () => {
       {/* Timetable Start */}
       {/* <h2 className="small-title">Timetable</h2> */}
       
-      <Row className="row-cols-1 row-cols-lg-5 g-2 mb-5">
-        <Col>
-          <Card className="h-100">
-            <Card.Body className="mb-5">
-              <p className="text-primary heading mb-8">Materia</p>
-              <div className="d-flex flex-column flex-md-row flex-lg-column align-items-center mb-n5 justify-content-md-between justify-content-center text-center text-md-start text-lg-center">
-                <Col xs="12" lg="12">
-                  <Select classNamePrefix="react-select" 
-                    options={materias} 
-                    value={value} 
-                    onChange={setValue} 
-                    placeholder="Seleccione" 
-                  />
-                </Col>
-               
-                {/* <div className="mb-4">
-                  <p className="mb-0">Geometry</p>
-                  <p className="text-small text-muted mb-0">10:00 - 11:00</p>
-                </div>
-                <div className="mb-4">
-                  <p className="mb-0">Biology</p>
-                  <p className="text-small text-muted mb-0">11:00 - 12:00</p>
-                </div>
-                <div className="mb-4">
-                  <p className="mb-0 text-muted">Lunch</p>
-                  <p className="text-small text-muted mb-0">12:00 - 13:00</p>
-                </div>
-                <div className="mb-4">
-                  <p className="mb-0">Language</p>
-                  <p className="text-small text-muted mb-0">13:00 - 14:00</p>
-                </div>
-                <div className="mb-4">
-                  <p className="mb-0">Art</p>
-                  <p className="text-small text-muted mb-0">13:00 - 14:00</p>
-                </div> */}
-              </div>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col>
-          <Card className="h-100">
-          <Card.Body className="mb-5">
-              <p className="text-primary heading mb-8">Sección</p>
-              <div className="d-flex flex-column flex-md-row flex-lg-column align-items-center mb-n5 justify-content-md-between justify-content-center text-center text-md-start text-lg-center">
-                <Col xs="12" lg="12">
-                  <Select classNamePrefix="react-select" 
-                    options={secciones} 
-                    value={value} 
-                    onChange={setValue} 
-                    placeholder="Seleccione" 
-                  />
-                </Col>
-                {/* <div className="mb-4">
-                  <p className="mb-0">Chemistry</p>
-                  <p className="text-small text-muted mb-0">10:00 - 11:00</p>
-                </div>
-                <div className="mb-4">
-                  <p className="mb-0">Chemistry</p>
-                  <p className="text-small text-muted mb-0">11:00 - 12:00</p>
-                </div>
-                <div className="mb-4">
-                  <p className="mb-0 text-muted">Lunch</p>
-                  <p className="text-small text-muted mb-0">12:00 - 13:00</p>
-                </div>
-                <div className="mb-4">
-                  <p className="mb-0">Physics</p>
-                  <p className="text-small text-muted mb-0">13:00 - 14:00</p>
-                </div>
-                <div className="mb-4">
-                  <p className="mb-0">History</p>
-                  <p className="text-small text-muted mb-0">13:00 - 14:00</p>
-                </div> */}
-              </div>
-            </Card.Body>
-          </Card>
-        </Col>
-        {/* <Col>
-          <Card className="h-100">
-            <Card.Body className="d-flex flex-column align-items-lg-center text-center text-md-start text-lg-center">
-              <p className="text-primary heading mb-4">Wednesday</p>
-              <div className="d-flex flex-column flex-md-row flex-lg-column align-items-center mb-n4 justify-content-md-between justify-content-center text-center text-md-start text-lg-center">
-                <div className="mb-4">
-                  <p className="mb-0">Biology</p>
-                  <p className="text-small text-muted mb-0">10:00 - 11:00</p>
-                </div>
-                <div className="mb-4">
-                  <p className="mb-0">Physics</p>
-                  <p className="text-small text-muted mb-0">11:00 - 12:00</p>
-                </div>
-                <div className="mb-4">
-                  <p className="mb-0 text-muted">Lunch</p>
-                  <p className="text-small text-muted mb-0">12:00 - 13:00</p>
-                </div>
-                <div className="mb-4">
-                  <p className="mb-0">Gymnastics</p>
-                  <p className="text-small text-muted mb-0">13:00 - 14:00</p>
-                </div>
-                <div className="mb-4">
-                  <p className="mb-0">Gymnastics</p>
-                  <p className="text-small text-muted mb-0">13:00 - 14:00</p>
-                </div>
-              </div>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col>
-          <Card className="h-100">
-            <Card.Body className="d-flex flex-column align-items-lg-center text-center text-md-start text-lg-center">
-              <p className="text-primary heading mb-4">Thursday</p>
-              <div className="d-flex flex-column flex-md-row flex-lg-column align-items-center mb-n4 justify-content-md-between justify-content-center text-center text-md-start text-lg-center">
-                <div className="mb-4">
-                  <p className="mb-0">Algebra</p>
-                  <p className="text-small text-muted mb-0">10:00 - 11:00</p>
-                </div>
-                <div className="mb-4">
-                  <p className="mb-0">Algebra</p>
-                  <p className="text-small text-muted mb-0">11:00 - 12:00</p>
-                </div>
-                <div className="mb-4">
-                  <p className="mb-0 text-muted">Lunch</p>
-                  <p className="text-small text-muted mb-0">12:00 - 13:00</p>
-                </div>
-                <div className="mb-4">
-                  <p className="mb-0">Geometry</p>
-                  <p className="text-small text-muted mb-0">13:00 - 14:00</p>
-                </div>
-                <div className="mb-4">
-                  <p className="mb-0">Geometry</p>
-                  <p className="text-small text-muted mb-0">13:00 - 14:00</p>
-                </div>
-              </div>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col>
-          <Card className="h-100">
-            <Card.Body className="d-flex flex-column align-items-lg-center text-center text-md-start text-lg-center">
-              <p className="text-primary heading mb-4">Friday</p>
-              <div className="d-flex flex-column flex-md-row flex-lg-column align-items-center mb-n4 justify-content-md-between justify-content-center text-center text-md-start text-lg-center">
-                <div className="mb-4">
-                  <p className="mb-0">Chemistry</p>
-                  <p className="text-small text-muted mb-0">10:00 - 11:00</p>
-                </div>
-                <div className="mb-4">
-                  <p className="mb-0">Physics</p>
-                  <p className="text-small text-muted mb-0">11:00 - 12:00</p>
-                </div>
-                <div className="mb-4">
-                  <p className="mb-0 text-muted">Lunch</p>
-                  <p className="text-small text-muted mb-0">12:00 - 13:00</p>
-                </div>
-                <div className="mb-4">
-                  <p className="mb-0">Biology</p>
-                  <p className="text-small text-muted mb-0">13:00 - 14:00</p>
-                </div>
-                <div className="mb-4">
-                  <p className="mb-0">History</p>
-                  <p className="text-small text-muted mb-0">13:00 - 14:00</p>
-                </div>
-              </div>
-            </Card.Body>
-          </Card>
-        </Col> */}
-      </Row>
       {/* Timetable End */}
 
       <Row>
@@ -475,12 +293,6 @@ const SchoolDashboard = () => {
       </Row>
       <Row>
         <Col>
-          <div className="d-flex justify-content-between">
-              <h2 className="small-title">Estudiantes</h2>
-              <NavLink to="/quiz/result" className="btn btn-icon btn-icon-end btn-xs btn-background-alternate p-0 text-small">
-                <span className="align-bottom">Ver Todos</span> <CsLineIcons icon="chevron-right" className="align-middle" size="12" />
-              </NavLink>
-          </div>
           <div>
             <Row className="mb-3">
               <Col sm="12" md="5" lg="3" xxl="2">
