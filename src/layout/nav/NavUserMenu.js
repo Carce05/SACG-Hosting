@@ -5,6 +5,7 @@ import { Col, Dropdown, Row } from 'react-bootstrap';
 import { MENU_PLACEMENT } from 'constants.js';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import { layoutShowingNavMenu } from 'layout/layoutSlice';
+import { NavLink } from 'react-router-dom';
 
 const NavUserMenuContent = () => (
   <div>
@@ -15,7 +16,10 @@ const NavUserMenuContent = () => (
       <Col xs="6" className="ps-1 pe-1">
         <ul className="list-unstyled">
           <li>
-            <a href="#/!">User Info</a>
+          <NavLink to="/profile-settings">
+                Restablecer
+              </NavLink>
+            {/* <a href="/">User Info</a> */}
           </li>
           <li>
             <a href="#/!">Preferences</a>
@@ -87,7 +91,7 @@ const NavUserMenuContent = () => (
             </a>
           </li>
           <li>
-            <a href="#/!">
+            <a href="/login">
               <CsLineIcons icon="logout" className="me-2" size="17" /> <span className="align-middle">Logout</span>
             </a>
           </li>

@@ -1,5 +1,4 @@
-import React from 'react';
-import { Row, Col, Card, Button, Badge } from 'react-bootstrap';
+import { Row, Col, Card, Button, Badge, Dropdown, Form } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import Rating from 'react-rating';
 import HtmlHead from 'components/html-head/HtmlHead';
@@ -7,10 +6,120 @@ import BreadcrumbList from 'components/breadcrumb-list/BreadcrumbList';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import ScrollByCount from 'components/scroll-by-count/ScrollByCount';
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-react';
+import React, { useState } from 'react';
+import Select from 'react-select';
+import { useTable, useGlobalFilter, useSortBy, usePagination, useRowSelect, useRowState } from 'react-table';
+import Table from 'views/interface/plugins/datatables/EditableRows/components/Table';
+import ButtonsCheckAll from 'views/interface/plugins/datatables/EditableRows/components/ButtonsCheckAll';
+import ButtonsAddNew from 'views/interface/plugins/datatables/EditableRows/components/ButtonsAddNew';
+import ControlsPageSize from 'views/interface/plugins/datatables/EditableRows/components/ControlsPageSize';
+import ControlsAdd from 'views/interface/plugins/datatables/EditableRows/components/ControlsAdd';
+import ControlsEdit from 'views/interface/plugins/datatables/EditableRows/components/ControlsEdit';
+import ControlsDelete from 'views/interface/plugins/datatables/EditableRows/components/ControlsDelete';
+import ControlsSearch from 'views/interface/plugins/datatables/EditableRows/components/ControlsSearch';
+import ModalAddEdit from 'views/interface/plugins/datatables/EditableRows/components/ModalAddEdit';
+import TablePagination from 'views/interface/plugins/datatables/EditableRows/components/TablePagination';
+
+const dummyData = [
+  { id: 1, name: 'Basler Brot', sales: 21, stock: 392310440, category: 'Sourdough@gmail.com', tag: 'New' },
+  { id: 2, name: 'Bauernbrot', sales: 63, stock: 129234013, category: 'Multigrain@gmail.com', tag: 'Done' },
+  { id: 3, name: 'Kommissbrot', sales: 23, stock: 561017657, category: 'Whole Wheat@gmail.com', tag: '' },
+  { id: 4, name: 'Lye Roll', sales: 97, stock: 127580420, category: 'Sourdough@gmail.com', tag: '' },
+  { id: 5, name: 'Panettone', sales: 56, stock: 789313762, category: 'Sourdough@gmail.com', tag: 'Done' },
+  { id: 6, name: 'Saffron Bun', sales: 98, stock: 129074548, category: 'Whole Wheat@gmail.com', tag: '' },
+  { id: 7, name: 'Ruisreikäleipä', sales: 45, stock: 904716276, category: 'Whole Wheat@gmail.com', tag: '' },
+  { id: 8, name: 'Rúgbrauð', sales: 80, stock: 797307649, category: 'Whole Wheat@gmail.com', tag: '' },
+  { id: 9, name: 'Yeast Karavai', sales: 34, stock: 680078801, category: 'Multigrain@gmail.com', tag: '' },
+  { id: 10, name: 'Brioche', sales: 33, stock: 378937746, category: 'Sourdough@gmail.com', tag: '' },
+  { id: 11, name: 'Pullman Loaf', sales: 45, stock: 461638720, category: 'Multigrain@gmail.com', tag: '' },
+  { id: 12, name: 'Soda Bread', sales: 11, stock: 348536477, category: 'Whole Wheat@gmail.com', tag: '' },
+  { id: 13, name: 'Barmbrack', sales: 85, stock: 591276986, category: 'Sourdough@gmail.com', tag: '' },
+  { id: 14, name: 'Buccellato di Lucca', sales: 12, stock: 980925057, category: 'Multigrain@gmail.com', tag: '' },
+  { id: 15, name: 'Toast Bread', sales: 21, stock: 220171422, category: 'Multigrain@gmail.com', tag: '' },
+  { id: 16, name: 'Cheesymite Scroll', sales: 45, stock: 545847219, category: 'Sourdough@gmail.com', tag: '' },
+  { id: 17, name: 'Baguette', sales: 45, stock: 553121944, category: 'Sourdough@gmail.com', tag: '' },
+  { id: 18, name: 'Guernsey Gâche', sales: 19, stock: 371226430, category: 'Multigrain@gmail.com', tag: '' },
+  { id: 19, name: 'Bazlama', sales: 85, stock: 384036275, category: 'Whole Wheat@gmail.com', tag: '' },
+  { id: 20, name: 'Bolillo', sales: 33, stock: 484876903, category: 'Whole Wheat@gmail.com', tag: '' },
+];
 
 const SchoolDashboard = () => {
-  const title = 'School Dashboard';
+  const [value, setValue] = useState();
+
+  const materias = [
+    { value: 'Español', label: 'Español' },
+    { value: 'Matemática', label: 'Matemática' },
+    { value: 'Ciencias', label: 'Ciencias' },
+  ];
+
+  const secciones = [
+    { value: '7-3', label: '7-3' },
+    { value: '11-3', label: '11-3' },
+    { value: '9-1', label: '9-1' },
+  ];
+
+
+  const title = 'Mis Secciones';
   const description = 'Elearning Portal School Dashboard Page';
+
+  const columns = React.useMemo(() => {
+    return [
+      { Header: 'Cédula', accessor: 'stock', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
+      {
+        Header: 'Nombre',
+        accessor: 'name',
+        sortable: true,
+        headerClassName: 'text-muted text-small text-uppercase w-30',
+        Cell: ({ cell }) => {
+          return (
+            <a
+              className="list-item-heading body"
+              href="#!"
+              onClick={(e) => {
+                e.preventDefault();
+              }}
+            >
+              {cell.value}
+            </a>
+          );
+        },
+      },    
+      { Header: 'Nota', accessor: 'sales', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
+      { Header: 'Correo', accessor: 'category', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-20' },
+      /*
+      {
+        Header: 'Tag',
+        accessor: 'tag',
+        sortable: true,
+        headerClassName: 'text-muted text-small text-uppercase w-10',
+        Cell: ({ cell }) => {
+          return <Badge bg="outline-primary">{cell.value}</Badge>;
+        },
+      },
+      */
+      {
+        Header: '',
+        id: 'action',
+        headerClassName: 'empty w-10',
+        Cell: ({ row }) => {
+          const { checked, onChange } = row.getToggleRowSelectedProps();
+          return <Button variant="outline-primary">Nota</Button>;
+        },
+      },
+    ];
+  }, []);
+
+  const [data, setData] = React.useState(dummyData);
+  const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
+
+  const tableInstance = useTable(
+    { columns, data, setData, isOpenAddEditModal, setIsOpenAddEditModal, initialState: { pageIndex: 0 } },
+    useGlobalFilter,
+    useSortBy,
+    usePagination,
+    useRowSelect,
+    useRowState
+  );
 
   const breadcrumbs = [{ to: '', text: 'Home' }];
   return (
@@ -22,7 +131,7 @@ const SchoolDashboard = () => {
           {/* Title Start */}
           <Col md="7">
             <h1 className="mb-0 pb-0 display-4">{title}</h1>
-            <BreadcrumbList items={breadcrumbs} />
+            {/* <BreadcrumbList items={breadcrumbs} /> */}
           </Col>
           {/* Title End */}
         </Row>
@@ -30,14 +139,24 @@ const SchoolDashboard = () => {
       {/* Title and Top Buttons End */}
 
       {/* Timetable Start */}
-      <h2 className="small-title">Timetable</h2>
+      {/* <h2 className="small-title">Timetable</h2> */}
+      
       <Row className="row-cols-1 row-cols-lg-5 g-2 mb-5">
         <Col>
           <Card className="h-100">
-            <Card.Body className="d-flex flex-column align-items-lg-center text-center text-md-start text-lg-center">
-              <p className="text-primary heading mb-4">Monday</p>
-              <div className="d-flex flex-column flex-md-row flex-lg-column align-items-center mb-n4 justify-content-md-between justify-content-center text-center text-md-start text-lg-center">
-                <div className="mb-4">
+            <Card.Body className="mb-5">
+              <p className="text-primary heading mb-8">Materia</p>
+              <div className="d-flex flex-column flex-md-row flex-lg-column align-items-center mb-n5 justify-content-md-between justify-content-center text-center text-md-start text-lg-center">
+                <Col xs="12" lg="12">
+                  <Select classNamePrefix="react-select" 
+                    options={materias} 
+                    value={value} 
+                    onChange={setValue} 
+                    placeholder="Seleccione" 
+                  />
+                </Col>
+               
+                {/* <div className="mb-4">
                   <p className="mb-0">Geometry</p>
                   <p className="text-small text-muted mb-0">10:00 - 11:00</p>
                 </div>
@@ -56,17 +175,25 @@ const SchoolDashboard = () => {
                 <div className="mb-4">
                   <p className="mb-0">Art</p>
                   <p className="text-small text-muted mb-0">13:00 - 14:00</p>
-                </div>
+                </div> */}
               </div>
             </Card.Body>
           </Card>
         </Col>
         <Col>
           <Card className="h-100">
-            <Card.Body className="d-flex flex-column align-items-lg-center text-center text-md-start text-lg-center">
-              <p className="text-primary heading mb-4">Tuesday</p>
-              <div className="d-flex flex-column flex-md-row flex-lg-column align-items-center mb-n4 justify-content-md-between justify-content-center text-center text-md-start text-lg-center">
-                <div className="mb-4">
+          <Card.Body className="mb-5">
+              <p className="text-primary heading mb-8">Sección</p>
+              <div className="d-flex flex-column flex-md-row flex-lg-column align-items-center mb-n5 justify-content-md-between justify-content-center text-center text-md-start text-lg-center">
+                <Col xs="12" lg="12">
+                  <Select classNamePrefix="react-select" 
+                    options={secciones} 
+                    value={value} 
+                    onChange={setValue} 
+                    placeholder="Seleccione" 
+                  />
+                </Col>
+                {/* <div className="mb-4">
                   <p className="mb-0">Chemistry</p>
                   <p className="text-small text-muted mb-0">10:00 - 11:00</p>
                 </div>
@@ -85,12 +212,12 @@ const SchoolDashboard = () => {
                 <div className="mb-4">
                   <p className="mb-0">History</p>
                   <p className="text-small text-muted mb-0">13:00 - 14:00</p>
-                </div>
+                </div> */}
               </div>
             </Card.Body>
           </Card>
         </Col>
-        <Col>
+        {/* <Col>
           <Card className="h-100">
             <Card.Body className="d-flex flex-column align-items-lg-center text-center text-md-start text-lg-center">
               <p className="text-primary heading mb-4">Wednesday</p>
@@ -176,15 +303,15 @@ const SchoolDashboard = () => {
               </div>
             </Card.Body>
           </Card>
-        </Col>
+        </Col> */}
       </Row>
       {/* Timetable End */}
 
       <Row>
         {/* Exam Results Start */}
-        <Col lg="6" className="mb-5">
+        {/* <Col lg="12" className="mb-5">
           <div className="d-flex justify-content-between">
-            <h2 className="small-title">Exam Results</h2>
+            <h2 className="small-title">Estudiantes</h2>
             <NavLink to="/quiz/result" className="btn btn-icon btn-icon-end btn-xs btn-background-alternate p-0 text-small">
               <span className="align-bottom">View All</span> <CsLineIcons icon="chevron-right" className="align-middle" size="12" />
             </NavLink>
@@ -196,11 +323,11 @@ const SchoolDashboard = () => {
                   <Row className="g-0 h-100 align-content-center">
                     <Col md="3" className="d-flex align-items-center mb-2 mb-md-0">
                       <NavLink to="/quiz/result" className="body-link text-truncate stretched-link">
-                        Chemistry
+                        1-1828-0064
                       </NavLink>
                     </Col>
                     <Col xs="5" md="4" className="d-flex align-items-center text-medium justify-content-start justify-content-md-center text-muted">
-                      Kirby Peters
+                      Erick Guillén
                     </Col>
                     <Col xs="5" md="3" className="d-flex align-items-center justify-content-center text-muted">
                       12.05.2021
@@ -218,11 +345,11 @@ const SchoolDashboard = () => {
                   <Row className="g-0 h-100 align-content-center">
                     <Col md="3" className="d-flex align-items-center mb-2 mb-md-0">
                       <NavLink to="/quiz/result" className="body-link text-truncate stretched-link">
-                        Biology
+                        1-1122-3333
                       </NavLink>
                     </Col>
                     <Col xs="5" md="4" className="d-flex align-items-center text-medium justify-content-start justify-content-md-center text-muted">
-                      Olli Hawkins
+                      Christopher Arce
                     </Col>
                     <Col xs="5" md="3" className="d-flex align-items-center justify-content-center text-muted">
                       11.05.2021
@@ -240,11 +367,11 @@ const SchoolDashboard = () => {
                   <Row className="g-0 h-100 align-content-center">
                     <Col md="3" className="d-flex align-items-center mb-2 mb-md-0">
                       <NavLink to="/quiz/result" className="body-link text-truncate stretched-link">
-                        Gymnastics
+                        1-1565-7678
                       </NavLink>
                     </Col>
                     <Col xs="5" md="4" className="d-flex align-items-center text-medium justify-content-start justify-content-md-center text-muted">
-                      Emilia Antoine
+                      Yulianna Jiménez
                     </Col>
                     <Col xs="5" md="3" className="d-flex align-items-center justify-content-center text-muted">
                       08.05.2021
@@ -262,11 +389,11 @@ const SchoolDashboard = () => {
                   <Row className="g-0 h-100 align-content-center">
                     <Col md="3" className="d-flex align-items-center mb-2 mb-md-0">
                       <NavLink to="/quiz/result" className="body-link text-truncate stretched-link">
-                        Physics
+                        1-5555-1212
                       </NavLink>
                     </Col>
                     <Col xs="5" md="4" className="d-flex align-items-center text-medium justify-content-start justify-content-md-center text-muted">
-                      Kathryn Mengel
+                      Jesús Arroyo
                     </Col>
                     <Col xs="5" md="3" className="d-flex align-items-center justify-content-center text-muted">
                       06.05.2021
@@ -284,11 +411,11 @@ const SchoolDashboard = () => {
                   <Row className="g-0 h-100 align-content-center">
                     <Col md="3" className="d-flex align-items-center mb-2 mb-md-0">
                       <NavLink to="/quiz/result" className="body-link text-truncate stretched-link">
-                        Geometry
+                        1-1828-0064
                       </NavLink>
                     </Col>
                     <Col xs="5" md="4" className="d-flex align-items-center text-medium justify-content-start justify-content-md-center text-muted">
-                      Daisy Hartley
+                      Erick Guillén
                     </Col>
                     <Col xs="5" md="3" className="d-flex align-items-center justify-content-center text-muted">
                       06.05.2021
@@ -325,11 +452,11 @@ const SchoolDashboard = () => {
               </Card>
             </ScrollByCount>
           </div>
-        </Col>
+        </Col> */}
         {/* Exam Results End */}
 
         {/* Homework Start */}
-        <Col lg="6" className="mb-5">
+        {/* <Col lg="6" className="mb-5">
           <h2 className="small-title">Homework</h2>
           <Card className="sh-40 h-lg-100-card">
             <Card.Body className="d-flex align-items-center justify-content-center h-100">
@@ -343,13 +470,49 @@ const SchoolDashboard = () => {
               </div>
             </Card.Body>
           </Card>
-        </Col>
+        </Col> */}
         {/* Homework End */}
+      </Row>
+      <Row>
+        <Col>
+          <div className="d-flex justify-content-between">
+              <h2 className="small-title">Estudiantes</h2>
+              <NavLink to="/quiz/result" className="btn btn-icon btn-icon-end btn-xs btn-background-alternate p-0 text-small">
+                <span className="align-bottom">Ver Todos</span> <CsLineIcons icon="chevron-right" className="align-middle" size="12" />
+              </NavLink>
+          </div>
+          <div>
+            <Row className="mb-3">
+              <Col sm="12" md="5" lg="3" xxl="2">
+                <div className="d-inline-block float-md-start me-1 mb-1 mb-md-0 search-input-container w-100 shadow bg-foreground">
+                  <ControlsSearch tableInstance={tableInstance} />
+                </div>
+              </Col>
+              <Col sm="12" md="7" lg="9" xxl="10" className="text-end">
+                <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
+                  <ControlsAdd tableInstance={tableInstance} /> <ControlsEdit tableInstance={tableInstance} /> <ControlsDelete tableInstance={tableInstance} />
+                </div>
+                <div className="d-inline-block">
+                  <ControlsPageSize tableInstance={tableInstance} />
+                </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs="12">
+                <Table className="react-table rows" tableInstance={tableInstance} />
+              </Col>
+              <Col xs="12">
+                <TablePagination tableInstance={tableInstance} />
+              </Col>
+            </Row>
+          </div>
+          <ModalAddEdit tableInstance={tableInstance} />
+        </Col>
       </Row>
 
       <Row>
         {/* Notifications Start */}
-        <Col xl="6" xxl="4" className="mb-5">
+        {/* <Col xl="6" xxl="4" className="mb-5">
           <h2 className="small-title">Notifications</h2>
           <Card className="sh-40 h-xl-100-card">
             <Card.Body className="mb-n2 scroll-out h-100">
@@ -588,11 +751,11 @@ const SchoolDashboard = () => {
               </OverlayScrollbarsComponent>
             </Card.Body>
           </Card>
-        </Col>
+        </Col> */}
         {/* Notifications End */}
 
         {/* Today’s Lunch Start */}
-        <Col xl="6" xxl="4" className="mb-5">
+        {/* <Col xl="6" xxl="4" className="mb-5">
           <div className="d-flex justify-content-between">
             <h2 className="small-title">Today’s Lunch</h2>
             <NavLink to="#" className="btn btn-icon btn-icon-end btn-xs btn-background-alternate p-0 text-small">
@@ -608,11 +771,11 @@ const SchoolDashboard = () => {
               </div>
             </div>
           </Card>
-        </Col>
+        </Col> */}
         {/* Today’s Lunch End */}
 
         {/* Materials Start */}
-        <Col xxl="4" className="mb-5">
+        {/* <Col xxl="4" className="mb-5">
           <h2 className="small-title">Materials</h2>
           <Card className="mb-2 sh-17 sh-sm-8">
             <Card.Body className="py-0">
@@ -694,12 +857,12 @@ const SchoolDashboard = () => {
               </Row>
             </Card.Body>
           </Card>
-        </Col>
+        </Col> */}
         {/* Materials End */}
       </Row>
 
       {/* Teachers Start */}
-      <h2 className="small-title">Teachers</h2>
+      {/* <h2 className="small-title">Teachers</h2>
       <Row className="row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xxl-6 g-2">
         <Col>
           <Card className="h-100">
@@ -821,7 +984,7 @@ const SchoolDashboard = () => {
             </Card.Body>
           </Card>
         </Col>
-      </Row>
+      </Row> */}
       {/* Teachers End */}
     </>
   );
