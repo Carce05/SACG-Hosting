@@ -81,16 +81,16 @@ const routesAndMenuItems = {
       ],
     },
     {
-      path: `${appRoot}/paths`,
-      label: 'menu.paths',
-      icon: 'destination',
-      exact: true,
-      redirect: true,
-      to: `${appRoot}/paths/list`,
-      subs: [
-        { path: '/list', label: 'menu.list', component: paths.list },
-        { path: '/detail', label: 'menu.detail', component: paths.detail },
-      ],
+      //path: `${appRoot}/paths`,
+      //label: 'menu.paths',
+      //icon: 'destination',
+      //exact: true,
+      //redirect: true,
+      //to: `${appRoot}/paths/list`,
+     // subs: [
+       // { path: '/list', label: 'menu.list', component: paths.list },
+       // { path: '/detail', label: 'menu.detail', component: paths.detail },
+     // ],
     },
     {
       path: `${appRoot}/instructor`,

@@ -167,7 +167,7 @@ const enMessages = {
   'menu.explore': 'Explore',
   'menu.quiz': 'Quiz',
   'menu.result': 'Result',
-  'menu.paths': 'Paths',
+ 
   'menu.instructor': 'Instructor',
   'menu.misc': 'Miscellaneous',
   'menu.player': 'Player',
