@@ -125,5 +125,18 @@
     "lint-staged": "^11.0.0",
     "prettier": "2.3.1",
     "sass": "^1.42.1"
-  }
+  },
+  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "main": ".eslintrc.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://carce20437@bitbucket.org/carce20437/sistemaacademicoliceodiurnoguarari.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://bitbucket.org/carce20437/sistemaacademicoliceodiurnoguarari/issues"
+  },
+  "homepage": "https://bitbucket.org/carce20437/sistemaacademicoliceodiurnoguarari#readme"
 }
