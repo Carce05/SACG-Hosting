@@ -178,6 +178,6 @@ const enMessages = {
   'menu.misc': 'Miscellaneous',
   'menu.player': 'Player',
   'menu.material': 'Material',
-  'menu.syllabus': 'Syllabus',
+  'menu.syllabus': 'Syllabusddd',
 };
 export default enMessages;
