@@ -1477,10 +1477,10 @@
   "resolved" "https://registry.npmjs.org/@gar/promisify/-/promisify-1.1.2.tgz"
   "version" "1.1.2"
 
-"@glidejs/glide@^3.4.1":
-  "integrity" "sha512-C34AEcK1HjSyxilRToUL54I6KAoodojUbeRlXoruobZuG0eGm8xfDL+3kgkWj7AJK4EZtunSOYfoqMp70eDtwg=="
-  "resolved" "https://registry.npmjs.org/@glidejs/glide/-/glide-3.4.1.tgz"
-  "version" "3.4.1"
+"@glidejs/glide@^3.6.0":
+  "integrity" "sha512-47Aa+JmYjY4xTFpTtYCwrqirmI1arnp1UZETwtWpbTPisXUAuxrdJxKJLH8KHFWMsSrLi9+AcfyfzDIuO75rEA=="
+  "resolved" "https://registry.npmjs.org/@glidejs/glide/-/glide-3.6.0.tgz"
+  "version" "3.6.0"
 
 "@hapi/address@2.x.x":
   "integrity" "sha512-QD1PhQk+s31P1ixsX0H0Suoupp3VMXzIVMSwobR3F3MSUO2YCV0B7xqLcUw/Bh8yuvd3LhpyqLQWTNcRmp6IdQ=="
