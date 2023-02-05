@@ -1,23 +1,5 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const app = express();
+const Server = require("./models/server");
 
-const uri = 'mongodb+srv://LCDG:Lcdg123.@cluster0.pvrl9qx.mongodb.net/?retryWrites=true&w=majority'
+const server = new Server();
 
-
-async function connect() {
-    try {
-        await mongoose.connect(uri);
-        console.log("Conectado a MongoDB");
-
-    }catch (error){
-        console.error(error);
-    }
-}
-
-connect();
-
-app.listen(8000, () => {
-        console.log("El servidor inicio en el puerto 8000")
-});
-
+server.listen();
