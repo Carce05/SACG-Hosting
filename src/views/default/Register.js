@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
@@ -8,17 +8,35 @@ import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import HtmlHead from 'components/html-head/HtmlHead';
 
 const Register = () => {
+  const history = useHistory();
   const title = 'Register';
   const description = 'Register Page';
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
+    thumb: Yup.string().required('Thumb is required'),
     email: Yup.string().email().required('Email is required'),
     password: Yup.string().min(6, 'Must be at least 6 chars!').required('Password is required'),
     terms: Yup.bool().required().oneOf([true], 'Terms must be accepted'),
   });
-  const initialValues = { name: '', email: '', password: '', terms: false };
-  const onSubmit = (values) => console.log('submit form', values);
+  const initialValues = { name: '', thumb: '', email: '', password: '', terms: false };
+  const onSubmit = async ({ name, thumb, email, password }) => { 
+    const rawResponse = await fetch('http://localhost:8080/api/usuarios', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+          name,
+          thumb,
+          role: 'ADMIN',
+          email,
+          password
+      })
+    });
+    history.push("/login");
+  }
 
   const formik = useFormik({ initialValues, validationSchema, onSubmit });
   const { handleSubmit, handleChange, values, touched, errors } = formik;
@@ -69,6 +87,11 @@ const Register = () => {
               <CsLineIcons icon="user" />
               <Form.Control type="text" name="name" placeholder="Name" value={values.name} onChange={handleChange} />
               {errors.name && touched.name && <div className="d-block invalid-tooltip">{errors.name}</div>}
+            </div>
+            <div className="mb-3 filled form-group tooltip-end-top">
+              <CsLineIcons icon="user" />
+              <Form.Control type="text" name="thumb" placeholder="thumb" value={values.thumb} onChange={handleChange} />
+              {errors.thumb && touched.thumb && <div classthumb="d-block invalid-tooltip">{errors.thumb}</div>}
             </div>
             <div className="mb-3 filled form-group tooltip-end-top">
               <CsLineIcons icon="email" />

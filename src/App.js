@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { Redirect } from "react-router-dom";
 
 // import redux for auth guard
 import { useSelector } from 'react-redux';
@@ -16,14 +17,16 @@ const App = () => {
   const { currentUser, isLogin } = useSelector((state) => state.auth);
 
   const routes = useMemo(() => getRoutes({ data: routesAndMenuItems, isLogin, userRole: currentUser.role }), [isLogin, currentUser]);
-  if (routes) {
-    return (
-      <Layout>
-        <RouteIdentifier routes={routes} fallback={<Loading />} />
-      </Layout>
-    );
+  if(isLogin) {
+    if (routes) {
+      return (
+        <Layout>
+          <RouteIdentifier routes={routes} fallback={<Loading />} />
+        </Layout>
+      );
+    }
   }
-  return <></>;
+  return <Redirect to="/login"/>;
 };
 
 export default App;
