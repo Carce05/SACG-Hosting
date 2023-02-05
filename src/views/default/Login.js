@@ -1,5 +1,5 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useState } from 'react';
+import { NavLink,useHistory } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
@@ -7,17 +7,45 @@ import LayoutFullpage from 'layout/LayoutFullpage';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
 
 import HtmlHead from 'components/html-head/HtmlHead';
+import { useDispatch } from 'react-redux';
+import { setCurrentUser } from 'auth/authSlice';
 
 const Login = () => {
+  const dispatch = useDispatch();
+  const history = useHistory();
   const title = 'Inicio de Sesión';
   const description = 'Pagina de Inicio de Sesión';
+  const [error, setError] = useState(false)
 
   const validationSchema = Yup.object().shape({
     email: Yup.string().email().required('Se requiere la identificación'),
     password: Yup.string().min(6, 'Se debe de tener almenos 6 caracteres').required('Se requiere la contraseña'),
   });
-  const initialValues = { email: '', password: '' };
-  const onSubmit = (values) => console.log('submit form', values);
+  const initialValues = { email: 'lisajackson@gmail.com', password: '123456' };
+  const onSubmit = async ({ email,password }) => {
+    const rawResponse = await fetch('http://localhost:8080/api/usuarios/login', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email,
+        password
+      })
+    });
+
+    const { status, usuario } = await rawResponse.json();
+    console.log(usuario)
+
+    if (status){
+      setError(false);
+      dispatch(setCurrentUser(usuario));
+      history.push("/dashboards");
+    } else {
+      setError(true);
+    }
+  } 
 
   const formik = useFormik({ initialValues, validationSchema, onSubmit });
   const { handleSubmit, handleChange, values, touched, errors } = formik;
@@ -61,7 +89,7 @@ const Login = () => {
         <div className="mb-5">
           <p className="h6">Por favor digita tus credenciales para iniciar sesión</p>
           <p className="h6">
-            {/* Si no tienes una cuenta creada, por favor <NavLink to="/register">registrate</NavLink> . */}
+            Si no tienes una cuenta creada, por favor <NavLink to="/register">registrate</NavLink> .
           </p>
         </div>
         <div>
@@ -82,6 +110,9 @@ const Login = () => {
             <Button size="lg" type="submit">
               Iniciar sesión
             </Button>
+            {
+              error && 'LOGIN INCORECTO'
+            }
           </form>
         </div>
       </div>
