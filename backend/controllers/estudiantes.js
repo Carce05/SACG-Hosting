@@ -2,21 +2,16 @@ const { response } = require('express');
 
 const bcryptjs = require('bcryptjs')
 
-const Usuario = require('../models/user')
+const Estudiante = require('../models/estudiante')
 
-const usuariosGet = (req, res = response) => {
-
-    const { name, thumb, role, email } = req.query;
-
-    res.json({
-        status: true,
-        usuario: {
-            name,
-            thumb,
-            role,
-            email
+//Get all Method
+const estudiantesGet = (req, res) => {
+    Estudiante.find({},(err,answer) => {
+        if(err){res.send(err)}
+        else{
+            res.send(answer)
         }
-    }) 
+    })
 }
 
 const usuariosPost = async (req, res = response) => {
@@ -61,35 +56,29 @@ const usuariosDelete = (req, res = response) => {
     })
 }
 
-const usuarioLogin = async (req, res = response) => {
-    const { email, password  } = req.body;
-    const { name, thumb, role, password : pass } = await Usuario.findOne({ email })
+const EstudiantesAsocidados = async (res = response) => {
+    //const { email, password  } = req.body;
+    const correo = 'mau@gmail.com';
+    const { cedula, nombre, apellido, correo : correo_encargado } = await Estudiante.findOne({ correo_encargado })
 
-    if (password === pass) {
         res.json({
             status: true,
-            usuario: {
-                name,
-                thumb,
-                role,
-                email
+            estudiante: {
+                cedula,
+                nombre,
+                apellido,
+                correo_encargado
             }
         }) 
-    } else {
-        res.json({
-            status: false,
-            mgs: 'LOGIN INCORRECTO'
-        })
-    }
 
 }
 
 
 
 module.exports = {
-    usuariosGet,
+    estudiantesGet,
     usuariosPost,
     usuariosPut,
     usuariosDelete,
-    usuarioLogin
+    EstudiantesAsocidados
 }

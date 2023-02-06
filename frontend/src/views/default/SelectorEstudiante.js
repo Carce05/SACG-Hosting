@@ -24,7 +24,30 @@ const SelectorEstudiante = () => {
     email: Yup.string().email().required('Se requiere la identificación'),
   });
   const initialValues = { email: '' };
-  const onSubmit = (values) => console.log('submit form', values);
+  const onSubmit = async ({ cedula,nombre }) => {
+    const rawResponse = await fetch('http://localhost:8080/api/Estudiantes/login', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        cedula,
+        nombre
+      })
+    });
+
+    const { cedula, nombre } = await rawResponse.json();
+    console.log(nombre)
+
+    if (cedula){
+      setError(false);
+      dispatch(setCurrentUser(nombre));
+      history.push("/dashboards");
+    } else {
+      setError(true);
+    }
+  } 
 
   const formik = useFormik({ initialValues, validationSchema, onSubmit });
   const { handleSubmit, handleChange, values, touched, errors } = formik;
