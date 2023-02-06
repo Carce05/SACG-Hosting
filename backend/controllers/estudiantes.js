@@ -5,13 +5,14 @@ const bcryptjs = require('bcryptjs')
 const Estudiante = require('../models/estudiante')
 
 //Get all Method
-const estudiantesGet = (req, res) => {
-    Estudiante.find({},(err,answer) => {
-        if(err){res.send(err)}
-        else{
-            res.send(answer)
-        }
-    })
+const estudiantesGet = async (req, res) => {
+    try{
+        const data = await Estudiante.find();
+        res.json(data)
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
 }
 
 const usuariosPost = async (req, res = response) => {

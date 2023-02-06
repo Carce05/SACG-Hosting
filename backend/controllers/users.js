@@ -4,20 +4,17 @@ const bcryptjs = require('bcryptjs')
 
 const Usuario = require('../models/user')
 
-const usuariosGet = (req, res = response) => {
+const usuariosGet = async (req, res = response) => {
 
-    const { name, thumb, role, email } = req.query;
-
-    res.json({
-        status: true,
-        usuario: {
-            name,
-            thumb,
-            role,
-            email
-        }
-    }) 
+    try{
+        const data = await Usuario.find();
+        res.json(data)
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
 }
+
 
 const usuariosPost = async (req, res = response) => {
     const { name, thumb, role, email,password } = req.body;
