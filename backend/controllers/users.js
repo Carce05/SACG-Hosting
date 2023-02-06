@@ -1,0 +1,94 @@
+const { response } = require('express');
+
+const bcryptjs = require('bcryptjs')
+
+const Usuario = require('../models/user')
+
+const usuariosGet = (req, res = response) => {
+
+    const { q, nombre = 'no name', apiKey, page = 0, limit } = req.query;
+
+    res.json({
+        msg: 'GET | CONTROLLER',
+        q,
+        nombre,
+        apiKey,
+        page,
+        limit
+    })
+}
+
+const usuariosPost = async (req, res = response) => {
+    const { name, thumb, role, email,password } = req.body;
+    const usuario = new Usuario( { name, thumb, role, email,password } );
+
+
+    //Check if the email exist
+    const existEmail = await Usuario.findOne({ email })
+
+    if (existEmail) {
+        return res.status(400).json({
+            msg: 'Email already taken'
+        })
+    }
+
+    // Encrypt password
+    // const salt =  bcryptjs.genSaltSync();
+    // usuario.password = bcryptjs.hashSync(password, salt)
+
+    await usuario.save();
+    // await usuarios.insertOne(usuario)
+
+    res.json({
+        msg: 'POST | CONTROLLER',
+        usuario
+    })
+}
+
+const usuariosPut = (req, res = response) => {
+
+    const id = req.params.userId;
+    res.json({
+        msg: 'PUT | CONTROLLER',
+        id
+    })
+}
+
+const usuariosDelete = (req, res = response) => {
+    res.json({
+        msg: 'DELETE | CONTROLLER'
+    })
+}
+
+const usuarioLogin = async (req, res = response) => {
+    const { email, password  } = req.body;
+    const { name, thumb, role, password : pass } = await Usuario.findOne({ email })
+
+    if (password === pass) {
+        res.json({
+            status: true,
+            usuario: {
+                name,
+                thumb,
+                role,
+                email
+            }
+        }) 
+    } else {
+        res.json({
+            status: false,
+            mgs: 'LOGIN INCORRECTO'
+        })
+    }
+
+}
+
+
+
+module.exports = {
+    usuariosGet,
+    usuariosPost,
+    usuariosPut,
+    usuariosDelete,
+    usuarioLogin
+}
