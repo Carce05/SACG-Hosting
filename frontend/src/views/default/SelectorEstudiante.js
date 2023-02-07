@@ -13,7 +13,7 @@ import AsyncSelect from 'react-select/async';
 import axios from "axios";
 
 const SelectorEstudiante = (props) => {
-  const [options, setOptions] = useState([]);
+  const [options, setOptions] = useState();
 
   const title = 'Seleccionar Estudiante';
   const description = 'Página para seleccionar un estudiante a cargo';
@@ -85,8 +85,7 @@ const SelectorEstudiante = (props) => {
           </NavLink>
         </div>
         <div className="mb-5">
-          <h2 className="cta-1 mb-0 text-primary">Seleccione su estudiante a cargo</h2>
-          <h2 className="cta-1 text-primary">para ingresar al sistema.</h2>
+          <h2 className="cta-1 mb-0 text-primary">Seleccione su estudiante a cargo para ingresar al sistema.</h2>          
         </div>
         <div>
           <form id="forgotPasswordForm" className="tooltip-end-bottom" onSubmit={handleSubmit}>
