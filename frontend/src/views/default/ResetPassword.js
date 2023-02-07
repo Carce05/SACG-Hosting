@@ -1,26 +1,70 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useEffect, useState, Fragment } from 'react';
+import { NavLink, useParams } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
 import * as Yup from 'yup';
+import axios from "axios";
 import { useFormik } from 'formik';
 import LayoutFullpage from 'layout/LayoutFullpage';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import HtmlHead from 'components/html-head/HtmlHead';
 
 const ResetPassword = () => {
-  const title = 'Reset Password';
-  const description = 'Reset Password Page';
+  const title = 'Reestablecer contraseña';
+  const description = 'Pagina de reestablecimiento de contraseña';
+  const [validUrl, setValidUrl] = useState(false);
+	const [password, setPassword] = useState("");
+	const [msg, setMsg] = useState("");
+	const [error, setError] = useState("");
+	const param = useParams();
+
   const validationSchema = Yup.object().shape({
-    password: Yup.string().min(6, 'Must be at least 6 chars!').required('Password is required'),
+    password: Yup.string().min(6, 'La contraseña debe de tener al menos 6 caracteres').required('Contraseña requerida'),
     passwordConfirm: Yup.string()
-      .required('Password Confirm is required')
-      .oneOf([Yup.ref('password'), null], 'Must be same with password!'),
+      .required('Es necesario confirmar tu contraseña')
+      .oneOf([Yup.ref('password'), null], 'Ambas contraseñas deben coincidir'),
   });
   const initialValues = { password: '', passwordConfirm: '' };
   const onSubmit = (values) => console.log('submit form', values);
 
   const formik = useFormik({ initialValues, validationSchema, onSubmit });
-  const { handleSubmit, handleChange, values, touched, errors } = formik;
+  const {handleChange, values, touched, errors } = formik;
+
+
+	const url = `http://localhost:8080/api/password-reset/${param.id}/${param.token}`;
+
+  
+  useEffect(() => {
+		const verifyUrl = async () => {
+			try {
+				await axios.get(url);
+				setValidUrl(true);
+			} catch (err) {
+				setValidUrl(false);
+			}
+		};
+		verifyUrl();
+	}, [param, url]);
+
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		try {
+			const { data } = await axios.post(url, { password });
+			setMsg(data.message);
+			setError("");
+			window.location = "/reset-password";
+		} catch (ec) {
+			if (
+				ec.response &&
+				ec.response.status >= 400 &&
+				ec.response.status <= 500
+			) {
+				setError(error.response.data.message);
+				setMsg("Error al reestablcer contraseña");
+			}
+		}
+	};
+
+
   const leftSide = (
     <div className="min-h-100 d-flex align-items-center">
       <div className="w-100 w-lg-75 w-xxl-60">
@@ -53,22 +97,27 @@ const ResetPassword = () => {
           </NavLink>
         </div>
         <div className="mb-5">
-          <h2 className="cta-1 mb-0 text-primary">¿Olvidó su contraseña?</h2>
+          <h2 className="cta-1 mb-0 text-primary">¿Desea cambiar su contraseña?</h2>
           <h2 className="cta-1 text-primary">¡Restablézcala aquí!</h2>
         </div>
         <div className="mb-5">
-          <p className="h6">Por favor ingrese su número de cédula para enviarle un correo y restablecer la contraseña.</p>
+          <p className="h6">Por favor ingrese su nueva contraseña</p>
         </div>
         <div>
           <form id="resetForm" className="tooltip-end-bottom" onSubmit={handleSubmit}>
             <div className="mb-3 filled">
               <CsLineIcons icon="lock-off" />
-              <Form.Control type="password" name="password" onChange={handleChange} value={values.password} placeholder="Contraseña" />
+              <Form.Control 							type="password"
+							placeholder="Contraseña"
+							name="password"
+							onChange={(e) => setPassword(e.target.value)}
+							value={password}
+							required />
               {errors.password && touched.password && <div className="d-block invalid-tooltip">{errors.password}</div>}
             </div>
             <div className="mb-3 filled">
               <CsLineIcons icon="lock-on" />
-              <Form.Control type="password" name="passwordConfirm" onChange={handleChange} value={values.passwordConfirm} placeholder="Confirmar Contraseña" />
+              <Form.Control type="password" name="passwordConfirm" onChange={handleChange} value={password} placeholder="Confirmar Contraseña" />
               {errors.passwordConfirm && touched.passwordConfirm && <div className="d-block invalid-tooltip">{errors.passwordConfirm}</div>}
             </div>
             <Button size="lg" type="submit">

@@ -1,8 +1,10 @@
-import React from 'react';
+
 import { NavLink } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
 import * as Yup from 'yup';
+import axios from "axios";
 import { useFormik } from 'formik';
+import React,  { useState } from 'react';
 import LayoutFullpage from 'layout/LayoutFullpage';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import HtmlHead from 'components/html-head/HtmlHead';
@@ -12,14 +14,39 @@ const ForgotPassword = () => {
   const description = 'Página para restablecer contraseña';
 
   const validationSchema = Yup.object().shape({
-    email: Yup.string().email().required('Se requiere la identificación'),
+    email: Yup.string().email().required('Se requiere el correo electrónico'),
   });
   const initialValues = { email: '' };
   const onSubmit = (values) => console.log('submit form', values);
 
   const formik = useFormik({ initialValues, validationSchema, onSubmit });
-  const { handleSubmit, handleChange, values, touched, errors } = formik;
+  const { handleChange, values, touched, errors } = formik;
 
+  const [email, setEmail] = useState("");
+  const [msg, setMsg] = useState("");
+	const [error, setError] = useState("");
+
+  const handleSubmit = async (e) => {
+		e.preventDefault();
+		try {
+			const url = `http://localhost:8080/api/password-reset`;
+			const { data } = await axios.post(url, { email });
+			setMsg(data.message);
+			setError("");
+		} catch (ec) {
+			if (
+				ec.response &&
+				ec.response.status >= 400 &&
+				ec.response.status <= 500
+			) {
+				setError(ec.response.data.message);
+				setMsg("Usuario no registrado en el sistema");
+			}
+      
+		}
+	};
+
+	
   const leftSide = (
     <div className="min-h-100 d-flex align-items-center">
       <div className="w-100 w-lg-75 w-xxl-60">
@@ -56,15 +83,22 @@ const ForgotPassword = () => {
           <h2 className="cta-1 text-primary">¡Restablézcala aquí!</h2>
         </div>
         <div className="mb-5">
-          <p className="h6">Por favor ingrese su número de cédula para enviarle un correo y restablecer la contraseña.</p>
+          <p className="h6">Por favor ingrese su correo electrónico, pronto recibirá un enlace para restablecer su contraseña.</p>
 
         </div>
         <div>
           <form id="forgotPasswordForm" className="tooltip-end-bottom" onSubmit={handleSubmit}>
             <div className="mb-3 filled form-group tooltip-end-top">
-              <CsLineIcons icon="user" />
-              <Form.Control type="text" name="email" placeholder="Cédula" value={values.email} onChange={handleChange} />
+              <CsLineIcons icon="email" />
+              <Form.Control type="email"
+					        placeholder="Email"
+					        name="email"
+					        onChange={(e) => setEmail(e.target.value)}
+					        value={email}
+					        required />
               {errors.email && touched.email && <div className="d-block invalid-tooltip">{errors.email}</div>}
+              {error && <div className={formik.error_msg}>{error}</div>}
+				      {msg && <div className={formik.success_msg}>{msg}</div>}  
             </div>
             <Button size="lg" type="submit">
               Enviar correo
