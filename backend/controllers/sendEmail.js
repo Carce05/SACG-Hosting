@@ -9,7 +9,7 @@ const sendEmail = async (email, subject, text) => {
             secure: true,
             auth: {
                 user: "liceodiurnoguarari@outlook.com",
-                pass: "Qwe!234ldg",
+                pass: "Qwe!234LDG",
             },
             tls: {
                 ciphers:'SSLv3'
