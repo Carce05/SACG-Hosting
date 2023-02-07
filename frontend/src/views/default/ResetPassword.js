@@ -30,7 +30,7 @@ const ResetPassword = () => {
   const {handleChange, values, touched, errors } = formik;
 
 
-	const url = `http://localhost:8080/api/password-reset/${param.id}/${param.token}`;
+	const url = `http://localhost:8080/api/reset-password/${param.id}/${param.token}`;
 
   
   useEffect(() => {
@@ -51,7 +51,6 @@ const ResetPassword = () => {
 			const { data } = await axios.post(url, { password });
 			setMsg(data.message);
 			setError("");
-			window.location = "/reset-password";
 		} catch (ec) {
 			if (
 				ec.response &&
@@ -64,7 +63,7 @@ const ResetPassword = () => {
 		}
 	};
 
-
+ 
   const leftSide = (
     <div className="min-h-100 d-flex align-items-center">
       <div className="w-100 w-lg-75 w-xxl-60">
@@ -87,6 +86,7 @@ const ResetPassword = () => {
       </div>
     </div>
   );
+
 
   const rightSide = (
     <div className="sw-lg-70 min-h-100 bg-foreground d-flex justify-content-center align-items-center shadow-deep py-5 full-page-content-right-border">
@@ -117,7 +117,7 @@ const ResetPassword = () => {
             </div>
             <div className="mb-3 filled">
               <CsLineIcons icon="lock-on" />
-              <Form.Control type="password" name="passwordConfirm" onChange={handleChange} value={password} placeholder="Confirmar Contraseña" />
+              <Form.Control type="password" name="passwordConfirm" onChange={handleChange} value={formik.passwordConfirm} placeholder="Confirmar Contraseña" />
               {errors.passwordConfirm && touched.passwordConfirm && <div className="d-block invalid-tooltip">{errors.passwordConfirm}</div>}
             </div>
             <Button size="lg" type="submit">
@@ -135,6 +135,7 @@ const ResetPassword = () => {
       <LayoutFullpage left={leftSide} right={rightSide} />
     </>
   );
+
 };
 
 export default ResetPassword;
