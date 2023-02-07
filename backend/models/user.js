@@ -1,3 +1,4 @@
+const bcryptSalt = 10;
 const { Schema, model } = require('mongoose');
 
 const UsuarioSchema = Schema({
@@ -19,5 +20,7 @@ const UsuarioSchema = Schema({
         type: String
     }
 });
+
+
 
 module.exports = model( 'Usuario', UsuarioSchema );
