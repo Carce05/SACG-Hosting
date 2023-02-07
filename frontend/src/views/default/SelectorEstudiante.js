@@ -51,7 +51,8 @@ const SelectorEstudiante = (props) => {
   const initialValues = { email: '' };
 
   const formik = useFormik({ initialValues, validationSchema });
-  const { handleSubmit, option, touched, errors } = formik;
+  const { handleSubmit, handleChange, option, touched, errors } = formik;
+  const { setSelectedOption } = useState(null);
 
   const leftSide = (
     <div className="min-h-100 d-flex align-items-center">
@@ -94,7 +95,7 @@ const SelectorEstudiante = (props) => {
               <Select classNamePrefix="react-select" 
                     options={options} 
                     value={option} 
-                    onChange={setOptions} 
+                    onChange={setSelectedOption} 
                     placeholder="Seleccione" 
               />
               {errors.email && touched.email && <div className="d-block invalid-tooltip">{errors.email}</div>}
