@@ -7,15 +7,10 @@ import LayoutFullpage from 'layout/LayoutFullpage';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import HtmlHead from 'components/html-head/HtmlHead';
 import Select from 'react-select';
+import { setCurrentUser } from 'auth/authSlice';
 
 const SelectorEstudiante = () => {
   const [value, setValue] = useState();
-
-  const estudiantes = [
-    { value: '1-1828-0064', label: 'Erick Guillen (1-1828-0064)' },
-    { value: '1-1221-4354', label: 'Christopher Arce (1-1221-4354)' },
-  ];
-
 
   const title = 'Seleccionar Estudiante';
   const description = 'Página para seleccionar un estudiante a cargo';
@@ -23,10 +18,45 @@ const SelectorEstudiante = () => {
   const validationSchema = Yup.object().shape({
     email: Yup.string().email().required('Se requiere la identificación'),
   });
-  const initialValues = { email: '' };
-  const onSubmit = (values) => console.log('submit form', values);
 
-  const formik = useFormik({ initialValues, validationSchema, onSubmit });
+  const usuario  = 'mau@gmail.com';
+
+  const initialValues = { email: '' };
+
+    /*
+    const rawResponse = fetch(, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    });
+
+    const estudiante = JSON.parse(rawResponse[0]);
+    
+    console.log(estudiante);
+    // const nombre = estudiante.nombre;
+    */
+    (async () => {
+      const response = await fetch(`http://localhost:8080/api/estudiantes/EstudiantesAsocidados/${usuario}`)
+  
+      const data = await response.json()
+  
+      console.log(data)
+  })()
+
+
+    const estudiantes = [
+      { value: '1-1828-0064', label: ''  },
+      { value: '1-1221-4354', label: 'Christopher Arce (1-1221-4354)' },
+    ];
+
+    
+  
+
+
+
+  const formik = useFormik({ initialValues, validationSchema });
   const { handleSubmit, handleChange, values, touched, errors } = formik;
 
   const leftSide = (

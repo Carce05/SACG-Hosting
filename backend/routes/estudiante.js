@@ -12,6 +12,6 @@ router.post('/',[
 ], usuariosPost)
 
 router.delete('/', usuariosDelete)
-router.get('/EstudiantesAsocidados', EstudiantesAsocidados)
+router.get('/EstudiantesAsocidados/:correo', EstudiantesAsocidados)
 
 module.exports = router;

@@ -15,4 +15,4 @@ const EstudianteSchema = Schema({
     }
 });
 
-module.exports = model( 'Estudiante', EstudianteSchema );
+module.exports = model( 'estudiantes', EstudianteSchema );

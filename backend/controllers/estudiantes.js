@@ -57,22 +57,23 @@ const usuariosDelete = (req, res = response) => {
     })
 }
 
-const EstudiantesAsocidados = async (res = response) => {
-    //const { email, password  } = req.body;
-    const correo = 'mau@gmail.com';
-    const { cedula, nombre, apellido, correo : correo_encargado } = await Estudiante.findOne({ correo_encargado })
-
-        res.json({
-            status: true,
-            estudiante: {
-                cedula,
-                nombre,
-                apellido,
-                correo_encargado
+const EstudiantesAsocidados = async (req, res) => {
+    try{
+        const correo = req.params.correo;
+        const data = await Estudiante.find(
+            {
+                "$or":[
+                    {correo_encargado : correo}
+                ]
             }
-        }) 
-
+        );
+        res.json(data)
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
 }
+
 
 
 
