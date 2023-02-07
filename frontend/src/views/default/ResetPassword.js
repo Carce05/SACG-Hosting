@@ -107,7 +107,8 @@ const ResetPassword = () => {
           <form id="resetForm" className="tooltip-end-bottom" onSubmit={handleSubmit}>
             <div className="mb-3 filled">
               <CsLineIcons icon="lock-off" />
-              <Form.Control 							type="password"
+              <Form.Control 							
+              type="password"
 							placeholder="Contraseña"
 							name="password"
 							onChange={(e) => setPassword(e.target.value)}
@@ -115,11 +116,7 @@ const ResetPassword = () => {
 							required />
               {errors.password && touched.password && <div className="d-block invalid-tooltip">{errors.password}</div>}
             </div>
-            <div className="mb-3 filled">
-              <CsLineIcons icon="lock-on" />
-              <Form.Control type="password" name="passwordConfirm" onChange={handleChange} value={formik.passwordConfirm} placeholder="Confirmar Contraseña" />
-              {errors.passwordConfirm && touched.passwordConfirm && <div className="d-block invalid-tooltip">{errors.passwordConfirm}</div>}
-            </div>
+            
             <Button size="lg" type="submit">
               Reestablecer
             </Button>
