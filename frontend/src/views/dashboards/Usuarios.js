@@ -6,7 +6,7 @@ import BreadcrumbList from 'components/breadcrumb-list/BreadcrumbList';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import ScrollByCount from 'components/scroll-by-count/ScrollByCount';
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 import { useTable, useGlobalFilter, useSortBy, usePagination, useRowSelect, useRowState } from 'react-table';
 import Table from 'views/interface/plugins/datatables/EditableRows/components/Table';
@@ -19,6 +19,7 @@ import ControlsDelete from 'views/interface/plugins/datatables/EditableRows/comp
 import ControlsSearch from 'views/interface/plugins/datatables/EditableRows/components/ControlsSearch';
 import ModalAddEdit from 'views/interface/plugins/datatables/EditableRows/components/ModalAddEdit';
 import TablePagination from 'views/interface/plugins/datatables/EditableRows/components/TablePagination';
+import axios from "axios";
 
 /* const dummyData = [
   { id: 1, name: 'Basler Brot', email: 213, cedula: 392310440, role: 'Sourdough', tag: 'New' },
@@ -46,10 +47,22 @@ import TablePagination from 'views/interface/plugins/datatables/EditableRows/com
 
 
 const Usuarios = () => {
-
-  const rawResponse = 'http://localhost:8080/api/usuarios'
+  const [data, setData] = useState([]);
   const title = 'Usuarios';
   const description = 'Administración de usuarios';
+
+  useEffect(() => {
+    
+    axios
+      .get("http://localhost:8080/api/usuarios")
+      .then((res) => {
+        setData(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
+
 
   const columns = React.useMemo(() => {
     return [
@@ -76,15 +89,6 @@ const Usuarios = () => {
       { Header: 'Email', accessor: 'email', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       { Header: 'Rol', accessor: 'role', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-20' },
       {
-        Header: 'Tag',
-        accessor: 'tag',
-        sortable: true,
-        headerClassName: 'text-muted text-small text-uppercase w-10',
-        Cell: ({ cell }) => {
-          return <Badge bg="outline-primary">{cell.value}</Badge>;
-        },
-      },
-      {
         Header: '',
         id: 'action',
         headerClassName: 'empty w-10',
@@ -96,7 +100,6 @@ const Usuarios = () => {
     ];
   }, []);
 
-  const [data, setData] = React.useState("");
   const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
 
   const tableInstance = useTable(
