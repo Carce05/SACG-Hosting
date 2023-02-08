@@ -19,7 +19,7 @@ import ControlsDelete from 'views/interface/plugins/datatables/EditableRows/comp
 import ControlsSearch from 'views/interface/plugins/datatables/EditableRows/components/ControlsSearch';
 import ModalAddEdit from 'views/interface/plugins/datatables/EditableRows/components/ModalAddEdit';
 import TablePagination from 'views/interface/plugins/datatables/EditableRows/components/TablePagination';
-import axios from 'axios';
+
 /* const dummyData = [
   { id: 1, name: 'Basler Brot', email: 213, cedula: 392310440, role: 'Sourdough', tag: 'New' },
   { id: 2, name: 'Bauernbrot', email: 633, cedula: 129234013, role: 'Multigrain', tag: 'Done' },
@@ -45,20 +45,11 @@ import axios from 'axios';
 
 
 
-const SchoolDashboard = () => {
-  axios.get('http://localhost:8080/api/usuarios')
-  .then((response) => {
-    const data = response.data;
-    this.setState({ posts: data });
-    console.log('Data has been received!!');
-  })
-  .catch(() => {
-    alert('Error retrieving data!!!');
-  });
+const Usuarios = () => {
 
-
+  const rawResponse = 'http://localhost:8080/api/usuarios'
   const title = 'Usuarios';
-  const description = 'Elearning Portal School Dashboard Page';
+  const description = 'Administración de usuarios';
 
   const columns = React.useMemo(() => {
     return [
@@ -816,4 +807,4 @@ const SchoolDashboard = () => {
   );
 };
 
-export default SchoolDashboard;
+export default Usuarios;
