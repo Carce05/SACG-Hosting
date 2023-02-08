@@ -16,6 +16,11 @@ const ResetPassword = () => {
 	const [msg, setMsg] = useState("");
 	const [error, setError] = useState("");
 	const param = useParams();
+   /* Mandando los parametros como undefined */
+	const url = `http://localhost:8080/api/reset-password/${param.id}/${param.token}`;
+
+
+ 
 
   const validationSchema = Yup.object().shape({
     password: Yup.string().min(6, 'La contraseña debe de tener al menos 6 caracteres').required('Contraseña requerida'),
@@ -23,6 +28,7 @@ const ResetPassword = () => {
       .required('Es necesario confirmar tu contraseña')
       .oneOf([Yup.ref('password'), null], 'Ambas contraseñas deben coincidir'),
   });
+
   const initialValues = { password: '', passwordConfirm: '' };
   const onSubmit = (values) => console.log('submit form', values);
 
@@ -30,7 +36,6 @@ const ResetPassword = () => {
   const {handleChange, values, touched, errors } = formik;
 
 
-	const url = `http://localhost:8080/api/reset-password/${param.id}/${param.token}`;
 
   
   useEffect(() => {
@@ -45,20 +50,24 @@ const ResetPassword = () => {
 		verifyUrl();
 	}, [param, url]);
 
+
+
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
 			const { data } = await axios.post(url, { password });
 			setMsg(data.message);
 			setError("");
+			window.location = "/login";
 		} catch (ec) {
 			if (
 				ec.response &&
 				ec.response.status >= 400 &&
 				ec.response.status <= 500
 			) {
-				setError(error.response.data.message);
-				setMsg("Error al reestablcer contraseña");
+				setError(ec.response.data.message);
+				setMsg("Error al reestablecer contraseña");
 			}
 		}
 	};
@@ -128,8 +137,10 @@ const ResetPassword = () => {
 
   return (
     <>
+ 
       <HtmlHead title={title} description={description} />
       <LayoutFullpage left={leftSide} right={rightSide} />
+     
     </>
   );
 
