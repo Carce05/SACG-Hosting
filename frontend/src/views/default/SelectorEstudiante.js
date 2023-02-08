@@ -7,8 +7,8 @@ import LayoutFullpage from 'layout/LayoutFullpage';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import HtmlHead from 'components/html-head/HtmlHead';
 import Select from 'react-select';
-import { setCurrentUser } from 'auth/authSlice';
 import AsyncSelect from 'react-select/async';
+import { useSelector } from 'react-redux';
 
 import axios from "axios";
 
@@ -18,11 +18,9 @@ const SelectorEstudiante = (props) => {
   const title = 'Seleccionar Estudiante';
   const description = 'Página para seleccionar un estudiante a cargo';
 
-  const validationSchema = Yup.object().shape({
-    email: Yup.string().email().required('Se requiere la identificación'),
-  });
+  const { userInfo } = useSelector((state) => state.user)
 
-  const usuario  = 'mau@gmail.com';
+  const usuario  = userInfo?.email;
 
   useEffect(() => {
     async function fetchData() {
