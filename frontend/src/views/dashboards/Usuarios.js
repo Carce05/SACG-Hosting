@@ -19,38 +19,50 @@ import ControlsDelete from 'views/interface/plugins/datatables/EditableRows/comp
 import ControlsSearch from 'views/interface/plugins/datatables/EditableRows/components/ControlsSearch';
 import ModalAddEdit from 'views/interface/plugins/datatables/EditableRows/components/ModalAddEdit';
 import TablePagination from 'views/interface/plugins/datatables/EditableRows/components/TablePagination';
+import axios from 'axios';
+/* const dummyData = [
+  { id: 1, name: 'Basler Brot', email: 213, cedula: 392310440, role: 'Sourdough', tag: 'New' },
+  { id: 2, name: 'Bauernbrot', email: 633, cedula: 129234013, role: 'Multigrain', tag: 'Done' },
+  { id: 3, name: 'Kommissbrot', email: 2321, cedula: 561017657, role: 'Whole Wheat', tag: '' },
+  { id: 4, name: 'Lye Roll', email: 973, cedula: 127580420, role: 'Sourdough', tag: '' },
+  { id: 5, name: 'Panettone', email: 563, cedula: 789313762, role: 'Sourdough', tag: 'Done' },
+  { id: 6, name: 'Saffron Bun', email: 98, cedula: 129074548, role: 'Whole Wheat', tag: '' },
+  { id: 7, name: 'Ruisreikäleipä', email: 459, cedula: 904716276, role: 'Whole Wheat', tag: '' },
+  { id: 8, name: 'Rúgbrauð', email: 802, cedula: 797307649, role: 'Whole Wheat', tag: '' },
+  { id: 9, name: 'Yeast Karavai', email: 345, cedula: 680078801, role: 'Multigrain', tag: '' },
+  { id: 10, name: 'Brioche', email: 334, cedula: 378937746, role: 'Sourdough', tag: '' },
+  { id: 11, name: 'Pullman Loaf', email: 456, cedula: 461638720, role: 'Multigrain', tag: '' },
+  { id: 12, name: 'Soda Bread', email: 1152, cedula: 348536477, role: 'Whole Wheat', tag: '' },
+  { id: 13, name: 'Barmbrack', email: 854, cedula: 591276986, role: 'Sourdough', tag: '' },
+  { id: 14, name: 'Buccellato di Lucca', email: 1298, cedula: 980925057, role: 'Multigrain', tag: '' },
+  { id: 15, name: 'Toast Bread', email: 2156, cedula: 220171422, role: 'Multigrain', tag: '' },
+  { id: 16, name: 'Cheesymite Scroll', email: 452, cedula: 545847219, role: 'Sourdough', tag: '' },
+  { id: 17, name: 'Baguette', email: 456, cedula: 553121944, role: 'Sourdough', tag: '' },
+  { id: 18, name: 'Guernsey Gâche', email: 1958, cedula: 371226430, role: 'Multigrain', tag: '' },
+  { id: 19, name: 'Bazlama', email: 858, cedula: 384036275, role: 'Whole Wheat', tag: '' },
+  { id: 20, name: 'Bolillo', email: 333, cedula: 484876903, role: 'Whole Wheat', tag: '' },
+]; */
 
-const dummyData = [
-  { id: 1, name: 'Basler Brot', sales: 213, stock: 392310440, category: 'Sourdough', tag: 'New' },
-  { id: 2, name: 'Bauernbrot', sales: 633, stock: 129234013, category: 'Multigrain', tag: 'Done' },
-  { id: 3, name: 'Kommissbrot', sales: 2321, stock: 561017657, category: 'Whole Wheat', tag: '' },
-  { id: 4, name: 'Lye Roll', sales: 973, stock: 127580420, category: 'Sourdough', tag: '' },
-  { id: 5, name: 'Panettone', sales: 563, stock: 789313762, category: 'Sourdough', tag: 'Done' },
-  { id: 6, name: 'Saffron Bun', sales: 98, stock: 129074548, category: 'Whole Wheat', tag: '' },
-  { id: 7, name: 'Ruisreikäleipä', sales: 459, stock: 904716276, category: 'Whole Wheat', tag: '' },
-  { id: 8, name: 'Rúgbrauð', sales: 802, stock: 797307649, category: 'Whole Wheat', tag: '' },
-  { id: 9, name: 'Yeast Karavai', sales: 345, stock: 680078801, category: 'Multigrain', tag: '' },
-  { id: 10, name: 'Brioche', sales: 334, stock: 378937746, category: 'Sourdough', tag: '' },
-  { id: 11, name: 'Pullman Loaf', sales: 456, stock: 461638720, category: 'Multigrain', tag: '' },
-  { id: 12, name: 'Soda Bread', sales: 1152, stock: 348536477, category: 'Whole Wheat', tag: '' },
-  { id: 13, name: 'Barmbrack', sales: 854, stock: 591276986, category: 'Sourdough', tag: '' },
-  { id: 14, name: 'Buccellato di Lucca', sales: 1298, stock: 980925057, category: 'Multigrain', tag: '' },
-  { id: 15, name: 'Toast Bread', sales: 2156, stock: 220171422, category: 'Multigrain', tag: '' },
-  { id: 16, name: 'Cheesymite Scroll', sales: 452, stock: 545847219, category: 'Sourdough', tag: '' },
-  { id: 17, name: 'Baguette', sales: 456, stock: 553121944, category: 'Sourdough', tag: '' },
-  { id: 18, name: 'Guernsey Gâche', sales: 1958, stock: 371226430, category: 'Multigrain', tag: '' },
-  { id: 19, name: 'Bazlama', sales: 858, stock: 384036275, category: 'Whole Wheat', tag: '' },
-  { id: 20, name: 'Bolillo', sales: 333, stock: 484876903, category: 'Whole Wheat', tag: '' },
-];
+
 
 const SchoolDashboard = () => {
+  axios.get('http://localhost:8080/api/usuarios')
+  .then((response) => {
+    const data = response.data;
+    this.setState({ posts: data });
+    console.log('Data has been received!!');
+  })
+  .catch(() => {
+    alert('Error retrieving data!!!');
+  });
+
 
   const title = 'Usuarios';
   const description = 'Elearning Portal School Dashboard Page';
 
   const columns = React.useMemo(() => {
     return [
-      { Header: 'Cédula', accessor: 'stock', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
+      { Header: 'Cédula', accessor: 'cedula', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       {
         Header: 'Nombre',
         accessor: 'name',
@@ -70,8 +82,8 @@ const SchoolDashboard = () => {
           );
         },
       },    
-      { Header: 'Sales', accessor: 'sales', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
-      { Header: 'Category', accessor: 'category', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-20' },
+      { Header: 'Email', accessor: 'email', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
+      { Header: 'Rol', accessor: 'role', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-20' },
       {
         Header: 'Tag',
         accessor: 'tag',
@@ -93,7 +105,7 @@ const SchoolDashboard = () => {
     ];
   }, []);
 
-  const [data, setData] = React.useState(dummyData);
+  const [data, setData] = React.useState("");
   const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
 
   const tableInstance = useTable(

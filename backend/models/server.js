@@ -35,6 +35,10 @@ class Server {
         this.app.use('/api/usuarios', require('../routes/user'))
 
 
+
+    
+
+
     }
 
     listen() {
