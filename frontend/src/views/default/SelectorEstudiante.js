@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
 import * as Yup from 'yup';
@@ -7,27 +7,51 @@ import LayoutFullpage from 'layout/LayoutFullpage';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import HtmlHead from 'components/html-head/HtmlHead';
 import Select from 'react-select';
+import AsyncSelect from 'react-select/async';
+import { useSelector } from 'react-redux';
 
-const SelectorEstudiante = () => {
-  const [value, setValue] = useState();
+import axios from "axios";
 
-  const estudiantes = [
-    { value: '1-1828-0064', label: 'Erick Guillen (1-1828-0064)' },
-    { value: '1-1221-4354', label: 'Christopher Arce (1-1221-4354)' },
-  ];
-
+const SelectorEstudiante = (props) => {
+  const [options, setOptions] = useState();
 
   const title = 'Seleccionar Estudiante';
   const description = 'Página para seleccionar un estudiante a cargo';
 
-  const validationSchema = Yup.object().shape({
-    email: Yup.string().email().required('Se requiere la identificación'),
-  });
-  const initialValues = { email: '' };
-  const onSubmit = (values) => console.log('submit form', values);
+  // const { userInfo } = useSelector((state) => state.user)
 
-  const formik = useFormik({ initialValues, validationSchema, onSubmit });
-  const { handleSubmit, handleChange, values, touched, errors } = formik;
+  // const usuario  = userInfo?.email;
+  const usuario  = 'mau@gmail.com';
+
+  useEffect(() => {
+    async function fetchData() {
+      // Fetch data
+      const { data } = await axios.get(`http://localhost:8080/api/estudiantes/EstudiantesAsocidados/${usuario}`);
+      const results = []
+      // Store results in the results array
+      data.forEach((value) => {
+        results.push({
+          value: value.cedula,
+          label: `${value.nombre} ${value.apellido} ( ${value.cedula} )`,
+        });
+      });
+      // Update the options state
+      setOptions([ 
+        ...results
+      ])
+    }
+
+    // Trigger the fetch
+    fetchData();
+  }, []);
+
+  const { label, name, ...rest } = props;
+
+  const initialValues = { email: '' };
+
+  const formik = useFormik({ initialValues });
+  const { handleSubmit, handleChange, option, touched, errors } = formik;
+  const { setSelectedOption } = useState(null);
 
   const leftSide = (
     <div className="min-h-100 d-flex align-items-center">
@@ -61,19 +85,18 @@ const SelectorEstudiante = () => {
           </NavLink>
         </div>
         <div className="mb-5">
-          <h2 className="cta-1 mb-0 text-primary">Seleccione su estudiante a cargo</h2>
-          <h2 className="cta-1 text-primary">para ingresar al sistema.</h2>
+          <h2 className="cta-1 mb-0 text-primary">Seleccione su estudiante a cargo para ingresar al sistema.</h2>          
         </div>
         <div>
           <form id="forgotPasswordForm" className="tooltip-end-bottom" onSubmit={handleSubmit}>
             <div className="mb-3 filled form-group tooltip-end-top">
               <CsLineIcons icon="user" />
-                  <Select classNamePrefix="react-select" 
-                    options={estudiantes} 
-                    value={value} 
-                    onChange={setValue} 
+              <Select classNamePrefix="react-select" 
+                    options={options} 
+                    value={option} 
+                    onChange={setSelectedOption} 
                     placeholder="Seleccione" 
-                  />
+              />
               {errors.email && touched.email && <div className="d-block invalid-tooltip">{errors.email}</div>}
             </div>
             <Button size="lg" type="submit">

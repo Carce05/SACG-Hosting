@@ -33,6 +33,11 @@ class Server {
 
     routes() {
         this.app.use('/api/usuarios', require('../routes/user'))
+        this.app.use('/api/reset-password', require('../routes/passwordReset'))
+        this.app.use('/api/estudiantes', require('../routes/estudiante'))
+
+
+    
 
 
     }

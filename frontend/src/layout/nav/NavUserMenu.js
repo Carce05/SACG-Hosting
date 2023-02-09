@@ -77,8 +77,8 @@ const NavUserMenuContent = () => (
             </a>
           </li>
           <li>
-            <a href="#/!">
-              <CsLineIcons icon="file-text" className="me-2" size="17" /> <span className="align-middle">Docs</span>
+            <a href="/selector-estudiante">
+              <CsLineIcons icon="sync-horizontal" className="me-0" size="17" /> <span className="align-middle">Cambiar Estudiante</span>
             </a>
           </li>
         </ul>
@@ -87,12 +87,12 @@ const NavUserMenuContent = () => (
         <ul className="list-unstyled">
           <li>
             <a href="#/!">
-              <CsLineIcons icon="gear" className="me-2" size="17" /> <span className="align-middle">Settings</span>
+              <CsLineIcons icon="gear" className="me-0" size="17" /> <span className="align-middle">Settings</span>
             </a>
           </li>
           <li>
             <a href="/login">
-              <CsLineIcons icon="logout" className="me-2" size="17" /> <span className="align-middle">Logout</span>
+              <CsLineIcons icon="logout" className="me-2" size="17" /> <span className="align-middle">Cerrar Sesión</span>
             </a>
           </li>
         </ul>
