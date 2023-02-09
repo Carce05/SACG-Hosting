@@ -21,7 +21,7 @@ const SelectorEstudiante = (props) => {
   // const { userInfo } = useSelector((state) => state.user)
 
   // const usuario  = userInfo?.email;
-  const usuario  = 'mau@gmail.com';
+  const usuario  = 'lisajackson@gmail.com';
 
   useEffect(() => {
     async function fetchData() {
