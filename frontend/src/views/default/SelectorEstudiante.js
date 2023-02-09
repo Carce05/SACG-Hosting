@@ -18,9 +18,10 @@ const SelectorEstudiante = (props) => {
   const title = 'Seleccionar Estudiante';
   const description = 'Página para seleccionar un estudiante a cargo';
 
-  const { userInfo } = useSelector((state) => state.user)
+  // const { userInfo } = useSelector((state) => state.user)
 
-  const usuario  = userInfo?.email;
+  // const usuario  = userInfo?.email;
+  const usuario  = 'mau@gmail.com';
 
   useEffect(() => {
     async function fetchData() {
