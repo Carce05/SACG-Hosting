@@ -21,7 +21,7 @@ const SelectorEstudiante = (props) => {
   // const { userInfo } = useSelector((state) => state.user)
 
   // const usuario  = userInfo?.email;
-  const usuario  = 'lisajackson@gmail.com';
+  const usuario  = 'mau@gmail.com';
 
   useEffect(() => {
     async function fetchData() {
@@ -49,7 +49,7 @@ const SelectorEstudiante = (props) => {
 
   const initialValues = { email: '' };
 
-  const formik = useFormik({ initialValues, validationSchema });
+  const formik = useFormik({ initialValues });
   const { handleSubmit, handleChange, option, touched, errors } = formik;
   const { setSelectedOption } = useState(null);
 
