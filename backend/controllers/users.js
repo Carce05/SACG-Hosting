@@ -19,7 +19,7 @@ const usuariosGet = async (req, res = response) => {
 const usuariosPost = async (req, res = response) => {
     const { name, thumb, role, email,password } = req.body;
     const usuario = new Usuario( { name, thumb, role, email,password } );
-
+    
 
     //Check if the email exist
     const existEmail = await Usuario.findOne({ email })
