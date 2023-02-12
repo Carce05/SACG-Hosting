@@ -4,19 +4,20 @@ import * as Yup from 'yup';
 import { useFormik, Formik } from 'formik';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import { NavLink, Redirect, useHistory } from 'react-router-dom';
+import axios from "axios";
 
 const ModalAddEdit = ({ tableInstance }) => {
   const history = useHistory();
 
   const { selectedFlatRows, data, setData, setIsOpenAddEditModal, isOpenAddEditModal } = tableInstance;
   const initialValues = {
-    name: selectedFlatRows.length === 1 ? selectedFlatRows[0].original.name : '', 
-    thumb: '', 
-    email: '', 
-    role: 'admin', 
-    password: '', 
+    name: selectedFlatRows.length === 1 ? selectedFlatRows[0].original.name : '',
+    thumb: '',
+    email: '',
+    role: 'admin',
+    password: '',
     personalId: '',
-    status: '', 
+    status: '',
     terms: false
   };
   const [selectedItem, setSelectedItem] = useState(initialValues);
@@ -26,11 +27,11 @@ const ModalAddEdit = ({ tableInstance }) => {
     thumb: Yup.string().required('Thumb is required'),
     email: Yup.string().email().required('Correo Electronico requerido'),
     password: Yup.string().min(6, 'Debe tener como minimo 6 caracteres!').required('Favor ingresar contraseña'),
-    personalId: Yup.string().min(9, 'Cedula debe contener 9 digitos al menos!').required('Favor ingresar cedula').max(9,'Cedula debe contener 9 digitos maximo!'),
+    personalId: Yup.string().min(9, 'Cedula debe contener 9 digitos al menos!').required('Favor ingresar cedula').max(9, 'Cedula debe contener 9 digitos maximo!'),
     terms: Yup.bool().required().oneOf([true], 'Es necesario aceptar los terminos'),
   });
 
-  const onSubmit = async ({ name, thumb, email, role, password, personalId}) => {
+  const onSubmit = async ({ name, thumb, email, role, password, personalId }) => {
     try {
       const rawResponse = await fetch('http://localhost:8080/api/usuarios', {
         method: 'POST',
@@ -48,15 +49,29 @@ const ModalAddEdit = ({ tableInstance }) => {
           status: 'Activo'
         })
       });
+      const response = await rawResponse.json();
+      if (rawResponse.status === 400) {
+        alert(response.msg);
+      } else {
+        axios
+        .get("http://localhost:8080/api/usuarios")
+        .then((res) => {
+          setData(res.data);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+        setIsOpenAddEditModal(false);
+      }
     } catch (e) {
       console.log(e);
     }
-    setIsOpenAddEditModal(false);
+
     <Redirect to="/dashboards/usuarios" />
     // history.push("/dashboards/usuarios");
   }
 
-  const cancelRegister = () => { 
+  const cancelRegister = () => {
     document.getElementById("registerForm").reset();
   }
 
@@ -83,9 +98,9 @@ const ModalAddEdit = ({ tableInstance }) => {
             <form id="registerForm" className="tooltip-end-bottom" onSubmit={handleSubmit}>
 
               <Form.Group controlId="name">
-                
+
                 <div className="mb-3 filled form-group tooltip-end-top">
-                <CsLineIcons icon="user" />
+                  <CsLineIcons icon="user" />
                   <Form.Control
                     type="text"
                     name="name"
@@ -101,7 +116,7 @@ const ModalAddEdit = ({ tableInstance }) => {
 
               <Form.Group controlId="personalId">
                 <div className="mb-3 filled form-group tooltip-end-top">
-                <CsLineIcons icon="credit-card" />
+                  <CsLineIcons icon="credit-card" />
                   <Form.Control
                     type="text"
                     name="personalId"
@@ -117,7 +132,7 @@ const ModalAddEdit = ({ tableInstance }) => {
 
               <Form.Group controlId="thumb">
                 <div className="mb-3 filled form-group tooltip-end-top">
-                <CsLineIcons icon="image" />
+                  <CsLineIcons icon="image" />
                   <Form.Control
                     type="text"
                     name="thumb"
@@ -133,7 +148,7 @@ const ModalAddEdit = ({ tableInstance }) => {
 
               <Form.Group controlId="email">
                 <div className="mb-3 filled form-group tooltip-end-top">
-                <CsLineIcons icon="at-sign" />
+                  <CsLineIcons icon="at-sign" />
                   <Form.Control
                     type="text"
                     name="email"
@@ -149,7 +164,7 @@ const ModalAddEdit = ({ tableInstance }) => {
 
               <Form.Group controlId="password">
                 <div className="mb-3 filled form-group tooltip-end-top">
-                <CsLineIcons icon="eye-off" />
+                  <CsLineIcons icon="eye-off" />
                   <Form.Control
                     type="password"
                     name="password"
@@ -213,7 +228,7 @@ const ModalAddEdit = ({ tableInstance }) => {
               </Button>
               <Button variant="outline-primary" onClick={() => setIsOpenAddEditModal(false) || cancelRegister()}>
                 Cancelar
-                
+
               </Button>
 
             </form>
