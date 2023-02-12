@@ -18,6 +18,12 @@ const UsuarioSchema = Schema({
     },
     password: {
         type: String
+    },
+    personalId: {
+        type: String
+    },
+    status: {
+        type: String
     }
 });
 

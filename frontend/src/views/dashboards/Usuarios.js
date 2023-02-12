@@ -66,7 +66,7 @@ const Usuarios = () => {
 
   const columns = React.useMemo(() => {
     return [
-      { Header: 'Cédula', accessor: 'personal_id', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
+      { Header: 'Cédula', accessor: 'personalId', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       {
         Header: 'Nombre',
         accessor: 'name',

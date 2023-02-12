@@ -17,17 +17,16 @@ const usuariosGet = async (req, res = response) => {
 
 
 const usuariosPost = async (req, res = response) => {
-    const { name, thumb, role, email,password } = req.body;
-    const usuario = new Usuario( { name, thumb, role, email,password } );
-    
+    const { name, thumb, role, email,password, personalId,status } = req.body;
+    const usuario = new Usuario( { name, thumb, role, email,password, personalId, status } );
 
     //Check if the email exist
-    const existEmail = await Usuario.findOne({ email })
+    const existEmail = await Usuario.findOne({ email });
 
     if (existEmail) {
         return res.status(400).json({
             msg: 'Email already taken'
-        })
+        });
     }
 
     // Encrypt password
@@ -40,7 +39,7 @@ const usuariosPost = async (req, res = response) => {
     res.json({
         msg: 'POST | CONTROLLER',
         usuario
-    })
+    });
 }
 
 const usuariosPut = (req, res = response) => {
