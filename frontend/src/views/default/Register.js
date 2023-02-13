@@ -20,6 +20,7 @@ const Register = () => {
     terms: Yup.bool().required().oneOf([true], 'Terms must be accepted'),
   });
   const initialValues = { name: '', thumb: '', email: '', password: '', terms: false };
+  
   const onSubmit = async ({ name, thumb, email, password }) => { 
     const rawResponse = await fetch('http://localhost:8080/api/usuarios', {
       method: 'POST',
