@@ -50,17 +50,10 @@ const Secciones = (props) => {
   const [value, setValue] = useState();
   const [materias, setMaterias] = useState();
   const [secciones, setSecciones] = useState();
-
-  const { label, name, ...rest } = props;
-
-  const initialValues = { email: '' };
-
-  const formik = useFormik({ initialValues });
-  const { handleSubmit, handleChange,  seccion, touched, errors } = formik;
+  const [seccion, setSeccion] = useState([]);
   const { setSelectedMateria, setSelectedSeccion } = useState(null);
 
   const docente  = '1-1828-0064';
-  const { materia } = formik;
 
   useEffect(() => {
     async function fetchData() {
@@ -76,12 +69,11 @@ const Secciones = (props) => {
         });
       });
       data.forEach((val) => {
-        if (materia === val.materia) {
-          resultsSecciones.push({
-            seccion: val.seccion,
-            label: `${val.seccion}`,
-          });
-        }
+        resultsSecciones.push({
+          seccion: val.seccion,
+          materia: val.materia,
+          label: `${val.seccion}`,
+        });
       });
       // Update the options state
       setMaterias([ 
@@ -96,7 +88,19 @@ const Secciones = (props) => {
     fetchData();
   }, []);
   
+  const { label, name, ...rest } = props;
 
+  const initialValues = { email: '' };
+
+  const formik = useFormik({ initialValues });
+  const { handleSubmit, handleChange, materia, touched, errors } = formik;
+ 
+  
+
+  const handleMateria = (id) => {
+    const dt = secciones.filter(x => x.materia === id.materia);
+    setSeccion(dt);
+  }
 
 
   const title = 'Mis Secciones';
@@ -180,7 +184,7 @@ const Secciones = (props) => {
                   <Select classNamePrefix="react-select" 
                     options={materias} 
                     value={materia} 
-                    onChange={setSelectedMateria} 
+                    onChange={handleMateria} 
                     placeholder="Seleccione" 
                   />
                 </Col>          
@@ -195,7 +199,7 @@ const Secciones = (props) => {
               <div className="d-flex flex-column flex-md-row flex-lg-column align-items-center mb-n5 justify-content-md-between justify-content-center text-center text-md-start text-lg-center">
                 <Col xs="12" lg="12">
                   <Select classNamePrefix="react-select" 
-                    options={secciones} 
+                    options={seccion} 
                     value={seccion} 
                     onChange={setSelectedSeccion} 
                     placeholder="Seleccione" 
