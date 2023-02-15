@@ -6,7 +6,7 @@ import BreadcrumbList from 'components/breadcrumb-list/BreadcrumbList';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import ScrollByCount from 'components/scroll-by-count/ScrollByCount';
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 import { useTable, useGlobalFilter, useSortBy, usePagination, useRowSelect, useRowState } from 'react-table';
 import Table from 'views/interface/plugins/datatables/EditableRows/components/Table';
@@ -19,6 +19,9 @@ import ControlsDelete from 'views/interface/plugins/datatables/EditableRows/comp
 import ControlsSearch from 'views/interface/plugins/datatables/EditableRows/components/ControlsSearch';
 import ModalAddEdit from 'views/interface/plugins/datatables/EditableRows/components/ModalAddEdit';
 import TablePagination from 'views/interface/plugins/datatables/EditableRows/components/TablePagination';
+import axios from "axios";
+import { useFormik } from 'formik';
+
 
 const dummyData = [
   { id: 1, name: 'Basler Brot', sales: 21, stock: 392310440, category: 'Sourdough@gmail.com', tag: 'New' },
@@ -43,20 +46,57 @@ const dummyData = [
   { id: 20, name: 'Bolillo', sales: 33, stock: 484876903, category: 'Whole Wheat@gmail.com', tag: '' },
 ];
 
-const SchoolDashboard = () => {
+const Secciones = (props) => {
   const [value, setValue] = useState();
+  const [materias, setMaterias] = useState();
+  const [secciones, setSecciones] = useState();
 
-  const materias = [
-    { value: 'Español', label: 'Español' },
-    { value: 'Matemática', label: 'Matemática' },
-    { value: 'Ciencias', label: 'Ciencias' },
-  ];
+  const { label, name, ...rest } = props;
 
-  const secciones = [
-    { value: '7-3', label: '7-3' },
-    { value: '11-3', label: '11-3' },
-    { value: '9-1', label: '9-1' },
-  ];
+  const initialValues = { email: '' };
+
+  const formik = useFormik({ initialValues });
+  const { handleSubmit, handleChange,  seccion, touched, errors } = formik;
+  const { setSelectedMateria, setSelectedSeccion } = useState(null);
+
+  const docente  = '1-1828-0064';
+  const { materia } = formik;
+
+  useEffect(() => {
+    async function fetchData() {
+      // Fetch data
+      const { data } = await axios.get(`http://localhost:8080/api/docentes_materias_secciones/DocenteAsignado/${docente}`);
+      const resultsMaterias = []
+      const resultsSecciones = []
+      // Store results in the results array
+      data.forEach((val) => {
+        resultsMaterias.push({
+          materia: val.materia,
+          label: `${val.materia}`,
+        });
+      });
+      data.forEach((val) => {
+        if (materia === val.materia) {
+          resultsSecciones.push({
+            seccion: val.seccion,
+            label: `${val.seccion}`,
+          });
+        }
+      });
+      // Update the options state
+      setMaterias([ 
+        ...resultsMaterias
+      ])
+      setSecciones([ 
+        ...resultsSecciones
+      ])
+    }
+
+    // Trigger the fetch
+    fetchData();
+  }, []);
+  
+
 
 
   const title = 'Mis Secciones';
@@ -86,17 +126,6 @@ const SchoolDashboard = () => {
       },    
       { Header: 'Nota', accessor: 'sales', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       { Header: 'Correo', accessor: 'category', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-20' },
-      /*
-      {
-        Header: 'Tag',
-        accessor: 'tag',
-        sortable: true,
-        headerClassName: 'text-muted text-small text-uppercase w-10',
-        Cell: ({ cell }) => {
-          return <Badge bg="outline-primary">{cell.value}</Badge>;
-        },
-      },
-      */
       {
         Header: '',
         id: 'action',
@@ -150,32 +179,11 @@ const SchoolDashboard = () => {
                 <Col xs="12" lg="12">
                   <Select classNamePrefix="react-select" 
                     options={materias} 
-                    value={value} 
-                    onChange={setValue} 
+                    value={materia} 
+                    onChange={setSelectedMateria} 
                     placeholder="Seleccione" 
                   />
-                </Col>
-               
-                {/* <div className="mb-4">
-                  <p className="mb-0">Geometry</p>
-                  <p className="text-small text-muted mb-0">10:00 - 11:00</p>
-                </div>
-                <div className="mb-4">
-                  <p className="mb-0">Biology</p>
-                  <p className="text-small text-muted mb-0">11:00 - 12:00</p>
-                </div>
-                <div className="mb-4">
-                  <p className="mb-0 text-muted">Lunch</p>
-                  <p className="text-small text-muted mb-0">12:00 - 13:00</p>
-                </div>
-                <div className="mb-4">
-                  <p className="mb-0">Language</p>
-                  <p className="text-small text-muted mb-0">13:00 - 14:00</p>
-                </div>
-                <div className="mb-4">
-                  <p className="mb-0">Art</p>
-                  <p className="text-small text-muted mb-0">13:00 - 14:00</p>
-                </div> */}
+                </Col>          
               </div>
             </Card.Body>
           </Card>
@@ -188,8 +196,8 @@ const SchoolDashboard = () => {
                 <Col xs="12" lg="12">
                   <Select classNamePrefix="react-select" 
                     options={secciones} 
-                    value={value} 
-                    onChange={setValue} 
+                    value={seccion} 
+                    onChange={setSelectedSeccion} 
                     placeholder="Seleccione" 
                   />
                 </Col>
@@ -990,4 +998,4 @@ const SchoolDashboard = () => {
   );
 };
 
-export default SchoolDashboard;
+export default Secciones;

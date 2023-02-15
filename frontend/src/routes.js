@@ -5,7 +5,7 @@ import { DEFAULT_PATHS } from 'config.js';
 
 const dashboards = {
   elearning: lazy(() => import('views/dashboards/ElearningDashboard')),
-  school: lazy(() => import('views/dashboards/SchoolDashboard')),
+  secciones: lazy(() => import('views/dashboards/Secciones')),
   usuarios: lazy(() => import('views/dashboards/Usuarios')),
   estudiantes: lazy(() => import('views/dashboards/Estudiantes')),
   perfil: lazy(() => import('views/dashboards/ProfileSettings')),
@@ -56,7 +56,7 @@ const routesAndMenuItems = {
       to: `${appRoot}/dashboards/elearning`,
       subs: [
         { path: '/elearning', label: 'menu.elearning', component: dashboards.elearning },
-        { path: '/school', label: 'menu.secciones', component: dashboards.school },
+        { path: '/secciones', label: 'menu.secciones', component: dashboards.secciones },
         { path: '/usuarios', label: 'menu.usuarios', component: dashboards.usuarios },
         { path: '/estudiantes', label: 'menu.estudiantes', component: dashboards.estudiantes },
         { path: '/perfil', label: 'menu.perfil', component: dashboards.perfil },
