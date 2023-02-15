@@ -54,6 +54,7 @@ const Secciones = (props) => {
   const { setSelectedMateria, setSelectedSeccion } = useState(null);
 
   const docente  = '1-1828-0064';
+  
 
   useEffect(() => {
     async function fetchData() {
@@ -61,12 +62,21 @@ const Secciones = (props) => {
       const { data } = await axios.get(`http://localhost:8080/api/docentes_materias_secciones/DocenteAsignado/${docente}`);
       const resultsMaterias = []
       const resultsSecciones = []
+      let contador = 0;
       // Store results in the results array
       data.forEach((val) => {
+        resultsMaterias.forEach((dup) => {
+          contador = 0;
+          if (val.materia === dup.materia) {
+            contador+=1;
+          }
+        })
+        if (contador === 0)
         resultsMaterias.push({
           materia: val.materia,
           label: `${val.materia}`,
         });
+
       });
       data.forEach((val) => {
         resultsSecciones.push({
