@@ -46,7 +46,7 @@ const NavLanguageSwitcher = () => {
           {currentLang.code}
         </Dropdown.Toggle>
 
-        <Dropdown.Menu
+         <Dropdown.Menu
           popperConfig={{
             modifiers: [
               {
@@ -69,8 +69,10 @@ const NavLanguageSwitcher = () => {
             </Dropdown.Item>
           ))}
         </Dropdown.Menu>
+
       </Dropdown>
     </div>
+
   );
 };
 export default React.memo(NavLanguageSwitcher);

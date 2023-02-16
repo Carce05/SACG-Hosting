@@ -1,5 +1,11 @@
 const enMessages = {
   'menu.dashboards': 'Inicio',
+  'menu.usuarios': 'Usuarios',
+  'menu.secciones': 'Secciones',
+  'menu.estudiantes': 'Estudiantes',
+  'menu.perfil': 'Perfil',
+  'menu.avisos': 'Avisos y Comunicados',
+  'menu.calificacion': 'Calificación',
   'menu.default': 'es|Default',
   'menu.visual': 'es|Visual',
   'menu.analytic': 'es|Analytic',
