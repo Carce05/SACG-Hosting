@@ -1,5 +1,4 @@
 const enMessages = {
-  'menu.usuarios': 'Users',
   'menu.dashboards': 'de|Dashboards',
   'menu.default': 'de|Default',
   'menu.visual': 'de|Visual',
