@@ -21,6 +21,7 @@ import ModalAddEdit from 'views/interface/plugins/datatables/EditableRows/compon
 import TablePagination from 'views/interface/plugins/datatables/EditableRows/components/TablePagination';
 import axios from "axios";
 import { useFormik } from 'formik';
+import { useSelector } from 'react-redux';
 
 
 const dummyData = [
@@ -47,9 +48,10 @@ const dummyData = [
 ];
 
 const Secciones = (props) => {
-  const [value, setValue] = useState();
+  const [value, setValue] = useState([]);
   const [materias, setMaterias] = useState();
   const [secciones, setSecciones] = useState();
+  const [estudiantes, setEstudiantes] = useState([]);
   const [seccion, setSeccion] = useState([]);
   const { label, name, ...rest } = props;
   const initialValues = { email: '' };
@@ -57,19 +59,20 @@ const Secciones = (props) => {
   const { handleSubmit, handleChange, materia, seccionn, touched, errors } = formik;
   const { setSelectedMateria, setSelectedSeccionn } = useState(null);
   
-
-  const docente  = '1-1828-0064';
+  
+  const { currentUser, isLogin } = useSelector((state) => state.auth);
+  const docente  = currentUser.email;
   
 
   useEffect(() => {
     async function fetchData() {
       // Fetch data
-      const { data } = await axios.get(`http://localhost:8080/api/docentes_materias_secciones/DocenteAsignado/${docente}`);
+      const response = await axios.get(`http://localhost:8080/api/docentes_materias_secciones/DocenteAsignado/${docente}`);
       const resultsMaterias = []
       const resultsSecciones = []
       let contador = 0;
       // Store results in the results array
-      data.forEach((val) => {
+      response.data.forEach((val) => {
         resultsMaterias.forEach((dup) => {
           contador = 0;
           if (val.materia === dup.materia) {
@@ -83,7 +86,7 @@ const Secciones = (props) => {
         });
 
       });
-      data.forEach((val) => {
+      response.data.forEach((val) => {
         resultsSecciones.push({
           seccion: val.seccion,
           materia: val.materia,
@@ -103,12 +106,58 @@ const Secciones = (props) => {
     fetchData();
   }, []);
   
+  
+  /*
+  useEffect(() => {
 
+    axios
+      .get("http://localhost:8080/api/estudiantes/")
+      .then((res) => {
+        setData(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
+*/
+
+
+  
+  useEffect(() => {
+    async function fetchData() {
+      // Fetch data
+      const response = await axios.get("http://localhost:8080/api/estudiantes/");
+      const resultsEstudiantes = []
+      // Store results in the results array
+      response.data.forEach((val) => {
+        resultsEstudiantes.push({
+          cedula: val.cedula,
+          nombre: val.nombre,
+          apellido: val.apellido,
+          seccion: val.seccion,
+        });
+      });
+      setEstudiantes([ 
+        ...resultsEstudiantes
+      ])
+    }
+
+    // Trigger the fetch
+    fetchData();
+  }, []);
+
+  const [data, setData] = React.useState(estudiantes);
 
   const handleMateria = (id) => {
     const dt = secciones.filter(x => x.materia === id.materia);
     setSeccion(dt);
   }
+
+  const handleSeccion = (id) => {
+    const dt = estudiantes.filter(x => x.seccion === id.seccion);
+    setData(dt);
+  }
+
 
 
   const title = 'Mis Secciones';
@@ -116,10 +165,10 @@ const Secciones = (props) => {
 
   const columns = React.useMemo(() => {
     return [
-      { Header: 'Cédula', accessor: 'stock', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
+      { Header: 'Cédula', accessor: 'cedula', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       {
         Header: 'Nombre',
-        accessor: 'name',
+        accessor: 'nombre',
         sortable: true,
         headerClassName: 'text-muted text-small text-uppercase w-30',
         Cell: ({ cell }) => {
@@ -136,8 +185,8 @@ const Secciones = (props) => {
           );
         },
       },    
-      { Header: 'Nota', accessor: 'sales', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
-      { Header: 'Correo', accessor: 'category', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-20' },
+      { Header: 'Apellido', accessor: 'apellido', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
+      { Header: 'Seccion', accessor: 'seccion', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-20' },
       {
         Header: '',
         id: 'action',
@@ -150,7 +199,6 @@ const Secciones = (props) => {
     ];
   }, []);
 
-  const [data, setData] = React.useState(dummyData);
   const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
 
   const tableInstance = useTable(
@@ -205,7 +253,7 @@ const Secciones = (props) => {
                   <Select classNamePrefix="react-select" 
                     options={seccion} 
                     value={seccionn} 
-                    onChange={setSelectedSeccionn} 
+                    onChange={handleSeccion} 
                     placeholder="Seleccione" 
                   />
                 </Col>
