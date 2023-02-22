@@ -57,7 +57,7 @@ const Secciones = (props) => {
   const initialValues = { email: '' };
   const formik = useFormik({ initialValues });
   const { handleSubmit, handleChange, materia, seccionn, touched, errors } = formik;
-  const { setSelectedMateria, setSelectedSeccionn } = useState(null);
+  const { setSelectedMateria, setSeccionn } = useState();
   
   
   const { currentUser, isLogin } = useSelector((state) => state.auth);
@@ -148,14 +148,18 @@ const Secciones = (props) => {
 
   const [data, setData] = React.useState(estudiantes);
 
-  const handleMateria = (id) => {
-    const dt = secciones.filter(x => x.materia === id.materia);
-    setSeccion(dt);
-  }
+
 
   const handleSeccion = (id) => {
     const dt = estudiantes.filter(x => x.seccion === id.seccion);
     setData(dt);
+  }
+
+  const handleMateria = (id) => {
+    const dt = secciones.filter(x => x.materia === id.materia);
+    setSeccion(dt);
+    // id.seccion = formik;
+    handleSeccion(id);
   }
 
 
