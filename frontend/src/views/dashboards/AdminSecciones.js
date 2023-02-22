@@ -67,7 +67,7 @@ const AdminSecciones = (props) => {
   useEffect(() => {
     async function fetchData() {
       // Fetch data
-      const response = await axios.get(`http://localhost:8080/api/docentes_materias_secciones/DocenteAsignado/${docente}`);
+      const response = await axios.get(`http://localhost:8080/api/docentes_materias_secciones/dmsGet`);
       const resultsMaterias = []
       const resultsSecciones = []
       let contador = 0;
