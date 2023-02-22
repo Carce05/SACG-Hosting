@@ -59,12 +59,13 @@ const usuariosDelete = (req, res = response) => {
 
 const usuarioLogin = async (req, res = response) => {
     const { email, password  } = req.body;
-    const { name, thumb, role, password : pass } = await Usuario.findOne({ email })
+    const { id, name, thumb, role, password : pass } = await Usuario.findOne({ email })
 
     if (password === pass) {
         res.json({
             status: true,
             usuario: {
+                id,
                 name,
                 thumb,
                 role,

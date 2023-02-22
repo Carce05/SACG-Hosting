@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { DEFAULT_USER, IS_DEMO } from 'config.js';
 
 const initialState = {
   isLogin: false,
