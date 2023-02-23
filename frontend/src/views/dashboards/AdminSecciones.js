@@ -50,26 +50,29 @@ const dummyData = [
 const AdminSecciones = (props) => {
   const [value, setValue] = useState([]);
   const [materias, setMaterias] = useState();
+  const [docentes, setDocentes] = useState([]);
+  const [docentesFiltrados, setDocentesFiltrados] = useState([]);
   const [secciones, setSecciones] = useState();
   const [estudiantes, setEstudiantes] = useState([]);
   const [seccion, setSeccion] = useState([]);
   const { label, name, ...rest } = props;
   const initialValues = { email: '' };
   const formik = useFormik({ initialValues });
-  const { handleSubmit, handleChange, materia, seccionn, touched, errors } = formik;
+  const { handleSubmit, handleChange, materia, docentee, seccionn, touched, errors } = formik;
   const { setSelectedMateria, setSeccionn } = useState();
   
   
-  const { currentUser, isLogin } = useSelector((state) => state.auth);
-  const docente  = currentUser.email;
+ 
   
 
   useEffect(() => {
     async function fetchData() {
       // Fetch data
-      const response = await axios.get(`http://localhost:8080/api/docentes_materias_secciones/dmsGet`);
+      const response = await axios.get(`http://localhost:8080/api/docentes_materias_secciones/`);
       const resultsMaterias = []
+      const resultsDocentes = []
       const resultsSecciones = []
+
       let contador = 0;
       // Store results in the results array
       response.data.forEach((val) => {
@@ -87,15 +90,27 @@ const AdminSecciones = (props) => {
 
       });
       response.data.forEach((val) => {
+        resultsDocentes.push({
+          docente: val.docente,
+          materia: val.materia,
+          label: `${val.docente}`,
+        });
+
+      });
+      response.data.forEach((val) => {
         resultsSecciones.push({
           seccion: val.seccion,
-          materia: val.materia,
+          docente: val.docente,
+          
           label: `${val.seccion}`,
         });
       });
       // Update the options state
       setMaterias([ 
         ...resultsMaterias
+      ])
+      setDocentes([ 
+        ...resultsDocentes
       ])
       setSecciones([ 
         ...resultsSecciones
@@ -155,12 +170,23 @@ const AdminSecciones = (props) => {
     setData(dt);
   }
 
-  const handleMateria = (id) => {
-    const dt = secciones.filter(x => x.materia === id.materia);
+  const handleDocente= (id) => {
+    const dt = secciones.filter(x => x.docente=== id.docente);
     setSeccion(dt);
-    // id.seccion = formik;
     handleSeccion(id);
+   
   }
+
+  const handleMateria = (id) => {
+    const dt = docentes.filter(x => x.materia === id.materia);
+    setDocentesFiltrados(dt);
+
+    // id.seccion = formik;
+    handleDocente(id);
+    
+  }
+
+
 
 
 
@@ -250,6 +276,23 @@ const AdminSecciones = (props) => {
         </Col>
         <Col>
           <Card className="h-100">
+            <Card.Body className="mb-5">
+              <p className="text-primary heading mb-8">Docente</p>
+              <div className="d-flex flex-column flex-md-row flex-lg-column align-items-center mb-n5 justify-content-md-between justify-content-center text-center text-md-start text-lg-center">
+                <Col xs="12" lg="12">
+                  <Select classNamePrefix="react-select" 
+                    options={docentesFiltrados} 
+                    value={docentee} 
+                    onChange={handleDocente} 
+                    placeholder="Seleccione" 
+                  />
+                </Col>          
+              </div>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col>
+          <Card className="h-100">
           <Card.Body className="mb-5">
               <p className="text-primary heading mb-8">Sección</p>
               <div className="d-flex flex-column flex-md-row flex-lg-column align-items-center mb-n5 justify-content-md-between justify-content-center text-center text-md-start text-lg-center">
@@ -271,9 +314,6 @@ const AdminSecciones = (props) => {
         <Col>
           <div className="d-flex justify-content-between">
               <h2 className="small-title">Estudiantes</h2>
-              <NavLink to="/quiz/result" className="btn btn-icon btn-icon-end btn-xs btn-background-alternate p-0 text-small">
-                <span className="align-bottom">Ver Todos</span> <CsLineIcons icon="chevron-right" className="align-middle" size="12" />
-              </NavLink>
           </div>
           <div>
             <Row className="mb-3">
