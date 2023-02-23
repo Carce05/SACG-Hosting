@@ -26,11 +26,11 @@ const sendEmail = async (email, subject, text) => {
         tls: {
         ciphers:'SSLv3'
     }
-        console.log('info',"Correo de reestablecimiento de contraseña enviado exitosamente");
-        bitacora.log('info',"Correo de reestablecimiento de contraseña enviado exitosamente");
+        console.log('Exito',"Correo de reestablecimiento de contraseña enviado exitosamente");
+        bitacora.log('Exito',"Correo de reestablecimiento de contraseña enviado exitosamente");
     } catch (error) {
-        bitacora.log('error', "Fallo en el envío del email");
-        console.log('error', "Fallo en el envío del email");
+        bitacora.log('error', "Fallo en el envío del email de reestablecimiento de contraseña");
+        console.log('error', "Fallo en el envío del email ");
     }
 };
 

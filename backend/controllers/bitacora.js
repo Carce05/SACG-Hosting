@@ -1,4 +1,3 @@
-
 const {
     createLogger,
     transports,
@@ -13,7 +12,7 @@ const bitacora = createLogger({
             format: format.combine(format.timestamp(), format.json())
         }),
         new transports.MongoDB({
-            tipo: 'error',
+            level: 'error',
             db: 'mongodb+srv://LCDG:Lcdg123.@cluster0.pvrl9qx.mongodb.net/LDG?retryWrites=true&w=majority',
             options: {
                 useUnifiedTopology: true
