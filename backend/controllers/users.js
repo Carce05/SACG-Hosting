@@ -16,7 +16,7 @@ const usuariosGet = async (req, res = response) => {
 const usuariosPost = async (req, res = response) => {
     const { name, thumb, role, email,password, personalId,status } = req.body;
     const usuario = new Usuario( { name, thumb, role, email,password, personalId, status } );
-    console.log(email,personalId)
+    
     //Check if the email exist
     const existEmail = await Usuario.findOne({ email });
     const existPersonalId = await Usuario.findOne({ personalId });
