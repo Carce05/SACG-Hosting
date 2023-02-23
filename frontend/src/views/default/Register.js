@@ -92,7 +92,7 @@ const Register = () => {
             <div className="mb-3 filled form-group tooltip-end-top">
               <CsLineIcons icon="user" />
               <Form.Control type="text" name="thumb" placeholder="thumb" value={values.thumb} onChange={handleChange} />
-              {errors.thumb && touched.thumb && <div classthumb="d-block invalid-tooltip">{errors.thumb}</div>}
+              {/* {errors.thumb && touched.thumb && <div classthumb="d-block invalid-tooltip">{errors.thumb}</div>} */}
             </div>
             <div className="mb-3 filled form-group tooltip-end-top">
               <CsLineIcons icon="email" />

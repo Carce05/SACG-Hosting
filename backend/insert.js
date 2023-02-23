@@ -15,8 +15,6 @@ async function run() {
       content: "Testeo",
     }
     const result = await usuarios.insertOne(doc);
-
-    console.log('Se insertó un documento con el _id: ${result.insertedId}');
   } finally {
     
     await client.close();

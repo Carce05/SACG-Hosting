@@ -11,6 +11,7 @@ const dashboards = {
   perfil: lazy(() => import('views/dashboards/ProfileSettings')),
   avisos: lazy(() => import('views/dashboards/Avisos')),
   calificacion: lazy(() => import('views/dashboards/Calificacion')),
+  matricula: lazy(() => import('views/dashboards/AdminMatriculas'))
 };
 const courses = {
   explore: lazy(() => import('views/courses/CoursesExplore')),
@@ -62,6 +63,7 @@ const routesAndMenuItems = {
         { path: '/perfil', label: 'menu.perfil', component: dashboards.perfil },
         { path: '/avisos', label: 'menu.avisos', component: dashboards.avisos },
         { path: '/calificacion', label: 'menu.calificacion', component: dashboards.calificacion },
+        { path: '/matricula-admin', label: 'menu.matricula', component: dashboards.matricula },
       ],
     },
     {

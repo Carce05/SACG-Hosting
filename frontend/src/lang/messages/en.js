@@ -25,6 +25,7 @@ const enMessages = {
   'menu.knowledge-base': 'Knowledge Base',
   'menu.error': 'Error',
   'menu.coming-soon': 'Coming Soon',
+  'menu.matricula': 'matricula',
   'menu.pricing': 'Pricing',
   'menu.search': 'Search',
   'menu.mailing': 'Mailing',
