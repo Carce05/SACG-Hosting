@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const bitacora = require("./bitacora");
 
 const sendEmail = async (email, subject, text) => {
     try {
@@ -25,10 +26,11 @@ const sendEmail = async (email, subject, text) => {
         tls: {
         ciphers:'SSLv3'
     }
-
-        console.log("Correo de reestablecimiento de contraseña enviado exitosamente");
+        console.log('info',"Correo de reestablecimiento de contraseña enviado exitosamente");
+        bitacora.log('info',"Correo de reestablecimiento de contraseña enviado exitosamente");
     } catch (error) {
-        console.log(error, "Fallo en el envío del email");
+        bitacora.log('error', "Fallo en el envío del email");
+        console.log('error', "Fallo en el envío del email");
     }
 };
 
