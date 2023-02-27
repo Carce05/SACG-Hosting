@@ -6,7 +6,8 @@ import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import { NavLink, Redirect, useHistory } from 'react-router-dom';
 import axios from "axios";
 import { useDispatch, useSelector } from 'react-redux';
-import { agregarMatricula, obtenerMatriculas } from 'store/slices/matricula/matriculaThunk';
+import { agregarMatricula, obtenerMatriculas, onShowAlert } from 'store/slices/matricula/matriculaThunk';
+import { setMatriculasLoaded, setMatriculasLoading } from 'store/slices/matricula/matriculaSlice';
 
 const ModalAddEditMatricula = ({ tableInstance }) => {
 
@@ -55,15 +56,14 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
   }
   
   const onSubmit = async (values) => {
+    dispatch(setMatriculasLoading())
     dispatch(agregarMatricula(values));
+    dispatch(onShowAlert());
     setIsOpenAddEditModal(false)
     cancelRegister();
-    dispatch(obtenerMatriculas());
   }
 
-
   const formik = useFormik({ initialValues, validationSchema, onSubmit });
-  // const { handleSubmit, handleChange, values, touched, errors, setFieldValue } = formik;
 
   return (
 
@@ -94,6 +94,7 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                     name="nombreCompleto"
                     value={values.nombreCompleto}
                     onChange={handleChange}
+                    disabled={ selectedFlatRows.length === 1 }
                   />
                   {errors.nombreCompleto && touched.nombreCompleto && (
                     <div className="invalid-tooltip-matricula">{errors.nombreCompleto}</div>
@@ -109,6 +110,7 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                       name="fechaNacimiento"
                       value={values.fechaNacimiento}
                       onChange={handleChange}
+                       disabled={ selectedFlatRows.length === 1 }
                     />
                   {errors.fechaNacimiento && touched.fechaNacimiento && (
                     <div className="invalid-tooltip-matricula">{errors.fechaNacimiento}</div>
@@ -123,6 +125,7 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                       name="edadCumplidaAnios"
                       value={values.edadCumplidaAnios}
                       onChange={handleChange}
+                       disabled={ selectedFlatRows.length === 1 }
                     />
                   {errors.edadCumplidaAnios && touched.edadCumplidaAnios && (
                     <div className="invalid-tooltip-matricula">{errors.edadCumplidaAnios}</div>
@@ -138,6 +141,7 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
 
                     value={values.edadCumplidaMeses}
                     onChange={handleChange}
+                    disabled={ selectedFlatRows.length === 1 }
                   />
                   {errors.edadCumplidaMeses && touched.edadCumplidaMeses && (
                     <div className="invalid-tooltip-matricula">{errors.edadCumplidaMeses}</div>
@@ -155,6 +159,7 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                       name="nacionalidad"
                       value={values.nacionalidad}
                       onChange={handleChange}
+                       disabled={ selectedFlatRows.length === 1 }
                     />
                   {errors.nacionalidad && touched.nacionalidad && (
                     <div className="invalid-tooltip-matricula">{errors.nacionalidad}</div>
@@ -169,6 +174,7 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                       name="telefono"
                       value={values.telefono}
                       onChange={handleChange}
+                       disabled={ selectedFlatRows.length === 1 }
                     />
                   {errors.telefono && touched.telefono && (
                     <div className="invalid-tooltip-matricula">{errors.telefono}</div>
@@ -187,6 +193,7 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                     name="domicilio"
                     value={values.domicilio}
                     onChange={handleChange}
+                    disabled={ selectedFlatRows.length === 1 }
                   />
                   {errors.domicilio && touched.domicilio && (
                     <div className="invalid-tooltip-matricula">{errors.domicilio}</div>
@@ -202,6 +209,7 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                       name="centroEducativoProcedencia"
                       value={values.centroEducativoProcedencia}
                       onChange={handleChange}
+                       disabled={ selectedFlatRows.length === 1 }
                     />
                   {errors.centroEducativoProcedencia && touched.centroEducativoProcedencia && (
                     <div className="invalid-tooltip-matricula">{errors.centroEducativoProcedencia}</div>
@@ -217,6 +225,7 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                       name="nivelAnterior"
                       value={values.nivelAnterior}
                       onChange={handleChange}
+                       disabled={ selectedFlatRows.length === 1 }
                     />
                   {errors.nivelAnterior && touched.nivelAnterior && (
                     <div className="invalid-tooltip-matricula">{errors.nivelAnterior}</div>
@@ -233,6 +242,7 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                     name="matricularNivelDe"
                     value={values.matricularNivelDe}
                     onChange={handleChange}
+                    disabled={ selectedFlatRows.length === 1 }
                   />
                   {errors.matricularNivelDe && touched.matricularNivelDe && (
                     <div className="invalid-tooltip-matricula">{errors.matricularNivelDe}</div>
@@ -247,6 +257,7 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                       name="estudianteConviveCon"
                       defaultValue={values.estudianteConviveCon}
                       onChange={handleChange}
+                       disabled={ selectedFlatRows.length === 1 }
                     >
                       <option>Seleccionar</option>
                       <option value="Ambos Padres">Ambos Padres</option>
@@ -269,6 +280,7 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                     name="estudianteConviveConOtros"
                     value={values.estudianteConviveConOtros}
                     onChange={handleChange}
+                    disabled={ selectedFlatRows.length === 1 }
                   />
                     {errors.estudianteConviveConOtros && touched.estudianteConviveConOtros && (
                     <div className="invalid-tooltip-matricula">{errors.estudianteConviveConOtros}</div>
@@ -284,6 +296,7 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                        name="tieneAdecuancion"
                       defaultValue={values.tieneAdecuancion}
                       onChange={handleChange}
+                       disabled={ selectedFlatRows.length === 1 }
                     >
                       <option>Seleccionar</option>
                       <option value="true">Si</option>
@@ -304,6 +317,7 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                       name="cualAdecuancion"
                       value={values.cualAdecuancion}
                       onChange={handleChange}
+                       disabled={ selectedFlatRows.length === 1 }
                     />
                     {errors.cualAdecuancion && touched.cualAdecuancion && (
                     <div className="invalid-tooltip-matricula">{errors.cualAdecuancion}</div>
@@ -323,6 +337,7 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                     as="textarea"
                     value={values.razonesEntrar}
                     onChange={handleChange}
+                    disabled={ selectedFlatRows.length === 1 }
                   />
                     {errors.razonesEntrar && touched.razonesEntrar && (
                     <div className="invalid-tooltip-matricula">{errors.razonesEntrar}</div>
@@ -332,7 +347,7 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
               <Button variant="primary" className={(selectedFlatRows.length) === 1 ? 'hide-element' : ''} type="submit">{selectedFlatRows.length === 1 ? 'Actualizar' : 'Agregar Matricula'}
               </Button>
               <Button variant="outline-primary" onClick={() => setIsOpenAddEditModal(false) || cancelRegister()}>
-                Cancelar
+                Cerrar
               </Button>
             </form>
           )}
