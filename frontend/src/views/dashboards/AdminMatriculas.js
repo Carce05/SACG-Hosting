@@ -1,4 +1,4 @@
-import { Row, Col, Card, Button, Badge, Dropdown, Form } from 'react-bootstrap';
+import { Row, Col, Card, Button, Badge, Dropdown, Form, Alert } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import Rating from 'react-rating';
 import HtmlHead from 'components/html-head/HtmlHead';
@@ -14,7 +14,7 @@ import ButtonsCheckAll from 'views/interface/plugins/datatables/EditableRows/com
 import ButtonsAddNew from 'views/interface/plugins/datatables/EditableRows/components/ButtonsAddNew';
 import ControlsPageSize from 'views/interface/plugins/datatables/EditableRows/components/ControlsPageSize';
 import ControlsAdd from 'views/interface/plugins/datatables/EditableRows/components/ControlsAdd';
-import ControlsEdit from 'views/interface/plugins/datatables/EditableRows/components/ControlsEdit';
+import ControlsVer from 'views/interface/plugins/datatables/EditableRows/components/ControlsVer';
 import ControlsDelete from 'views/interface/plugins/datatables/EditableRows/components/ControlsDelete';
 import ControlsSearch from 'views/interface/plugins/datatables/EditableRows/components/ControlsSearch';
 import ModalAddEditMatricula from 'views/interface/plugins/datatables/EditableRows/components/ModalAddEditMatricula';
@@ -27,23 +27,29 @@ const AdminMatricula = () => {
   const title = 'Matricula';
   const description = 'Administración de Matricula';
   const dispatch = useDispatch();
-  const { matriculas } = useSelector((state) => state.matricula);
+  const { matriculas, matriculasLoading, onShowAlert } = useSelector((state) => state.matricula);
   const { currentUser } = useSelector((state) => state.auth);
   useEffect(() => {
-    console.log(matriculas.length)
     if(matriculas.length > 0){
-      setData(matriculas);
+      if (currentUser.role !== 'admin'){
+        const matriculasPerUser = matriculas.filter(e => e.encargadoId === currentUser.id );
+        setData(matriculasPerUser);
+      } else {
+        setData(matriculas);
+      }
+      
     } else {
       dispatch(obtenerMatriculas());
     }
-
-  }, [matriculas]);
-
-  const onRefrescar = () => {
-     dispatch(obtenerMatriculas());
-  }
+    if (onShowAlert) {
+      dispatch(obtenerMatriculas());
+    }
+  }, [matriculas, onShowAlert]);
 
 
+const onRefrescar = () => {
+    dispatch(obtenerMatriculas());
+}
   const columns = React.useMemo(() => {
     return [
       { Header: 'Nombre Completo', accessor: 'nombreCompleto', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
@@ -93,6 +99,7 @@ const AdminMatricula = () => {
   );
 
   const breadcrumbs = [{ to: '', text: 'Home' }];
+
   return (
     <>
       <HtmlHead title={title} description={description} />
@@ -102,7 +109,7 @@ const AdminMatricula = () => {
           {/* Title Start */}
           <Col md="7">
           <div className='form-input-hori'>
-              <h1 className="mb-0 pb-0 display-4">{title}</h1>
+              <h1 className="mb-0 pb-0 display-4">{(currentUser.role === 'admin') ? title : 'Agregar Nueva'}</h1>
               <div className={ (currentUser.role === 'Encargado') ? 'show-element d-inline-block me-0 me-sm-3 float-start float-md-none' : 'hide-element'}>
                     <ControlsAdd tableInstance={tableInstance} />
               </div>
@@ -117,28 +124,29 @@ const AdminMatricula = () => {
         <Col>
           <div> 
             <Row className="mb-3">
-              <Col sm="12" md="5" lg="3" xxl="2" className={ (currentUser.role === 'admin') ? 'show-element' : 'hide-element'} >
-                <div className="d-inline-block float-md-start me-1 mb-1 mb-md-0 search-input-container w-100 shadow bg-foreground">
-                  <ControlsSearch tableInstance={tableInstance} />
+              <Col sm="12" md="5" lg="3" xxl="2">
+                <div className={ (currentUser.role === 'admin') ? 'show-element d-inline-block float-md-start me-1 mb-1 mb-md-0 search-input-container w-100 shadow bg-foreground' : 'hide-element' }>
+                  <ControlsSearch tableInstance={tableInstance}/>
                 </div>
               </Col>
               <Col sm="12" md="7" lg="9" xxl="10" className="text-end">
                 <div className={ (currentUser.role === 'admin') ? 'show-element d-inline-block me-0 me-sm-3 float-start float-md-none' : 'hide-element'}>
-                  <ControlsAdd tableInstance={tableInstance} />  <ControlsEdit tableInstance={tableInstance} />
+                  <ControlsAdd tableInstance={tableInstance} />  <ControlsVer tableInstance={tableInstance} />
                 </div>
-                <Button variant="outline-primary" className="d-inline-block" onClick={ onRefrescar }>
+                <Button variant="outline-primary" className={ (currentUser.role === 'admin') ? 'show-element' : 'hide-element'} onClick={ onRefrescar }>
                     Refrescar
                 </Button>
-                {/* <div className={ (currentUser.role === 'admin') ? 'show-element d-inline-block me-0 me-sm-3 float-start float-md-none' : 'hide-element'}>
-                  <ControlsAdd tableInstance={tableInstance} /> <ControlsEdit tableInstance={tableInstance} /> <ControlsDelete tableInstance={tableInstance} />
-                </div> */}
                 <div className={ (currentUser.role === 'admin') ? 'show-element d-inline-block' : 'hide-element'}>
                   <ControlsPageSize tableInstance={tableInstance} />
                 </div>
               </Col>
+             
+              <div className={ (currentUser.role !== 'admin') ? 'show-element d-inline-block me-0 me-sm-3 float-start float-md-none' : 'hide-element'}>
+                <h3 className={ (currentUser.role !== 'admin') ? 'show-element d-inline-block mb-10 pb-0 mr-3' : 'hide-element'}>Tus Matriculas</h3> <ControlsVer tableInstance={tableInstance} />
+              </div>
             </Row>
             <Row>
-              <Col xs="12" className={ (currentUser.role === 'admin') ? 'show-element' : 'hide-element'}>
+              <Col xs="12">
                 <Table className="react-table rows" tableInstance={tableInstance} />
               </Col>
               <Col xs="12">
@@ -148,6 +156,14 @@ const AdminMatricula = () => {
           </div>
           <ModalAddEditMatricula tableInstance={tableInstance} />
         </Col>
+        { 
+          onShowAlert && (
+            <Alert variant="success">
+              Matricula agregada con exito
+            </Alert>
+          )
+        }
+
       </Row>
     </>
   );
