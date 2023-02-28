@@ -283,7 +283,7 @@ const SchoolDashboard = () => {
         <Col>
           <div>
           <Form>
-      <Row className="g-3">
+      <Row className="g-6">
         <Col md="1">
           <Form.Label>Cotidiano</Form.Label>
           <Form.Control type="number" />
@@ -306,6 +306,10 @@ const SchoolDashboard = () => {
         </Col>
         <Col md="1">
           <Form.Label>Asistencia</Form.Label>
+          <Form.Control type="number" />
+        </Col>
+        <Col md="1">
+          <Form.Label>Total</Form.Label>
           <Form.Control type="number" />
         </Col>
         
