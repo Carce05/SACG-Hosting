@@ -12,19 +12,24 @@ import RouteIdentifier from 'routing/components/RouteIdentifier';
 import { getRoutes } from 'routing/helper';
 import routesAndMenuItems from 'routes.js';
 import Loading from 'components/loading/Loading';
+import { useLogin } from 'hooks/useLogin';
 
-const App = () => { 
-  const { currentUser, isLogin } = useSelector((state) => state.auth);
+const App = () => {
 
-  const routes = useMemo(() => getRoutes({ data: routesAndMenuItems, isLogin, userRole: currentUser.role }), [isLogin, currentUser]);
-  if(isLogin) {
-    if (routes) {
-      return (
-        <Layout>
-          <RouteIdentifier routes={routes} fallback={<Loading />} />
-        </Layout>
-      );
-    }
+  if (localStorage.getItem('loginState') !== null) {
+    const { currentUser = '' } = JSON.parse(localStorage.getItem('loginState'));
+    const { onCheckLogin } = useLogin();
+    const isLogged = onCheckLogin();
+      const routes = useMemo(() => getRoutes({ data: routesAndMenuItems, isLogged, userRole: currentUser.role }), [isLogged, currentUser]);
+      if(isLogged) {
+        if (routes) {
+          return (
+            <Layout>
+              <RouteIdentifier routes={routes} fallback={<Loading />} />
+            </Layout>
+          );
+        }
+      }
   }
   return <Redirect to="/login"/>;
 };
