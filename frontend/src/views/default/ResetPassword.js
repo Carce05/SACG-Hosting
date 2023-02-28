@@ -8,6 +8,7 @@ import LayoutFullpage from 'layout/LayoutFullpage';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import HtmlHead from 'components/html-head/HtmlHead';
 
+
 const ResetPassword = () => {
   const title = 'Reestablecer contraseña';
   const description = 'Pagina de reestablecimiento de contraseña';
@@ -19,20 +20,17 @@ const ResetPassword = () => {
    /* Mandando los parametros como undefined */
 	const url = `http://localhost:8080/api/reset-password/${param.id}/${param.token}`;
 
-
+  
  
 
   const validationSchema = Yup.object().shape({
     password: Yup.string().min(6, 'La contraseña debe de tener al menos 6 caracteres').required('Contraseña requerida'),
-    passwordConfirm: Yup.string()
-      .required('Es necesario confirmar tu contraseña')
-      .oneOf([Yup.ref('password'), null], 'Ambas contraseñas deben coincidir'),
+
   });
 
-  const initialValues = { password: '', passwordConfirm: '' };
-  const onSubmit = (values) => console.log('submit form', values);
+  const initialValues = { password: ''};
 
-  const formik = useFormik({ initialValues, validationSchema, onSubmit });
+  const formik = useFormik({ initialValues, validationSchema});
   const {handleChange, values, touched, errors } = formik;
 
 

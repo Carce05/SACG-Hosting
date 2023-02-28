@@ -3,8 +3,8 @@ const Token = require("../models/token");
 const sendEmail = require("../controllers/sendEmail");
 const crypto = require("crypto");
 const Joi = require("joi");
-const express = require("express");
-const router = express.Router();
+const router = require("express").Router();
+const mongoose = require('mongoose');
 
 //Enviar email de reset de contraseña
 router.post("/", async (req, res) => {
@@ -61,8 +61,8 @@ router.post("/:userId/:token", async (req, res) => {
         const { error } = schema.validate(req.body);
         if (error) return res.status(400).send(error.details[0].message);
 
-        const user = await Usuario.findById(req.params.userId);
-        if (!user) return res.status(400).send("Link invalido o expirado");
+        const user = await Usuario.findOne(_id = mongoose.Types.ObjectId (req.params.userId)  );
+        if (!user) return res.status(400).send("Usuario no encontrado");
 
         const token = await Token.findOne({
             userId: user._id,
