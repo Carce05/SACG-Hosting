@@ -17,7 +17,7 @@ import ControlsAdd from 'views/interface/plugins/datatables/EditableRows/compone
 import ControlsEdit from 'views/interface/plugins/datatables/EditableRows/components/ControlsEdit';
 import ControlsDelete from 'views/interface/plugins/datatables/EditableRows/components/ControlsDelete';
 import ControlsSearch from 'views/interface/plugins/datatables/EditableRows/components/ControlsSearch';
-import ModalAddEdit from 'views/interface/plugins/datatables/EditableRows/components/ModalAddEdit';
+import ModalCalificacion from 'views/interface/plugins/datatables/EditableRows/components/ModalCalificacion';
 import TablePagination from 'views/interface/plugins/datatables/EditableRows/components/TablePagination';
 import axios from "axios";
 import { useFormik } from 'formik';
@@ -193,6 +193,8 @@ const AdminSecciones = (props) => {
   const title = 'Mis Secciones';
   const description = 'Elearning Portal School Dashboard Page';
 
+  const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
+
   const columns = React.useMemo(() => {
     return [
       { Header: 'Cédula', accessor: 'cedula', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
@@ -223,13 +225,13 @@ const AdminSecciones = (props) => {
         headerClassName: 'empty w-10',
         Cell: ({ row }) => {
           const { checked, onChange } = row.getToggleRowSelectedProps();
-          return <Button variant="outline-primary">Nota</Button>;
+          return <Button onClick={() => setIsOpenAddEditModal(true)} variant="outline-primary" >Nota</Button>;
         },
       },
     ];
   }, []);
 
-  const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
+ 
 
   const tableInstance = useTable(
     { columns, data, setData, isOpenAddEditModal, setIsOpenAddEditModal, initialState: { pageIndex: 0 } },
@@ -323,9 +325,6 @@ const AdminSecciones = (props) => {
                 </div>
               </Col>
               <Col sm="12" md="7" lg="9" xxl="10" className="text-end">
-                <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
-                  <ControlsAdd tableInstance={tableInstance} /> <ControlsEdit tableInstance={tableInstance} /> <ControlsDelete tableInstance={tableInstance} />
-                </div>
                 <div className="d-inline-block">
                   <ControlsPageSize tableInstance={tableInstance} />
                 </div>
@@ -340,7 +339,7 @@ const AdminSecciones = (props) => {
               </Col>
             </Row>
           </div>
-          <ModalAddEdit tableInstance={tableInstance} />
+          <ModalCalificacion tableInstance={tableInstance}/>
         </Col>
       </Row>
     </>
