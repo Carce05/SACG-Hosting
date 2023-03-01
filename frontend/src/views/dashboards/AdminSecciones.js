@@ -95,8 +95,25 @@ const AdminSecciones = (props) => {
           materia: val.materia,
           label: `${val.docente}`,
         });
+      }); 
 
-      });
+       /* response.data.forEach((val) => {
+          resultsDocentes.forEach((dup) => {
+            contador = 0;
+            if (val.docente === dup.docente) {
+              contador+=1;
+            }
+          })
+          if (contador === 0)
+          resultsDocentes.push({
+            docente: val.docente,
+            label: `${val.docente}`,
+          });
+  
+        }); */
+
+      
+          
       response.data.forEach((val) => {
         resultsSecciones.push({
           seccion: val.seccion,

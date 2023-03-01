@@ -24,3 +24,4 @@ const bitacora = createLogger({
 })
 
 module.exports = bitacora;
+
