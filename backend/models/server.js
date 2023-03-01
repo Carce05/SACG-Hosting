@@ -43,6 +43,7 @@ class Server {
         this.app.use('/api/reset-password', require('../routes/passwordReset'))
         this.app.use('/api/estudiantes', require('../routes/estudiante'))
         this.app.use('/api/matricula', require('../routes/matriculas'))
+        this.app.use('/api/contacto', require('../routes/contact'))
     }
 
     listen() {

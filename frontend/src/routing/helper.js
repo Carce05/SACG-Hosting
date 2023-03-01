@@ -206,7 +206,82 @@ export const convertToMenuItems = ({ data = [], authGuardActive = IS_AUTH_GUARD_
   };
   return items.map(itemMapper).filter((x) => Object.keys(x).length > 0);
 };
+export const convertToFooterItems = ({ data = [], authGuardActive = IS_AUTH_GUARD_ACTIVE, isLogin = false, userRole = null }) => {
+  let items = [];
+  if (Array.isArray(data)) {
+    items = data;
+  } else {
+    items = [...data.sidebarItems, ...data.mainMenuItems];
+  }
 
+  const itemMapper = (item) => {
+    const tempItem = { ...item };
+
+    if (authGuardActive) {
+      /* Authentication Guard */
+      if (tempItem.roles) tempItem.protected = true;
+
+      if (tempItem.publicOnly) {
+        delete tempItem.roles;
+        delete tempItem.protected;
+      }
+
+      if (tempItem.protected) {
+        if (!isLogin) {
+          return {};
+        }
+        if (tempItem.roles) {
+          if (!userHasRole(tempItem.roles, userRole)) {
+            return {};
+          }
+        }
+      } else if (tempItem.publicOnly && isLogin) {
+        return {};
+      }
+    }
+
+    if (tempItem.subs) {
+      tempItem.subs = item.subs
+        .map((sub) => {
+          const controlledSub = { ...sub, path: tempItem.path + sub.path };
+          if (tempItem.mega || tempItem.megaParent) controlledSub.megaParent = true;
+
+          if (authGuardActive) {
+            if (tempItem.protected) controlledSub.protected = true;
+
+            if (tempItem.roles) {
+              if (!sub.roles) controlledSub.roles = tempItem.roles;
+              else {
+                // common roles..
+                controlledSub.roles = tempItem.roles.filter((x) => sub.roles.includes(x));
+
+                if (controlledSub.roles && controlledSub.roles.length === 0) {
+                  controlledSub.inaccessible = true;
+                  console.log(
+                    `This menu item(${controlledSub.path}) is inaccessible. Please check the roles you defined in the hierarchical structure.`,
+                    controlledSub
+                  );
+                }
+              }
+            } else if (tempItem.publicOnly) {
+              controlledSub.publicOnly = true;
+            }
+            if (controlledSub.roles && controlledSub.roles.length === 0) delete controlledSub.roles;
+
+            if (!controlledSub.inaccessible) return itemMapper(controlledSub);
+            return itemMapper({});
+          }
+          return itemMapper(controlledSub);
+        })
+        .filter((x) => Object.keys(x).length > 0);
+
+      if (tempItem.subs.length === 0) delete tempItem.subs;
+    }
+    if (tempItem.label && !item.hideInMenu) return clearMenuItem(tempItem);
+    return {};
+  };
+  return items.map(itemMapper).filter((x) => Object.keys(x).length > 0);
+};
 export const convertToSearchItems = ({ data = [], authGuardActive = IS_AUTH_GUARD_ACTIVE, isLogin = false, userRole = null }) => {
   let items = [];
   if (Array.isArray(data)) {
@@ -300,5 +375,5 @@ export const getRoutes = ({ data, isLogin, userRole }) =>
 
 export const getLayoutlessRoutes = ({ data }) => convertToRoutes({ data, noLayout: true })();
 export const getMenuItems = ({ data, isLogin, userRole }) => convertToMenuItems({ data, isLogin, userRole, authGuardActive: IS_AUTH_GUARD_ACTIVE });
-
+export const getFooterItems = ({ data, isLogin, userRole }) => convertToFooterItems({ data, isLogin, userRole, authGuardActive: IS_AUTH_GUARD_ACTIVE });
 export const getSearchItems = ({ data, isLogin, userRole }) => convertToSearchItems({ data, isLogin, userRole, authGuardActive: IS_AUTH_GUARD_ACTIVE });
