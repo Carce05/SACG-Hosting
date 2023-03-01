@@ -63,8 +63,7 @@ const routesAndMenuItems = {
         { path: '/perfil', label: 'menu.perfil', component: dashboards.perfil },
         { path: '/avisos', label: 'menu.avisos', component: dashboards.avisos },
         { path: '/calificacion', label: 'menu.calificacion', component: dashboards.calificacion },
-        { path: '/matricula-admin', label: 'menu.matricula', component: dashboards.matricula },
-        { path: '/secciones-admin', label: 'menu.admin_secciones', component: dashboards.adminSecciones }
+        { path: '/matricula-admin', label: 'menu.matricula', component: dashboards.matricula }
       ],
     },
     {
