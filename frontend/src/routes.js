@@ -11,8 +11,7 @@ const dashboards = {
   perfil: lazy(() => import('views/dashboards/ProfileSettings')),
   avisos: lazy(() => import('views/dashboards/Avisos')),
   calificacion: lazy(() => import('views/dashboards/Calificacion')),
-  matricula: lazy(() => import('views/dashboards/AdminMatriculas')),
-  adminSecciones : lazy(() => import('views/dashboards/AdminSecciones'))
+  matricula: lazy(() => import('views/dashboards/AdminMatriculas'))
 };
 const courses = {
   explore: lazy(() => import('views/courses/CoursesExplore')),
