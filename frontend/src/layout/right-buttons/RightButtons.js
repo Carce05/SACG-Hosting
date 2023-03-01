@@ -15,13 +15,6 @@ const RightButtons = () => {
     setIsShowSettingsModal(false);
     document.documentElement.click();
   };
-  const showNichesModal = () => {
-    setIsShowNichesModal(true);
-  };
-  const closeNichesModal = () => {
-    setIsShowNichesModal(false);
-    document.documentElement.click();
-  };
 
   return (
     <>
@@ -34,29 +27,8 @@ const RightButtons = () => {
           </Button>
         </OverlayTrigger>
 
-        <OverlayTrigger delay={{ show: 1000, hide: 0 }} overlay={<Tooltip>Niches</Tooltip>} placement="left">
-          <Button variant="primary" className="settings-button p-0" onClick={showNichesModal}>
-            <span>
-              <CsLineIcons icon="toy" className="position-relative" />
-            </span>
-          </Button>
-        </OverlayTrigger>
-        <OverlayTrigger delay={{ show: 1000, hide: 0 }} overlay={<Tooltip>Purchase</Tooltip>} placement="left">
-          <Button
-            variant="primary"
-            href="https://themeforest.net/item/acorn-react-admin-template/33951408"
-            rel="noreferrer"
-            target="_blank"
-            className="settings-button p-0"
-          >
-            <span>
-              <CsLineIcons icon="cart" className="position-relative" />
-            </span>
-          </Button>
-        </OverlayTrigger>
       </div>
-      <SettingsModal show={isShowSettingsModal} handleClose={closeSettingsModal} />
-      <NichesModal show={isShowNichesModal} handleClose={closeNichesModal} />
+      <SettingsModal show={isShowSettingsModal} handleClose={closeSettingsModal} />    
     </>
   );
 };
