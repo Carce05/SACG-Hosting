@@ -17,35 +17,12 @@ import ControlsAdd from 'views/interface/plugins/datatables/EditableRows/compone
 import ControlsEdit from 'views/interface/plugins/datatables/EditableRows/components/ControlsEdit';
 import ControlsDelete from 'views/interface/plugins/datatables/EditableRows/components/ControlsDelete';
 import ControlsSearch from 'views/interface/plugins/datatables/EditableRows/components/ControlsSearch';
-import ModalAddEdit from 'views/interface/plugins/datatables/EditableRows/components/ModalAddEdit';
+import ModalCalificacion from 'views/interface/plugins/datatables/EditableRows/components/ModalCalificacion';
 import TablePagination from 'views/interface/plugins/datatables/EditableRows/components/TablePagination';
 import axios from "axios";
 import { useFormik } from 'formik';
 import { useSelector } from 'react-redux';
 
-
-const dummyData = [
-  { id: 1, name: 'Basler Brot', sales: 21, stock: 392310440, category: 'Sourdough@gmail.com', tag: 'New' },
-  { id: 2, name: 'Bauernbrot', sales: 63, stock: 129234013, category: 'Multigrain@gmail.com', tag: 'Done' },
-  { id: 3, name: 'Kommissbrot', sales: 23, stock: 561017657, category: 'Whole Wheat@gmail.com', tag: '' },
-  { id: 4, name: 'Lye Roll', sales: 97, stock: 127580420, category: 'Sourdough@gmail.com', tag: '' },
-  { id: 5, name: 'Panettone', sales: 56, stock: 789313762, category: 'Sourdough@gmail.com', tag: 'Done' },
-  { id: 6, name: 'Saffron Bun', sales: 98, stock: 129074548, category: 'Whole Wheat@gmail.com', tag: '' },
-  { id: 7, name: 'Ruisreikäleipä', sales: 45, stock: 904716276, category: 'Whole Wheat@gmail.com', tag: '' },
-  { id: 8, name: 'Rúgbrauð', sales: 80, stock: 797307649, category: 'Whole Wheat@gmail.com', tag: '' },
-  { id: 9, name: 'Yeast Karavai', sales: 34, stock: 680078801, category: 'Multigrain@gmail.com', tag: '' },
-  { id: 10, name: 'Brioche', sales: 33, stock: 378937746, category: 'Sourdough@gmail.com', tag: '' },
-  { id: 11, name: 'Pullman Loaf', sales: 45, stock: 461638720, category: 'Multigrain@gmail.com', tag: '' },
-  { id: 12, name: 'Soda Bread', sales: 11, stock: 348536477, category: 'Whole Wheat@gmail.com', tag: '' },
-  { id: 13, name: 'Barmbrack', sales: 85, stock: 591276986, category: 'Sourdough@gmail.com', tag: '' },
-  { id: 14, name: 'Buccellato di Lucca', sales: 12, stock: 980925057, category: 'Multigrain@gmail.com', tag: '' },
-  { id: 15, name: 'Toast Bread', sales: 21, stock: 220171422, category: 'Multigrain@gmail.com', tag: '' },
-  { id: 16, name: 'Cheesymite Scroll', sales: 45, stock: 545847219, category: 'Sourdough@gmail.com', tag: '' },
-  { id: 17, name: 'Baguette', sales: 45, stock: 553121944, category: 'Sourdough@gmail.com', tag: '' },
-  { id: 18, name: 'Guernsey Gâche', sales: 19, stock: 371226430, category: 'Multigrain@gmail.com', tag: '' },
-  { id: 19, name: 'Bazlama', sales: 85, stock: 384036275, category: 'Whole Wheat@gmail.com', tag: '' },
-  { id: 20, name: 'Bolillo', sales: 33, stock: 484876903, category: 'Whole Wheat@gmail.com', tag: '' },
-];
 
 const Secciones = (props) => {
   const [value, setValue] = useState([]);
@@ -167,6 +144,8 @@ const Secciones = (props) => {
   const title = 'Mis Secciones';
   const description = 'Elearning Portal School Dashboard Page';
 
+  const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
+
   const columns = React.useMemo(() => {
     return [
       { Header: 'Cédula', accessor: 'cedula', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
@@ -197,13 +176,13 @@ const Secciones = (props) => {
         headerClassName: 'empty w-10',
         Cell: ({ row }) => {
           const { checked, onChange } = row.getToggleRowSelectedProps();
-          return <Button variant="outline-primary">Nota</Button>;
+          return <Button onClick={() => setIsOpenAddEditModal(true)} variant="outline-primary" >Nota</Button>;
         },
       },
     ];
   }, []);
 
-  const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
+  
 
   const tableInstance = useTable(
     { columns, data, setData, isOpenAddEditModal, setIsOpenAddEditModal, initialState: { pageIndex: 0 } },
@@ -283,9 +262,6 @@ const Secciones = (props) => {
                 </div>
               </Col>
               <Col sm="12" md="7" lg="9" xxl="10" className="text-end">
-                <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
-                  <ControlsAdd tableInstance={tableInstance} /> <ControlsEdit tableInstance={tableInstance} /> <ControlsDelete tableInstance={tableInstance} />
-                </div>
                 <div className="d-inline-block">
                   <ControlsPageSize tableInstance={tableInstance} />
                 </div>
@@ -300,7 +276,7 @@ const Secciones = (props) => {
               </Col>
             </Row>
           </div>
-          <ModalAddEdit tableInstance={tableInstance} />
+          <ModalCalificacion tableInstance={tableInstance}/>
         </Col>
       </Row>
     </>
