@@ -7,11 +7,17 @@ import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import { layoutShowingNavMenu } from 'layout/layoutSlice';
 import { NavLink } from 'react-router-dom';
 
-const NavUserMenuContent = () => (
+const NavUserMenuContent = () => {
+
+  const onLogout = () => {
+    localStorage.removeItem("loginState"); 
+  }
+  
+  return( 
   <div>
     <Row className="mb-3 ms-0 me-0">
       <Col xs="12" className="ps-1 mb-2">
-        <div className="text-extra-small text-primary">ACCOUNT</div>
+        <div className="text-extra-small text-primary">CUENTA</div>
       </Col>
       <Col xs="6" className="ps-1 pe-1">
         <ul className="list-unstyled">
@@ -22,45 +28,43 @@ const NavUserMenuContent = () => (
             {/* <a href="/">User Info</a> */}
           </li>
           <li>
-            <a href="#/!">Preferences</a>
+            <a href="#/!">Preferencias</a>
           </li>
           <li>
-            <a href="#/!">Calendar</a>
+            <a href="#/!">Calendario</a>
           </li>
         </ul>
       </Col>
       <Col xs="6" className="ps-1 pe-1">
         <ul className="list-unstyled">
           <li>
-            <a href="#/!">Security</a>
+            <a href="#/!">Seguridad</a>
           </li>
           <li>
-            <a href="#/!">Billing</a>
+            <a href="#/!">Facturación</a>
           </li>
         </ul>
       </Col>
     </Row>
     <Row className="mb-1 ms-0 me-0">
       <Col xs="12" className="p-1 mb-2 pt-2">
-        <div className="text-extra-small text-primary">APPLICATION</div>
+        <div className="text-extra-small text-primary">APLICACIÓN</div>
       </Col>
       <Col xs="6" className="ps-1 pe-1">
         <ul className="list-unstyled">
           <li>
-            <a href="#/!">Themes</a>
+            <a href="#/!">Temas</a>
           </li>
-          <li>
-            <a href="#/!">Language</a>
-          </li>
+          
         </ul>
       </Col>
       <Col xs="6" className="pe-1 ps-1">
         <ul className="list-unstyled">
           <li>
-            <a href="#/!">Devices</a>
+            <a href="#/!">Dispositivos</a>
           </li>
           <li>
-            <a href="#/!">Storage</a>
+            <a href="#/!">Almacenamiento</a>
           </li>
         </ul>
       </Col>
@@ -73,7 +77,7 @@ const NavUserMenuContent = () => (
         <ul className="list-unstyled">
           <li>
             <a href="#/!">
-              <CsLineIcons icon="help" className="me-2" size="17" /> <span className="align-middle">Help</span>
+              <CsLineIcons icon="help" className="me-2" size="17" /> <span className="align-middle">Ayuda</span>
             </a>
           </li>
           <li>
@@ -87,11 +91,11 @@ const NavUserMenuContent = () => (
         <ul className="list-unstyled">
           <li>
             <a href="#/!">
-              <CsLineIcons icon="gear" className="me-0" size="17" /> <span className="align-middle">Settings</span>
+              <CsLineIcons icon="gear" className="me-0" size="17" /> <span className="align-middle">Configuraciones</span>
             </a>
           </li>
           <li>
-            <a href="/login">
+            <a onClick={ onLogout } href="/login">
               <CsLineIcons icon="logout" className="me-2" size="17" /> <span className="align-middle">Cerrar Sesión</span>
             </a>
           </li>
@@ -99,7 +103,7 @@ const NavUserMenuContent = () => (
       </Col>
     </Row>
   </div>
-);
+)};
 
 const NavUserMenuDropdownToggle = React.memo(
   React.forwardRef(({ onClick, expanded = false, user = {} }, ref) => (
@@ -137,6 +141,7 @@ NavUserMenuDropdownMenu.displayName = 'NavUserMenuDropdownMenu';
 const MENU_NAME = 'NavUserMenu';
 
 const NavUserMenu = () => {
+
   const dispatch = useDispatch();
   const {
     placementStatus: { view: placement },

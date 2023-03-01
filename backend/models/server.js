@@ -23,6 +23,13 @@ class Server {
     middlewares() {
         //CORS
         this.app.use( cors());
+        this.app.options('*',cors());
+        this.app.use(function(req, res, next) {
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Methods", "GET, PUT, POST");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next();
+          });
 
         // PARSE JSON FORMAT
         this.app.use( express.json() );
@@ -35,16 +42,13 @@ class Server {
         this.app.use('/api/usuarios', require('../routes/user'))
         this.app.use('/api/reset-password', require('../routes/passwordReset'))
         this.app.use('/api/estudiantes', require('../routes/estudiante'))
-
-
-    
-
-
+        this.app.use('/api/matricula', require('../routes/matriculas'))
+        this.app.use('/api/docentes_materias_secciones', require('../routes/docente_materia_seccion'))
     }
 
     listen() {
         this.app.listen(this.port, () => {
-            console.log(`Example app listening on port ${ this.port }`)
+            console.log(`APP RUNNING IN: ${ this.port }`)
         })
     }
 }

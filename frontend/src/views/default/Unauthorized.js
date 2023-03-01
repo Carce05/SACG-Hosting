@@ -5,8 +5,8 @@ import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import HtmlHead from 'components/html-head/HtmlHead';
 
 const Unauthorized = () => {
-  const title = 'Unauthorized';
-  const description = 'Unauthorized Page';
+  const title = 'No autorizado';
+  const description = 'Pagina no autorizada';
 
   const rightSide = (
     <div className="sw-lg-80 min-h-100 bg-foreground d-flex justify-content-center align-items-center shadow-deep py-5 full-page-content-right-border">
@@ -17,18 +17,18 @@ const Unauthorized = () => {
           </NavLink>
         </div>
         <div className="mb-5">
-          <h2 className="cta-1 mb-0 text-primary">Ooops, it looks like an error!</h2>
-          <h2 className="display-2 text-primary">Unauthorized</h2>
+          <h2 className="cta-1 mb-0 text-primary">Ooops, Parece que ha ocurrido un error!</h2>
+          <h2 className="display-2 text-primary">No autorizado</h2>
         </div>
         <div className="mb-5">
-          <p className="h6">It looks like the page you are looking for is not available.</p>
+          <p className="h6">Parece que esta pagina no esta disponible para ti.</p>
           <p className="h6">
-            If you think that is a mistake, please <NavLink to="/">contact</NavLink> us.
+            Si crees que es un error, por favor <NavLink to="/">contactanos</NavLink>.
           </p>
         </div>
         <div>
           <NavLink to="/" className="btn btn-icon btn-icon-start btn-primary">
-            <CsLineIcons icon="arrow-left" /> <span>Back to Home</span>
+            <CsLineIcons icon="arrow-left" /> <span>ir a inicio</span>
           </NavLink>
         </div>
       </div>

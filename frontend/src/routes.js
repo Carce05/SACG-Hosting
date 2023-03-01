@@ -11,6 +11,9 @@ const dashboards = {
   perfil: lazy(() => import('views/dashboards/ProfileSettings')),
   avisos: lazy(() => import('views/dashboards/Avisos')),
   calificacion: lazy(() => import('views/dashboards/Calificacion')),
+  matricula: lazy(() => import('views/dashboards/AdminMatriculas')),
+  adminSecciones : lazy(() => import('views/dashboards/AdminSecciones'))
+
 };
 
 const appRoot = DEFAULT_PATHS.APP.endsWith('/') ? DEFAULT_PATHS.APP.slice(1, DEFAULT_PATHS.APP.length) : DEFAULT_PATHS.APP;
@@ -38,6 +41,9 @@ const routesAndMenuItems = {
         { path: '/perfil', label: 'menu.perfil', component: dashboards.perfil },
         { path: '/avisos', label: 'menu.avisos', component: dashboards.avisos },
         { path: '/calificacion', label: 'menu.calificacion', component: dashboards.calificacion },
+        { path: '/matricula', label: 'menu.matricula', component: dashboards.matricula },
+        { path: '/secciones-admin', label: 'menu.admin_secciones', component: dashboards.adminSecciones }
+        
       ],
     },
   ],

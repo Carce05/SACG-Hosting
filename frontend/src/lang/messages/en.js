@@ -25,6 +25,7 @@ const enMessages = {
   'menu.knowledge-base': 'Knowledge Base',
   'menu.error': 'Error',
   'menu.coming-soon': 'Coming Soon',
+  'menu.matricula': 'Matricula',
   'menu.pricing': 'Pricing',
   'menu.search': 'Search',
   'menu.mailing': 'Mailing',
@@ -161,7 +162,8 @@ const enMessages = {
   'menu.tickets': 'Tickets',
   'menu.tickets-detail': 'Teicket Detail',
 
-  'menu.secciones' : 'Mis Secciones',
+  'menu.secciones' : 'Secciones (Docente)',
+  'menu.admin_secciones' : 'Secciones (Administrador)',
   'menu.usuarios' : 'Usuarios',
   'menu.avisos' : 'Avisos',
   'menu.calificacion' : 'Calificacion',

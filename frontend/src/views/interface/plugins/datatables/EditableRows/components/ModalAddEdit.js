@@ -12,12 +12,12 @@ const ModalAddEdit = ({ tableInstance }) => {
   const { selectedFlatRows, data, setData, setIsOpenAddEditModal, isOpenAddEditModal } = tableInstance;
   const initialValues = {
     name: selectedFlatRows.length === 1 ? selectedFlatRows[0].original.name : '',
-    thumb: '',
-    email: '',
-    role: 'admin',
-    password: '',
-    personalId: '',
-    status: '',
+    thumb: selectedFlatRows.length === 1 ? selectedFlatRows[0].original.thumb : '',
+    email: selectedFlatRows.length === 1 ? selectedFlatRows[0].original.email : '',
+    role: selectedFlatRows.length === 1 ? selectedFlatRows[0].original.role : 'Administrador',
+    password: selectedFlatRows.length === 1 ? selectedFlatRows[0].original.password : '',
+    personalId: selectedFlatRows.length === 1 ? selectedFlatRows[0].original.personalId : '',
+    status: selectedFlatRows.length === 1 ? selectedFlatRows[0].original.status : 'Activo',
     terms: false
   };
   const [selectedItem, setSelectedItem] = useState(initialValues);
@@ -31,46 +31,72 @@ const ModalAddEdit = ({ tableInstance }) => {
     terms: Yup.bool().required().oneOf([true], 'Es necesario aceptar los terminos'),
   });
 
-  const onSubmit = async ({ name, thumb, email, role, password, personalId }) => {
-    try {
-      const rawResponse = await fetch('http://localhost:8080/api/usuarios', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
+  const onSubmit = async ({ name, thumb, email, role, password, personalId, status }) => {
+    if (selectedFlatRows.length === 1) {
+      try {
+        const {_id: id} = selectedFlatRows[0].original;
+        const response = await axios.put(`http://localhost:8080/api/usuarios/${id}`, {
           name,
           thumb,
           email,
           password,
           role,
           personalId,
-          status: 'Activo'
-        })
-      });
-      const response = await rawResponse.json();
-      if (rawResponse.status === 400) {
-        alert(response.msg);
-      } else {
-        axios
-        .get("http://localhost:8080/api/usuarios")
-        .then((res) => {
-          setData(res.data);
-        })
-        .catch((err) => {
-          console.error(err);
+          status
         });
-        setIsOpenAddEditModal(false);
+        alert('Usuario actualizado con exito');
+
+      } catch (e) {
+        console.log(e.message);
+        if (e.response && e.response.status === 400) {
+          console.log(e.response.data.msg);
+          alert(e.response.data.msg);
+          setIsOpenAddEditModal(true);
+        } 
+        else {
+          alert('Problema al actualizar el usuario');
+          setIsOpenAddEditModal(true);
+        }
       }
-    } catch (e) {
-      console.log(e);
+
     }
+    else {
+      try {
+        const response = await axios.post('http://localhost:8080/api/usuarios/', {
+          name,
+          thumb,
+          email,
+          password,
+          role,
+          personalId,
+          status
+        });
 
-    <Redirect to="/dashboards/usuarios" />
-    // history.push("/dashboards/usuarios");
+        alert('Usuario guardado con exito');
+        
+      } catch (e) {
+        console.log(e.message);
+        if (e.response && e.response.status === 400) {
+          setIsOpenAddEditModal(true);
+          console.log(e.response.data.msg);
+          alert(e.response.data.msg, { onDismiss: () => setIsOpenAddEditModal(true) });
+        } 
+        else {
+          alert('Problema al guardar el usuario', { onDismiss: () => setIsOpenAddEditModal(true) });
+          setIsOpenAddEditModal(true);
+        }
+      }
+    }
+    axios
+            .get("http://localhost:8080/api/usuarios")
+            .then((res) => {
+              setData(res.data);
+            })
+            .catch((err) => {
+              console.error(err);
+            });
+          
   }
-
   const cancelRegister = () => {
     document.getElementById("registerForm").reset();
   }
@@ -89,7 +115,8 @@ const ModalAddEdit = ({ tableInstance }) => {
         <Formik
           validationSchema={validationSchema}
           onSubmit={(values) => {
-            onSubmit(values);
+            onSubmit(values)
+            console.log(values);
           }}
           initialValues={initialValues}
         >
@@ -115,6 +142,7 @@ const ModalAddEdit = ({ tableInstance }) => {
               </Form.Group>
 
               <Form.Group controlId="personalId">
+
                 <div className="mb-3 filled form-group tooltip-end-top">
                   <CsLineIcons icon="credit-card" />
                   <Form.Control
@@ -131,6 +159,7 @@ const ModalAddEdit = ({ tableInstance }) => {
               </Form.Group>
 
               <Form.Group controlId="thumb">
+
                 <div className="mb-3 filled form-group tooltip-end-top">
                   <CsLineIcons icon="image" />
                   <Form.Control
@@ -147,6 +176,7 @@ const ModalAddEdit = ({ tableInstance }) => {
               </Form.Group>
 
               <Form.Group controlId="email">
+
                 <div className="mb-3 filled form-group tooltip-end-top">
                   <CsLineIcons icon="at-sign" />
                   <Form.Control
@@ -163,6 +193,7 @@ const ModalAddEdit = ({ tableInstance }) => {
               </Form.Group>
 
               <Form.Group controlId="password">
+
                 <div className="mb-3 filled form-group tooltip-end-top">
                   <CsLineIcons icon="eye-off" />
                   <Form.Control
@@ -182,28 +213,50 @@ const ModalAddEdit = ({ tableInstance }) => {
                 <Form.Label>Rol</Form.Label>
                 <Form.Group controlId="role">
                   <Form.Check
-                    value="admin"
+                    value="Administrador"
                     type="radio"
                     aria-label="radio 1"
                     label="Administrador"
                     onChange={handleChange}
-                    checked={values.role === "admin"}
+                    checked={values.role === "Administrador"}
                   />
                   <Form.Check
-                    value="profesor"
+                    value="Profesor"
                     type="radio"
                     aria-label="radio 1"
                     label="Profesor"
                     onChange={handleChange}
-                    checked={values.role === "profesor"}
+                    checked={values.role === "Profesor"}
                   />
                   <Form.Check
-                    value="encargado"
+                    value="Encargado"
                     type="radio"
                     aria-label="radio 2"
                     label="Encargado"
                     onChange={handleChange}
-                    checked={values.role === "encargado"}
+                    checked={values.role === "Encargado"}
+                  />
+                </Form.Group>
+              </div>
+
+              <div className="mb-3">
+                <Form.Label>Estado del usuario</Form.Label>
+                <Form.Group controlId="status">
+                  <Form.Check
+                    value="Activo"
+                    type="radio"
+                    aria-label="radio 1"
+                    label="Activo"
+                    onChange={handleChange}
+                    checked={values.status === "Activo"}
+                  />
+                  <Form.Check
+                    value="Inactivo"
+                    type="radio"
+                    aria-label="radio 1"
+                    label="Inactivo"
+                    onChange={handleChange}
+                    checked={values.status === "Inactivo"}
                   />
                 </Form.Group>
               </div>
@@ -220,6 +273,8 @@ const ModalAddEdit = ({ tableInstance }) => {
             </form>
           )}
         </Formik>
+
+
       </Modal.Body>
 
       <Modal.Footer>

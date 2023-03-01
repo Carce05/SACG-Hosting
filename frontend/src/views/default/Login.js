@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink,useHistory } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
 import * as Yup from 'yup';
@@ -9,10 +9,20 @@ import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import HtmlHead from 'components/html-head/HtmlHead';
 import { useDispatch } from 'react-redux';
 import { setCurrentUser } from 'auth/authSlice';
+import { useLogin } from 'hooks/useLogin';
 
 const Login = () => {
   const dispatch = useDispatch();
   const history = useHistory();
+
+  const { onUserLogin, onCheckLogin } = useLogin();
+
+  useEffect(() => {
+    if(onCheckLogin()) {
+      history.push("/dashboards");
+    }
+  }, [])
+
   const title = 'Inicio de Sesión';
   const description = 'Pagina de Inicio de Sesión';
   const [error, setError] = useState(false)
@@ -35,13 +45,15 @@ const Login = () => {
       })
     });
 
+    
+
     const { status, usuario } = await rawResponse.json();
-    console.log(usuario)
 
     if (status){
       setError(false);
       dispatch(setCurrentUser(usuario));
       history.push("/dashboards");
+      onUserLogin(usuario)
     } else {
       setError(true);
     }
@@ -78,38 +90,58 @@ const Login = () => {
       <div className="sw-lg-50 px-5">
         <div className="sh-11">
           <NavLink to="/">
-           
+           <center>
             <img src="/img/logo/image2vector.svg" alt="Logo" width="75" height="75"/>
+            </center>
           </NavLink>
         </div>
         <div className="mb-5">
+          <center>
           <h2 className="cta-1 mb-0 text-primary">Sistema Acádemico</h2>
           <h2 className="cta-1 text-primary">Liceo Diurno de Guararí</h2>
+          </center>
         </div>
         <div className="mb-5">
           <p className="h6">Por favor digita tus credenciales para iniciar sesión</p>
-          <p className="h6">
+          
+          {/* 
+           <p className="h6"> 
             Si no tienes una cuenta creada, por favor <NavLink to="/register">registrate</NavLink> .
           </p>
+        */}
         </div>
         <div>
           <form id="loginForm" className="tooltip-end-bottom" onSubmit={handleSubmit}>
             <div className="mb-3 filled form-group tooltip-end-top">
               <CsLineIcons icon="email" />
-              <Form.Control type="text" name="email" placeholder="Numero de Indentificación" value={values.email} onChange={handleChange} />
+              <Form.Control type="text" name="email" placeholder="Correo" value={values.email} onChange={handleChange} />
               {errors.email && touched.email && <div className="d-block invalid-tooltip">{errors.email}</div>}
             </div>
             <div className="mb-3 filled form-group tooltip-end-top">
               <CsLineIcons icon="lock-off" />
               <Form.Control type="password" name="password" onChange={handleChange} value={values.password} placeholder="Contraseña" />
+              
+              {/*
               <NavLink className="text-small position-absolute t-3 e-3" to="/forgot-password">
                 Restablecer
               </NavLink>
+              
               {errors.password && touched.password && <div className="d-block invalid-tooltip">{errors.password}</div>}
+              */}
             </div>
+
             <Button size="lg" type="submit">
               Iniciar sesión
             </Button>
+
+            <p className="h6"> </p>
+
+            <NavLink className="text" to="/forgot-password" value={values.password}>
+            <Button>Restablecer Contraseña</Button>
+            </NavLink>
+
+            <p className="h6"> </p>
+            <p className="h6">**En caso de no poseer una cuenta por favor contactar al administrador</p>
             {
               error && 'LOGIN INCORECTO'
             }
