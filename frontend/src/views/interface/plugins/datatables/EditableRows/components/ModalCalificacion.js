@@ -11,42 +11,42 @@ const ModalCalificacion = ({ tableInstance }) => {
 
   const { selectedFlatRows, data, setData, setIsOpenAddEditModal, isOpenAddEditModal } = tableInstance;
   const initialValues = {
-    name: selectedFlatRows.length === 1 ? selectedFlatRows[0].original.name : '',
-    thumb: '',
-    email: '',
-    role: 'admin',
-    password: '',
-    personalId: '',
-    status: '',
-    terms: false
+    cotidiano: selectedFlatRows.length === 1 ? selectedFlatRows[0].original.cotidiano : '',
+    tarea: '', 
+    examen1: '',
+    examen2: '',
+    proyecto: '',
+    asistencia: '',
+    observaciones: ''
   };
   const [selectedItem, setSelectedItem] = useState(initialValues);
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required('Nombre completo es requerido'),
-    thumb: Yup.string().required('Thumb is required'),
-    email: Yup.string().email().required('Correo Electronico requerido'),
-    password: Yup.string().min(6, 'Debe tener como minimo 6 caracteres!').required('Favor ingresar contraseña'),
-    personalId: Yup.string().min(9, 'Cedula debe contener 9 digitos al menos!').required('Favor ingresar cedula').max(9, 'Cedula debe contener 9 digitos maximo!'),
-    terms: Yup.bool().required().oneOf([true], 'Es necesario aceptar los terminos'),
+    cotidiano: Yup.string().min(1,'La nota no puede ser menor a 0').required('Nota de cotidiano requerida'),
+    tarea: Yup.string().min(1,'La nota no puede ser menor a 0').required('Nota de la tarea requerida'),
+    examen1: Yup.string().min(1,'La nota no puede ser menor a 0').required('Nota del primer examen requerida'),
+    examen2: Yup.string().min(1,'La nota no puede ser menor a 0').required('Nota del segundo examen requerida'),
+    proyecto: Yup.string().min(1,'La nota no puede ser menor a 0').required('Nota del proyecto requerida'),
+    asistencia: Yup.string().min(1,'La nota no puede ser menor a 0').required('Nota de asistencia requerida'),
+    observaciones: Yup.string().max(200, 'Observaciones no puede contener más de 200 carateres'),
   });
 
-  const onSubmit = async ({ name, thumb, email, role, password, personalId }) => {
+  const onSubmit = async ({ cotidiano, tarea,  examen1, examen2, proyecto, asistencia, observaciones }) => {
     try {
-      const rawResponse = await fetch('http://localhost:8080/api/usuarios', {
+      const rawResponse = await fetch('http://localhost:8080/api/calificaciones', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          name,
-          thumb,
-          email,
-          password,
-          role,
-          personalId,
-          status: 'Activo'
+          cotidiano,
+          tarea, 
+          examen1,
+          examen2,
+          proyecto,
+          asistencia,
+          observaciones
         })
       });
       const response = await rawResponse.json();
@@ -97,110 +97,110 @@ const ModalCalificacion = ({ tableInstance }) => {
 
             <form id="registerForm" className="tooltip-end-bottom" onSubmit={handleSubmit}>
 
-              <Form.Group controlId="name">
+              <Form.Group controlId="cotidiano">
               <Form.Label>Cotidiano</Form.Label>
                 <div className="mb-3 filled form-group tooltip-end-top">
                   
                   <CsLineIcons icon="book-open" />
                   <Form.Control
                     type="text"
-                    name="name"
+                    name="cotidiano"
                     placeholder="Cotidiano"
-                    value={values.name}
+                    value={values.cotidiano}
                     onChange={handleChange}
                   />
-                  {errors.name && touched.name && (
-                    <div className="d-block invalid-tooltip">{errors.name}</div>
+                  {errors.cotidiano && touched.cotidiano && (
+                    <div className="d-block invalid-tooltip">{errors.cotidiano}</div>
                   )}
                 </div>
               </Form.Group>
 
-              <Form.Group controlId="personalId">
+              <Form.Group controlId="tarea">
               <Form.Label>Tarea</Form.Label>
                 <div className="mb-3 filled form-group tooltip-end-top">
                   <CsLineIcons icon="home-garage" />
                   <Form.Control
                     type="text"
-                    name="personalId"
+                    name="tarea"
                     placeholder="Tarea"
-                    value={values.personalId}
+                    value={values.tarea}
                     onChange={handleChange}
                   />
-                  {errors.personalId && touched.personalId && (
-                    <div className="d-block invalid-tooltip">{errors.personalId}</div>
+                  {errors.tarea && touched.tarea && (
+                    <div className="d-block invalid-tooltip">{errors.tarea}</div>
                   )}
                 </div>
               </Form.Group>
 
-              <Form.Group controlId="thumb">
+              <Form.Group controlId="examen1">
               <Form.Label>Examen 1</Form.Label>
                 <div className="mb-3 filled form-group tooltip-end-top">
                   <CsLineIcons icon="quiz" />
                   <Form.Control
                     type="text"
-                    name="thumb"
+                    name="examen1"
                     placeholder="Examen 1"
-                    value={values.thumb}
+                    value={values.examen1}
                     onChange={handleChange}
                   />
-                  {errors.thumb && touched.thumb && (
-                    <div className="d-block invalid-tooltip">{errors.thumb}</div>
+                  {errors.examen1 && touched.examen1 && (
+                    <div className="d-block invalid-tooltip">{errors.examen1}</div>
                   )}
                 </div>
               </Form.Group>
 
-              <Form.Group controlId="email">
+              <Form.Group controlId="examen2">
               <Form.Label>Examen 2</Form.Label>
                 <div className="mb-3 filled form-group tooltip-end-top">
                   <CsLineIcons icon="quiz" />
                   <Form.Control
                     type="text"
-                    name="email"
+                    name="examen2"
                     placeholder="Examen 2"
-                    value={values.email}
+                    value={values.examen2}
                     onChange={handleChange}
                   />
-                  {errors.email && touched.email && (
-                    <div className="d-block invalid-tooltip">{errors.email}</div>
+                  {errors.examen2 && touched.examen2 && (
+                    <div className="d-block invalid-tooltip">{errors.examen2}</div>
                   )}
                 </div>
               </Form.Group>
 
-              <Form.Group controlId="password">
+              <Form.Group controlId="proyecto">
               <Form.Label>Proyecto</Form.Label>
                 <div className="mb-3 filled form-group tooltip-end-top">
                   <CsLineIcons icon="file-chart" />
                   <Form.Control
-                    type="password"
-                    name="password"
+                    type="text"
+                    name="proyecto"
                     placeholder="Proyecto"
-                    value={values.password}
+                    value={values.proyecto}
                     onChange={handleChange}
                   />
-                  {errors.password && touched.password && (
-                    <div className="d-block invalid-tooltip">{errors.password}</div>
+                  {errors.proyecto && touched.proyecto && (
+                    <div className="d-block invalid-tooltip">{errors.proyecto}</div>
                   )}
                 </div>
               </Form.Group>
 
-              <Form.Group controlId="password">
+              <Form.Group controlId="asistencia">
               <Form.Label>Asistencia</Form.Label>
                 <div className="mb-3 filled form-group tooltip-end-top">
                   <CsLineIcons icon="online-class" />
                   <Form.Control
-                    type="password"
-                    name="password"
+                    type="text"
+                    name="asistencia"
                     placeholder="Asistencia"
-                    value={values.password}
+                    value={values.asistencia}
                     onChange={handleChange}
                   />
-                  {errors.password && touched.password && (
-                    <div className="d-block invalid-tooltip">{errors.password}</div>
+                  {errors.asistencia && touched.asistencia && (
+                    <div className="d-block invalid-tooltip">{errors.asistencia}</div>
                   )}
                 </div>
               </Form.Group>
 
-              <Form.Group controlId="password">
+              <Form.Group controlId="observaciones">
               <Form.Label>Observaciones</Form.Label>
                 <div className="mb-3 filled form-group tooltip-end-top">
                   <CsLineIcons icon="eye" />
@@ -208,13 +208,13 @@ const ModalCalificacion = ({ tableInstance }) => {
                     as="textarea" 
                     rows={5}
                     type="text"
-                    name="password"
+                    name="observaciones"
                     placeholder="Observaciones"
-                    value={values.password}
+                    value={values.observaciones}
                     onChange={handleChange}
                   />
-                  {errors.password && touched.password && (
-                    <div className="d-block invalid-tooltip">{errors.password}</div>
+                  {errors.observaciones && touched.observaciones && (
+                    <div className="d-block invalid-tooltip">{errors.observaciones}</div>
                   )}
                 </div>
               </Form.Group>

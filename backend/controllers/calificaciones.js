@@ -16,29 +16,31 @@ const calificacionesGet = async (req, res) => {
 }
 
 const calificacionesPost = async (req, res = response) => {
-    const { name, thumb, role, email,password } = req.body;
-    const usuario = new Usuario( { name, thumb, role, email,password } );
+    const { cotidiano, tarea,  examen1, examen2, proyecto, asistencia, observaciones } = req.body;
+    const calificacion = new Calificacion( { cotidiano, tarea,  examen1, examen2, proyecto, asistencia, observaciones } );
 
 
     //Check if the email exist
-    const existEmail = await Usuario.findOne({ email })
+    // const existEmail = await Calificacion.findOne({ email })
 
+    /*
     if (existEmail) {
         return res.status(400).json({
             msg: 'Email already taken'
         })
     }
+    */
 
     // Encrypt password
     // const salt =  bcryptjs.genSaltSync();
     // usuario.password = bcryptjs.hashSync(password, salt)
 
-    await usuario.save();
+    await calificacion.save();
     // await usuarios.insertOne(usuario)
 
     res.json({
         msg: 'POST | CONTROLLER',
-        usuario
+        calificacion
     })
 }
 

@@ -7,9 +7,7 @@ router.get('/', calificacionesGet)
 
 router.put('/:userId', calificacionesPut)
 
-router.post('/',[
-    check('correo', 'Email is not valid').isEmail()
-], calificacionesPost)
+router.post('/', calificacionesPost)
 
 router.delete('/', calificacionesDelete)
 
