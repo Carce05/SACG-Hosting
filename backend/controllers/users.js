@@ -1,7 +1,5 @@
 const { response } = require('express');
-
 const bcryptjs = require('bcryptjs')
-
 const Usuario = require('../models/user')
 
 const usuariosGet = async (req, res = response) => {
@@ -15,23 +13,27 @@ const usuariosGet = async (req, res = response) => {
     }
 }
 
-
 const usuariosPost = async (req, res = response) => {
     const { name, thumb, role, email,password, personalId,status } = req.body;
     const usuario = new Usuario( { name, thumb, role, email,password, personalId, status } );
-
+    
     //Check if the email exist
     const existEmail = await Usuario.findOne({ email });
-
-    if (existEmail) {
+    const existPersonalId = await Usuario.findOne({ personalId });
+    if (existEmail ) {
         return res.status(400).json({
             msg: 'Email already taken'
         });
+    }else if(existPersonalId){
+        return res.status(400).json({
+            msg: 'Personalid already taken'
+        });
     }
 
+
     // Encrypt password
-    // const salt =  bcryptjs.genSaltSync();
-    // usuario.password = bcryptjs.hashSync(password, salt)
+     const salt =  bcryptjs.genSaltSync();
+     usuario.password = bcryptjs.hashSync(password, salt)
 
     await usuario.save();
     // await usuarios.insertOne(usuario)
@@ -42,13 +44,16 @@ const usuariosPost = async (req, res = response) => {
     });
 }
 
-const usuariosPut = (req, res = response) => {
-
-    const id = req.params.userId;
-    res.json({
-        msg: 'PUT | CONTROLLER',
-        id
-    })
+const usuariosPut = async(req, res) => {
+    try {
+        await Usuario.updateOne({ _id: req.params.userId }, req.body);
+        res.status(200).send({
+            msg: 'PUT | CONTROLLER',
+            id: req.params.userId
+        })
+    } catch (err) {
+        res.status(500).send(err);
+    }
 }
 
 const usuariosDelete = (req, res = response) => {
@@ -80,8 +85,6 @@ const usuarioLogin = async (req, res = response) => {
     }
 
 }
-
-
 
 module.exports = {
     usuariosGet,

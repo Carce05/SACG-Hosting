@@ -18,7 +18,7 @@ const PurePlyr = React.memo(() => {
 
 const CoursesDetail = () => {
   const title = 'Bread Making Techniques';
-  const description = 'Elearning Portal Course Detail Page';
+  const description = 'Elearning Portal Course Detail Page.';
 
   const breadcrumbs = [
     { to: '', text: 'Home' },

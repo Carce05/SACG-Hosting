@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink,useHistory } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
 import * as Yup from 'yup';
@@ -9,10 +9,20 @@ import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import HtmlHead from 'components/html-head/HtmlHead';
 import { useDispatch } from 'react-redux';
 import { setCurrentUser } from 'auth/authSlice';
+import { useLogin } from 'hooks/useLogin';
 
 const Login = () => {
   const dispatch = useDispatch();
   const history = useHistory();
+
+  const { onUserLogin, onCheckLogin } = useLogin();
+
+  useEffect(() => {
+    if(onCheckLogin()) {
+      history.push("/dashboards");
+    }
+  }, [])
+
   const title = 'Inicio de Sesión';
   const description = 'Pagina de Inicio de Sesión';
   const [error, setError] = useState(false)
@@ -35,13 +45,15 @@ const Login = () => {
       })
     });
 
+    
+
     const { status, usuario } = await rawResponse.json();
-    console.log(usuario)
 
     if (status){
       setError(false);
       dispatch(setCurrentUser(usuario));
       history.push("/dashboards");
+      onUserLogin(usuario)
     } else {
       setError(true);
     }
