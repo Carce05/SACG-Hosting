@@ -12,9 +12,13 @@ const dashboards = {
   avisos: lazy(() => import('views/dashboards/Avisos')),
   calificacion: lazy(() => import('views/dashboards/Calificacion')),
   matricula: lazy(() => import('views/dashboards/AdminMatriculas')),
-  adminSecciones : lazy(() => import('views/dashboards/AdminSecciones'))
+  adminSecciones : lazy(() => import('views/dashboards/AdminSecciones')),
+  contacto: lazy(() => import('views/dashboards/Contacto'))
 
 };
+const footer = {
+  contacto: lazy(() => import('views/dashboards/Contacto'))
+}
 
 const appRoot = DEFAULT_PATHS.APP.endsWith('/') ? DEFAULT_PATHS.APP.slice(1, DEFAULT_PATHS.APP.length) : DEFAULT_PATHS.APP;
 
@@ -42,11 +46,25 @@ const routesAndMenuItems = {
         { path: '/avisos', label: 'menu.avisos', component: dashboards.avisos },
         { path: '/calificacion', label: 'menu.calificacion', component: dashboards.calificacion },
         { path: '/matricula', label: 'menu.matricula', component: dashboards.matricula },
-        { path: '/secciones-admin', label: 'menu.admin_secciones', component: dashboards.adminSecciones }
+        { path: '/secciones-admin', label: 'menu.admin_secciones', component: dashboards.adminSecciones },
+        { path: '/contacto', label: 'contacto', component: dashboards.contacto }
         
       ],
     },
   ],
   sidebarItems: [],
+  footerItems: [
+    {
+      path: `${appRoot}/dashboards`,
+      icon: 'home-garage',
+      label: 'menu.dashboards',
+      exact: true,
+      redirect: true,
+      to: `${appRoot}/dashboards/contacto`,
+      subs: [
+        { path: '/contacto', label: 'contacto', component: dashboards.contacto },
+      ],
+    },
+  ],
 };
 export default routesAndMenuItems;
