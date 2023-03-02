@@ -121,13 +121,13 @@ const Login = () => {
               <CsLineIcons icon="lock-off" />
               <Form.Control type="password" name="password" onChange={handleChange} value={values.password} placeholder="Contraseña" />
               
-              {/*
+              
               <NavLink className="text-small position-absolute t-3 e-3" to="/forgot-password">
                 Restablecer
               </NavLink>
               
               {errors.password && touched.password && <div className="d-block invalid-tooltip">{errors.password}</div>}
-              */}
+              
             </div>
 
             <Button size="lg" type="submit">
@@ -135,11 +135,6 @@ const Login = () => {
             </Button>
 
             <p className="h6"> </p>
-
-            <NavLink className="text" to="/forgot-password" value={values.password}>
-            <Button>Restablecer Contraseña</Button>
-            </NavLink>
-
             <p className="h6"> </p>
             <p className="h6">**En caso de no poseer una cuenta por favor contactar al administrador</p>
             {
