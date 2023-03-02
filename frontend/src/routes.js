@@ -13,8 +13,6 @@ const dashboards = {
   calificacion: lazy(() => import('views/dashboards/Calificacion')),
   matricula: lazy(() => import('views/dashboards/AdminMatriculas'))
 };
-
-
 const courses = {
   explore: lazy(() => import('views/courses/CoursesExplore')),
   list: lazy(() => import('views/courses/CoursesList')),
