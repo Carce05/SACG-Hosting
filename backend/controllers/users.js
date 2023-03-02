@@ -1,6 +1,7 @@
 const { response } = require('express');
 const bcryptjs = require('bcryptjs')
 const Usuario = require('../models/user')
+const bitacora = require("./bitacora");
 
 const usuariosGet = async (req, res = response) => {
 
@@ -81,7 +82,9 @@ const usuarioLogin = async (req, res = response) => {
         res.json({
             status: false,
             mgs: 'LOGIN INCORRECTO'
+            
         })
+        bitacora.log('error', "Error al intentar loguearse al sistema");
     }
 
 }
