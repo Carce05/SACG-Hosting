@@ -32,14 +32,10 @@ const ModalCalificacion = ({ tableInstance }) => {
   });
 
   const onSubmit = async ({ cotidiano, tarea,  examen1, examen2, proyecto, asistencia, observaciones }) => {
+    if (selectedFlatRows.length === 1) {
     try {
-      const rawResponse = await fetch('http://localhost:8080/api/calificaciones', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
+      const {_id: id} = selectedFlatRows[0].original;
+        const response = await axios.put(`http://localhost:8080/api/calificaciones/${id}`, {
           cotidiano,
           tarea, 
           examen1,
@@ -47,27 +43,62 @@ const ModalCalificacion = ({ tableInstance }) => {
           proyecto,
           asistencia,
           observaciones
-        })
+        
       });
-      const response = await rawResponse.json();
-      if (rawResponse.status === 400) {
-        alert(response.msg);
-      } else {
-        axios
-        .get("http://localhost:8080/api/usuarios")
-        .then((res) => {
-          setData(res.data);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-        setIsOpenAddEditModal(false);
-      }
+      alert('Calificación actualizada con exito');
+     
     } catch (e) {
-      console.log(e);
+      console.log(e.message);
+      if (e.response && e.response.status === 400) {
+        console.log(e.response.data.msg);
+        alert(e.response.data.msg);
+        setIsOpenAddEditModal(true);
+      }  else {
+        alert('Problema al actualizar la calificación');
+        setIsOpenAddEditModal(true);
+      }
     }
+    
+  }
+  else {
+    try {
+      const response = await axios.post('http://localhost:8080/api/calificaciones', {
+        cotidiano,
+        tarea, 
+        examen1,
+        examen2,
+        proyecto,
+        asistencia,
+        observaciones
+      
+    });
+    alert('guardado con exito');
+    } catch (e) {
+      console.log(e.message);
+      if (e.response && e.response.status === 400) {
+        setIsOpenAddEditModal(true);
+        console.log(e.response.data.msg);
+        alert(e.response.data.msg, { onDismiss: () => setIsOpenAddEditModal(true) });
+      } 
+      else {
+        alert('Problema al guardar el usuario', { onDismiss: () => setIsOpenAddEditModal(true) });
+        setIsOpenAddEditModal(true);
+      }
+    }
+  }
+  axios
+            .get("http://localhost:8080/api/calificaciones")
+            .then((res) => {
+              setData(res.data);
+            })
+            .catch((err) => {
+              console.error(err);
+            });
 
-    <Redirect to="/dashboards/usuarios" />
+
+
+
+    <Redirect to="/dashboards/calificaciones" />
     // history.push("/dashboards/usuarios");
   }
 
