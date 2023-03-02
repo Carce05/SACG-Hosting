@@ -261,21 +261,7 @@ const ModalAddEdit = ({ tableInstance }) => {
                 </Form.Group>
               </div>
 
-              <Form.Group controlId="terms">
-                <div className="mb-3 position-relative form-group">
-                  <label >Terminos y condiciones</label>
-                  <div className="form-check">
-                    <input type="checkbox" className="form-check-input" name="terms" onChange={handleChange} value={values.terms} />
-                    <label className="form-check-label">
-                      He leido y aceptado los {' '}
-                      <NavLink to="/" target="_blank">
-                        terminos y condiciones.
-                      </NavLink>
-                    </label>
-                    {errors.terms && touched.terms && <div className="d-block invalid-tooltip">{errors.terms}</div>}
-                  </div>
-                </div>
-              </Form.Group>
+
 
               <Button variant="primary" type="submit">{selectedFlatRows.length === 1 ? 'Actualizar' : 'Agregar'}
               </Button>
