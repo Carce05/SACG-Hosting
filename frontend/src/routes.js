@@ -10,14 +10,10 @@ const dashboards = {
   estudiantes: lazy(() => import('views/dashboards/Estudiantes')),
   perfil: lazy(() => import('views/dashboards/ProfileSettings')),
   avisos: lazy(() => import('views/dashboards/Avisos')),
-  calificacion: lazy(() => import('views/dashboards/Calificacion')),
-  matricula: lazy(() => import('views/dashboards/AdminMatriculas')),
-  contacto: lazy(() => import('views/dashboards/Contacto'))
+  calificacion: lazy(() => import('views/dashboards/Calificacion'))
 };
 
-const footer = {
-  contacto: lazy(() => import('views/dashboards/Contacto'))
-}
+
 const courses = {
   explore: lazy(() => import('views/courses/CoursesExplore')),
   list: lazy(() => import('views/courses/CoursesList')),
@@ -68,8 +64,7 @@ const routesAndMenuItems = {
         { path: '/perfil', label: 'menu.perfil', component: dashboards.perfil },
         { path: '/avisos', label: 'menu.avisos', component: dashboards.avisos },
         { path: '/calificacion', label: 'menu.calificacion', component: dashboards.calificacion },
-        { path: '/matricula-admin', label: 'menu.matricula', component: dashboards.matricula },
-        { path: '/contacto', label: 'contacto', component: dashboards.contacto },
+        { path: '/matricula-admin', label: 'menu.matricula', component: dashboards.matricula }
       ],
     },
     {
@@ -137,18 +132,5 @@ const routesAndMenuItems = {
     },
   ],
   sidebarItems: [],
-  footerItems: [
-    {
-      path: `${appRoot}/dashboards`,
-      icon: 'home-garage',
-      label: 'menu.dashboards',
-      exact: true,
-      redirect: true,
-      to: `${appRoot}/dashboards/contacto`,
-      subs: [
-        { path: '/contacto', label: 'contacto', component: dashboards.contacto },
-      ],
-    },
-  ],
 };
 export default routesAndMenuItems;
