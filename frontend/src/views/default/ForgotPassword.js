@@ -8,6 +8,7 @@ import React,  { useState } from 'react';
 import LayoutFullpage from 'layout/LayoutFullpage';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import HtmlHead from 'components/html-head/HtmlHead';
+// const bitacora = require ('...../backend/controllers/bitacora');
 
 const ForgotPassword = () => {
   const title = 'Restablecer Contraseña';
@@ -41,7 +42,11 @@ const ForgotPassword = () => {
 			) {
 				setError(ec.response.data.message);
 				setMsg("Usuario no registrado en el sistema");
-			}
+
+			}else{
+        setError(ec.response.data.message);
+        setMsg("Correo de reestablecimiento de contraseña enviado exitosamente");
+      }
       
 		}
 	};

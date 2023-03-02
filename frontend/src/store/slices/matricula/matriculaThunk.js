@@ -1,5 +1,5 @@
 import { mainEndpoint } from "api/apiConfig";
-import { setMatriculas } from "./matriculaSlice";
+import { setMatriculas, setMatriculasLoaded, setMatriculasLoading, setOnHideAlert, setOnShowAlert } from "./matriculaSlice";
 
 
 const agregarMatricula = (matricula) => {
@@ -10,6 +10,7 @@ const agregarMatricula = (matricula) => {
         ...matricula
       },
     );
+    dispatch(setMatriculasLoaded())
   };
 };
 
@@ -17,11 +18,26 @@ const agregarMatricula = (matricula) => {
 const obtenerMatriculas = () => {
     return async (dispatch, getState) => {
       const matriculas = await mainEndpoint.get(`matricula`);
-      dispatch(setMatriculas( matriculas ));
+      if(matriculas){
+        dispatch(setMatriculas( {...matriculas} ));
+      }
+     
     };
-  };
+};
+
+
+const onShowAlert = () => {
+  return async (dispatch, getState) => {
+    dispatch(setOnShowAlert());
+    setTimeout(() => {
+      dispatch(setOnHideAlert());
+      dispatch(setMatriculasLoaded())
+    }, 2000)
+  }
+}  
 
 export {
     obtenerMatriculas,
-    agregarMatricula
+    agregarMatricula,
+    onShowAlert
 };

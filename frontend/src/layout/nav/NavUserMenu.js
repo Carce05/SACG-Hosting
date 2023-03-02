@@ -7,7 +7,13 @@ import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import { layoutShowingNavMenu } from 'layout/layoutSlice';
 import { NavLink } from 'react-router-dom';
 
-const NavUserMenuContent = () => (
+const NavUserMenuContent = () => {
+
+  const onLogout = () => {
+    localStorage.removeItem("loginState"); 
+  }
+  
+  return( 
   <div>
     <Row className="mb-3 ms-0 me-0">
       <Col xs="12" className="ps-1 mb-2">
@@ -89,7 +95,7 @@ const NavUserMenuContent = () => (
             </a>
           </li>
           <li>
-            <a href="/login">
+            <a onClick={ onLogout } href="/login">
               <CsLineIcons icon="logout" className="me-2" size="17" /> <span className="align-middle">Cerrar Sesión</span>
             </a>
           </li>
@@ -97,7 +103,7 @@ const NavUserMenuContent = () => (
       </Col>
     </Row>
   </div>
-);
+)};
 
 const NavUserMenuDropdownToggle = React.memo(
   React.forwardRef(({ onClick, expanded = false, user = {} }, ref) => (
@@ -135,6 +141,7 @@ NavUserMenuDropdownMenu.displayName = 'NavUserMenuDropdownMenu';
 const MENU_NAME = 'NavUserMenu';
 
 const NavUserMenu = () => {
+
   const dispatch = useDispatch();
   const {
     placementStatus: { view: placement },
