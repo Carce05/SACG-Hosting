@@ -23,6 +23,7 @@ export const DEFAULT_PATHS = {
   UNAUTHORIZED: '/unauthorized',
   INVALID_ACCESS: '/invalid-access',
   PROFILE_SETTINGS: '/profile-settings',
+  CONTACTO: '/contacto',
 };
 
 export const DEFAULT_SETTINGS = {
