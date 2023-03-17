@@ -165,6 +165,12 @@ const MainMenuItem = memo(({ item, id, isSubItem = false, menuPlacement = DEFAUL
   }
   if (!isSubItem || menuPlacement === MENU_PLACEMENT.Vertical) {
     const { currentUser } = useSelector((state) => state.auth);
+
+    if (item.label === 'menu.usuarios' && currentUser.role !== 'Administrador'){
+      return (
+        <></>
+      );
+    }
     return (
       <li className={(item.label === 'menu.matricula' && currentUser.role === 'Profesor') ? 'hide-element' : ''}>
         <NavLink to={item.path} className={classNames({ active: isActive })} activeClassName="">

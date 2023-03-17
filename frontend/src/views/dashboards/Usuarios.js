@@ -1,4 +1,4 @@
-import { Row, Col, Card, Button, Badge, Dropdown, Form } from 'react-bootstrap';
+import { Row, Col, Card, Button, Badge, Dropdown, Form, Alert } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import Rating from 'react-rating';
 import HtmlHead from 'components/html-head/HtmlHead';
@@ -20,6 +20,7 @@ import ControlsSearch from 'views/interface/plugins/datatables/EditableRows/comp
 import ModalAddEdit from 'views/interface/plugins/datatables/EditableRows/components/ModalAddEdit';
 import TablePagination from 'views/interface/plugins/datatables/EditableRows/components/TablePagination';
 import axios from "axios";
+import { useSelector } from 'react-redux';
 
 /* const dummyData = [
   { id: 1, name: 'Basler Brot', email: 213, cedula: 392310440, role: 'Sourdough', tag: 'New' },
@@ -47,6 +48,7 @@ import axios from "axios";
 
 
 const Usuarios = () => {
+  const { currentUser, isUpdated } = useSelector((state) => state.auth);
   const [data, setData] = useState([]);
   const title = 'Usuarios';
   const description = 'Administración de usuarios';
@@ -61,11 +63,31 @@ const Usuarios = () => {
       .catch((err) => {
         console.error(err);
       });
-  }, []);
+  }, [isUpdated]);
 
+	const isValidUrl = urlString=> {
+    const urlPattern = new RegExp('^(https?:\\/\\/)?'+ // validate protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // validate domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // validate OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // validate port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // validate query string
+    '(\\#[-a-z\\d_]*)?$','i'); // validate fragment locator
+    return !!urlPattern.test(urlString);
+}
 
   const columns = React.useMemo(() => {
     return [
+      {
+        Header: 'thumb',
+        accessor: 'thumb',
+        sortable: true,
+        headerClassName: 'text-muted text-small text-uppercase w-10',
+        Cell: ({ cell }) => {
+          return (
+            <img className="user-admin-images" src={ isValidUrl(cell.value) ? cell.value : 'https://cdn-icons-png.flaticon.com/512/149/149071.png'  } alt={ isValidUrl(cell.value) }/>
+          );
+        },
+      },    
       { Header: 'Cédula', accessor: 'personalId', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       {
         Header: 'Nombre',
@@ -127,6 +149,13 @@ const Usuarios = () => {
           {/* Title End */}
         </Row>
       </div>
+      { 
+          isUpdated && (
+            <Alert variant="success">
+              Acción realizada con exito
+            </Alert>
+          )
+        }
     
       <Row>
         <Col>
@@ -139,7 +168,7 @@ const Usuarios = () => {
               </Col>
               <Col sm="12" md="7" lg="9" xxl="10" className="text-end">
                 <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
-                  <ControlsAdd tableInstance={tableInstance} /> <ControlsEdit tableInstance={tableInstance} /> <ControlsDelete tableInstance={tableInstance} />
+                  <ControlsAdd tableInstance={tableInstance} /> <ControlsEdit tableInstance={tableInstance} />
                 </div>
                 <div className="d-inline-block">
                   <ControlsPageSize tableInstance={tableInstance} />
