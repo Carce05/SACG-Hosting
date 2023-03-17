@@ -22,20 +22,17 @@ const NavUserMenuContent = () => {
       <Col xs="6" className="ps-1 pe-1">
         <ul className="list-unstyled">
           <li>
-          <NavLink to="/profile-settings">
-                Restablecer
-              </NavLink>
-            {/* <a href="/">User Info</a> */}
+            <NavLink to="/dashboards/perfil">Perfil</NavLink>
           </li>
-          <li>
+          {/* <li>
             <a href="#/!">Preferencias</a>
           </li>
           <li>
             <a href="#/!">Calendario</a>
-          </li>
+          </li> */}
         </ul>
       </Col>
-      <Col xs="6" className="ps-1 pe-1">
+      {/* <Col xs="6" className="ps-1 pe-1">
         <ul className="list-unstyled">
           <li>
             <a href="#/!">Seguridad</a>
@@ -44,7 +41,7 @@ const NavUserMenuContent = () => {
             <a href="#/!">Facturación</a>
           </li>
         </ul>
-      </Col>
+      </Col> */}
     </Row>
     <Row className="mb-1 ms-0 me-0">
       <Col xs="12" className="p-1 mb-2 pt-2">
