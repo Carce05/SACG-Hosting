@@ -1,4 +1,7 @@
 const enMessages = {
+  'menu.matricula': 'Matricula',
+  'menu.admin_secciones': 'secciones',
+  'contacto': 'Contacto',
   'menu.dashboards': 'Inicio',
   'menu.usuarios': 'Usuarios',
   'menu.avisos': 'Avisos',
