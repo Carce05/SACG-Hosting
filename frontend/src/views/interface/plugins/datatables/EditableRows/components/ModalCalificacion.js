@@ -6,18 +6,39 @@ import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import { NavLink, Redirect, useHistory } from 'react-router-dom';
 import axios from "axios";
 
-const ModalCalificacion = ({ tableInstance }) => {
+const ModalCalificacion = ({ tableInstance, calificaciones }) => {
   const history = useHistory();
+ 
+  let cotidianoRes = 0;
+  let tareaRes = 0;
+  let examen1Res = 0;
+  let examen2Res = 0;
+  let proyectoRes = 0;
+  let asistenciaRes = 0;
+  let observacionesRes = "";
 
+  if (calificaciones.length >= 1) {
+    cotidianoRes = calificaciones[0].cotidiano;
+    tareaRes = calificaciones[0].tarea;
+    examen1Res = calificaciones[0].examen1;
+    examen2Res = calificaciones[0].examen2;
+    proyectoRes = calificaciones[0].proyecto;
+    asistenciaRes = calificaciones[0].asistencia;
+    observacionesRes = calificaciones[0].observaciones;
+  }
+  // const {coti} = calificaciones.length === 2 ? calificaciones[0].cotidiano :'';
   const { selectedFlatRows, data, setData, setIsOpenAddEditModal, isOpenAddEditModal } = tableInstance;
+
+  // const estudiante = selectedFlatRows[0].original.cedula;
+
   const initialValues = {
-    cotidiano: selectedFlatRows.length === 1 ? selectedFlatRows[0].original.cotidiano : '',
-    tarea: '', 
-    examen1: '',
-    examen2: '',
-    proyecto: '',
-    asistencia: '',
-    observaciones: ''
+    cotidiano: cotidianoRes,
+    tarea: tareaRes, 
+    examen1: examen1Res,
+    examen2: examen2Res,
+    proyecto: proyectoRes,
+    asistencia: asistenciaRes,
+    observaciones: observacionesRes
   };
   const [selectedItem, setSelectedItem] = useState(initialValues);
 

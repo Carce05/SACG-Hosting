@@ -29,6 +29,7 @@ const Secciones = (props) => {
   const [materias, setMaterias] = useState();
   const [secciones, setSecciones] = useState();
   const [estudiantes, setEstudiantes] = useState([]);
+  const [calificaciones, setCalificaciones] = useState([]);
   const [seccion, setSeccion] = useState([]);
   const { label, name, ...rest } = props;
   const initialValues = { email: '' };
@@ -112,10 +113,40 @@ const Secciones = (props) => {
           nombre: val.nombre,
           apellido: val.apellido,
           seccion: val.seccion,
+          materia: "",
         });
       });
       setEstudiantes([ 
         ...resultsEstudiantes
+      ])
+    }
+
+    // Trigger the fetch
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    async function fetchData() {
+      // Fetch data
+      const response = await axios.get("http://localhost:8080/api/calificaciones/");
+      const resultsCalificaciones = []
+      // Store results in the results array
+      response.data.forEach((val) => {
+        resultsCalificaciones.push({
+          estudiante: val.estudiante,
+          materia: val.materia,
+          cotidiano: val.cotidiano,
+          tarea: val.tarea,
+          examen1: val.examen1,
+          examen2: val.examen2,
+          proyecto: val.proyecto,
+          asistencia: val.asistencia,
+          total: val.total,
+          observaciones: val.observaciones,
+        });
+      });
+      setCalificaciones([ 
+        ...resultsCalificaciones
       ])
     }
 
@@ -258,7 +289,7 @@ const Secciones = (props) => {
               </Col>
             </Row>
           </div>
-          <ModalCalificacion tableInstance={tableInstance}/>
+          <ModalCalificacion tableInstance={tableInstance} calificaciones={calificaciones}/>
         </Col>
       </Row>
     </>
