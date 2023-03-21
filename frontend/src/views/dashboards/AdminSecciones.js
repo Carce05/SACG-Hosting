@@ -27,14 +27,13 @@ const AdminSecciones = (props) => {
   const [value, setValue] = useState([]);
   const [materias, setMaterias] = useState();
   const [docentes, setDocentes] = useState([]);
-  const [docentesFiltrados, setDocentesFiltrados] = useState([]);
   const [secciones, setSecciones] = useState();
   const [estudiantes, setEstudiantes] = useState([]);
   const [seccion, setSeccion] = useState([]);
   const { label, name, ...rest } = props;
   const initialValues = { email: '' };
   const formik = useFormik({ initialValues });
-  const { handleSubmit, handleChange, materia, docentee, seccionn, touched, errors } = formik;
+  const { handleSubmit, handleChange, materiaa, docente, seccionn, touched, errors } = formik;
   const { setSelectedMateria, setSeccionn } = useState();
   
   
@@ -50,60 +49,54 @@ const AdminSecciones = (props) => {
       const resultsSecciones = []
 
       let contador = 0;
+      let contador2 = 0;
       // Store results in the results array
+      
       response.data.forEach((val) => {
-        resultsMaterias.forEach((dup) => {
-          contador = 0;
-          if (val.materia === dup.materia) {
-            contador+=1;
+        resultsDocentes.forEach((dup) => {
+        contador2 = 0;
+          if (val.docente === dup.docente) {
+            contador2+=1;
           }
         })
-        if (contador === 0)
-        resultsMaterias.push({
-          materia: val.materia,
-          label: `${val.materia}`,
-        });
-
-      });
-      response.data.forEach((val) => {
+        if (contador2 === 0)
         resultsDocentes.push({
           docente: val.docente,
-          materia: val.materia,
           label: `${val.docente}`,
+          });
         });
-      }); 
 
-       /* response.data.forEach((val) => {
-          resultsDocentes.forEach((dup) => {
+        response.data.forEach((val) => {
+          resultsMaterias.forEach((dup) => {
             contador = 0;
-            if (val.docente === dup.docente) {
+            if (val.materia === dup.materia) {
               contador+=1;
             }
           })
           if (contador === 0)
-          resultsDocentes.push({
+          resultsMaterias.push({
+            materia: val.materia,
             docente: val.docente,
-            label: `${val.docente}`,
+            label: `${val.materia}`,
           });
   
-        }); */
+        });
 
-      
           
       response.data.forEach((val) => {
         resultsSecciones.push({
           seccion: val.seccion,
-          docente: val.docente,
-          
+          materia: val.materia,
           label: `${val.seccion}`,
         });
       });
       // Update the options state
-      setMaterias([ 
-        ...resultsMaterias
-      ])
+      
       setDocentes([ 
         ...resultsDocentes
+      ])
+      setMaterias([ 
+        ...resultsMaterias
       ])
       setSecciones([ 
         ...resultsSecciones
@@ -114,22 +107,6 @@ const AdminSecciones = (props) => {
     fetchData();
   }, []);
   
-  
-  /*
-  useEffect(() => {
-
-    axios
-      .get("http://localhost:8080/api/estudiantes/")
-      .then((res) => {
-        setData(res.data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, []);
-*/
-
-
   
   useEffect(() => {
     async function fetchData() {
@@ -163,19 +140,17 @@ const AdminSecciones = (props) => {
     setData(dt);
   }
 
-  const handleDocente= (id) => {
-    const dt = secciones.filter(x => x.docente=== id.docente);
+  const handleMateria= (id) => {
+    const dt = secciones.filter(x => x.materia=== id.materia);
     setSeccion(dt);
     handleSeccion(id);
    
   }
 
-  const handleMateria = (id) => {
-    const dt = docentes.filter(x => x.materia === id.materia);
-    setDocentesFiltrados(dt);
-
-    // id.seccion = formik;
-    handleDocente(id);
+  const handleDocente = (id) => {
+    const dt = materias.filter(x => x.docente === id.docente);
+    setMaterias(dt);
+    handleMateria(id);
     
   }
 
@@ -239,29 +214,27 @@ const AdminSecciones = (props) => {
   return (
     <>
       <HtmlHead title={title} description={description} />
-      {/* Title and Top Buttons Start */}
       <div className="page-title-container">
         <Row>
-          {/* Title Start */}
           <Col md="7">
             <h1 className="mb-0 pb-0 display-4">{title}</h1>
-            {/* <BreadcrumbList items={breadcrumbs} /> */}
           </Col>
-          {/* Title End */}
+       
         </Row>
       </div>
       
       <Row className="row-cols-1 row-cols-lg-5 g-2 mb-5">
+       
         <Col>
           <Card className="h-100">
             <Card.Body className="mb-5">
-              <p className="text-primary heading mb-8">Materia</p>
+              <p className="text-primary heading mb-8">Docente</p>
               <div className="d-flex flex-column flex-md-row flex-lg-column align-items-center mb-n5 justify-content-md-between justify-content-center text-center text-md-start text-lg-center">
                 <Col xs="12" lg="12">
                   <Select classNamePrefix="react-select" 
-                    options={materias} 
-                    value={materia} 
-                    onChange={handleMateria} 
+                    options={docentes} 
+                    value={docente} 
+                    onChange={handleDocente} 
                     placeholder="Seleccione" 
                   />
                 </Col>          
@@ -272,13 +245,13 @@ const AdminSecciones = (props) => {
         <Col>
           <Card className="h-100">
             <Card.Body className="mb-5">
-              <p className="text-primary heading mb-8">Docente</p>
+              <p className="text-primary heading mb-8">Materia</p>
               <div className="d-flex flex-column flex-md-row flex-lg-column align-items-center mb-n5 justify-content-md-between justify-content-center text-center text-md-start text-lg-center">
                 <Col xs="12" lg="12">
                   <Select classNamePrefix="react-select" 
-                    options={docentesFiltrados} 
-                    value={docentee} 
-                    onChange={handleDocente} 
+                    options={materias} 
+                    value={materiaa} 
+                    onChange={handleMateria} 
                     placeholder="Seleccione" 
                   />
                 </Col>          

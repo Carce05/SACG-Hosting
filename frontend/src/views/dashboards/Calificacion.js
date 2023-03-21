@@ -23,28 +23,7 @@ import { useFormik } from 'formik';
 import { useSelector } from 'react-redux';
 import axios from "axios";
 
-const dummyData = [
-  { id: 1, name: 'Basler Brot', sales: 213, stock: 392310440, category: 'Sourdough', tag: 'New' },
-  { id: 2, name: 'Bauernbrot', sales: 633, stock: 129234013, category: 'Multigrain', tag: 'Done' },
-  { id: 3, name: 'Kommissbrot', sales: 2321, stock: 561017657, category: 'Whole Wheat', tag: '' },
-  { id: 4, name: 'Lye Roll', sales: 973, stock: 127580420, category: 'Sourdough', tag: '' },
-  { id: 5, name: 'Panettone', sales: 563, stock: 789313762, category: 'Sourdough', tag: 'Done' },
-  { id: 6, name: 'Saffron Bun', sales: 98, stock: 129074548, category: 'Whole Wheat', tag: '' },
-  { id: 7, name: 'Ruisreikäleipä', sales: 459, stock: 904716276, category: 'Whole Wheat', tag: '' },
-  { id: 8, name: 'Rúgbrauð', sales: 802, stock: 797307649, category: 'Whole Wheat', tag: '' },
-  { id: 9, name: 'Yeast Karavai', sales: 345, stock: 680078801, category: 'Multigrain', tag: '' },
-  { id: 10, name: 'Brioche', sales: 334, stock: 378937746, category: 'Sourdough', tag: '' },
-  { id: 11, name: 'Pullman Loaf', sales: 456, stock: 461638720, category: 'Multigrain', tag: '' },
-  { id: 12, name: 'Soda Bread', sales: 1152, stock: 348536477, category: 'Whole Wheat', tag: '' },
-  { id: 13, name: 'Barmbrack', sales: 854, stock: 591276986, category: 'Sourdough', tag: '' },
-  { id: 14, name: 'Buccellato di Lucca', sales: 1298, stock: 980925057, category: 'Multigrain', tag: '' },
-  { id: 15, name: 'Toast Bread', sales: 2156, stock: 220171422, category: 'Multigrain', tag: '' },
-  { id: 16, name: 'Cheesymite Scroll', sales: 452, stock: 545847219, category: 'Sourdough', tag: '' },
-  { id: 17, name: 'Baguette', sales: 456, stock: 553121944, category: 'Sourdough', tag: '' },
-  { id: 18, name: 'Guernsey Gâche', sales: 1958, stock: 371226430, category: 'Multigrain', tag: '' },
-  { id: 19, name: 'Bazlama', sales: 858, stock: 384036275, category: 'Whole Wheat', tag: '' },
-  { id: 20, name: 'Bolillo', sales: 333, stock: 484876903, category: 'Whole Wheat', tag: '' },
-];
+
 
 const Calificacion = (props) => {
   const [value, setValue] = useState([]);
@@ -83,32 +62,15 @@ const Calificacion = (props) => {
           observaciones: val.observaciones,
         });
       });
-      // Update the options state
       setCalificaciones([ 
         ...resultsCalificaciones
       ])
     }
 
-    // Trigger the fetch
+
     fetchData();
   }, []);
   
-  
-  /*
-  useEffect(() => {
-
-    axios
-      .get("http://localhost:8080/api/estudiantes/")
-      .then((res) => {
-        setData(res.data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, []);
-*/
-
-
 
 
   const title = 'Calificación';
@@ -119,23 +81,18 @@ const Calificacion = (props) => {
   return (
     <>
       <HtmlHead title={title} description={description} />
-      {/* Title and Top Buttons Start */}
+
       <div className="page-title-container">
         <Row>
-          {/* Title Start */}
+          
           <Col md="7">
             <h1 className="mb-0 pb-0 display-4">{title}</h1>
-            {/* <BreadcrumbList items={breadcrumbs} /> */}
+     
           </Col>
-          {/* Title End */}
+      
         </Row>
       </div>
-      {/* Title and Top Buttons End */}
-
-      {/* Timetable Start */}
-      {/* <h2 className="small-title">Timetable</h2> */}
-      
-      {/* Timetable End */}
+     
 
       <Card body className="mb-5">
               
@@ -151,11 +108,11 @@ const Calificacion = (props) => {
         </Col>
         <Col md="1">
           <Form.Label>Tarea</Form.Label>
-          <Form.Control type="number" value={calificaciones[0].tarea}/>
+          <Form.Control type="number" value={calificaciones[1].tarea}/>
         </Col>
         <Col md="1">
           <Form.Label>Examen 1</Form.Label>
-          <Form.Control type="number" value={calificaciones[0].examen1}/>
+          <Form.Control type="number" value={calificaciones[2].examen1}/>
         </Col>
         <Col md="1">
           <Form.Label>Examen 2</Form.Label>

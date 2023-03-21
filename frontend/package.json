@@ -111,9 +111,11 @@
     ]
   },
   "devDependencies": {
+    "@babel/core": "^7.21.3",
+    "@babel/eslint-parser": "^7.21.3",
     "babel-plugin-module-resolver": "^4.1.0",
     "concurrently": "^6.2.0",
-    "eslint": "^7.28.0",
+    "eslint": "^7.32.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.23.4",
