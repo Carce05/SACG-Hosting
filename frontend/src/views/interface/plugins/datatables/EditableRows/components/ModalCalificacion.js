@@ -11,8 +11,10 @@ const ModalCalificacion = ({ tableInstance, calificaciones }) => {
  
   const { selectedFlatRows, data, setData, setIsOpenAddEditModal, isOpenAddEditModal } = tableInstance;
 
+  let materiaRes = "";
 
   let cedula = "";
+
   let cotidianoRes = 0;
   let tareaRes = 0;
   let examen1Res = 0;
@@ -23,11 +25,13 @@ const ModalCalificacion = ({ tableInstance, calificaciones }) => {
 
   if (selectedFlatRows.length === 1) {
     cedula = selectedFlatRows[0].original.cedula;
+    materiaRes = selectedFlatRows[0].original.materia;
   }
+
 
   if (calificaciones.length >= 1) {
     calificaciones.forEach((val) => {
-      if (val.estudiante === cedula){
+      if (val.estudiante === cedula && val.materia === materiaRes){
         cotidianoRes = val.cotidiano;
         tareaRes = val.tarea;
         examen1Res = val.examen1;

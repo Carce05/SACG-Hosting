@@ -164,6 +164,9 @@ const Secciones = (props) => {
   }
 
   const handleMateria = (id) => {
+    estudiantes.forEach((val) => {
+        val.materia = id.materia;
+    });
     const dt = secciones.filter(x => x.materia === id.materia);
     setSeccion(dt);
     // id.seccion = formik;
@@ -182,6 +185,7 @@ const Secciones = (props) => {
       { Header: 'Cédula', accessor: 'cedula', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       { Header: 'Nombre', accessor: 'nombre', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },    
       { Header: 'Apellido', accessor: 'apellido', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
+      { Header: 'Materia', accessor: 'materia', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       { Header: 'Seccion', accessor: 'seccion', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       {
         Header: '',
