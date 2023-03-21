@@ -9,6 +9,10 @@ import axios from "axios";
 const ModalCalificacion = ({ tableInstance, calificaciones }) => {
   const history = useHistory();
  
+  const { selectedFlatRows, data, setData, setIsOpenAddEditModal, isOpenAddEditModal } = tableInstance;
+
+
+  let cedula = "";
   let cotidianoRes = 0;
   let tareaRes = 0;
   let examen1Res = 0;
@@ -17,17 +21,25 @@ const ModalCalificacion = ({ tableInstance, calificaciones }) => {
   let asistenciaRes = 0;
   let observacionesRes = "";
 
+  if (selectedFlatRows.length === 1) {
+    cedula = selectedFlatRows[0].original.cedula;
+  }
+
   if (calificaciones.length >= 1) {
-    cotidianoRes = calificaciones[0].cotidiano;
-    tareaRes = calificaciones[0].tarea;
-    examen1Res = calificaciones[0].examen1;
-    examen2Res = calificaciones[0].examen2;
-    proyectoRes = calificaciones[0].proyecto;
-    asistenciaRes = calificaciones[0].asistencia;
-    observacionesRes = calificaciones[0].observaciones;
+    calificaciones.forEach((val) => {
+      if (val.estudiante === cedula){
+        cotidianoRes = val.cotidiano;
+        tareaRes = val.tarea;
+        examen1Res = val.examen1;
+        examen2Res = val.examen2;
+        proyectoRes = val.proyecto;
+        asistenciaRes = val.asistencia;
+        observacionesRes = val.observaciones;
+      }
+    });
   }
   // const {coti} = calificaciones.length === 2 ? calificaciones[0].cotidiano :'';
-  const { selectedFlatRows, data, setData, setIsOpenAddEditModal, isOpenAddEditModal } = tableInstance;
+  
 
   // const estudiante = selectedFlatRows[0].original.cedula;
 
