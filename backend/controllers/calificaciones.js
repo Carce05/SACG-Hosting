@@ -15,9 +15,9 @@ const calificacionesGet = async (req, res) => {
     }
 }
 
-const calificacionesPost = async (req, res = response) => {
-    const { cotidiano, tarea,  examen1, examen2, proyecto, asistencia, observaciones } = req.body;
-    const calificacion = new Calificacion( { cotidiano, tarea,  examen1, examen2, proyecto, asistencia, observaciones } );
+const calificacionesPost = async (req, res) => {
+    const { estudiante, materia, cotidiano, tarea,  examen1, examen2, proyecto, asistencia, observaciones, anio, trimestre } = req.body;
+    const calificacion = new Calificacion( { estudiante, materia, cotidiano, tarea,  examen1, examen2, proyecto, asistencia, observaciones, anio, trimestre } );
 
 
     //Check if the email exist

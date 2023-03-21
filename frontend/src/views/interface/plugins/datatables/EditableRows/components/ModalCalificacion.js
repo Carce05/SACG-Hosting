@@ -71,7 +71,7 @@ const ModalCalificacion = ({ tableInstance, calificaciones }) => {
   });
 
   const onSubmit = async ({ estudiante, materia, cotidiano, tarea,  examen1, examen2, proyecto, asistencia, total, observaciones, anio, trimestre }) => {
-    if (selectedFlatRows.length === 1) {
+    if (idRes !== "") {
     try {
       const {_id: id} = selectedFlatRows[0].original;
       const response = await axios.put(`http://localhost:8080/api/calificaciones/${idRes}`, {
@@ -88,8 +88,8 @@ const ModalCalificacion = ({ tableInstance, calificaciones }) => {
         anio: 2023,
         trimestre: 'II'        
       });
-       
-     
+      alert('Calificación actualizada correctamente');
+      setIsOpenAddEditModal(false);
     } catch (e) {
       console.log(e.message);
       if (e.response && e.response.status === 400) {
@@ -106,14 +106,18 @@ const ModalCalificacion = ({ tableInstance, calificaciones }) => {
   else {
     try {
       const response = await axios.post('http://localhost:8080/api/calificaciones', {
+        estudiante: cedula,
+        materia: materiaRes,
         cotidiano,
         tarea, 
         examen1,
         examen2,
         proyecto,
         asistencia,
-        observaciones
-      
+        total: 100,
+        observaciones,
+        anio: 2023,
+        trimestre: 'II'  
     });
     alert('guardado con exito');
     } catch (e) {

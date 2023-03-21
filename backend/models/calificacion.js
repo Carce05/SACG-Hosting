@@ -31,7 +31,13 @@ const CalificacionSchema = Schema({
     },
     observaciones: {
         type: String
-    }
+    },
+    anio: {
+        type: Number
+    },
+    trimestre: {
+        type: String
+    },
 });
 
 module.exports = model( 'calificaciones', CalificacionSchema );
