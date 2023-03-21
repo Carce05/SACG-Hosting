@@ -5,7 +5,7 @@ const router = Router();
 
 router.get('/', calificacionesGet)
 
-router.put('/:userId', calificacionesPut)
+router.put('/:idRes', calificacionesPut)
 
 router.post('/', calificacionesPost)
 

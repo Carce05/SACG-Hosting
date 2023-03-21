@@ -131,8 +131,11 @@ const Secciones = (props) => {
       const response = await axios.get("http://localhost:8080/api/calificaciones/");
       const resultsCalificaciones = []
       // Store results in the results array
+      
+      /* eslint no-underscore-dangle: 0 */
       response.data.forEach((val) => {
         resultsCalificaciones.push({
+          id: val._id,
           estudiante: val.estudiante,
           materia: val.materia,
           cotidiano: val.cotidiano,

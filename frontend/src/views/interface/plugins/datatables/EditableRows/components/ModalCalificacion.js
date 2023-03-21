@@ -15,6 +15,7 @@ const ModalCalificacion = ({ tableInstance, calificaciones }) => {
 
   let cedula = "";
 
+  let idRes = "";
   let cotidianoRes = 0;
   let tareaRes = 0;
   let examen1Res = 0;
@@ -32,6 +33,7 @@ const ModalCalificacion = ({ tableInstance, calificaciones }) => {
   if (calificaciones.length >= 1) {
     calificaciones.forEach((val) => {
       if (val.estudiante === cedula && val.materia === materiaRes){
+        idRes = val.id;
         cotidianoRes = val.cotidiano;
         tareaRes = val.tarea;
         examen1Res = val.examen1;
@@ -68,21 +70,25 @@ const ModalCalificacion = ({ tableInstance, calificaciones }) => {
     observaciones: Yup.string().max(200, 'Observaciones no puede contener más de 200 carateres'),
   });
 
-  const onSubmit = async ({ cotidiano, tarea,  examen1, examen2, proyecto, asistencia, observaciones }) => {
+  const onSubmit = async ({ estudiante, materia, cotidiano, tarea,  examen1, examen2, proyecto, asistencia, total, observaciones, anio, trimestre }) => {
     if (selectedFlatRows.length === 1) {
     try {
       const {_id: id} = selectedFlatRows[0].original;
-        const response = await axios.put(`http://localhost:8080/api/calificaciones/${id}`, {
-          cotidiano,
-          tarea, 
-          examen1,
-          examen2,
-          proyecto,
-          asistencia,
-          observaciones
-        
+      const response = await axios.put(`http://localhost:8080/api/calificaciones/${idRes}`, {
+        estudiante: cedula,
+        materia: materiaRes,
+        cotidiano,
+        tarea, 
+        examen1,
+        examen2,
+        proyecto,
+        asistencia,
+        total: 100,
+        observaciones,
+        anio: 2023,
+        trimestre: 'II'        
       });
-      alert('Calificación actualizada con exito');
+       
      
     } catch (e) {
       console.log(e.message);
@@ -123,21 +129,17 @@ const ModalCalificacion = ({ tableInstance, calificaciones }) => {
       }
     }
   }
-  axios
-            .get("http://localhost:8080/api/calificaciones")
-            .then((res) => {
-              setData(res.data);
-            })
-            .catch((err) => {
-              console.error(err);
-            });
-
-
-
-
-    <Redirect to="/dashboards/calificaciones" />
-    // history.push("/dashboards/usuarios");
   }
+  /*
+  axios
+  .get("http://localhost:8080/api/calificaciones")
+  .then((res) => {
+    setData(res.data);
+  })
+  .catch((err) => {
+    console.error(err);
+  });
+  */
 
   const cancelRegister = () => {
     document.getElementById("registerForm").reset();

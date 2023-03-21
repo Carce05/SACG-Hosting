@@ -44,13 +44,16 @@ const calificacionesPost = async (req, res = response) => {
     })
 }
 
-const calificacionesPut = (req, res = response) => {
-
-    const id = req.params.userId;
-    res.json({
-        msg: 'PUT | CONTROLLER',
-        id
-    })
+const calificacionesPut = async(req, res) => {
+    try {
+        await Calificacion.updateOne({ _id: req.params.idRes }, req.body);
+        res.status(200).send({
+            msg: 'PUT | CONTROLLER',
+            id: req.params.idRes
+        })
+    } catch (err) {
+        res.status(500).send(err);
+    }
 }
 
 const calificacionesDelete = (req, res = response) => {
