@@ -22,31 +22,6 @@ import TablePagination from 'views/interface/plugins/datatables/EditableRows/com
 import axios from "axios";
 import { useSelector } from 'react-redux';
 
-/* const dummyData = [
-  { id: 1, name: 'Basler Brot', email: 213, cedula: 392310440, role: 'Sourdough', tag: 'New' },
-  { id: 2, name: 'Bauernbrot', email: 633, cedula: 129234013, role: 'Multigrain', tag: 'Done' },
-  { id: 3, name: 'Kommissbrot', email: 2321, cedula: 561017657, role: 'Whole Wheat', tag: '' },
-  { id: 4, name: 'Lye Roll', email: 973, cedula: 127580420, role: 'Sourdough', tag: '' },
-  { id: 5, name: 'Panettone', email: 563, cedula: 789313762, role: 'Sourdough', tag: 'Done' },
-  { id: 6, name: 'Saffron Bun', email: 98, cedula: 129074548, role: 'Whole Wheat', tag: '' },
-  { id: 7, name: 'Ruisreikäleipä', email: 459, cedula: 904716276, role: 'Whole Wheat', tag: '' },
-  { id: 8, name: 'Rúgbrauð', email: 802, cedula: 797307649, role: 'Whole Wheat', tag: '' },
-  { id: 9, name: 'Yeast Karavai', email: 345, cedula: 680078801, role: 'Multigrain', tag: '' },
-  { id: 10, name: 'Brioche', email: 334, cedula: 378937746, role: 'Sourdough', tag: '' },
-  { id: 11, name: 'Pullman Loaf', email: 456, cedula: 461638720, role: 'Multigrain', tag: '' },
-  { id: 12, name: 'Soda Bread', email: 1152, cedula: 348536477, role: 'Whole Wheat', tag: '' },
-  { id: 13, name: 'Barmbrack', email: 854, cedula: 591276986, role: 'Sourdough', tag: '' },
-  { id: 14, name: 'Buccellato di Lucca', email: 1298, cedula: 980925057, role: 'Multigrain', tag: '' },
-  { id: 15, name: 'Toast Bread', email: 2156, cedula: 220171422, role: 'Multigrain', tag: '' },
-  { id: 16, name: 'Cheesymite Scroll', email: 452, cedula: 545847219, role: 'Sourdough', tag: '' },
-  { id: 17, name: 'Baguette', email: 456, cedula: 553121944, role: 'Sourdough', tag: '' },
-  { id: 18, name: 'Guernsey Gâche', email: 1958, cedula: 371226430, role: 'Multigrain', tag: '' },
-  { id: 19, name: 'Bazlama', email: 858, cedula: 384036275, role: 'Whole Wheat', tag: '' },
-  { id: 20, name: 'Bolillo', email: 333, cedula: 484876903, role: 'Whole Wheat', tag: '' },
-]; */
-
-
-
 const Usuarios = () => {
   const { currentUser, isUpdated } = useSelector((state) => state.auth);
   const [data, setData] = useState([]);
