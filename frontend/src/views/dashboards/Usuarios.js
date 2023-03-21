@@ -78,13 +78,13 @@ const Usuarios = () => {
   const columns = React.useMemo(() => {
     return [
       {
-        Header: 'thumb',
+        Header: '',
         accessor: 'thumb',
-        sortable: true,
+        sortable: false,
         headerClassName: 'text-muted text-small text-uppercase w-10',
         Cell: ({ cell }) => {
           return (
-            <img className="user-admin-images" src={ isValidUrl(cell.value) ? cell.value : 'https://cdn-icons-png.flaticon.com/512/149/149071.png'  } alt={ isValidUrl(cell.value) }/>
+            <img className="user-admin-images" src='https://www.nicepng.com/png/full/202-2024687_profile-icon-for-the-politics-category-profile-icon.png' alt="UserProp"/>
           );
         },
       },    

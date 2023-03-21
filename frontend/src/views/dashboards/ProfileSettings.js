@@ -54,15 +54,7 @@ const ProfileSettings = () => {
           <Card className="mb-5">
             <Card.Body>
               <Form>
-                <img className="settings-profile-img" alt={ name } src={ thumb } />
-                <Row className="mb-3">
-                  <Col lg="2" md="3" sm="4">
-                    <Form.Label className="col-form-label">Imagen</Form.Label>
-                  </Col>
-                  <Col sm="8" md="9" lg="10">
-                    <Form.Control type="text" name='formThumb' onChange={ onInputChange } defaultValue={ formThumb } />
-                  </Col>
-                </Row>
+                <img className="settings-profile-img" alt={ name } src='https://www.nicepng.com/png/full/202-2024687_profile-icon-for-the-politics-category-profile-icon.png' />
                 <Row className="mb-3">
                   <Col lg="2" md="3" sm="4">
                     <Form.Label className="col-form-label">Nombre</Form.Label>

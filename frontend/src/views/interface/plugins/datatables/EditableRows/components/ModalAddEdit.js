@@ -16,7 +16,6 @@ const ModalAddEdit = ({ tableInstance }) => {
   const initialValues = {
     img: selectedFlatRows.length === 1 ? selectedFlatRows[0].original.img : '',
     name: selectedFlatRows.length === 1 ? selectedFlatRows[0].original.name : '',
-    thumb: selectedFlatRows.length === 1 ? selectedFlatRows[0].original.thumb : '',
     email: selectedFlatRows.length === 1 ? selectedFlatRows[0].original.email : '',
     role: selectedFlatRows.length === 1 ? selectedFlatRows[0].original.role : 'Administrador',
     password: selectedFlatRows.length === 1 ? selectedFlatRows[0].original.password : '',
@@ -28,7 +27,6 @@ const ModalAddEdit = ({ tableInstance }) => {
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required('Nombre completo es requerido'),
-    thumb: Yup.string().required('Thumb is required'),
     email: Yup.string().email().required('Correo Electronico requerido'),
     password: Yup.string().min(6, 'Debe tener como minimo 6 caracteres!').required('Favor ingresar contraseña'),
     personalId: Yup.string().min(9, 'Cedula debe contener 9 digitos al menos!').required('Favor ingresar cedula').max(9, 'Cedula debe contener 9 digitos maximo!'),
@@ -167,23 +165,6 @@ const ModalAddEdit = ({ tableInstance }) => {
                 </div>
               </Form.Group>
 
-              <Form.Group controlId="thumb">
-
-                <div className="mb-3 filled form-group tooltip-end-top">
-                  <CsLineIcons icon="image" />
-                  <Form.Control
-                    type="text"
-                    name="thumb"
-                    placeholder="Imagen de perfil"
-                    value={values.thumb}
-                    onChange={handleChange}
-                  />
-                  {errors.thumb && touched.thumb && (
-                    <div className="d-block invalid-tooltip">{errors.thumb}</div>
-                  )}
-                </div>
-              </Form.Group>
-
               <Form.Group controlId="email">
 
                 <div className="mb-3 filled form-group tooltip-end-top">
@@ -267,7 +248,7 @@ const ModalAddEdit = ({ tableInstance }) => {
                   />
                 </Form.Group>
               </div>
-              <Button variant="primary" type="submit">{selectedFlatRows.length === 1 ? 'Actualizar' : 'Agregar Matricula'}</Button>
+              <Button variant="primary" type="submit">{selectedFlatRows.length === 1 ? 'Actualizar' : 'Agregar Usuario'}</Button>
               <Button variant="outline-primary" onClick={() => setIsOpenAddEditModal(false) || cancelRegister()}>Cerrar</Button>
             </form>
           )}
