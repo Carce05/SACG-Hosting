@@ -21,25 +21,24 @@ import { da } from 'date-fns/locale';
 
 
 
-const Calificacion = () => {
+const Calificacion = (props) => {
   const [value, setValue] = useState([]);
   const [calificaciones, setCalificaciones] = useState([]);
   const [anios, setAnios] = useState();
   const [periodos, setPeriodos] = useState();
+  const [trimestre, setTrimestre] = useState([]);
+  const { label, name, ...rest } = props;
   const initialValues = { email: '' };
   const formik = useFormik({ initialValues });
-  const { handleSubmit, handleChange, anio, trimestre, touched, errors } = formik;
+  const { handleSubmit, handleChange, anioo, trimestree, touched, errors } = formik;
   const { currentUser, isLogin, isUpdated } = useSelector((state) => state.auth);
   const encargado  = currentUser.email;
 
 
-
-  
   useEffect(() => {
     async function fetchData() {
       // Fetch data
       const response = await axios.get("http://localhost:8080/api/calificaciones/");
-      const resultsCalificaciones = []
       const resultsAnios = []
       const resultsPeriodo= []
 
@@ -73,39 +72,66 @@ const Calificacion = () => {
             trimestre: val.trimestre,
             anio: val.anio,
             label: `${val.trimestre}`,
-          });
+          })
+        });
+
+          
+
+        setAnios([ 
+          ...resultsAnios
+        ])
+        setPeriodos([ 
+          ...resultsPeriodo
+        ])
+
+       
+        
+      }
+      
+      // Trigger the fetch
+      fetchData();
+    }, []);
+
+
+
+  useEffect(() => {
+    async function fetchData() {
+      // Fetch data
+      const response = await axios.get("http://localhost:8080/api/calificaciones/");
+      const resultsCalificaciones = []
+
+     
+
+          response.data.forEach((val) => {
+            resultsCalificaciones.push({
+              estudiante: val.estudiante,
+              materia: val.materia,
+              cotidiano: val.cotidiano,
+              tarea: val.tarea,
+              examen1: val.examen1,
+              examen2: val.examen2,
+              asistencia: val.asistencia,
+              total: val.total,
+              anio: val.anio,
+              trimestre: val.trimestre,
+              observaciones: val.observaciones,
+            });
   
         });
 
+       
 
-      response.data.forEach((val) => {
-        resultsCalificaciones.push({
-          estudiante: val.estudiante,
-          materia: val.materia,
-          cotidiano: val.cotidiano,
-          tarea: val.tarea,
-          examen1: val.examen1,
-          examen2: val.examen2,
-          asistencia: val.asistencia,
-          total: val.total,
-          observaciones: val.observaciones,
-        });
-      });
+        setCalificaciones([ 
+          ...resultsCalificaciones
+        ])
+        
+      }
+      
+      // Trigger the fetch
+      fetchData();
+    }, []);
 
-      setAnios([ 
-        ...resultsAnios
-      ])
-      setPeriodos([ 
-        ...resultsPeriodo
-      ])
-      setCalificaciones([ 
-        ...resultsCalificaciones
-      ])
-    }
-    
-    // Trigger the fetch
-    fetchData();
-  }, []);
+
 
   const [data, setData] = React.useState(calificaciones);
 
@@ -115,11 +141,13 @@ const Calificacion = () => {
   }
 
   const handleAnio= (id) => {
-    const dt = calificaciones.filter(x => x.anio=== id.anio);
-    setPeriodos(dt);
+    const dt = periodos.filter(x => x.anio=== id.anio);
+    setTrimestre(dt);
     handlePeriodo(id);
    
   }
+
+  
 
 
   const title = 'Calificación';
@@ -190,24 +218,25 @@ const Calificacion = () => {
       sortable: false, 
       headerClassName: 'text-muted text-small text-uppercase w-50' },
 
-
-
-     /* {
-        Header: '',
-        id: 'action',
-        headerClassName: 'empty w-10',
-        Cell: ({ row }) => {
-          const { checked, onChange } = row.getToggleRowSelectedProps();
-          return <Form.Check className="form-check float-end mt-1" type="checkbox" checked={checked} onChange={onChange} />;
-        },
-      }, */
     ];
   }, []);
 
  
 
   const tableInstance = useTable(
-    { columns, data, setData, isOpenAddEditModal, setIsOpenAddEditModal, initialState: { pageIndex: 0 } },
+    { columns, data, setData, stateReducer: (state, action) => {
+      if (action.type === 'toggleRowSelected' && Object.keys(state.selectedRowIds).length) {
+         const newState = { ...state };
+
+         newState.selectedRowIds = {
+           [action.id]: true,
+         };
+
+         return newState;
+      }
+
+      return state;
+   }, isOpenAddEditModal, setIsOpenAddEditModal, initialState: { pageIndex: 0 } },
     useGlobalFilter,
     useSortBy,
     usePagination,
@@ -215,7 +244,6 @@ const Calificacion = () => {
     useRowState
   );
 
-  const breadcrumbs = [{ to: '', text: 'Home' }];
   return (
     <>
       <HtmlHead title={title} description={description} />
@@ -225,7 +253,7 @@ const Calificacion = () => {
           {/* Title Start */}
           <Col md="7">
             <h1 className="mb-0 pb-0 display-4">{title}</h1>
-            {/* <BreadcrumbList items={breadcrumbs} /> */}
+           
           </Col>
           {/* Title End */}
         </Row>
@@ -240,7 +268,7 @@ const Calificacion = () => {
                 <Col xs="12" lg="12">
                   <Select classNamePrefix="react-select" 
                     options={anios} 
-                    value={anio} 
+                    value={anioo} 
                     onChange={handleAnio} 
                     placeholder="Seleccione" 
                   />
@@ -256,8 +284,8 @@ const Calificacion = () => {
               <div className="d-flex flex-column flex-md-row flex-lg-column align-items-center mb-n5 justify-content-md-between justify-content-center text-center text-md-start text-lg-center">
                 <Col xs="12" lg="12">
                   <Select classNamePrefix="react-select" 
-                    options={periodos} 
-                    value={trimestre} 
+                    options={trimestre} 
+                    value={trimestree} 
                     onChange={handlePeriodo} 
                     placeholder="Seleccione" 
                   />
@@ -282,14 +310,6 @@ const Calificacion = () => {
                   <ControlsSearch tableInstance={tableInstance} />
                 </div>
               </Col>
-              <Col sm="12" md="7" lg="9" xxl="10" className="text-end">
-                <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
-                  <ControlsAdd tableInstance={tableInstance} /> <ControlsEdit tableInstance={tableInstance} />
-                </div>
-                <div className="d-inline-block">
-                  <ControlsPageSize tableInstance={tableInstance} />
-                </div>
-              </Col>
             </Row>
             <Row>
               <Col xs="12">
@@ -300,7 +320,7 @@ const Calificacion = () => {
               </Col>
             </Row>
           </div>
-          <ModalAddEdit tableInstance={tableInstance} />
+          
         </Col>
       </Row>
 
