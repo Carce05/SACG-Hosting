@@ -24,11 +24,12 @@ const usuariosPost = async (req, res = response) => {
         return res.status(400).json({
             msg: 'Email already taken'
         });
-    }else if(existPersonalId){
+    }
+    if(existPersonalId){
         return res.status(400).json({
             msg: 'Personalid already taken'
         });
-    }
+    } 
     // Encrypt password
      const salt =  bcryptjs.genSaltSync();
      usuario.password = bcryptjs.hashSync(password, salt)
