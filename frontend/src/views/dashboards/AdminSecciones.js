@@ -129,7 +129,7 @@ const AdminSecciones = (props) => {
 useEffect(() => {
   async function fetchData() {
     // Fetch data
-    const response = await axios.get("http://localhost:8080/api/calificaciones/%22");
+    const response = await axios.get("http://localhost:8080/api/calificaciones/");
     const resultsCalificaciones = []
     // Store results in the results array
 
