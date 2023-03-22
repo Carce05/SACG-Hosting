@@ -136,8 +136,9 @@ const Calificacion = (props) => {
   const [data, setData] = React.useState(calificaciones);
 
   const handlePeriodo = (id) => {
-    const dt = calificaciones.filter(x => x.trimestre === id.trimestre);
-    setData(dt);
+    const dt = calificaciones.filter(x => x.anio === id.anio);
+    const td = dt.filter(x => x.trimestre === id.trimestre);
+    setData(td);
   }
 
   const handleAnio= (id) => {
