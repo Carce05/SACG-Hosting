@@ -123,7 +123,7 @@ const ModalAddEdit = ({ tableInstance }) => {
         <Formik
           validationSchema={validationSchema}
           onSubmit={(values) => {
-            onSaveInfo()
+            onSubmit(values)
           }}
           initialValues={initialValues}
         >
