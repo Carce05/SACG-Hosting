@@ -62,14 +62,17 @@ const calificacionesDelete = (req, res = response) => {
     })
 }
 
-/*
-const EstudiantesAsocidados = async (req, res) => {
+const buscarCalificacion = async (req, res) => {
     try{
-        const correo = req.params.correo;
-        const data = await Estudiante.find(
+        const estudiante = req.query.estudiante;
+        const materia = req.query.materia;
+        // const estudiante = req.params.correo;
+
+        const data = await Calificacion.find(
             {
-                "$or":[
-                    {correo_encargado : correo}
+                "$and":[
+                    {estudiante : estudiante},
+                    {materia : materia}
                 ]
             }
         );
@@ -79,7 +82,6 @@ const EstudiantesAsocidados = async (req, res) => {
         res.status(500).json({message: error.message})
     }
 }
-*/
 
 
 
@@ -87,5 +89,6 @@ module.exports = {
     calificacionesGet,
     calificacionesPost,
     calificacionesPut,
-    calificacionesDelete
+    calificacionesDelete,
+    buscarCalificacion
 }

@@ -6,14 +6,14 @@ import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import { NavLink, Redirect, useHistory } from 'react-router-dom';
 import axios from "axios";
 
-const ModalCalificacion = ({ tableInstance, calificaciones }) => {
-  const history = useHistory();
+const ModalCalificacion = ({ tableInstance, calificaciones, student }) => {
+const history = useHistory();
  
   const { selectedFlatRows, data, setData, setIsOpenAddEditModal, isOpenAddEditModal } = tableInstance;
 
   let materiaRes = "";
 
-  let cedula = "";
+  let cedula = student;
 
   let idRes = "";
   let cotidianoRes = 0;
@@ -45,7 +45,7 @@ const ModalCalificacion = ({ tableInstance, calificaciones }) => {
     });
   }
   // const {coti} = calificaciones.length === 2 ? calificaciones[0].cotidiano :'';
-  
+
 
   // const estudiante = selectedFlatRows[0].original.cedula;
 
@@ -73,7 +73,6 @@ const ModalCalificacion = ({ tableInstance, calificaciones }) => {
   const onSubmit = async ({ estudiante, materia, cotidiano, tarea,  examen1, examen2, proyecto, asistencia, total, observaciones, anio, trimestre }) => {
     if (idRes !== "") {
     try {
-      const {_id: id} = selectedFlatRows[0].original;
       const response = await axios.put(`http://localhost:8080/api/calificaciones/${idRes}`, {
         estudiante: cedula,
         materia: materiaRes,
@@ -120,6 +119,7 @@ const ModalCalificacion = ({ tableInstance, calificaciones }) => {
         trimestre: 'II'  
     });
     alert('guardado con exito');
+          setIsOpenAddEditModal(false);
     } catch (e) {
       console.log(e.message);
       if (e.response && e.response.status === 400) {
@@ -154,7 +154,7 @@ const ModalCalificacion = ({ tableInstance, calificaciones }) => {
 
   return (
 
-    <Modal className=" modal-right fade" show={isOpenAddEditModal} onHide={() => setIsOpenAddEditModal(false)}>
+    <Modal className=" modal-right fade" show={isOpenAddEditModal} onHide={() => setIsOpenAddEditModal(false) }>
       <Modal.Header>
         <Modal.Title>Calificación</Modal.Title>
       </Modal.Header>

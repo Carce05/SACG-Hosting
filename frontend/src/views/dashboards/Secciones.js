@@ -36,7 +36,7 @@ const Secciones = (props) => {
   const formik = useFormik({ initialValues });
   const { handleSubmit, handleChange, materia, seccionn, touched, errors } = formik;
   const { setSelectedMateria, setSeccionn } = useState();
-  
+  let student = "";
   
   const { currentUser, isLogin } = useSelector((state) => state.auth);
   const docente  = currentUser.email;
@@ -125,41 +125,46 @@ const Secciones = (props) => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    async function fetchData() {
-      // Fetch data
-      const response = await axios.get("http://localhost:8080/api/calificaciones/");
-      const resultsCalificaciones = []
-      // Store results in the results array
+  async function getCalificacion(cedulaRow, materiaRow) {
+    // Fetch data
+    const response = await axios.get('http://localhost:8080/api/calificaciones/buscarCalificacion', {
+      params: {
+        estudiante: cedulaRow,
+        materia: materiaRow
+      }
+    });
+    const resultsCalificaciones = []
+    // Store results in the results array
 
-      /* eslint no-underscore-dangle: 0 */
-      response.data.forEach((val) => {
-        resultsCalificaciones.push({
-          id: val._id,
-          estudiante: val.estudiante,
-          materia: val.materia,
-          cotidiano: val.cotidiano,
-          tarea: val.tarea,
-          examen1: val.examen1,
-          examen2: val.examen2,
-          proyecto: val.proyecto,
-          asistencia: val.asistencia,
-          total: val.total,
-          observaciones: val.observaciones,
-        });
+    /* eslint no-underscore-dangle: 0 */
+    response.data.forEach((val) => {
+      resultsCalificaciones.push({
+        id: val._id,
+        estudiante: val.estudiante,
+        materia: val.materia,
+        cotidiano: val.cotidiano,
+        tarea: val.tarea,
+        examen1: val.examen1,
+        examen2: val.examen2,
+        proyecto: val.proyecto,
+        asistencia: val.asistencia,
+        total: val.total,
+        observaciones: val.observaciones,
       });
-      setCalificaciones([ 
-        ...resultsCalificaciones
-      ])
-    }
+    });
+    setCalificaciones([ 
+      ...resultsCalificaciones
+    ])
 
-    // Trigger the fetch
-    fetchData();
-  }, []);
+      student = cedulaRow;
+
+  }
+
+  
 
   const [data, setData] = React.useState(estudiantes);
 
-
+  const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
 
   const handleSeccion = (id) => {
     const dt = estudiantes.filter(x => x.seccion === id.seccion);
@@ -176,12 +181,23 @@ const Secciones = (props) => {
     handleSeccion(id);
   }
 
+  const handleCalificacion = (row) => {
+    const cedulaRow = row.cells[0].value;
+    const materiaRow = row.cells[3].value;
+
+
+
+    getCalificacion(cedulaRow,materiaRow);
+
+    setIsOpenAddEditModal(true)
+  }
+
 
 
   const title = 'Mis Secciones';
   const description = 'Elearning Portal School Dashboard Page';
 
-  const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
+  
 
   const columns = React.useMemo(() => {
     return [
@@ -196,7 +212,7 @@ const Secciones = (props) => {
         headerClassName: 'empty w-10',
         Cell: ({ row }) => {
           const { checked, onChange } = row.getToggleRowSelectedProps();
-          return <Button onClick={() => setIsOpenAddEditModal(true)} variant="outline-primary" >Nota</Button>;
+          return <Button onClick={() => handleCalificacion(row) } variant="outline-primary" >Nota</Button>;
         },
       },
     ];
@@ -308,7 +324,9 @@ const tableInstance = useTable(
               </Col>
             </Row>
           </div>
-          <ModalCalificacion tableInstance={tableInstance} calificaciones={calificaciones}/>
+          <ModalCalificacion tableInstance={tableInstance} 
+            calificaciones={calificaciones} 
+            student={student} />
         </Col>
       </Row>
     </>
