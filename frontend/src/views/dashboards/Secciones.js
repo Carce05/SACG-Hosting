@@ -29,13 +29,14 @@ const Secciones = (props) => {
   const [materias, setMaterias] = useState();
   const [secciones, setSecciones] = useState();
   const [estudiantes, setEstudiantes] = useState([]);
+  const [calificaciones, setCalificaciones] = useState([]);
   const [seccion, setSeccion] = useState([]);
   const { label, name, ...rest } = props;
   const initialValues = { email: '' };
   const formik = useFormik({ initialValues });
   const { handleSubmit, handleChange, materia, seccionn, touched, errors } = formik;
   const { setSelectedMateria, setSeccionn } = useState();
-  
+  let student = "";
   
   const { currentUser, isLogin } = useSelector((state) => state.auth);
   const docente  = currentUser.email;
@@ -112,6 +113,7 @@ const Secciones = (props) => {
           nombre: val.nombre,
           apellido: val.apellido,
           seccion: val.seccion,
+          materia: "",
         });
       });
       setEstudiantes([ 
@@ -123,9 +125,46 @@ const Secciones = (props) => {
     fetchData();
   }, []);
 
+  async function getCalificacion(cedulaRow, materiaRow) {
+    // Fetch data
+    const response = await axios.get('http://localhost:8080/api/calificaciones/buscarCalificacion', {
+      params: {
+        estudiante: cedulaRow,
+        materia: materiaRow
+      }
+    });
+    const resultsCalificaciones = []
+    // Store results in the results array
+
+    /* eslint no-underscore-dangle: 0 */
+    response.data.forEach((val) => {
+      resultsCalificaciones.push({
+        id: val._id,
+        estudiante: val.estudiante,
+        materia: val.materia,
+        cotidiano: val.cotidiano,
+        tarea: val.tarea,
+        examen1: val.examen1,
+        examen2: val.examen2,
+        proyecto: val.proyecto,
+        asistencia: val.asistencia,
+        total: val.total,
+        observaciones: val.observaciones,
+      });
+    });
+    setCalificaciones([ 
+      ...resultsCalificaciones
+    ])
+
+      student = cedulaRow;
+
+  }
+
+  
+
   const [data, setData] = React.useState(estudiantes);
 
-
+  const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
 
   const handleSeccion = (id) => {
     const dt = estudiantes.filter(x => x.seccion === id.seccion);
@@ -133,10 +172,24 @@ const Secciones = (props) => {
   }
 
   const handleMateria = (id) => {
+    estudiantes.forEach((val) => {
+        val.materia = id.materia;
+    });
     const dt = secciones.filter(x => x.materia === id.materia);
     setSeccion(dt);
     // id.seccion = formik;
     handleSeccion(id);
+  }
+
+  const handleCalificacion = (row) => {
+    const cedulaRow = row.cells[0].value;
+    const materiaRow = row.cells[3].value;
+
+
+
+    getCalificacion(cedulaRow,materiaRow);
+
+    setIsOpenAddEditModal(true)
   }
 
 
@@ -144,13 +197,14 @@ const Secciones = (props) => {
   const title = 'Mis Secciones';
   const description = 'Elearning Portal School Dashboard Page';
 
-  const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
+  
 
   const columns = React.useMemo(() => {
     return [
       { Header: 'Cédula', accessor: 'cedula', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       { Header: 'Nombre', accessor: 'nombre', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },    
       { Header: 'Apellido', accessor: 'apellido', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
+      { Header: 'Materia', accessor: 'materia', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       { Header: 'Seccion', accessor: 'seccion', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       {
         Header: '',
@@ -158,7 +212,7 @@ const Secciones = (props) => {
         headerClassName: 'empty w-10',
         Cell: ({ row }) => {
           const { checked, onChange } = row.getToggleRowSelectedProps();
-          return <Button onClick={() => setIsOpenAddEditModal(true)} variant="outline-primary" >Nota</Button>;
+          return <Button onClick={() => handleCalificacion(row) } variant="outline-primary" >Nota</Button>;
         },
       },
     ];
@@ -166,8 +220,20 @@ const Secciones = (props) => {
 
   
 
-  const tableInstance = useTable(
-    { columns, data, setData, isOpenAddEditModal, setIsOpenAddEditModal, initialState: { pageIndex: 0 } },
+const tableInstance = useTable(
+    { columns, data, setData, stateReducer: (state, action) => {
+      if (action.type === 'toggleRowSelected' && Object.keys(state.selectedRowIds).length) {
+         const newState = { ...state };
+
+         newState.selectedRowIds = {
+           [action.id]: true,
+         };
+
+         return newState;
+      }
+
+      return state;
+   }, isOpenAddEditModal, setIsOpenAddEditModal, initialState: { pageIndex: 0 } },
     useGlobalFilter,
     useSortBy,
     usePagination,
@@ -258,7 +324,9 @@ const Secciones = (props) => {
               </Col>
             </Row>
           </div>
-          <ModalCalificacion tableInstance={tableInstance}/>
+          <ModalCalificacion tableInstance={tableInstance} 
+            calificaciones={calificaciones} 
+            student={student} />
         </Col>
       </Row>
     </>

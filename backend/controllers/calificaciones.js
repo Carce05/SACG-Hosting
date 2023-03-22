@@ -15,9 +15,9 @@ const calificacionesGet = async (req, res) => {
     }
 }
 
-const calificacionesPost = async (req, res = response) => {
-    const { cotidiano, tarea,  examen1, examen2, proyecto, asistencia, observaciones } = req.body;
-    const calificacion = new Calificacion( { cotidiano, tarea,  examen1, examen2, proyecto, asistencia, observaciones } );
+const calificacionesPost = async (req, res) => {
+    const { estudiante, materia, cotidiano, tarea,  examen1, examen2, proyecto, asistencia, observaciones, anio, trimestre } = req.body;
+    const calificacion = new Calificacion( { estudiante, materia, cotidiano, tarea,  examen1, examen2, proyecto, asistencia, observaciones, anio, trimestre } );
 
 
     //Check if the email exist
@@ -44,13 +44,16 @@ const calificacionesPost = async (req, res = response) => {
     })
 }
 
-const calificacionesPut = (req, res = response) => {
-
-    const id = req.params.userId;
-    res.json({
-        msg: 'PUT | CONTROLLER',
-        id
-    })
+const calificacionesPut = async(req, res) => {
+    try {
+        await Calificacion.updateOne({ _id: req.params.idRes }, req.body);
+        res.status(200).send({
+            msg: 'PUT | CONTROLLER',
+            id: req.params.idRes
+        })
+    } catch (err) {
+        res.status(500).send(err);
+    }
 }
 
 const calificacionesDelete = (req, res = response) => {
@@ -59,14 +62,17 @@ const calificacionesDelete = (req, res = response) => {
     })
 }
 
-/*
-const EstudiantesAsocidados = async (req, res) => {
+const buscarCalificacion = async (req, res) => {
     try{
-        const correo = req.params.correo;
-        const data = await Estudiante.find(
+        const estudiante = req.query.estudiante;
+        const materia = req.query.materia;
+        // const estudiante = req.params.correo;
+
+        const data = await Calificacion.find(
             {
-                "$or":[
-                    {correo_encargado : correo}
+                "$and":[
+                    {estudiante : estudiante},
+                    {materia : materia}
                 ]
             }
         );
@@ -76,7 +82,6 @@ const EstudiantesAsocidados = async (req, res) => {
         res.status(500).json({message: error.message})
     }
 }
-*/
 
 
 
@@ -84,5 +89,6 @@ module.exports = {
     calificacionesGet,
     calificacionesPost,
     calificacionesPut,
-    calificacionesDelete
+    calificacionesDelete,
+    buscarCalificacion
 }

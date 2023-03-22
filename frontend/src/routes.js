@@ -47,7 +47,7 @@ const routesAndMenuItems = {
         { path: '/calificacion', label: 'menu.calificacion', component: dashboards.calificacion },
         { path: '/matricula', label: 'menu.matricula', component: dashboards.matricula },
         { path: '/secciones-admin', label: 'menu.admin_secciones', component: dashboards.adminSecciones },
-        { path: '/contacto', label: 'contacto', component: dashboards.contacto }
+        { path: '/contacto', label: 'Contacto', component: dashboards.contacto }
         
       ],
     },
@@ -62,7 +62,7 @@ const routesAndMenuItems = {
       redirect: true,
       to: `${appRoot}/dashboards/contacto`,
       subs: [
-        { path: '/contacto', label: 'contacto', component: dashboards.contacto },
+        { path: '/contacto', label: 'Contacto', component: dashboards.contacto },
       ],
     },
   ],
