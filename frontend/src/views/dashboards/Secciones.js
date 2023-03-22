@@ -131,7 +131,7 @@ const Secciones = (props) => {
       const response = await axios.get("http://localhost:8080/api/calificaciones/");
       const resultsCalificaciones = []
       // Store results in the results array
-      
+
       /* eslint no-underscore-dangle: 0 */
       response.data.forEach((val) => {
         resultsCalificaciones.push({
@@ -204,8 +204,20 @@ const Secciones = (props) => {
 
   
 
-  const tableInstance = useTable(
-    { columns, data, setData, isOpenAddEditModal, setIsOpenAddEditModal, initialState: { pageIndex: 0 } },
+const tableInstance = useTable(
+    { columns, data, setData, stateReducer: (state, action) => {
+      if (action.type === 'toggleRowSelected' && Object.keys(state.selectedRowIds).length) {
+         const newState = { ...state };
+
+         newState.selectedRowIds = {
+           [action.id]: true,
+         };
+
+         return newState;
+      }
+
+      return state;
+   }, isOpenAddEditModal, setIsOpenAddEditModal, initialState: { pageIndex: 0 } },
     useGlobalFilter,
     useSortBy,
     usePagination,
