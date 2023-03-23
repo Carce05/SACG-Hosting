@@ -9,6 +9,7 @@ import { actualizarUsuario, actualizarUsuarioFromAdmin, agregarUsuarioFromAdmin 
 import { useDispatch } from 'react-redux';
 
 const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }) => {
+  const dispatch = useDispatch();
   const history = useHistory();
 
   const { selectedFlatRows, data, setData, setIsOpenAddEditModal, isOpenAddEditModal } = tableInstance;

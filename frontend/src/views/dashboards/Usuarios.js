@@ -20,6 +20,7 @@ import ControlsSearch from 'views/interface/plugins/datatables/EditableRows/comp
 import ModalAddEdit from 'views/interface/plugins/datatables/EditableRows/components/ModalAddEdit';
 import TablePagination from 'views/interface/plugins/datatables/EditableRows/components/TablePagination';
 import axios from "axios";
+import { useSelector } from 'react-redux';
 
 const Usuarios = () => {
   const { currentUser, isUpdated } = useSelector((state) => state.auth);
