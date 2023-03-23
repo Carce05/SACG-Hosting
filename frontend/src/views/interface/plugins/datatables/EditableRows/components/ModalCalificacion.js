@@ -6,18 +6,57 @@ import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import { NavLink, Redirect, useHistory } from 'react-router-dom';
 import axios from "axios";
 
-const ModalCalificacion = ({ tableInstance }) => {
-  const history = useHistory();
-
+const ModalCalificacion = ({ tableInstance, calificaciones, student }) => {
+const history = useHistory();
+ 
   const { selectedFlatRows, data, setData, setIsOpenAddEditModal, isOpenAddEditModal } = tableInstance;
+
+  let materiaRes = "";
+
+  let cedula = student;
+
+  let idRes = "";
+  let cotidianoRes = 0;
+  let tareaRes = 0;
+  let examen1Res = 0;
+  let examen2Res = 0;
+  let proyectoRes = 0;
+  let asistenciaRes = 0;
+  let observacionesRes = "";
+
+  if (selectedFlatRows.length === 1) {
+    cedula = selectedFlatRows[0].original.cedula;
+    materiaRes = selectedFlatRows[0].original.materia;
+  }
+
+
+  if (calificaciones.length >= 1) {
+    calificaciones.forEach((val) => {
+      if (val.estudiante === cedula && val.materia === materiaRes){
+        idRes = val.id;
+        cotidianoRes = val.cotidiano;
+        tareaRes = val.tarea;
+        examen1Res = val.examen1;
+        examen2Res = val.examen2;
+        proyectoRes = val.proyecto;
+        asistenciaRes = val.asistencia;
+        observacionesRes = val.observaciones;
+      }
+    });
+  }
+  // const {coti} = calificaciones.length === 2 ? calificaciones[0].cotidiano :'';
+
+
+  // const estudiante = selectedFlatRows[0].original.cedula;
+
   const initialValues = {
-    cotidiano: selectedFlatRows.length === 1 ? selectedFlatRows[0].original.cotidiano : '',
-    tarea: '', 
-    examen1: '',
-    examen2: '',
-    proyecto: '',
-    asistencia: '',
-    observaciones: ''
+    cotidiano: cotidianoRes,
+    tarea: tareaRes, 
+    examen1: examen1Res,
+    examen2: examen2Res,
+    proyecto: proyectoRes,
+    asistencia: asistenciaRes,
+    observaciones: observacionesRes
   };
   const [selectedItem, setSelectedItem] = useState(initialValues);
 
@@ -31,22 +70,25 @@ const ModalCalificacion = ({ tableInstance }) => {
     observaciones: Yup.string().max(200, 'Observaciones no puede contener más de 200 carateres'),
   });
 
-  const onSubmit = async ({ cotidiano, tarea,  examen1, examen2, proyecto, asistencia, observaciones }) => {
-    if (selectedFlatRows.length === 1) {
+  const onSubmit = async ({ estudiante, materia, cotidiano, tarea,  examen1, examen2, proyecto, asistencia, total, observaciones, anio, trimestre }) => {
+    if (idRes !== "") {
     try {
-      const {_id: id} = selectedFlatRows[0].original;
-        const response = await axios.put(`http://localhost:8080/api/calificaciones/${id}`, {
-          cotidiano,
-          tarea, 
-          examen1,
-          examen2,
-          proyecto,
-          asistencia,
-          observaciones
-        
+      const response = await axios.put(`http://localhost:8080/api/calificaciones/${idRes}`, {
+        estudiante: cedula,
+        materia: materiaRes,
+        cotidiano,
+        tarea, 
+        examen1,
+        examen2,
+        proyecto,
+        asistencia,
+        total: 100,
+        observaciones,
+        anio: 2023,
+        trimestre: 'II'        
       });
-      alert('Calificación actualizada con exito');
-     
+      alert('Calificación actualizada correctamente');
+      setIsOpenAddEditModal(false);
     } catch (e) {
       console.log(e.message);
       if (e.response && e.response.status === 400) {
@@ -63,16 +105,21 @@ const ModalCalificacion = ({ tableInstance }) => {
   else {
     try {
       const response = await axios.post('http://localhost:8080/api/calificaciones', {
+        estudiante: cedula,
+        materia: materiaRes,
         cotidiano,
         tarea, 
         examen1,
         examen2,
         proyecto,
         asistencia,
-        observaciones
-      
+        total: 100,
+        observaciones,
+        anio: 2023,
+        trimestre: 'II'  
     });
     alert('guardado con exito');
+          setIsOpenAddEditModal(false);
     } catch (e) {
       console.log(e.message);
       if (e.response && e.response.status === 400) {
@@ -86,21 +133,17 @@ const ModalCalificacion = ({ tableInstance }) => {
       }
     }
   }
-  axios
-            .get("http://localhost:8080/api/calificaciones")
-            .then((res) => {
-              setData(res.data);
-            })
-            .catch((err) => {
-              console.error(err);
-            });
-
-
-
-
-    <Redirect to="/dashboards/calificaciones" />
-    // history.push("/dashboards/usuarios");
   }
+  /*
+  axios
+  .get("http://localhost:8080/api/calificaciones")
+  .then((res) => {
+    setData(res.data);
+  })
+  .catch((err) => {
+    console.error(err);
+  });
+  */
 
   const cancelRegister = () => {
     document.getElementById("registerForm").reset();
@@ -111,7 +154,7 @@ const ModalCalificacion = ({ tableInstance }) => {
 
   return (
 
-    <Modal className=" modal-right fade" show={isOpenAddEditModal} onHide={() => setIsOpenAddEditModal(false)}>
+    <Modal className=" modal-right fade" show={isOpenAddEditModal} onHide={() => setIsOpenAddEditModal(false) }>
       <Modal.Header>
         <Modal.Title>Calificación</Modal.Title>
       </Modal.Header>
