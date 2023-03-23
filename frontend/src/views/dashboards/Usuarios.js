@@ -1,4 +1,4 @@
-import { Row, Col, Card, Button, Badge, Dropdown, Form, Alert } from 'react-bootstrap';
+import { Row, Col, Card, Button, Badge, Alert, Form } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import Rating from 'react-rating';
 import HtmlHead from 'components/html-head/HtmlHead';
@@ -20,16 +20,19 @@ import ControlsSearch from 'views/interface/plugins/datatables/EditableRows/comp
 import ModalAddEdit from 'views/interface/plugins/datatables/EditableRows/components/ModalAddEdit';
 import TablePagination from 'views/interface/plugins/datatables/EditableRows/components/TablePagination';
 import axios from "axios";
-import { useSelector } from 'react-redux';
 
 const Usuarios = () => {
   const { currentUser, isUpdated } = useSelector((state) => state.auth);
   const [data, setData] = useState([]);
   const title = 'Usuarios';
   const description = 'Administración de usuarios';
-
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showDangerAlert, setShowDangerAlert] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const handleEditClick = () => {
+    setShowModal(true);
+  };
   useEffect(() => {
-    
     axios
       .get("http://localhost:8080/api/usuarios")
       .then((res) => {
@@ -99,7 +102,6 @@ const Usuarios = () => {
   }, []);
 
   const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
-
   const tableInstance = useTable(
     { columns, data, setData, isOpenAddEditModal, setIsOpenAddEditModal, initialState: { pageIndex: 0 } },
     useGlobalFilter,
@@ -143,13 +145,27 @@ const Usuarios = () => {
               </Col>
               <Col sm="12" md="7" lg="9" xxl="10" className="text-end">
                 <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
-                  <ControlsAdd tableInstance={tableInstance} /> <ControlsEdit tableInstance={tableInstance} />
+                   <ControlsAdd tableInstance={tableInstance}  /><ControlsEdit tableInstance={tableInstance} /> <ControlsDelete tableInstance={tableInstance} />
                 </div>
                 <div className="d-inline-block">
                   <ControlsPageSize tableInstance={tableInstance} />
                 </div>
               </Col>
             </Row>
+            <Col className="mb-3 d-flex align-items-center justify-content-center">
+            {showSuccessAlert && (
+                  <Alert variant="success" onClose={() => setShowSuccessAlert(false)} dismissible>
+                    Usuario guardado correctamente.
+                  </Alert>
+                )}
+            </Col>
+            <Col className="mb-3 d-flex align-items-center justify-content-center">
+            {showDangerAlert && (
+                  <Alert variant="danger" onClose={() => setShowDangerAlert(false)} dismissible>
+                    Ocurrio un error al intentar guardar la información favor revisar el correo o cedula.
+                  </Alert>
+                )}
+            </Col>
             <Row>
               <Col xs="12">
                 <Table className="react-table rows" tableInstance={tableInstance} />
@@ -159,7 +175,7 @@ const Usuarios = () => {
               </Col>
             </Row>
           </div>
-          <ModalAddEdit tableInstance={tableInstance} />
+          <ModalAddEdit tableInstance={tableInstance} setShowSuccessAlert={setShowSuccessAlert} setShowDangerAlert={setShowDangerAlert}/>
         </Col>
       </Row>
     </>

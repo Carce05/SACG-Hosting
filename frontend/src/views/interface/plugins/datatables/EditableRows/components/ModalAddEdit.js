@@ -8,8 +8,7 @@ import axios from "axios";
 import { actualizarUsuario, actualizarUsuarioFromAdmin, agregarUsuarioFromAdmin } from 'store/slices/usuarios/usuarioThunk';
 import { useDispatch } from 'react-redux';
 
-const ModalAddEdit = ({ tableInstance }) => {
-  const dispatch = useDispatch();
+const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }) => {
   const history = useHistory();
 
   const { selectedFlatRows, data, setData, setIsOpenAddEditModal, isOpenAddEditModal } = tableInstance;
@@ -30,69 +29,70 @@ const ModalAddEdit = ({ tableInstance }) => {
     email: Yup.string().email().required('Correo Electronico requerido'),
     password: Yup.string().min(6, 'Debe tener como minimo 6 caracteres!').required('Favor ingresar contraseña'),
     personalId: Yup.string().min(9, 'Cedula debe contener 9 digitos al menos!').required('Favor ingresar cedula').max(9, 'Cedula debe contener 9 digitos maximo!'),
-    terms: Yup.bool().required().oneOf([true], 'Es necesario aceptar los terminos'),
+    // terms: Yup.bool().required().oneOf([true], 'Es necesario aceptar los terminos'),
   });
 
   const onSubmit = async ({ name, thumb, email, role, password, personalId, status }) => {
+    if (selectedFlatRows.length === 1) {
+      try {
+        const {_id: id} = selectedFlatRows[0].original;
+        const response = await axios.put(`http://localhost:8080/api/usuarios/${id}`, {
+          name,
+          thumb,
+          email,
+          password,
+          role,
+          personalId,
+          status
+        });
+        setShowSuccessAlert(true);
 
-    console.log(name);
-    // if (selectedFlatRows.length === 1) {
-    //   const formState = { name, thumb, email, role, password, status }
-    //   console.log(selectedItem)
-    //   try {
-    //     const {_id: id} = selectedFlatRows[0].original;
-    //     dispatch(actualizarUsuarioFromAdmin(formState, id));
-
-    //   } catch (e) {
-    //     console.log(e.message);
-    //     if (e.response && e.response.status === 400) {
-    //       console.log(e.response.data.msg);
-    //       alert(e.response.data.msg);
-    //       setIsOpenAddEditModal(true);
-    //     } 
-    //     else {
-    //       alert('Problema al actualizar el usuario');
-    //       setIsOpenAddEditModal(true);
-    //     }
-    //   }
-
-    // }
-    // else {
-    //   try {
-    //     const response = await axios.post('http://localhost:8080/api/usuarios/', {
-    //       name,
-    //       thumb,
-    //       email,
-    //       password,
-    //       role,
-    //       personalId,
-    //       status
-    //     });
-
-    //     alert('Usuario guardado con exito');
-        
-    //   } catch (e) {
-    //     console.log(e.message);
-    //     if (e.response && e.response.status === 400) {
-    //       setIsOpenAddEditModal(true);
-    //       console.log(e.response.data.msg);
-    //       alert(e.response.data.msg, { onDismiss: () => setIsOpenAddEditModal(true) });
-    //     } 
-    //     else {
-    //       alert('Problema al guardar el usuario', { onDismiss: () => setIsOpenAddEditModal(true) });
-    //       setIsOpenAddEditModal(true);
-    //     }
-    //   }
-    // }
-    // axios
-    //         .get("http://localhost:8080/api/usuarios")
-    //         .then((res) => {
-    //           setData(res.data);
-    //         })
-    //         .catch((err) => {
-    //           console.error(err);
-    //         });
-          
+      } catch (e) {
+        console.log(e.message);
+        setShowDangerAlert(true);
+        if (e.response && e.response.status === 400) {
+          // console.log(e.response.data.msg);
+          setShowDangerAlert(true);
+        } 
+        else {
+          setShowDangerAlert(true);
+        }
+      }
+    }
+    else {
+      try {
+        const response = await axios.post('http://localhost:8080/api/usuarios/', {
+          name,
+          thumb,
+          email,
+          password,
+          role,
+          personalId,
+          status
+        });
+        setShowSuccessAlert(true);
+      } catch (e) {
+        console.log(e.message);
+        if (e.response && e.response.status === 400) {
+          setIsOpenAddEditModal(true);
+          console.log(e.response.data.msg);
+          alert(e.response.data.msg, { onDismiss: () => setIsOpenAddEditModal(true) });
+        } 
+        else {
+          setShowDangerAlert(true);
+          // alert('Problema al guardar el usuario', { onDismiss: () => setIsOpenAddEditModal(true) });
+        }
+      }
+    }
+    axios
+            .get("http://localhost:8080/api/usuarios")
+            .then((res) => {
+              setData(res.data);
+            })
+            .catch((err) => {
+              console.error(err);
+            });
+            setIsOpenAddEditModal(false);
   }
   const cancelRegister = () => {
     document.getElementById("usersForm").reset();
@@ -123,16 +123,14 @@ const ModalAddEdit = ({ tableInstance }) => {
         <Formik
           validationSchema={validationSchema}
           onSubmit={(values) => {
-            onSaveInfo()
+            onSubmit(values)
           }}
           initialValues={initialValues}
         >
           {({ handleSubmit, handleChange, values, errors, touched }) => (
 
-            <form id="usersForm" className="tooltip-end-bottom" onSubmit={ (e) => onSaveInfo(e, values) }>
-
+            <form id="registerForm" className="tooltip-end-bottom" onSubmit={handleSubmit}>
               <Form.Group controlId="name">
-
                 <div className="mb-3 filled form-group tooltip-end-top">
                   <CsLineIcons icon="user" />
                   <Form.Control
@@ -166,7 +164,6 @@ const ModalAddEdit = ({ tableInstance }) => {
               </Form.Group>
 
               <Form.Group controlId="email">
-
                 <div className="mb-3 filled form-group tooltip-end-top">
                   <CsLineIcons icon="at-sign" />
                   <Form.Control
@@ -186,6 +183,7 @@ const ModalAddEdit = ({ tableInstance }) => {
                 <div className="mb-3 filled form-group tooltip-end-top">
                   <CsLineIcons icon="eye-off" />
                   <Form.Control
+                    type="text"
                     name="password"
                     placeholder="Contraseña"
                     value={values.password}
@@ -248,8 +246,11 @@ const ModalAddEdit = ({ tableInstance }) => {
                   />
                 </Form.Group>
               </div>
-              <Button variant="primary" type="submit">{selectedFlatRows.length === 1 ? 'Actualizar' : 'Agregar Usuario'}</Button>
-              <Button variant="outline-primary" onClick={() => setIsOpenAddEditModal(false) || cancelRegister()}>Cerrar</Button>
+              <Button variant="primary" type="submit">{selectedFlatRows.length === 1 ? 'Actualizar' : 'Agregar'}
+              </Button>
+              <Button variant="outline-primary" onClick={() => setIsOpenAddEditModal(false) || cancelRegister()}>
+                Cancelar
+              </Button>   
             </form>
           )}
         </Formik>

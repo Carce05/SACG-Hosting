@@ -25,7 +25,6 @@ const contactPost = async (req, res = response) => {
 }
 
 const contactPut = async(req, res) => {
-    console.log('hola')
     try {
         await Contact.updateOne({ _id: req.params.contactId }, req.body);
         res.status(200).send({

@@ -17,7 +17,6 @@ const usuariosGet = async (req, res = response) => {
 const usuariosPost = async (req, res = response) => {
     const { name, thumb, role, email,password, personalId,status } = req.body;
     const usuario = new Usuario( { name, thumb, role, email,password, personalId, status } );
-    
     //Check if the email exist
     const existEmail = await Usuario.findOne({ email });
     const existPersonalId = await Usuario.findOne({ personalId });
@@ -25,20 +24,16 @@ const usuariosPost = async (req, res = response) => {
         return res.status(400).json({
             msg: 'Email already taken'
         });
-    }else if(existPersonalId){
+    }
+    if(existPersonalId){
         return res.status(400).json({
             msg: 'Personalid already taken'
         });
-    }
-
-
+    } 
     // Encrypt password
      const salt =  bcryptjs.genSaltSync();
      usuario.password = bcryptjs.hashSync(password, salt)
-
     await usuario.save();
-    // await usuarios.insertOne(usuario)
-
     res.json({
         msg: 'POST | CONTROLLER',
         usuario
