@@ -44,15 +44,11 @@ const Usuarios = () => {
       });
   }, [isUpdated]);
 
-	const isValidUrl = urlString=> {
-    const urlPattern = new RegExp('^(https?:\\/\\/)?'+ // validate protocol
-    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // validate domain name
-    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // validate OR ip (v4) address
-    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // validate port and path
-    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // validate query string
-    '(\\#[-a-z\\d_]*)?$','i'); // validate fragment locator
-    return !!urlPattern.test(urlString);
-}
+
+  const validUrl = (link) => {
+    const pattern = new RegExp(`\\blocalhost:8080/public/images/profile_upload/\\b`, 'i');
+    return pattern.test(link);
+  }
 
   const columns = React.useMemo(() => {
     return [
@@ -63,7 +59,7 @@ const Usuarios = () => {
         headerClassName: 'text-muted text-small text-uppercase w-10',
         Cell: ({ cell }) => {
           return (
-            <img className="user-admin-images" src='https://www.nicepng.com/png/full/202-2024687_profile-icon-for-the-politics-category-profile-icon.png' alt="UserProp"/>
+            <img className="user-admin-images" src={ validUrl(cell.value) ? cell.value : 'https://cdn3.iconfinder.com/data/icons/vector-icons-6/96/256-512.png' } alt={ cell.value }/>
           );
         },
       },    

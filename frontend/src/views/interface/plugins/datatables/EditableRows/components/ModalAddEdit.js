@@ -1,20 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import * as Yup from 'yup';
 import { useFormik, Formik } from 'formik';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import { NavLink, Redirect, useHistory } from 'react-router-dom';
 import axios from "axios";
-import { actualizarUsuario, actualizarUsuarioFromAdmin, agregarUsuarioFromAdmin } from 'store/slices/usuarios/usuarioThunk';
+import { actualizarUsuario, actualizarUsuarioFromAdmin, agregarUsuarioNuevo } from 'store/slices/usuarios/usuarioThunk';
 import { useDispatch } from 'react-redux';
+import { UploadProfileImages } from 'views/interface/components/UploadProfileImages';
 
 const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }) => {
   const dispatch = useDispatch();
   const history = useHistory();
+  const ref = useRef();
 
   const { selectedFlatRows, data, setData, setIsOpenAddEditModal, isOpenAddEditModal } = tableInstance;
   const initialValues = {
+    /* eslint no-underscore-dangle: 0 */
+    userMongoId: selectedFlatRows.length === 1 ? selectedFlatRows[0].original._id : '',
     img: selectedFlatRows.length === 1 ? selectedFlatRows[0].original.img : '',
+    thumb: selectedFlatRows.length === 1 ? selectedFlatRows[0].original.thumb : '',
     name: selectedFlatRows.length === 1 ? selectedFlatRows[0].original.name : '',
     email: selectedFlatRows.length === 1 ? selectedFlatRows[0].original.email : '',
     role: selectedFlatRows.length === 1 ? selectedFlatRows[0].original.role : 'Administrador',
@@ -46,6 +51,7 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
           personalId,
           status
         });
+        ref.current.handleSubmit();
         setShowSuccessAlert(true);
 
       } catch (e) {
@@ -62,7 +68,7 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
     }
     else {
       try {
-        const response = await axios.post('http://localhost:8080/api/usuarios/', {
+        const userToSave = {
           name,
           thumb,
           email,
@@ -70,7 +76,8 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
           role,
           personalId,
           status
-        });
+        }
+        dispatch(agregarUsuarioNuevo(userToSave, ref.current.returnImage()));
         setShowSuccessAlert(true);
       } catch (e) {
         console.log(e.message);
@@ -96,23 +103,12 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
             setIsOpenAddEditModal(false);
   }
   const cancelRegister = () => {
-    document.getElementById("usersForm").reset();
+    document.getElementById("registerForm").reset();
   }
 
   const formik = useFormik({ initialValues, validationSchema, onSubmit });
 
 
-  const onSaveInfo = (e, formState) => {
-    e.preventDefault();
-    if (selectedFlatRows.length === 1) {
-      const {_id: userID} = selectedFlatRows[0].original;
-      dispatch(actualizarUsuarioFromAdmin(formState, userID));
-    } else {
-      dispatch(agregarUsuarioFromAdmin(formState));
-    }
-    setIsOpenAddEditModal(false);
-    cancelRegister();
-  }
   return (
 
     <Modal className=" modal-right fade" show={isOpenAddEditModal} onHide={() => setIsOpenAddEditModal(false)}>
@@ -131,6 +127,24 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
           {({ handleSubmit, handleChange, values, errors, touched }) => (
 
             <form id="registerForm" className="tooltip-end-bottom" onSubmit={handleSubmit}>
+              <Form.Group controlId="name">
+
+              {
+                selectedFlatRows.length === 1 
+                ? <UploadProfileImages userData={{
+                  userId: values.userMongoId,
+                  updateImage: true,
+                  thumb: values.thumb
+                }} ref={ ref }/>
+                : <UploadProfileImages userData={{
+                  userId: values.userMongoId,
+                  updateImage: false,
+                  thumb: values.thumb
+                }} ref={ ref }/>
+
+              }
+
+              </Form.Group>
               <Form.Group controlId="name">
                 <div className="mb-3 filled form-group tooltip-end-top">
                   <CsLineIcons icon="user" />
