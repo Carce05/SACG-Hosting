@@ -15,8 +15,33 @@ const usuariosGet = async (req, res = response) => {
 }
 
 const usuariosPost = async (req, res = response) => {
-    const { name, thumb, role, email,password, personalId,status } = req.body;
-    const usuario = new Usuario( { name, thumb, role, email,password, personalId, status } );
+    const { name, role, email,password, personalId,status } = req.body;
+    const usuario = new Usuario( { name, thumb: '', role, email,password, personalId, status } );
+    //Check if the email exist
+    const existEmail = await Usuario.findOne({ email });
+    const existPersonalId = await Usuario.findOne({ personalId });
+    if (existEmail ) {
+        return res.status(400).json({
+            msg: 'Email already taken'
+        });
+    }
+    if(existPersonalId){
+        return res.status(400).json({
+            msg: 'Personalid already taken'
+        });
+    } 
+    // Encrypt password
+     const salt =  bcryptjs.genSaltSync();
+     usuario.password = bcryptjs.hashSync(password, salt)
+    await usuario.save();
+    res.json({
+        msg: 'POST | CONTROLLER',
+        usuario
+    });
+}
+const usuariosPostImage = async (req, res = response) => { 
+    const { name, role, email,password, personalId,status } = req.body;
+    const usuario = new Usuario( { name, thumb: `http://localhost:8080/${req.file.path}`, role, email,password, personalId, status } );
     //Check if the email exist
     const existEmail = await Usuario.findOne({ email });
     const existPersonalId = await Usuario.findOne({ personalId });
@@ -41,14 +66,21 @@ const usuariosPost = async (req, res = response) => {
 }
 
 const usuariosPut = async(req, res) => {
+    const currentUserReq = await Usuario.findOne({ _id: req.params.userId })
+    console.log(req.body)
     try {
-        await Usuario.updateOne({ _id: req.params.userId }, req.body);
+        if(currentUserReq.password !== req.body.password) {
+            const bcryptPass = bcryptjs.hashSync(req.body.password, bcryptjs.genSaltSync())
+            await Usuario.updateOne({ _id: req.params.userId }, {...req.body, password: bcryptPass });
+        } else {
+            await Usuario.updateOne({ _id: req.params.userId }, req.body);
+        }
         res.status(200).send({
             msg: 'PUT | CONTROLLER',
             id: req.params.userId
         })
     } catch (err) {
-        res.status(500).send(err);
+        // res.status(500).send(err);
     }
 }
 
@@ -61,8 +93,8 @@ const usuariosDelete = (req, res = response) => {
 const usuarioLogin = async (req, res = response) => {
     const { email, password  } = req.body;
     const { id, name, thumb, role, password : pass } = await Usuario.findOne({ email })
-
-    if (password === pass) {
+    const validate = await bcryptjs.compare(password, pass);
+    if (validate) {
         res.json({
             status: true,
             usuario: {
@@ -70,7 +102,8 @@ const usuarioLogin = async (req, res = response) => {
                 name,
                 thumb,
                 role,
-                email
+                email,
+                pass
             }
         }) 
     } else {
@@ -84,10 +117,33 @@ const usuarioLogin = async (req, res = response) => {
 
 }
 
+
+const userImageUpload = async (req, res = response) => {
+
+    if (req.body.updateImage){
+        try {
+            await Usuario.updateOne({ _id: req.body.userId }, { $set: { 
+                'thumb': `http://localhost:8080/${req.file.path}`
+              }});
+              
+            res.status(200).send({
+                msg: 'IMAGEN ACTUALIZADA CORRECTAMENTE',
+                id: req.body.userId,
+                imagePath: `http://localhost:8080/${req.file.path}`
+            })
+        } catch (err) {
+            res.status(500).send(err);
+        }
+    }
+}
+  
 module.exports = {
     usuariosGet,
     usuariosPost,
     usuariosPut,
     usuariosDelete,
-    usuarioLogin
+    usuarioLogin,
+    userImageUpload,
+    usuariosPostImage
 }
+  

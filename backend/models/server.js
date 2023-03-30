@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const { dbConnection } = require('../database/config');
 require('dotenv').config();
 
@@ -35,7 +36,7 @@ class Server {
         this.app.use( express.json() );
 
         //SERVER STATIC FILE
-        this.app.use(express.static('public'));
+        this.app.use('/public', express.static('public'));
     }
 
     routes() {

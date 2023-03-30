@@ -22,7 +22,7 @@ const RightButtons = () => {
         <OverlayTrigger delay={{ show: 1000, hide: 0 }} overlay={<Tooltip>Settings</Tooltip>} placement="left">
           <Button variant="primary" className="settings-button p-0" onClick={showSettingsModal}>
             <span>
-              <CsLineIcons icon="paint-roller" className="position-relative" />
+              <CsLineIcons icon="paint-roller" className="icon-change" />
             </span>
           </Button>
         </OverlayTrigger>

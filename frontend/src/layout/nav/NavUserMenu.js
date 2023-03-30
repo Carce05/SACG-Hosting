@@ -22,46 +22,9 @@ const NavUserMenuContent = () => {
       <Col xs="6" className="ps-1 pe-1">
         <ul className="list-unstyled">
           <li>
-            <NavLink to="/dashboards/perfil">Perfil</NavLink>
-          </li>
-          {/* <li>
-            <a href="#/!">Preferencias</a>
-          </li>
-          <li>
-            <a href="#/!">Calendario</a>
-          </li> */}
-        </ul>
-      </Col>
-      {/* <Col xs="6" className="ps-1 pe-1">
-        <ul className="list-unstyled">
-          <li>
-            <a href="#/!">Seguridad</a>
-          </li>
-          <li>
-            <a href="#/!">Facturación</a>
-          </li>
-        </ul>
-      </Col> */}
-    </Row>
-    <Row className="mb-1 ms-0 me-0">
-      <Col xs="12" className="p-1 mb-2 pt-2">
-        <div className="text-extra-small text-primary">APLICACIÓN</div>
-      </Col>
-      <Col xs="6" className="ps-1 pe-1">
-        <ul className="list-unstyled">
-          <li>
-            <a href="#/!">Temas</a>
-          </li>
-          
-        </ul>
-      </Col>
-      <Col xs="6" className="pe-1 ps-1">
-        <ul className="list-unstyled">
-          <li>
-            <a href="#/!">Dispositivos</a>
-          </li>
-          <li>
-            <a href="#/!">Almacenamiento</a>
+            <a href="/dashboards/perfil">
+              <CsLineIcons icon="tool" className="me-2" size="17" /> <span className="align-middle">Perfil</span>
+            </a>
           </li>
         </ul>
       </Col>
@@ -70,25 +33,11 @@ const NavUserMenuContent = () => {
       <Col xs="12" className="p-1 mb-3 pt-3">
         <div className="separator-light" />
       </Col>
-      <Col xs="6" className="ps-1 pe-1">
+      <Col xs="10" className="ps-1 pe-1">
         <ul className="list-unstyled">
-          <li>
-            <a href="#/!">
-              <CsLineIcons icon="help" className="me-2" size="17" /> <span className="align-middle">Ayuda</span>
-            </a>
-          </li>
           <li>
             <a href="/selector-estudiante">
-              <CsLineIcons icon="sync-horizontal" className="me-0" size="17" /> <span className="align-middle">Cambiar Estudiante</span>
-            </a>
-          </li>
-        </ul>
-      </Col>
-      <Col xs="6" className="pe-1 ps-1">
-        <ul className="list-unstyled">
-          <li>
-            <a href="#/!">
-              <CsLineIcons icon="gear" className="me-0" size="17" /> <span className="align-middle">Configuraciones</span>
+              <CsLineIcons icon="sync-horizontal" className="me-2" size="17" /> <span className="align-middle">Cambiar Estudiante</span>
             </a>
           </li>
           <li>
@@ -101,6 +50,11 @@ const NavUserMenuContent = () => {
     </Row>
   </div>
 )};
+
+const validUrl = (link) => {
+  const pattern = new RegExp(`\\blocalhost:8080/public/images/profile_upload/\\b`, 'i');
+  return pattern.test(link);
+}
 
 const NavUserMenuDropdownToggle = React.memo(
   React.forwardRef(({ onClick, expanded = false, user = {} }, ref) => (
@@ -116,7 +70,7 @@ const NavUserMenuDropdownToggle = React.memo(
         onClick(e);
       }}
     >
-      <img className="profile" alt={user.name} src='https://www.nicepng.com/png/full/202-2024687_profile-icon-for-the-politics-category-profile-icon.png' />
+      <img className="profile" alt={user.name} src={ validUrl(user.thumb) ? user.thumb : 'https://cdn3.iconfinder.com/data/icons/vector-icons-6/96/256-512.png' } />
       <div className="name">{user.name}</div>
     </a>
   ))

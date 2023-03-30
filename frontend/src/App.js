@@ -1,8 +1,5 @@
 import React, { useMemo } from 'react';
-import { Redirect } from "react-router-dom";
-
-// import redux for auth guard
-import { useSelector } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
 // import layout
 import Layout from 'layout/Layout';
@@ -15,7 +12,6 @@ import Loading from 'components/loading/Loading';
 import { useLogin } from 'hooks/useLogin';
 
 const App = () => {
-
   if (localStorage.getItem('loginState') !== null) {
     const { currentUser = '' } = JSON.parse(localStorage.getItem('loginState'));
     const { onCheckLogin } = useLogin();

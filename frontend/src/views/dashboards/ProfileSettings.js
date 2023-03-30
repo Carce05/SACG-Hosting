@@ -1,21 +1,17 @@
 import { Row, Col, Card, Button, Badge, Dropdown, Form, Alert } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
-import Rating from 'react-rating';
 import HtmlHead from 'components/html-head/HtmlHead';
-import BreadcrumbList from 'components/breadcrumb-list/BreadcrumbList';
-import CsLineIcons from 'cs-line-icons/CsLineIcons';
-import ScrollByCount from 'components/scroll-by-count/ScrollByCount';
-import { OverlayScrollbarsComponent } from 'overlayscrollbars-react';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Select from 'react-select';
 import { actualizarUsuario } from 'store/slices/usuarios/usuarioThunk';
 import { useDispatch, useSelector } from 'react-redux';
+import { UploadProfileImages } from 'views/interface/components/UploadProfileImages';
 import { useForm } from "../../hooks/useForm";
 
 const ProfileSettings = () => {
   const dispatch = useDispatch();
+  const ref = useRef();
   const { currentUser, isUpdated } = useSelector((state) => state.auth);
-  const { id, name, email, role, thumb } = currentUser;
+  const { id, name, email, role, thumb, pass } = currentUser;
   const title = 'Profile Settings';
   const description = 'Profile Settings';
 
@@ -28,16 +24,25 @@ const ProfileSettings = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [genderValue, setGenderValue] = useState( { value: role, label: role });
 
-  const { formName, formEmail, formThumb, onInputChange, formState } =
+  const { formName, formEmail, formPass, onInputChange, formState } =
   useForm({
     formName: name,
     formEmail: email,
-    formThumb: thumb,
+    formPass: ''
   });
 
   const onActualizarPerfil = () => {
-    dispatch(actualizarUsuario(formState, id));
+
+    if(formPass.length !== 0) {
+      dispatch(actualizarUsuario(formState, id));
+    } else {
+      console.log(pass)
+      dispatch(actualizarUsuario({...formState, formPass: pass}, id));
+    }
+    ref.current.handleSubmit()
   }
+  
+  console.log(thumb)
 
 
   return (
@@ -53,8 +58,12 @@ const ProfileSettings = () => {
           <h2 className="small-title">Información del Usuario</h2>
           <Card className="mb-5">
             <Card.Body>
+            <UploadProfileImages userData={{
+                userId: id,
+                updateImage: true,
+                thumb
+              }} ref={ ref }/>
               <Form>
-                <img className="settings-profile-img" alt={ name } src='https://www.nicepng.com/png/full/202-2024687_profile-icon-for-the-politics-category-profile-icon.png' />
                 <Row className="mb-3">
                   <Col lg="2" md="3" sm="4">
                     <Form.Label className="col-form-label">Nombre</Form.Label>
@@ -77,6 +86,14 @@ const ProfileSettings = () => {
                   </Col>
                   <Col sm="8" md="9" lg="10">
                     <Form.Control type="email" name='formEmail' onChange={ onInputChange } defaultValue={ formEmail } />
+                  </Col>
+                </Row>
+                <Row className="mb-3">
+                  <Col lg="2" md="3" sm="4">
+                    <Form.Label className="col-form-label">Contraseña</Form.Label>
+                  </Col>
+                  <Col sm="8" md="9" lg="10">
+                    <Form.Control type="password" name='formPass' onChange={ onInputChange } defaultValue={ formPass } />
                   </Col>
                 </Row>
                 <Row className="mt-5">
