@@ -31,7 +31,7 @@ const AdminMatricula = () => {
   const { currentUser } = useSelector((state) => state.auth);
   useEffect(() => {
     if(matriculas.length > 0){
-      if (currentUser.role !== 'admin'){
+      if (currentUser.role !== 'Administrador'){
         const matriculasPerUser = matriculas.filter(e => e.encargadoId === currentUser.id );
         setData(matriculasPerUser);
       } else {
@@ -109,7 +109,7 @@ const onRefrescar = () => {
           {/* Title Start */}
           <Col md="7">
           <div className='form-input-hori'>
-              <h1 className="mb-0 pb-0 display-4">{(currentUser.role === 'admin') ? title : 'Agregar Nueva'}</h1>
+              <h1 className="mb-0 pb-0 display-4">{(currentUser.role === 'Administrador') ? title : 'Agregar Nueva'}</h1>
               <div className={ (currentUser.role === 'Encargado') ? 'show-element d-inline-block me-0 me-sm-3 float-start float-md-none' : 'hide-element'}>
                     <ControlsAdd tableInstance={tableInstance} />
               </div>
@@ -125,24 +125,24 @@ const onRefrescar = () => {
           <div> 
             <Row className="mb-3">
               <Col sm="12" md="5" lg="3" xxl="2">
-                <div className={ (currentUser.role === 'admin') ? 'show-element d-inline-block float-md-start me-1 mb-1 mb-md-0 search-input-container w-100 shadow bg-foreground' : 'hide-element' }>
+                <div className={ (currentUser.role === 'Administrador') ? 'show-element d-inline-block float-md-start me-1 mb-1 mb-md-0 search-input-container w-100 shadow bg-foreground' : 'hide-element' }>
                   <ControlsSearch tableInstance={tableInstance}/>
                 </div>
               </Col>
               <Col sm="12" md="7" lg="9" xxl="10" className="text-end">
-                <div className={ (currentUser.role === 'admin') ? 'show-element d-inline-block me-0 me-sm-3 float-start float-md-none' : 'hide-element'}>
+                <div className={ (currentUser.role === 'Administrador') ? 'show-element d-inline-block me-0 me-sm-3 float-start float-md-none' : 'hide-element'}>
                   <ControlsAdd tableInstance={tableInstance} />  <ControlsVer tableInstance={tableInstance} />
                 </div>
-                <Button variant="outline-primary" className={ (currentUser.role === 'admin') ? 'show-element' : 'hide-element'} onClick={ onRefrescar }>
+                <Button variant="outline-primary" className={ (currentUser.role === 'Administrador') ? 'show-element' : 'hide-element'} onClick={ onRefrescar }>
                     Refrescar
                 </Button>
-                <div className={ (currentUser.role === 'admin') ? 'show-element d-inline-block' : 'hide-element'}>
+                <div className={ (currentUser.role === 'Administrador') ? 'show-element d-inline-block' : 'hide-element'}>
                   <ControlsPageSize tableInstance={tableInstance} />
                 </div>
               </Col>
              
-              <div className={ (currentUser.role !== 'admin') ? 'show-element d-inline-block me-0 me-sm-3 float-start float-md-none' : 'hide-element'}>
-                <h3 className={ (currentUser.role !== 'admin') ? 'show-element d-inline-block mb-10 pb-0 mr-3' : 'hide-element'}>Tus Matriculas</h3> <ControlsVer tableInstance={tableInstance} />
+              <div className={ (currentUser.role !== 'Administrador') ? 'show-element d-inline-block me-0 me-sm-3 float-start float-md-none' : 'hide-element'}>
+                <h3 className={ (currentUser.role !== 'Administrador') ? 'show-element d-inline-block mb-10 pb-0 mr-3' : 'hide-element'}>Tus Matriculas</h3> <ControlsVer tableInstance={tableInstance} />
               </div>
             </Row>
             <Row>

@@ -95,6 +95,10 @@ const agregarUsuarioNuevo = (userToSave, image) => {
         `/usuarios/withimage`,
           formData
       );
+      dispatch(setUpdatedUser());
+      setTimeout(() => {
+          dispatch(setUpdatedUserFalse());
+      }, 2000)
     } else {
       const { data } = await mainEndpoint.post(
         `/usuarios`,
@@ -102,6 +106,10 @@ const agregarUsuarioNuevo = (userToSave, image) => {
           ...userToSave
         },
       );
+      dispatch(setUpdatedUser());
+      setTimeout(() => {
+          dispatch(setUpdatedUserFalse());
+      }, 2000)
     }
 }}
 
