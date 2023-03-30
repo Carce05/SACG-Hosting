@@ -42,8 +42,10 @@ const Usuarios = () => {
       .catch((err) => {
         console.error(err);
       });
-  }, [isUpdated]);
+      console.log(showSuccessAlert)
+  }, [isUpdated, showSuccessAlert]);
 
+  
 
   const validUrl = (link) => {
     const pattern = new RegExp(`\\blocalhost:8080/public/images/profile_upload/\\b`, 'i');
@@ -123,13 +125,6 @@ const Usuarios = () => {
           {/* Title End */}
         </Row>
       </div>
-      { 
-          isUpdated && (
-            <Alert variant="success">
-              Acción realizada con exito
-            </Alert>
-          )
-        }
     
       <Row>
         <Col>

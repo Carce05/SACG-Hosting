@@ -53,7 +53,6 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
         });
         ref.current.handleSubmit();
         setShowSuccessAlert(true);
-
       } catch (e) {
         console.log(e.message);
         setShowDangerAlert(true);
@@ -80,7 +79,6 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
         dispatch(agregarUsuarioNuevo(userToSave, ref.current.returnImage()));
         setShowSuccessAlert(true);
       } catch (e) {
-        console.log(e.message);
         if (e.response && e.response.status === 400) {
           setIsOpenAddEditModal(true);
           console.log(e.response.data.msg);
