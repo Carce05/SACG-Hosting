@@ -14,7 +14,7 @@ import ButtonsCheckAll from 'views/interface/plugins/datatables/EditableRows/com
 import ButtonsAddNew from 'views/interface/plugins/datatables/EditableRows/components/ButtonsAddNew';
 import ControlsPageSize from 'views/interface/plugins/datatables/EditableRows/components/ControlsPageSize';
 import ControlsAdd from 'views/interface/plugins/datatables/EditableRows/components/ControlsAdd';
-import ControlsEdit from 'views/interface/plugins/datatables/EditableRows/components/ControlsEdit';
+import ControlsCalificacion from 'views/interface/plugins/datatables/EditableRows/components/ControlsCalificacion';
 import ControlsDelete from 'views/interface/plugins/datatables/EditableRows/components/ControlsDelete';
 import ControlsSearch from 'views/interface/plugins/datatables/EditableRows/components/ControlsSearch';
 import ModalCalificacion from 'views/interface/plugins/datatables/EditableRows/components/ModalCalificacion';
@@ -36,9 +36,8 @@ const Secciones = (props) => {
   const formik = useFormik({ initialValues });
   const { handleSubmit, handleChange, materia, seccionn, touched, errors } = formik;
   const { setSelectedMateria, setSeccionn } = useState();
-  let student = "";
   
-  const { currentUser, isLogin } = useSelector((state) => state.auth);
+  const { currentUser, isLogin, isUpdated } = useSelector((state) => state.auth);
   const docente  = currentUser.email;
   
 
@@ -125,14 +124,11 @@ const Secciones = (props) => {
     fetchData();
   }, []);
 
-  async function getCalificacion(cedulaRow, materiaRow) {
+  
+  useEffect(() => {
+  async function fetchData() {
     // Fetch data
-    const response = await axios.get('http://localhost:8080/api/calificaciones/buscarCalificacion', {
-      params: {
-        estudiante: cedulaRow,
-        materia: materiaRow
-      }
-    });
+    const response = await axios.get('http://localhost:8080/api/calificaciones');
     const resultsCalificaciones = []
     // Store results in the results array
 
@@ -155,10 +151,11 @@ const Secciones = (props) => {
     setCalificaciones([ 
       ...resultsCalificaciones
     ])
-
-      student = cedulaRow;
-
   }
+
+      // Trigger the fetch
+      fetchData();
+}, [isUpdated]);
 
   
 
@@ -181,17 +178,6 @@ const Secciones = (props) => {
     handleSeccion(id);
   }
 
-  const handleCalificacion = (row) => {
-    const cedulaRow = row.cells[0].value;
-    const materiaRow = row.cells[3].value;
-
-
-
-    getCalificacion(cedulaRow,materiaRow);
-
-    setIsOpenAddEditModal(true)
-  }
-
 
 
   const title = 'Mis Secciones';
@@ -206,6 +192,7 @@ const Secciones = (props) => {
       { Header: 'Apellido', accessor: 'apellido', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       { Header: 'Materia', accessor: 'materia', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       { Header: 'Seccion', accessor: 'seccion', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
+      /*
       {
         Header: '',
         id: 'action',
@@ -213,6 +200,16 @@ const Secciones = (props) => {
         Cell: ({ row }) => {
           const { checked, onChange } = row.getToggleRowSelectedProps();
           return <Button onClick={() => handleCalificacion(row) } variant="outline-primary" >Nota</Button>;
+        },
+      },
+      */
+      {
+        Header: '',
+        id: 'action',
+        headerClassName: 'empty w-10',
+        Cell: ({ row }) => {
+          const { checked, onChange } = row.getToggleRowSelectedProps();
+          return <Form.Check className="form-check float-end mt-1" type="checkbox" checked={checked} onChange={onChange}/>;
         },
       },
     ];
@@ -310,8 +307,8 @@ const tableInstance = useTable(
                 </div>
               </Col>
               <Col sm="12" md="7" lg="9" xxl="10" className="text-end">
-                <div className="d-inline-block">
-                  <ControlsPageSize tableInstance={tableInstance} />
+                <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
+                  <ControlsCalificacion tableInstance={tableInstance} />
                 </div>
               </Col>
             </Row>
@@ -325,8 +322,7 @@ const tableInstance = useTable(
             </Row>
           </div>
           <ModalCalificacion tableInstance={tableInstance} 
-            calificaciones={calificaciones} 
-            student={student} />
+           calificaciones={calificaciones}/>
         </Col>
       </Row>
     </>

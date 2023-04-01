@@ -6,14 +6,14 @@ import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import { NavLink, Redirect, useHistory } from 'react-router-dom';
 import axios from "axios";
 
-const ModalCalificacion = ({ tableInstance, calificaciones, student }) => {
+const ModalCalificacion = ({ tableInstance, calificaciones }) => {
 const history = useHistory();
  
   const { selectedFlatRows, data, setData, setIsOpenAddEditModal, isOpenAddEditModal } = tableInstance;
 
   let materiaRes = "";
 
-  let cedula = student;
+  let cedula = "";
 
   let idRes = "";
   let cotidianoRes = 0;
@@ -24,13 +24,17 @@ const history = useHistory();
   let asistenciaRes = 0;
   let observacionesRes = "";
 
+  const [calificacionesUpdate, setCalificacionesUpdate] = useState([]);
+
+
   if (selectedFlatRows.length === 1) {
     cedula = selectedFlatRows[0].original.cedula;
     materiaRes = selectedFlatRows[0].original.materia;
+    console.log("Consulto");
   }
 
 
-  if (calificaciones.length >= 1) {
+  if (calificaciones.length >= 1 && calificaciones !== undefined) {
     calificaciones.forEach((val) => {
       if (val.estudiante === cedula && val.materia === materiaRes){
         idRes = val.id;
@@ -73,7 +77,7 @@ const history = useHistory();
   const onSubmit = async ({ estudiante, materia, cotidiano, tarea,  examen1, examen2, proyecto, asistencia, total, observaciones, anio, trimestre }) => {
     if (idRes !== "") {
     try {
-      const response = await axios.put(`http://localhost:8080/api/calificaciones/${idRes}`, {
+      await axios.put(`http://localhost:8080/api/calificaciones/${idRes}`, {
         estudiante: cedula,
         materia: materiaRes,
         cotidiano,
@@ -89,6 +93,28 @@ const history = useHistory();
       });
       alert('Calificación actualizada correctamente');
       setIsOpenAddEditModal(false);
+
+      const response = await axios.get('http://localhost:8080/api/calificaciones');
+      const resultsCalificaciones = []
+      // Store results in the results array
+  
+      /* eslint no-underscore-dangle: 0 */
+      response.data.forEach((val) => {
+        resultsCalificaciones.push({
+          id: val._id,
+          estudiante: val.estudiante,
+          materia: val.materia,
+          cotidiano: val.cotidiano,
+          tarea: val.tarea,
+          examen1: val.examen1,
+          examen2: val.examen2,
+          proyecto: val.proyecto,
+          asistencia: val.asistencia,
+          total: val.total,
+          observaciones: val.observaciones,
+        });
+      });
+      calificaciones = resultsCalificaciones;
     } catch (e) {
       console.log(e.message);
       if (e.response && e.response.status === 400) {
