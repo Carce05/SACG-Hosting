@@ -30,6 +30,7 @@ const AdminSecciones = (props) => {
   const [docentesFiltrados, setDocentesFiltrados] = useState([]);
   const [secciones, setSecciones] = useState();
   const [estudiantes, setEstudiantes] = useState([]);
+  const [calificaciones, setCalificaciones] = useState([]);
   const [seccion, setSeccion] = useState([]);
   const { label, name, ...rest } = props;
   const initialValues = { email: '' };
@@ -50,6 +51,7 @@ const AdminSecciones = (props) => {
       const resultsSecciones = []
 
       let contador = 0;
+      let contador2 = 0;
       // Store results in the results array
       response.data.forEach((val) => {
         resultsMaterias.forEach((dup) => {
@@ -65,7 +67,15 @@ const AdminSecciones = (props) => {
         });
 
       });
+      
       response.data.forEach((val) => {
+        resultsDocentes.forEach((dup) => {
+          contador2 = 0;
+          if (val.docente === dup.docente) {
+            contador2 +=1;
+          }
+        })
+        if (contador2 === 0)
         resultsDocentes.push({
           docente: val.docente,
           materia: val.materia,
@@ -94,7 +104,7 @@ const AdminSecciones = (props) => {
         resultsSecciones.push({
           seccion: val.seccion,
           docente: val.docente,
-          
+          materia: val.materia,
           label: `${val.seccion}`,
         });
       });
@@ -115,21 +125,38 @@ const AdminSecciones = (props) => {
   }, []);
   
   
-  /*
-  useEffect(() => {
 
-    axios
-      .get("http://localhost:8080/api/estudiantes/")
-      .then((res) => {
-        setData(res.data);
-      })
-      .catch((err) => {
-        console.error(err);
+useEffect(() => {
+  async function fetchData() {
+    // Fetch data
+    const response = await axios.get("http://localhost:8080/api/calificaciones/");
+    const resultsCalificaciones = []
+    // Store results in the results array
+
+    /* eslint no-underscore-dangle: 0 */
+    response.data.forEach((val) => {
+      resultsCalificaciones.push({
+        id: val._id,
+        estudiante: val.estudiante,
+        materia: val.materia,
+        cotidiano: val.cotidiano,
+        tarea: val.tarea,
+        examen1: val.examen1,
+        examen2: val.examen2,
+        proyecto: val.proyecto,
+        asistencia: val.asistencia,
+        total: val.total,
+        observaciones: val.observaciones,
       });
-  }, []);
-*/
+    });
+    setCalificaciones([ 
+      ...resultsCalificaciones
+    ])
+  }
 
-
+  // Trigger the fetch
+  fetchData();
+}, []);
   
   useEffect(() => {
     async function fetchData() {
@@ -164,17 +191,19 @@ const AdminSecciones = (props) => {
   }
 
   const handleDocente= (id) => {
-    const dt = secciones.filter(x => x.docente=== id.docente);
-    setSeccion(dt);
+    const dt = secciones.filter(x => x.docente === id.docente);
+    const td = dt.filter(x => x.materia === id.materia);
+    setSeccion(td);
     handleSeccion(id);
    
   }
 
   const handleMateria = (id) => {
+    estudiantes.forEach((val) => {
+      val.materia = id.materia;
+    });
     const dt = docentes.filter(x => x.materia === id.materia);
     setDocentesFiltrados(dt);
-
-    // id.seccion = formik;
     handleDocente(id);
     
   }
@@ -211,6 +240,7 @@ const AdminSecciones = (props) => {
         },
       },    
       { Header: 'Apellido', accessor: 'apellido', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
+      { Header: 'Materia', accessor: 'materia', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       { Header: 'Seccion', accessor: 'seccion', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       {
         Header: '',
@@ -227,7 +257,19 @@ const AdminSecciones = (props) => {
  
 
   const tableInstance = useTable(
-    { columns, data, setData, isOpenAddEditModal, setIsOpenAddEditModal, initialState: { pageIndex: 0 } },
+    { columns, data, setData, stateReducer: (state, action) => {
+      if (action.type === 'toggleRowSelected' && Object.keys(state.selectedRowIds).length) {
+         const newState = { ...state };
+
+         newState.selectedRowIds = {
+           [action.id]: true,
+         };
+
+         return newState;
+      }
+
+      return state;
+   }, isOpenAddEditModal, setIsOpenAddEditModal, initialState: { pageIndex: 0 } },
     useGlobalFilter,
     useSortBy,
     usePagination,
@@ -317,11 +359,7 @@ const AdminSecciones = (props) => {
                   <ControlsSearch tableInstance={tableInstance} />
                 </div>
               </Col>
-              <Col sm="12" md="7" lg="9" xxl="10" className="text-end">
-                <div className="d-inline-block">
-                  <ControlsPageSize tableInstance={tableInstance} />
-                </div>
-              </Col>
+              
             </Row>
             <Row>
               <Col xs="12">
@@ -332,7 +370,7 @@ const AdminSecciones = (props) => {
               </Col>
             </Row>
           </div>
-          <ModalCalificacion tableInstance={tableInstance}/>
+          <ModalCalificacion tableInstance={tableInstance} calificaciones={calificaciones}/>
         </Col>
       </Row>
     </>

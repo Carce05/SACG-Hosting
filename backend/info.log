@@ -14,3 +14,5 @@
 {"level":"error","message":"Fallo en el envío del email","timestamp":"2023-02-23T23:37:09.000Z"}
 {"level":"error","message":"Fallo en el envío del email","timestamp":"2023-02-23T23:37:26.107Z"}
 {"level":"error","message":"Fallo en el envío del email","timestamp":"2023-02-23T23:38:06.008Z"}
+{"level":"error","message":"Error al intentar loguearse al sistema","timestamp":"2023-03-21T04:14:44.225Z"}
+{"level":"error","message":"Error al intentar loguearse al sistema","timestamp":"2023-03-21T04:14:45.769Z"}
