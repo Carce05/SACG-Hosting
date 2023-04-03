@@ -1,4 +1,4 @@
-import { Row, Col, Card, Button, Badge, Dropdown, Form } from 'react-bootstrap';
+import { Row, Col, Card, Button, Badge, Alert, Form } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import Rating from 'react-rating';
 import HtmlHead from 'components/html-head/HtmlHead';
@@ -6,54 +6,51 @@ import BreadcrumbList from 'components/breadcrumb-list/BreadcrumbList';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import ScrollByCount from 'components/scroll-by-count/ScrollByCount';
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 import { useTable, useGlobalFilter, useSortBy, usePagination, useRowSelect, useRowState } from 'react-table';
 import Table from 'views/interface/plugins/datatables/EditableRows/components/Table';
 import ButtonsCheckAll from 'views/interface/plugins/datatables/EditableRows/components/ButtonsCheckAll';
 import ButtonsAddNew from 'views/interface/plugins/datatables/EditableRows/components/ButtonsAddNew';
 import ControlsPageSize from 'views/interface/plugins/datatables/EditableRows/components/ControlsPageSize';
-import ControlsAdd from 'views/interface/plugins/datatables/EditableRows/components/ControlsAdd';
 import ControlsEdit from 'views/interface/plugins/datatables/EditableRows/components/ControlsEdit';
-import ControlsDelete from 'views/interface/plugins/datatables/EditableRows/components/ControlsDelete';
+import ControlsDeleteAnnouncement from 'views/interface/plugins/datatables/EditableRows/components/ControlsDeleteAnnouncement';
 import ControlsSearch from 'views/interface/plugins/datatables/EditableRows/components/ControlsSearch';
 import ModalAddEdit from 'views/interface/plugins/datatables/EditableRows/components/ModalAddEdit';
 import TablePagination from 'views/interface/plugins/datatables/EditableRows/components/TablePagination';
+import axios from "axios";
+import ModalAddAnnouncement from 'views/interface/plugins/datatables/EditableRows/components/ModalAddAnnouncement';
 
-const dummyData = [
-  { id: 1, name: 'Basler Brot', sales: 213, stock: 392310440, category: 'Sourdough', tag: 'Activo' },
-  { id: 2, name: 'Bauernbrot', sales: 633, stock: 129234013, category: 'Multigrain', tag: 'Inactivo' },
-  { id: 3, name: 'Kommissbrot', sales: 2321, stock: 561017657, category: 'Whole Wheat', tag: '' },
-  { id: 4, name: 'Lye Roll', sales: 973, stock: 127580420, category: 'Sourdough', tag: '' },
-  { id: 5, name: 'Panettone', sales: 563, stock: 789313762, category: 'Sourdough', tag: 'Activo' },
-  { id: 6, name: 'Saffron Bun', sales: 98, stock: 129074548, category: 'Whole Wheat', tag: '' },
-  { id: 7, name: 'Ruisreikäleipä', sales: 459, stock: 904716276, category: 'Whole Wheat', tag: '' },
-  { id: 8, name: 'Rúgbrauð', sales: 802, stock: 797307649, category: 'Whole Wheat', tag: '' },
-  { id: 9, name: 'Yeast Karavai', sales: 345, stock: 680078801, category: 'Multigrain', tag: '' },
-  { id: 10, name: 'Brioche', sales: 334, stock: 378937746, category: 'Sourdough', tag: '' },
-  { id: 11, name: 'Pullman Loaf', sales: 456, stock: 461638720, category: 'Multigrain', tag: 'Inactivo' },
-  { id: 12, name: 'Soda Bread', sales: 1152, stock: 348536477, category: 'Whole Wheat', tag: '' },
-  { id: 13, name: 'Barmbrack', sales: 854, stock: 591276986, category: 'Sourdough', tag: '' },
-  { id: 14, name: 'Buccellato di Lucca', sales: 1298, stock: 980925057, category: 'Multigrain', tag: '' },
-  { id: 15, name: 'Toast Bread', sales: 2156, stock: 220171422, category: 'Multigrain', tag: '' },
-  { id: 16, name: 'Cheesymite Scroll', sales: 452, stock: 545847219, category: 'Sourdough', tag: '' },
-  { id: 17, name: 'Baguette', sales: 456, stock: 553121944, category: 'Sourdough', tag: '' },
-  { id: 18, name: 'Guernsey Gâche', sales: 1958, stock: 371226430, category: 'Multigrain', tag: '' },
-  { id: 19, name: 'Bazlama', sales: 858, stock: 384036275, category: 'Whole Wheat', tag: '' },
-  { id: 20, name: 'Bolillo', sales: 333, stock: 484876903, category: 'Whole Wheat', tag: '' },
-];
 
 const SchoolDashboard = () => {
-
+  const [data, setData] = useState([]);
   const title = 'Avisos';
-  const description = 'Elearning Portal School Dashboard Page';
+  const description = '';
+  const [showModal, setShowModal] = useState(false);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showDangerAlert, setShowDangerAlert] = useState(false);
+  const handleEditClick = () => {
+    setShowModal(true);
+  };
+
+  useEffect(() => {
+
+    axios
+      .get("http://localhost:8080/api/comunicados")
+      .then((res) => {
+        setData(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
 
   const columns = React.useMemo(() => {
     return [
-      { Header: 'ID', accessor: 'id', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
+      { Header: 'Publicación', accessor: 'createdAt', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       {
-        Header: 'Descripción',
-        accessor: 'name',
+        Header: 'Titulo',
+        accessor: 'title',
         sortable: true,
         headerClassName: 'text-muted text-small text-uppercase w-30',
         Cell: ({ cell }) => {
@@ -69,14 +66,24 @@ const SchoolDashboard = () => {
             </a>
           );
         },
-      },    
+      },
       {
-        Header: 'Estado',
-        accessor: 'tag',
+        Header: 'Descripción',
+        accessor: 'description',
         sortable: true,
-        headerClassName: 'text-muted text-small text-uppercase w-10',
+        headerClassName: 'text-muted text-small text-uppercase w-30',
         Cell: ({ cell }) => {
-          return <Badge bg="outline-primary">{cell.value}</Badge>;
+          return (
+            <a
+              className="list-item-heading body"
+              href="#!"
+              onClick={(e) => {
+                e.preventDefault();
+              }}
+            >
+              {cell.value}
+            </a>
+          );
         },
       },
       {
@@ -91,18 +98,29 @@ const SchoolDashboard = () => {
     ];
   }, []);
 
-  const [data, setData] = React.useState(dummyData);
+
   const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
 
   const tableInstance = useTable(
-    { columns, data, setData, isOpenAddEditModal, setIsOpenAddEditModal, initialState: { pageIndex: 0 } },
+    { columns, data, setData, stateReducer: (state, action) => {
+      if (action.type === 'toggleRowSelected' && Object.keys(state.selectedRowIds).length) {
+         const newState = { ...state };
+
+         newState.selectedRowIds = {
+           [action.id]: true,
+         };
+
+         return newState;
+      }
+
+      return state;
+   }, isOpenAddEditModal, setIsOpenAddEditModal, initialState: { pageIndex: 0 } },
     useGlobalFilter,
     useSortBy,
     usePagination,
     useRowSelect,
     useRowState
   );
-
   const breadcrumbs = [{ to: '', text: 'Home' }];
   return (
     <>
@@ -113,184 +131,9 @@ const SchoolDashboard = () => {
           {/* Title Start */}
           <Col md="7">
             <h1 className="mb-0 pb-0 display-4">{title}</h1>
-            {/* <BreadcrumbList items={breadcrumbs} /> */}
           </Col>
-          {/* Title End */}
         </Row>
       </div>
-      {/* Title and Top Buttons End */}
-
-      {/* Timetable Start */}
-      {/* <h2 className="small-title">Timetable</h2> */}
-      
-      {/* Timetable End */}
-
-      <Row>
-        {/* Exam Results Start */}
-        {/* <Col lg="12" className="mb-5">
-          <div className="d-flex justify-content-between">
-            <h2 className="small-title">Estudiantes</h2>
-            <NavLink to="/quiz/result" className="btn btn-icon btn-icon-end btn-xs btn-background-alternate p-0 text-small">
-              <span className="align-bottom">View All</span> <CsLineIcons icon="chevron-right" className="align-middle" size="12" />
-            </NavLink>
-          </div>
-          <div className="scroll-out">
-            <ScrollByCount count="5">
-              <Card className="mb-2 sh-11 sh-md-8">
-                <Card.Body className="pt-0 pb-0 h-100">
-                  <Row className="g-0 h-100 align-content-center">
-                    <Col md="3" className="d-flex align-items-center mb-2 mb-md-0">
-                      <NavLink to="/quiz/result" className="body-link text-truncate stretched-link">
-                        1-1828-0064
-                      </NavLink>
-                    </Col>
-                    <Col xs="5" md="4" className="d-flex align-items-center text-medium justify-content-start justify-content-md-center text-muted">
-                      Erick Guillén
-                    </Col>
-                    <Col xs="5" md="3" className="d-flex align-items-center justify-content-center text-muted">
-                      12.05.2021
-                    </Col>
-                    <Col xs="2" md="2" className="d-flex align-items-center text-muted text-medium mb-1 mb-md-0 justify-content-end">
-                      <Badge bg="outline-primary" className="py-1 px-3 text-small lh-1-5">
-                        B
-                      </Badge>
-                    </Col>
-                  </Row>
-                </Card.Body>
-              </Card>
-              <Card className="mb-2 sh-11 sh-md-8">
-                <Card.Body className="pt-0 pb-0 h-100">
-                  <Row className="g-0 h-100 align-content-center">
-                    <Col md="3" className="d-flex align-items-center mb-2 mb-md-0">
-                      <NavLink to="/quiz/result" className="body-link text-truncate stretched-link">
-                        1-1122-3333
-                      </NavLink>
-                    </Col>
-                    <Col xs="5" md="4" className="d-flex align-items-center text-medium justify-content-start justify-content-md-center text-muted">
-                      Christopher Arce
-                    </Col>
-                    <Col xs="5" md="3" className="d-flex align-items-center justify-content-center text-muted">
-                      11.05.2021
-                    </Col>
-                    <Col xs="2" md="2" className="d-flex align-items-center text-muted text-medium mb-1 mb-md-0 justify-content-end">
-                      <Badge bg="outline-primary" className="py-1 px-3 text-small lh-1-5">
-                        A
-                      </Badge>
-                    </Col>
-                  </Row>
-                </Card.Body>
-              </Card>
-              <Card className="mb-2 sh-11 sh-md-8">
-                <Card.Body className="pt-0 pb-0 h-100">
-                  <Row className="g-0 h-100 align-content-center">
-                    <Col md="3" className="d-flex align-items-center mb-2 mb-md-0">
-                      <NavLink to="/quiz/result" className="body-link text-truncate stretched-link">
-                        1-1565-7678
-                      </NavLink>
-                    </Col>
-                    <Col xs="5" md="4" className="d-flex align-items-center text-medium justify-content-start justify-content-md-center text-muted">
-                      Yulianna Jiménez
-                    </Col>
-                    <Col xs="5" md="3" className="d-flex align-items-center justify-content-center text-muted">
-                      08.05.2021
-                    </Col>
-                    <Col xs="2" md="2" className="d-flex align-items-center text-muted text-medium mb-1 mb-md-0 justify-content-end">
-                      <Badge bg="outline-primary" className="py-1 px-3 text-small lh-1-5">
-                        A
-                      </Badge>
-                    </Col>
-                  </Row>
-                </Card.Body>
-              </Card>
-              <Card className="mb-2 sh-11 sh-md-8">
-                <Card.Body className="pt-0 pb-0 h-100">
-                  <Row className="g-0 h-100 align-content-center">
-                    <Col md="3" className="d-flex align-items-center mb-2 mb-md-0">
-                      <NavLink to="/quiz/result" className="body-link text-truncate stretched-link">
-                        1-5555-1212
-                      </NavLink>
-                    </Col>
-                    <Col xs="5" md="4" className="d-flex align-items-center text-medium justify-content-start justify-content-md-center text-muted">
-                      Jesús Arroyo
-                    </Col>
-                    <Col xs="5" md="3" className="d-flex align-items-center justify-content-center text-muted">
-                      06.05.2021
-                    </Col>
-                    <Col xs="2" md="2" className="d-flex align-items-center text-muted text-medium mb-1 mb-md-0 justify-content-end">
-                      <Badge bg="outline-primary" className="py-1 px-3 text-small lh-1-5">
-                        A
-                      </Badge>
-                    </Col>
-                  </Row>
-                </Card.Body>
-              </Card>
-              <Card className="mb-2 sh-11 sh-md-8">
-                <Card.Body className="pt-0 pb-0 h-100">
-                  <Row className="g-0 h-100 align-content-center">
-                    <Col md="3" className="d-flex align-items-center mb-2 mb-md-0">
-                      <NavLink to="/quiz/result" className="body-link text-truncate stretched-link">
-                        1-1828-0064
-                      </NavLink>
-                    </Col>
-                    <Col xs="5" md="4" className="d-flex align-items-center text-medium justify-content-start justify-content-md-center text-muted">
-                      Erick Guillén
-                    </Col>
-                    <Col xs="5" md="3" className="d-flex align-items-center justify-content-center text-muted">
-                      06.05.2021
-                    </Col>
-                    <Col xs="2" md="2" className="d-flex align-items-center text-muted text-medium mb-1 mb-md-0 justify-content-end">
-                      <Badge bg="outline-primary" className="py-1 px-3 text-small lh-1-5">
-                        C
-                      </Badge>
-                    </Col>
-                  </Row>
-                </Card.Body>
-              </Card>
-              <Card className="mb-2 sh-11 sh-md-8">
-                <Card.Body className="pt-0 pb-0 h-100">
-                  <Row className="g-0 h-100 align-content-center">
-                    <Col md="3" className="d-flex align-items-center mb-2 mb-md-0">
-                      <NavLink to="/quiz/result" className="body-link text-truncate stretched-link">
-                        Mechanics
-                      </NavLink>
-                    </Col>
-                    <Col xs="5" md="4" className="d-flex align-items-center text-medium justify-content-start justify-content-md-center text-muted">
-                      Winry Rockbell
-                    </Col>
-                    <Col xs="5" md="3" className="d-flex align-items-center justify-content-center text-muted">
-                      04.05.2021
-                    </Col>
-                    <Col xs="2" md="2" className="d-flex align-items-center text-muted text-medium mb-1 mb-md-0 justify-content-end">
-                      <Badge bg="outline-primary" className="py-1 px-3 text-small lh-1-5">
-                        A
-                      </Badge>
-                    </Col>
-                  </Row>
-                </Card.Body>
-              </Card>
-            </ScrollByCount>
-          </div>
-        </Col> */}
-        {/* Exam Results End */}
-
-        {/* Homework Start */}
-        {/* <Col lg="6" className="mb-5">
-          <h2 className="small-title">Homework</h2>
-          <Card className="sh-40 h-lg-100-card">
-            <Card.Body className="d-flex align-items-center justify-content-center h-100">
-              <div className="text-center">
-                <img src="/img/illustration/icon-performance.webp" className="theme-filter mb-3" alt="launch" />
-                <p className="mb-3">Yay, no homework for the week!</p>
-                <Button variant="primary" className="btn-icon btn-icon-start mt-3 stretched-link">
-                  <CsLineIcons icon="chevron-right" className="text-primary" />
-                  <span>Results</span>
-                </Button>
-              </div>
-            </Card.Body>
-          </Card>
-        </Col> */}
-        {/* Homework End */}
-      </Row>
       <Row>
         <Col>
           <div>
@@ -302,13 +145,30 @@ const SchoolDashboard = () => {
               </Col>
               <Col sm="12" md="7" lg="9" xxl="10" className="text-end">
                 <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
-                  <ControlsAdd tableInstance={tableInstance} /> <ControlsEdit tableInstance={tableInstance} /> <ControlsDelete tableInstance={tableInstance} />
+                  <Button onClick={handleEditClick} variant="foreground-alternate" className="btn-icon btn-icon-only shadow add-datatable">
+                    <CsLineIcons icon="plus" />
+                  </Button>{/* <ControlsEdit tableInstance={tableInstance} /> */} <ControlsDeleteAnnouncement tableInstance={tableInstance} />
                 </div>
                 <div className="d-inline-block">
                   <ControlsPageSize tableInstance={tableInstance} />
                 </div>
               </Col>
             </Row>
+            <Col className="mb-3 d-flex align-items-center justify-content-center">
+            {showSuccessAlert && (
+                  <Alert variant="success" onClose={() => setShowSuccessAlert(false)} dismissible>
+                    Aviso agregado correctamente.
+                  </Alert>
+                )}
+            </Col>
+            <Col className="mb-3 d-flex align-items-center justify-content-center">
+            {showDangerAlert && (
+                  <Alert variant="danger" onClose={() => setShowDangerAlert(false)} dismissible>
+                    Un error ha ocurrido al intentar crear el aviso.
+                  </Alert>
+                )}
+            </Col>
+            
             <Row>
               <Col xs="12">
                 <Table className="react-table rows" tableInstance={tableInstance} />
@@ -321,7 +181,7 @@ const SchoolDashboard = () => {
           <ModalAddEdit tableInstance={tableInstance} />
         </Col>
       </Row>
-
+                <ModalAddAnnouncement  showModal={showModal} setShowModal={setShowModal} setData={setData} setShowSuccessAlert={setShowSuccessAlert} setShowDangerAlert= {setShowDangerAlert} />
       <Row>
         {/* Notifications Start */}
         {/* <Col xl="6" xxl="4" className="mb-5">
@@ -672,132 +532,6 @@ const SchoolDashboard = () => {
         </Col> */}
         {/* Materials End */}
       </Row>
-
-      {/* Teachers Start */}
-      {/* <h2 className="small-title">Teachers</h2>
-      <Row className="row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xxl-6 g-2">
-        <Col>
-          <Card className="h-100">
-            <Card.Body className="text-center">
-              <div className="sw-13 position-relative mb-3 mx-auto">
-                <img src="/img/profile/profile-1.webp" className="img-fluid rounded-xl" alt="thumb" />
-              </div>
-              <NavLink to="/instructor/detail" className="mb-3 stretched-link body-link">
-                Blaine Cottrell
-              </NavLink>
-              <div className="text-muted text-medium mb-2">Chemistry</div>
-              <Rating
-                initialRating={5}
-                readonly
-                emptySymbol={<i className="cs-star text-primary" />}
-                fullSymbol={<i className="cs-star-full text-primary" />}
-              />
-              <div className="text-muted d-inline-block text-small align-text-top">(572)</div>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col>
-          <Card className="h-100">
-            <Card.Body className="text-center">
-              <div className="sw-13 position-relative mb-3 mx-auto">
-                <img src="/img/profile/profile-2.webp" className="img-fluid rounded-xl" alt="thumb" />
-              </div>
-              <NavLink to="/instructor/detail" className="mb-3 stretched-link body-link">
-                Kirby Peters
-              </NavLink>
-              <div className="text-muted text-medium mb-2">Geometry</div>
-              <Rating
-                initialRating={5}
-                readonly
-                emptySymbol={<i className="cs-star text-primary" />}
-                fullSymbol={<i className="cs-star-full text-primary" />}
-              />
-              <div className="text-muted d-inline-block text-small align-text-top">(211)</div>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col>
-          <Card className="h-100">
-            <Card.Body className="text-center">
-              <div className="sw-13 position-relative mb-3 mx-auto">
-                <img src="/img/profile/profile-3.webp" className="img-fluid rounded-xl" alt="thumb" />
-              </div>
-              <NavLink to="/instructor/detail" className="mb-3 stretched-link body-link">
-                Olli Hawkins
-              </NavLink>
-              <div className="text-muted text-medium mb-2">Physics</div>
-              <Rating
-                initialRating={5}
-                readonly
-                emptySymbol={<i className="cs-star text-primary" />}
-                fullSymbol={<i className="cs-star-full text-primary" />}
-              />
-              <div className="text-muted d-inline-block text-small align-text-top">(28)</div>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col>
-          <Card className="h-100">
-            <Card.Body className="text-center">
-              <div className="sw-13 position-relative mb-3 mx-auto">
-                <img src="/img/profile/profile-4.webp" className="img-fluid rounded-xl" alt="thumb" />
-              </div>
-              <NavLink to="/instructor/detail" className="mb-3 stretched-link body-link">
-                Emilia Antoine
-              </NavLink>
-              <div className="text-muted text-medium mb-2">Gymnastics</div>
-              <Rating
-                initialRating={5}
-                readonly
-                emptySymbol={<i className="cs-star text-primary" />}
-                fullSymbol={<i className="cs-star-full text-primary" />}
-              />
-              <div className="text-muted d-inline-block text-small align-text-top">(75)</div>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col>
-          <Card className="h-100">
-            <Card.Body className="text-center">
-              <div className="sw-13 position-relative mb-3 mx-auto">
-                <img src="/img/profile/profile-5.webp" className="img-fluid rounded-xl" alt="thumb" />
-              </div>
-              <NavLink to="/instructor/detail" className="mb-3 stretched-link body-link">
-                Kathryn Mengel
-              </NavLink>
-              <div className="text-muted text-medium mb-2">Biology</div>
-              <Rating
-                initialRating={5}
-                readonly
-                emptySymbol={<i className="cs-star text-primary" />}
-                fullSymbol={<i className="cs-star-full text-primary" />}
-              />
-              <div className="text-muted d-inline-block text-small align-text-top">(46)</div>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col>
-          <Card className="h-100">
-            <Card.Body className="text-center">
-              <div className="sw-13 position-relative mb-3 mx-auto">
-                <img src="/img/profile/profile-6.webp" className="img-fluid rounded-xl" alt="thumb" />
-              </div>
-              <NavLink to="/instructor/detail" className="mb-3 stretched-link body-link">
-                Daisy Hartley
-              </NavLink>
-              <div className="text-muted text-medium mb-2">Gymnastics</div>
-              <Rating
-                initialRating={5}
-                readonly
-                emptySymbol={<i className="cs-star text-primary" />}
-                fullSymbol={<i className="cs-star-full text-primary" />}
-              />
-              <div className="text-muted d-inline-block text-small align-text-top">(91)</div>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row> */}
-      {/* Teachers End */}
     </>
   );
 };

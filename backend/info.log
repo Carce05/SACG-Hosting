@@ -1,18 +1,5 @@
-{"level":"info","message":"Correo de reestablecimiento de contraseña enviado exitosamente","timestamp":"2023-02-23T23:18:03.397Z"}
-{"level":"info","message":"Correo de reestablecimiento de contraseña enviado exitosamente","timestamp":"2023-02-23T23:18:07.991Z"}
-{"level":"info","message":"Correo de reestablecimiento de contraseña enviado exitosamente","timestamp":"2023-02-23T23:18:13.533Z"}
-{"level":"error","message":"Fallo en el envío del email","timestamp":"2023-02-23T23:18:22.585Z"}
-{"level":"error","message":"Fallo en el envío del email","timestamp":"2023-02-23T23:24:36.158Z"}
-{"level":"error","message":"Fallo en el envío del email","timestamp":"2023-02-23T23:24:38.593Z"}
-{"level":"error","message":"Fallo en el envío del email","timestamp":"2023-02-23T23:24:46.794Z"}
-{"level":"error","message":"Fallo en el envío del email","timestamp":"2023-02-23T23:25:23.196Z"}
-{"level":"error","message":"Fallo en el envío del email","timestamp":"2023-02-23T23:27:06.265Z"}
-{"level":"error","message":"Fallo en el envío del email","timestamp":"2023-02-23T23:29:47.647Z"}
-{"level":"error","message":"Fallo en el envío del email","timestamp":"2023-02-23T23:33:54.526Z"}
-{"level":"error","message":"Fallo en el envío del email","timestamp":"2023-02-23T23:35:29.484Z"}
-{"level":"error","message":"Fallo en el envío del email","timestamp":"2023-02-23T23:35:43.278Z"}
-{"level":"error","message":"Fallo en el envío del email","timestamp":"2023-02-23T23:37:09.000Z"}
-{"level":"error","message":"Fallo en el envío del email","timestamp":"2023-02-23T23:37:26.107Z"}
-{"level":"error","message":"Fallo en el envío del email","timestamp":"2023-02-23T23:38:06.008Z"}
-{"level":"error","message":"Error al intentar loguearse al sistema","timestamp":"2023-03-21T04:14:44.225Z"}
-{"level":"error","message":"Error al intentar loguearse al sistema","timestamp":"2023-03-21T04:14:45.769Z"}
+{"level":"error","message":"Error al intentar loguearse al sistema","timestamp":"2023-03-23T18:21:08.525Z"}
+{"level":"error","message":"Error al intentar loguearse al sistema","timestamp":"2023-03-24T20:36:07.981Z"}
+{"level":"error","message":"Error al intentar loguearse al sistema","timestamp":"2023-03-30T21:19:33.358Z"}
+{"level":"error","message":"Error al intentar loguearse al sistema","timestamp":"2023-03-30T21:19:36.944Z"}
+{"level":"error","message":"Error al intentar loguearse al sistema","timestamp":"2023-03-30T21:19:54.942Z"}

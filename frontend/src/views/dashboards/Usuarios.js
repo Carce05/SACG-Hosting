@@ -1,4 +1,4 @@
-import { Row, Col, Card, Button, Badge, Dropdown, Form, Alert } from 'react-bootstrap';
+import { Row, Col, Card, Button, Badge, Alert, Form } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import Rating from 'react-rating';
 import HtmlHead from 'components/html-head/HtmlHead';
@@ -27,9 +27,13 @@ const Usuarios = () => {
   const [data, setData] = useState([]);
   const title = 'Usuarios';
   const description = 'Administración de usuarios';
-
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showDangerAlert, setShowDangerAlert] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const handleEditClick = () => {
+    setShowModal(true);
+  };
   useEffect(() => {
-    
     axios
       .get("http://localhost:8080/api/usuarios")
       .then((res) => {
@@ -38,17 +42,15 @@ const Usuarios = () => {
       .catch((err) => {
         console.error(err);
       });
-  }, [isUpdated]);
+      console.log(showSuccessAlert)
+  }, [isUpdated, showSuccessAlert]);
 
-	const isValidUrl = urlString=> {
-    const urlPattern = new RegExp('^(https?:\\/\\/)?'+ // validate protocol
-    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // validate domain name
-    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // validate OR ip (v4) address
-    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // validate port and path
-    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // validate query string
-    '(\\#[-a-z\\d_]*)?$','i'); // validate fragment locator
-    return !!urlPattern.test(urlString);
-}
+  
+
+  const validUrl = (link) => {
+    const pattern = new RegExp(`\\blocalhost:8080/public/images/profile_upload/\\b`, 'i');
+    return pattern.test(link);
+  }
 
   const columns = React.useMemo(() => {
     return [
@@ -59,7 +61,7 @@ const Usuarios = () => {
         headerClassName: 'text-muted text-small text-uppercase w-10',
         Cell: ({ cell }) => {
           return (
-            <img className="user-admin-images" src='https://www.nicepng.com/png/full/202-2024687_profile-icon-for-the-politics-category-profile-icon.png' alt="UserProp"/>
+            <img className="user-admin-images" src={ validUrl(cell.value) ? cell.value : 'https://cdn3.iconfinder.com/data/icons/vector-icons-6/96/256-512.png' } alt={ cell.value }/>
           );
         },
       },    
@@ -99,7 +101,6 @@ const Usuarios = () => {
   }, []);
 
   const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
-
   const tableInstance = useTable(
     { columns, data, setData, isOpenAddEditModal, setIsOpenAddEditModal, initialState: { pageIndex: 0 } },
     useGlobalFilter,
@@ -124,13 +125,6 @@ const Usuarios = () => {
           {/* Title End */}
         </Row>
       </div>
-      { 
-          isUpdated && (
-            <Alert variant="success">
-              Acción realizada con exito
-            </Alert>
-          )
-        }
     
       <Row>
         <Col>
@@ -143,13 +137,27 @@ const Usuarios = () => {
               </Col>
               <Col sm="12" md="7" lg="9" xxl="10" className="text-end">
                 <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
-                  <ControlsAdd tableInstance={tableInstance} /> <ControlsEdit tableInstance={tableInstance} />
+                   <ControlsAdd tableInstance={tableInstance}  /><ControlsEdit tableInstance={tableInstance} /> <ControlsDelete tableInstance={tableInstance} />
                 </div>
                 <div className="d-inline-block">
                   <ControlsPageSize tableInstance={tableInstance} />
                 </div>
               </Col>
             </Row>
+            <Col className="mb-3 d-flex align-items-center justify-content-center">
+            {showSuccessAlert && (
+                  <Alert variant="success" onClose={() => setShowSuccessAlert(false)} dismissible>
+                    Usuario guardado correctamente.
+                  </Alert>
+                )}
+            </Col>
+            <Col className="mb-3 d-flex align-items-center justify-content-center">
+            {showDangerAlert && (
+                  <Alert variant="danger" onClose={() => setShowDangerAlert(false)} dismissible>
+                    Ocurrio un error al intentar guardar la información favor revisar el correo o cedula.
+                  </Alert>
+                )}
+            </Col>
             <Row>
               <Col xs="12">
                 <Table className="react-table rows" tableInstance={tableInstance} />
@@ -159,7 +167,7 @@ const Usuarios = () => {
               </Col>
             </Row>
           </div>
-          <ModalAddEdit tableInstance={tableInstance} />
+          <ModalAddEdit tableInstance={tableInstance} setShowSuccessAlert={setShowSuccessAlert} setShowDangerAlert={setShowDangerAlert}/>
         </Col>
       </Row>
     </>

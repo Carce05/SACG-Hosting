@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const { dbConnection } = require('../database/config');
 require('dotenv').config();
 
@@ -35,7 +36,7 @@ class Server {
         this.app.use( express.json() );
 
         //SERVER STATIC FILE
-        this.app.use(express.static('public'));
+        this.app.use('/public', express.static('public'));
     }
 
     routes() {
@@ -46,6 +47,7 @@ class Server {
         this.app.use('/api/docentes_materias_secciones', require('../routes/docente_materia_seccion'))
         this.app.use('/api/calificaciones', require('../routes/calificacion'))
         this.app.use('/api/contacto', require('../routes/contact'))
+        this.app.use('/api/comunicados', require('../routes/announcement'))
     }
 
     listen() {

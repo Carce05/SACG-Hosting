@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { Row, Col, Card, ProgressBar, Button, Badge } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import Rating from 'react-rating';
@@ -9,9 +9,20 @@ import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import YourTimeChart from './components/YourTimeChart';
 
 const ElearningDashboard = () => {
-  
+  const [announcements, setAnnouncements] = useState([]);
+
   const title = 'Inicio';
   const description = 'Inicio del Sistema Acádemico';
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await fetch('http://localhost:8080/api/comunicados');
+      const data = await result.json();
+      setAnnouncements(data);
+    };
+
+    fetchData();
+  }, []);
 
   const breadcrumbs = [{ to: '', text: '' }];
   return (
@@ -34,75 +45,37 @@ const ElearningDashboard = () => {
         {/* Continue Learning Start */}
         <Col xl="6" className="mb-5">
           <h2 className="small-title">Avisos</h2>
-          <Card className="mb-2">
-            <Row className="g-0 sh-14">
-              <Col xs="auto" className="position-relative">
-                <NavLink to="/courses/detail">
-                  <img src="/img/logo/LiceoGuarari.jpg" alt="alternate text" className="card-img card-img-horizontal sw-14 sw-lg-18" />
-                  {/* <Button variant="foreground" size="sm" className="btn-icon-only px-3 position-absolute absolute-center opacity-75 pe-none">
-                    <CsLineIcons icon="" size="16" fill="var(--primary)" /> 
-                  </Button> */}
-                </NavLink>
-              </Col>
-              <Col>
-                <Card.Body className="py-0 h-100 d-flex align-items-center">
-                  <div className="w-100">
-                    <div className="d-flex flex-row justify-content-between mb-2">
-                      <NavLink to="/courses/detail">Inicio del periodo lectivo 2023</NavLink>
-                      {/* <div className="text-muted">67%</div> */}
+          {announcements.map((announcement) => (
+            <Card key={`${announcement.description}-${announcement.createdAt}`} className="row g-0 h-auto sh-md-19 card mb-3">
+              <Row className="g-0 sh-14">
+                <Col xs="auto" className="position-relative">
+                  <img src="/img/logo/LiceoGuarari.jpg" 
+                  alt="alternate text" 
+                  className="card-img card-img-horizontal sw-14 sw-lg-25" />
+                </Col>
+                <Col>
+                  <Card.Body className="py-0 h-100 d-flex align-items-center">
+                    <div className="w-100">
+                      <div className="d-flex flex-row justify-content-between mb-2">
+                      <NavLink to="#">
+                      <p className="card-text">{announcement.title}</p>
+                        </NavLink>
+                        {/* 
+                        <NavLink to="/courses/detail">
+                        </NavLink>
+                        <div className="text-muted">67%</div> */}
+                      </div>
+                      <p className="card-text">{announcement.description}</p>
+                      <p className="text-muted">Publicado el {announcement.createdAt}</p>
                     </div>
-                    {/* <ProgressBar className="progress-md mb-2" now={67} /> */}
-                  </div>
-                </Card.Body>
-              </Col>
-            </Row>
-          </Card>
-          <Card className="mb-2">
-            <Row className="g-0 sh-14">
-              <Col xs="auto" className="position-relative">
-                <NavLink to="/courses/detail">
-                  <img src="/img/logo/LiceoGuarari.jpg"  alt="alternate text" className="card-img card-img-horizontal sw-14 sw-lg-18" />
-                  {/* <Button variant="foreground" size="sm" className="btn-icon-only px-3 position-absolute absolute-center opacity-75 pe-none">
-                    <CsLineIcons icon="play" size="16" fill="var(--primary)" />
-                  </Button> */}
-                </NavLink>
-              </Col>
-              <Col>
-                <Card.Body className="py-0 h-100 d-flex align-items-center">
-                  <div className="w-100">
-                    <div className="d-flex flex-row justify-content-between mb-2">
-                      <NavLink to="/courses/detail">Remodelaciones en la Instutución</NavLink>
-                      {/* <div className="text-muted">85%</div> */}
-                    </div>
-                    {/* <ProgressBar className="progress-md mb-2" now={40} /> */}
-                  </div>
-                </Card.Body>
-              </Col>
-            </Row>
-          </Card>
-          <Card>
-            <Row className="g-0 sh-14">
-              <Col xs="auto" className="position-relative">
-                <NavLink to="/courses/detail">
-                   <img src="/img/logo/LiceoGuarari.jpg"  alt="alternate text" className="card-img card-img-horizontal sw-14 sw-lg-18" />
-                  {/* <Button variant="foreground" size="sm" className="btn-icon-only px-3 position-absolute absolute-center opacity-75 pe-none">
-                    <CsLineIcons icon="play" size="16" fill="var(--primary)" />
-                  </Button> */}
-                </NavLink>
-              </Col>
-              <Col>
-                <Card.Body className="py-0 h-100 d-flex align-items-center">
-                  <div className="w-100">
-                    <div className="d-flex flex-row justify-content-between mb-2">
-                      <NavLink to="/courses/detail">Calendario de Actividades Estudiantiles 2023</NavLink>
-                      {/* <div className="text-muted">14%</div> */}
-                    </div>
-                    {/* <ProgressBar className="progress-md mb-2" now={14} /> */}
-                  </div>
-                </Card.Body>
-              </Col>
-            </Row>
-          </Card>
+                  </Card.Body>
+                </Col>
+              </Row>
+            </Card>
+          ))}
+                      
+          
+          
         </Col>
         {/* Continue Learning End */}
 
@@ -115,7 +88,7 @@ const ElearningDashboard = () => {
               <div>
                 <div className="cta-1 mb-3 text-black w-75 w-sm-50">Historia</div>
                 <div className="w-50 text-black mb-3">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ac odio tempor orci dapibus ultrices in. Mauris ultrices eros in cursus. Duis at tellus at urna condimentum mattis pellentesque id. Pretium viverra suspendisse potenti nullam ac tortor vitae. Donec ultrices tincidunt arcu non sodales neque sodales ut. Sed libero enim sed faucibus turpis in. Ornare quam viverra orci sagittis.
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ac odio tempor orci dapibus ultrices in. Mauris ultrices eros in cursus. Duis at tellus at urna condimentum mattis pellentesque id. Pretium viverra suspendisse potenti nullam ac tortor vitae. Donec ultrices tincidunt arcu non sodales neque sodales ut. Sed libero enim sed faucibus turpis in. Ornare quam viverra orci sagittis.
                 </div>
                 {/* <Rating
                   className="mb-2"
@@ -132,7 +105,7 @@ const ElearningDashboard = () => {
               </div>
             </div>
           </Card>
-        </Col> 
+        </Col>
         {/* Recommended Courses End */}
       </Row>
 
@@ -316,7 +289,7 @@ const ElearningDashboard = () => {
                   <NavLink to="#">
                     <CsLineIcons icon="book" className="text-primary" />
                     <p className="heading mt-3 text-body">Calificaciones</p>
-                    
+
                   </NavLink>
                 </Card.Body>
               </Card>
