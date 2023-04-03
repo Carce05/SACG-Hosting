@@ -37,7 +37,7 @@ const Secciones = (props) => {
   const { handleSubmit, handleChange, materia, seccionn, touched, errors } = formik;
   const { setSelectedMateria, setSeccionn } = useState();
   
-  const { currentUser, isLogin, isUpdated } = useSelector((state) => state.auth);
+  const { currentUser, isLogin } = useSelector((state) => state.auth);
   const docente  = currentUser.email;
   
 
@@ -157,7 +157,7 @@ const Secciones = (props) => {
 
       // Trigger the fetch
       fetchData();
-}, [isUpdated]);
+}, []);
 
   
 

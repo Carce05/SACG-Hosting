@@ -63,8 +63,6 @@ const history = useHistory();
   if (selectedFlatRows.length === 1) {
     cedula = selectedFlatRows[0].original.cedula;
     materiaRes = selectedFlatRows[0].original.materia;
-    // updateCalificaciones(cedula, materiaRes);
-    console.log("Consulto");
   }
 
   if (isOpenAddEditModal) {
