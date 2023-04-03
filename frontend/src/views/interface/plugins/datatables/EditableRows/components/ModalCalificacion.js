@@ -6,7 +6,7 @@ import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import { NavLink, Redirect, useHistory } from 'react-router-dom';
 import axios from "axios";
 
-const ModalCalificacion = ({ tableInstance, calificaciones, setCalificaciones }) => {
+const ModalCalificacion = ({ tableInstance, calificaciones, setCalificaciones, estudiantes, setEstudiantes }) => {
 const history = useHistory();
  
   const { selectedFlatRows, data, setData, setIsOpenAddEditModal, isOpenAddEditModal } = tableInstance;
@@ -22,6 +22,7 @@ const history = useHistory();
   let examen2Res = 0;
   let proyectoRes = 0;
   let asistenciaRes = 0;
+  let totalRes = 0;
   let observacionesRes = "";
 
   // const [calificacion, setCalificaciones] = useState([]);
@@ -79,6 +80,7 @@ const history = useHistory();
           examen2Res = val.examen2;
           proyectoRes = val.proyecto;
           asistenciaRes = val.asistencia;
+          totalRes = val.total
           observacionesRes = val.observaciones;
         }
       });
@@ -93,6 +95,7 @@ const history = useHistory();
     examen2: examen2Res,
     proyecto: proyectoRes,
     asistencia: asistenciaRes,
+    total: totalRes,
     observaciones: observacionesRes
   };
 
@@ -113,6 +116,7 @@ const history = useHistory();
     examen2: Yup.string().min(1,'La nota no puede ser menor a 0').required('Nota del segundo examen requerida'),
     proyecto: Yup.string().min(1,'La nota no puede ser menor a 0').required('Nota del proyecto requerida'),
     asistencia: Yup.string().min(1,'La nota no puede ser menor a 0').required('Nota de asistencia requerida'),
+    total: Yup.string().min(1,'La nota no puede ser menor a 0').required('Total requerido'),
     observaciones: Yup.string().max(200, 'Observaciones no puede contener más de 200 carateres'),
   });
 
@@ -132,7 +136,7 @@ const history = useHistory();
         examen2,
         proyecto,
         asistencia,
-        total: 100,
+        total,
         observaciones,
         anio: 2023,
         trimestre: 'II'        
@@ -148,6 +152,16 @@ const history = useHistory();
             .catch((err) => {
                console.error(err);
              });
+
+      /*
+      estudiantes.forEach((val) => {
+        calificaciones.forEach((cali) => {
+          if (val.cedula === cali.estudiante && val.materia === cali.materia) {
+            val.total = cali.total;
+          }
+        })
+      });    
+      */         
 
     } catch (e) {
       console.log(e.message);
@@ -173,7 +187,7 @@ const history = useHistory();
         examen2,
         proyecto,
         asistencia,
-        total: 100,
+        total,
         observaciones,
         anio: 2023,
         trimestre: 'II'  
@@ -336,6 +350,23 @@ const history = useHistory();
                   />
                   {errors.asistencia && touched.asistencia && (
                     <div className="d-block invalid-tooltip">{errors.asistencia}</div>
+                  )}
+                </div>
+              </Form.Group>
+
+              <Form.Group controlId="total">
+              <Form.Label>Total</Form.Label>
+                <div className="mb-3 filled form-group tooltip-end-top">
+                  <CsLineIcons icon="check-circle" />
+                  <Form.Control
+                    type="text"
+                    name="total"
+                    placeholder="Total"
+                    value={values.total}
+                    onChange={handleChange}
+                  />
+                  {errors.total && touched.total && (
+                    <div className="d-block invalid-tooltip">{errors.total}</div>
                   )}
                 </div>
               </Form.Group>

@@ -3,7 +3,7 @@ import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import axios from "axios";
 
-const ControlsCalificacion = ({ tableInstance, calificaciones }) => {
+const ControlsCalificacion = ({ tableInstance }) => {
   const { selectedFlatRows, setIsOpenAddEditModal } = tableInstance;
 
   if (selectedFlatRows.length !== 1) {

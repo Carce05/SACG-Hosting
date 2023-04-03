@@ -113,6 +113,7 @@ const Secciones = (props) => {
           apellido: val.apellido,
           seccion: val.seccion,
           materia: "",
+          total: 0,
         });
       });
       setEstudiantes([ 
@@ -161,11 +162,24 @@ const Secciones = (props) => {
 
   
 
-  const [data, setData] = React.useState(estudiantes);
+
 
   const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
 
+  const insertarCalificaciones = () => {
+    estudiantes.forEach((val) => {
+      calificaciones.forEach((cali) => {
+        if (val.cedula === cali.estudiante && val.materia === cali.materia) {
+          val.total = cali.total;
+        }
+      })
+    });
+  }
+
+  const [data, setData] = React.useState(estudiantes);
+
   const handleSeccion = (id) => {
+    insertarCalificaciones();
     const dt = estudiantes.filter(x => x.seccion === id.seccion);
     setData(dt);
   }
@@ -182,6 +196,8 @@ const Secciones = (props) => {
 
 
 
+
+
   const title = 'Mis Secciones';
   const description = 'Elearning Portal School Dashboard Page';
 
@@ -194,6 +210,7 @@ const Secciones = (props) => {
       { Header: 'Apellido', accessor: 'apellido', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       { Header: 'Materia', accessor: 'materia', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       { Header: 'Seccion', accessor: 'seccion', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
+      { Header: 'Total', accessor: 'total', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       /*
       {
         Header: '',
@@ -310,7 +327,10 @@ const tableInstance = useTable(
               </Col>
               <Col sm="12" md="7" lg="9" xxl="10" className="text-end">
                 <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
-                  <ControlsCalificacion tableInstance={tableInstance} calificaciones={calificaciones}/>
+                  <Button onClick={insertarCalificaciones} variant="outline-primary" >Refrescar</Button>
+                </div>
+                <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
+                  <ControlsCalificacion tableInstance={tableInstance} />
                 </div>
               </Col>
             </Row>
@@ -323,9 +343,12 @@ const tableInstance = useTable(
               </Col>
             </Row>
           </div>
-          <ModalCalificacion tableInstance={tableInstance} 
+          <ModalCalificacion onHide={insertarCalificaciones}
+           tableInstance={tableInstance} 
            calificaciones={calificaciones}
-           setCalificaciones={setCalificaciones}/>
+           setCalificaciones={setCalificaciones}
+           estudiantes={estudiantes}
+           setEstudiantes={setEstudiantes}/>
         </Col>
       </Row>
     </>
