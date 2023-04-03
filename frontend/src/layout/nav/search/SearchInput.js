@@ -118,7 +118,7 @@ const SearchInput = ({ show, setShow }) => {
           autoComplete="off"
           onChange={(e) => setQuery(e.target.value)}
           value={query}
-          placeholder="Search for Pages"
+          placeholder="Buscar"
           autoFocus
         />
         {query.length > 0 && (
