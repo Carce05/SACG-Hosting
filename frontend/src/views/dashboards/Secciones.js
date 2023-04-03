@@ -135,7 +135,7 @@ const Secciones = (props) => {
     /* eslint no-underscore-dangle: 0 */
     response.data.forEach((val) => {
       resultsCalificaciones.push({
-        id: val._id,
+        _id: val._id,
         estudiante: val.estudiante,
         materia: val.materia,
         cotidiano: val.cotidiano,
@@ -146,6 +146,8 @@ const Secciones = (props) => {
         asistencia: val.asistencia,
         total: val.total,
         observaciones: val.observaciones,
+        anio: val.anio,
+        trimestre: val.trimestre,
       });
     });
     setCalificaciones([ 
@@ -308,7 +310,7 @@ const tableInstance = useTable(
               </Col>
               <Col sm="12" md="7" lg="9" xxl="10" className="text-end">
                 <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
-                  <ControlsCalificacion tableInstance={tableInstance} />
+                  <ControlsCalificacion tableInstance={tableInstance} calificaciones={calificaciones}/>
                 </div>
               </Col>
             </Row>
@@ -322,7 +324,8 @@ const tableInstance = useTable(
             </Row>
           </div>
           <ModalCalificacion tableInstance={tableInstance} 
-           calificaciones={calificaciones}/>
+           calificaciones={calificaciones}
+           setCalificaciones={setCalificaciones}/>
         </Col>
       </Row>
     </>

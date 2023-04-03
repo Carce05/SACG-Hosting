@@ -6,7 +6,7 @@ import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import { NavLink, Redirect, useHistory } from 'react-router-dom';
 import axios from "axios";
 
-const ModalCalificacion = ({ tableInstance, calificaciones }) => {
+const ModalCalificacion = ({ tableInstance, calificaciones, setCalificaciones }) => {
 const history = useHistory();
  
   const { selectedFlatRows, data, setData, setIsOpenAddEditModal, isOpenAddEditModal } = tableInstance;
@@ -24,34 +24,69 @@ const history = useHistory();
   let asistenciaRes = 0;
   let observacionesRes = "";
 
-  const [calificacionesUpdate, setCalificacionesUpdate] = useState([]);
+  // const [calificacion, setCalificaciones] = useState([]);
 
+
+
+  /*
+  async function updateCalificaciones(cedulaP, materiaP) {
+    const response = await axios.get('http://localhost:8080/api/calificaciones/buscarCalificacion', {
+      params: {
+        estudiante: cedulaP,
+        materia: materiaP
+      }
+    });
+
+    eslint no-underscore-dangle: 0 
+    idRes = response.data[0]._id;
+    cotidianoRes = response.data[0].cotidiano;
+    tareaRes = response.data[0].tarea;
+    examen1Res = response.data[0].examen1;
+    examen2Res = response.data[0].examen2;
+    proyectoRes = response.data[0].proyecto;
+    asistenciaRes = response.data[0].asistencia;
+    observacionesRes = response.data[0].observaciones;
+
+    initialValues = {
+      cotidiano: cotidianoRes,
+      tarea: tareaRes, 
+      examen1: examen1Res,
+      examen2: examen2Res,
+      proyecto: proyectoRes,
+      asistencia: asistenciaRes,
+      observaciones: observacionesRes
+    };
+
+  }
+  */
 
   if (selectedFlatRows.length === 1) {
     cedula = selectedFlatRows[0].original.cedula;
     materiaRes = selectedFlatRows[0].original.materia;
+    // updateCalificaciones(cedula, materiaRes);
     console.log("Consulto");
   }
 
-
-  if (calificaciones.length >= 1 && calificaciones !== undefined) {
-    calificaciones.forEach((val) => {
-      if (val.estudiante === cedula && val.materia === materiaRes){
-        idRes = val.id;
-        cotidianoRes = val.cotidiano;
-        tareaRes = val.tarea;
-        examen1Res = val.examen1;
-        examen2Res = val.examen2;
-        proyectoRes = val.proyecto;
-        asistenciaRes = val.asistencia;
-        observacionesRes = val.observaciones;
-      }
-    });
+  if (isOpenAddEditModal) {
+    // updateCalificaciones(cedula, materiaRes);
+    
+    if (calificaciones !== undefined && calificaciones.length >= 1 ) {
+      calificaciones.forEach((val) => {
+        if (val.estudiante === cedula && val.materia === materiaRes){
+          /* eslint no-underscore-dangle: 0 */
+          idRes = val._id;
+          cotidianoRes = val.cotidiano;
+          tareaRes = val.tarea;
+          examen1Res = val.examen1;
+          examen2Res = val.examen2;
+          proyectoRes = val.proyecto;
+          asistenciaRes = val.asistencia;
+          observacionesRes = val.observaciones;
+        }
+      });
+    }
+    
   }
-  // const {coti} = calificaciones.length === 2 ? calificaciones[0].cotidiano :'';
-
-
-  // const estudiante = selectedFlatRows[0].original.cedula;
 
   const initialValues = {
     cotidiano: cotidianoRes,
@@ -62,7 +97,16 @@ const history = useHistory();
     asistencia: asistenciaRes,
     observaciones: observacionesRes
   };
-  const [selectedItem, setSelectedItem] = useState(initialValues);
+
+
+
+  // const {coti} = calificaciones.length === 2 ? calificaciones[0].cotidiano :'';
+
+
+  // const estudiante = selectedFlatRows[0].original.cedula;
+
+
+  // const [selectedItem, setSelectedItem] = useState(initialValues);
 
   const validationSchema = Yup.object().shape({
     cotidiano: Yup.string().min(1,'La nota no puede ser menor a 0').required('Nota de cotidiano requerida'),
@@ -73,6 +117,10 @@ const history = useHistory();
     asistencia: Yup.string().min(1,'La nota no puede ser menor a 0').required('Nota de asistencia requerida'),
     observaciones: Yup.string().max(200, 'Observaciones no puede contener más de 200 carateres'),
   });
+
+  const cancelRegister = () => {
+    document.getElementById("calificacionForm").reset();
+  }
 
   const onSubmit = async ({ estudiante, materia, cotidiano, tarea,  examen1, examen2, proyecto, asistencia, total, observaciones, anio, trimestre }) => {
     if (idRes !== "") {
@@ -93,28 +141,16 @@ const history = useHistory();
       });
       alert('Calificación actualizada correctamente');
       setIsOpenAddEditModal(false);
+      
+      axios
+          .get("http://localhost:8080/api/calificaciones")
+          .then((res) => {
+           setCalificaciones(res.data);
+            })
+            .catch((err) => {
+               console.error(err);
+             });
 
-      const response = await axios.get('http://localhost:8080/api/calificaciones');
-      const resultsCalificaciones = []
-      // Store results in the results array
-  
-      /* eslint no-underscore-dangle: 0 */
-      response.data.forEach((val) => {
-        resultsCalificaciones.push({
-          id: val._id,
-          estudiante: val.estudiante,
-          materia: val.materia,
-          cotidiano: val.cotidiano,
-          tarea: val.tarea,
-          examen1: val.examen1,
-          examen2: val.examen2,
-          proyecto: val.proyecto,
-          asistencia: val.asistencia,
-          total: val.total,
-          observaciones: val.observaciones,
-        });
-      });
-      calificaciones = resultsCalificaciones;
     } catch (e) {
       console.log(e.message);
       if (e.response && e.response.status === 400) {
@@ -146,6 +182,14 @@ const history = useHistory();
     });
     alert('guardado con exito');
           setIsOpenAddEditModal(false);
+          axios
+          .get("http://localhost:8080/api/calificaciones")
+          .then((res) => {
+           setCalificaciones(res.data);
+            })
+            .catch((err) => {
+               console.error(err);
+             });
     } catch (e) {
       console.log(e.message);
       if (e.response && e.response.status === 400) {
@@ -171,9 +215,7 @@ const history = useHistory();
   });
   */
 
-  const cancelRegister = () => {
-    document.getElementById("registerForm").reset();
-  }
+
 
   const formik = useFormik({ initialValues, validationSchema, onSubmit });
   // const { handleSubmit, handleChange, values, touched, errors, setFieldValue } = formik;
@@ -195,7 +237,7 @@ const history = useHistory();
         >
           {({ handleSubmit, handleChange, values, errors, touched }) => (
 
-            <form id="registerForm" className="tooltip-end-bottom" onSubmit={handleSubmit}>
+            <form id="calificacionForm" className="tooltip-end-bottom" onSubmit={handleSubmit}>
 
               <Form.Group controlId="cotidiano">
               <Form.Label>Cotidiano</Form.Label>
