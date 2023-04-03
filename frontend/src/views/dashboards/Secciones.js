@@ -297,9 +297,9 @@ const tableInstance = useTable(
         <Col>
           <div className="d-flex justify-content-between">
               <h2 className="small-title">Estudiantes</h2>
-              <NavLink to="/quiz/result" className="btn btn-icon btn-icon-end btn-xs btn-background-alternate p-0 text-small">
-                <span className="align-bottom">Ver Todos</span> <CsLineIcons icon="chevron-right" className="align-middle" size="12" />
-              </NavLink>
+              <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
+                <h2 className="small-title">Nota</h2> 
+              </div>
           </div>
           <div>
             <Row className="mb-3">
