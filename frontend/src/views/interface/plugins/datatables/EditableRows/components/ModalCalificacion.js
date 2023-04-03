@@ -6,14 +6,14 @@ import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import { NavLink, Redirect, useHistory } from 'react-router-dom';
 import axios from "axios";
 
-const ModalCalificacion = ({ tableInstance, calificaciones, student }) => {
+const ModalCalificacion = ({ tableInstance, calificaciones, setCalificaciones, estudiantes, setEstudiantes }) => {
 const history = useHistory();
  
   const { selectedFlatRows, data, setData, setIsOpenAddEditModal, isOpenAddEditModal } = tableInstance;
 
   let materiaRes = "";
 
-  let cedula = student;
+  let cedula = "";
 
   let idRes = "";
   let cotidianoRes = 0;
@@ -22,32 +22,71 @@ const history = useHistory();
   let examen2Res = 0;
   let proyectoRes = 0;
   let asistenciaRes = 0;
+  let totalRes = 0;
   let observacionesRes = "";
+
+  // const [calificacion, setCalificaciones] = useState([]);
+
+
+
+  /*
+  async function updateCalificaciones(cedulaP, materiaP) {
+    const response = await axios.get('http://localhost:8080/api/calificaciones/buscarCalificacion', {
+      params: {
+        estudiante: cedulaP,
+        materia: materiaP
+      }
+    });
+
+    eslint no-underscore-dangle: 0 
+    idRes = response.data[0]._id;
+    cotidianoRes = response.data[0].cotidiano;
+    tareaRes = response.data[0].tarea;
+    examen1Res = response.data[0].examen1;
+    examen2Res = response.data[0].examen2;
+    proyectoRes = response.data[0].proyecto;
+    asistenciaRes = response.data[0].asistencia;
+    observacionesRes = response.data[0].observaciones;
+
+    initialValues = {
+      cotidiano: cotidianoRes,
+      tarea: tareaRes, 
+      examen1: examen1Res,
+      examen2: examen2Res,
+      proyecto: proyectoRes,
+      asistencia: asistenciaRes,
+      observaciones: observacionesRes
+    };
+
+  }
+  */
 
   if (selectedFlatRows.length === 1) {
     cedula = selectedFlatRows[0].original.cedula;
     materiaRes = selectedFlatRows[0].original.materia;
   }
 
-
-  if (calificaciones.length >= 1) {
-    calificaciones.forEach((val) => {
-      if (val.estudiante === cedula && val.materia === materiaRes){
-        idRes = val.id;
-        cotidianoRes = val.cotidiano;
-        tareaRes = val.tarea;
-        examen1Res = val.examen1;
-        examen2Res = val.examen2;
-        proyectoRes = val.proyecto;
-        asistenciaRes = val.asistencia;
-        observacionesRes = val.observaciones;
-      }
-    });
+  if (isOpenAddEditModal) {
+    // updateCalificaciones(cedula, materiaRes);
+    
+    if (calificaciones !== undefined && calificaciones.length >= 1 ) {
+      calificaciones.forEach((val) => {
+        if (val.estudiante === cedula && val.materia === materiaRes){
+          /* eslint no-underscore-dangle: 0 */
+          idRes = val._id;
+          cotidianoRes = val.cotidiano;
+          tareaRes = val.tarea;
+          examen1Res = val.examen1;
+          examen2Res = val.examen2;
+          proyectoRes = val.proyecto;
+          asistenciaRes = val.asistencia;
+          totalRes = val.total
+          observacionesRes = val.observaciones;
+        }
+      });
+    }
+    
   }
-  // const {coti} = calificaciones.length === 2 ? calificaciones[0].cotidiano :'';
-
-
-  // const estudiante = selectedFlatRows[0].original.cedula;
 
   const initialValues = {
     cotidiano: cotidianoRes,
@@ -56,9 +95,19 @@ const history = useHistory();
     examen2: examen2Res,
     proyecto: proyectoRes,
     asistencia: asistenciaRes,
+    total: totalRes,
     observaciones: observacionesRes
   };
-  const [selectedItem, setSelectedItem] = useState(initialValues);
+
+
+
+  // const {coti} = calificaciones.length === 2 ? calificaciones[0].cotidiano :'';
+
+
+  // const estudiante = selectedFlatRows[0].original.cedula;
+
+
+  // const [selectedItem, setSelectedItem] = useState(initialValues);
 
   const validationSchema = Yup.object().shape({
     cotidiano: Yup.string().min(1,'La nota no puede ser menor a 0').required('Nota de cotidiano requerida'),
@@ -67,13 +116,18 @@ const history = useHistory();
     examen2: Yup.string().min(1,'La nota no puede ser menor a 0').required('Nota del segundo examen requerida'),
     proyecto: Yup.string().min(1,'La nota no puede ser menor a 0').required('Nota del proyecto requerida'),
     asistencia: Yup.string().min(1,'La nota no puede ser menor a 0').required('Nota de asistencia requerida'),
+    total: Yup.string().min(1,'La nota no puede ser menor a 0').required('Total requerido'),
     observaciones: Yup.string().max(200, 'Observaciones no puede contener más de 200 carateres'),
   });
+
+  const cancelRegister = () => {
+    document.getElementById("calificacionForm").reset();
+  }
 
   const onSubmit = async ({ estudiante, materia, cotidiano, tarea,  examen1, examen2, proyecto, asistencia, total, observaciones, anio, trimestre }) => {
     if (idRes !== "") {
     try {
-      const response = await axios.put(`http://localhost:8080/api/calificaciones/${idRes}`, {
+      await axios.put(`http://localhost:8080/api/calificaciones/${idRes}`, {
         estudiante: cedula,
         materia: materiaRes,
         cotidiano,
@@ -82,13 +136,33 @@ const history = useHistory();
         examen2,
         proyecto,
         asistencia,
-        total: 100,
+        total,
         observaciones,
         anio: 2023,
         trimestre: 'II'        
       });
       alert('Calificación actualizada correctamente');
       setIsOpenAddEditModal(false);
+      
+      axios
+          .get("http://localhost:8080/api/calificaciones")
+          .then((res) => {
+           setCalificaciones(res.data);
+            })
+            .catch((err) => {
+               console.error(err);
+             });
+
+      /*
+      estudiantes.forEach((val) => {
+        calificaciones.forEach((cali) => {
+          if (val.cedula === cali.estudiante && val.materia === cali.materia) {
+            val.total = cali.total;
+          }
+        })
+      });    
+      */         
+
     } catch (e) {
       console.log(e.message);
       if (e.response && e.response.status === 400) {
@@ -113,13 +187,21 @@ const history = useHistory();
         examen2,
         proyecto,
         asistencia,
-        total: 100,
+        total,
         observaciones,
         anio: 2023,
         trimestre: 'II'  
     });
     alert('guardado con exito');
           setIsOpenAddEditModal(false);
+          axios
+          .get("http://localhost:8080/api/calificaciones")
+          .then((res) => {
+           setCalificaciones(res.data);
+            })
+            .catch((err) => {
+               console.error(err);
+             });
     } catch (e) {
       console.log(e.message);
       if (e.response && e.response.status === 400) {
@@ -145,9 +227,7 @@ const history = useHistory();
   });
   */
 
-  const cancelRegister = () => {
-    document.getElementById("registerForm").reset();
-  }
+
 
   const formik = useFormik({ initialValues, validationSchema, onSubmit });
   // const { handleSubmit, handleChange, values, touched, errors, setFieldValue } = formik;
@@ -169,7 +249,7 @@ const history = useHistory();
         >
           {({ handleSubmit, handleChange, values, errors, touched }) => (
 
-            <form id="registerForm" className="tooltip-end-bottom" onSubmit={handleSubmit}>
+            <form id="calificacionForm" className="tooltip-end-bottom" onSubmit={handleSubmit}>
 
               <Form.Group controlId="cotidiano">
               <Form.Label>Cotidiano</Form.Label>
@@ -270,6 +350,23 @@ const history = useHistory();
                   />
                   {errors.asistencia && touched.asistencia && (
                     <div className="d-block invalid-tooltip">{errors.asistencia}</div>
+                  )}
+                </div>
+              </Form.Group>
+
+              <Form.Group controlId="total">
+              <Form.Label>Total</Form.Label>
+                <div className="mb-3 filled form-group tooltip-end-top">
+                  <CsLineIcons icon="check-circle" />
+                  <Form.Control
+                    type="text"
+                    name="total"
+                    placeholder="Total"
+                    value={values.total}
+                    onChange={handleChange}
+                  />
+                  {errors.total && touched.total && (
+                    <div className="d-block invalid-tooltip">{errors.total}</div>
                   )}
                 </div>
               </Form.Group>

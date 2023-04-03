@@ -194,7 +194,7 @@ useEffect(() => {
     const dt = secciones.filter(x => x.docente === id.docente);
     const td = dt.filter(x => x.materia === id.materia);
     setSeccion(td);
-    handleSeccion(id);
+    // handleSeccion(id);
    
   }
 
@@ -204,7 +204,7 @@ useEffect(() => {
     });
     const dt = docentes.filter(x => x.materia === id.materia);
     setDocentesFiltrados(dt);
-    handleDocente(id);
+    // handleDocente(id);
     
   }
 
