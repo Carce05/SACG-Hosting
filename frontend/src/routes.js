@@ -32,12 +32,12 @@ const routesAndMenuItems = {
     },
 
     {
-      path: `${appRoot}/dashboards`,
+      path: `${appRoot}/principal`,
       icon: 'home-garage',
       label: 'menu.dashboards',
       exact: true,
       redirect: true,
-      to: `${appRoot}/dashboards`,
+      to: `${appRoot}/principal/inicio`,
       subs: [
         { path: '/inicio', label: 'menu.elearning', icon: 'home', component: dashboards.elearning },
         { path: '/mi-perfil', label: 'menu.perfil', icon: 'user', component: dashboards.perfil }
@@ -53,7 +53,7 @@ const routesAndMenuItems = {
       label: 'menu.matricular-modulo',
       exact: true,
       redirect: true,
-      to: `${appRoot}/dashboards/`,
+      to: `${appRoot}/principal/inicio`,
       subs: [
         { path: '/matricula', label: 'menu.matricula', icon : 'content',  component: dashboards.matricula },
         { path: '/estudiantes-por-matricular', label: 'menu.estudiantes', icon : 'clock',  component: dashboards.estudiantes },
@@ -66,7 +66,7 @@ const routesAndMenuItems = {
       label: 'menu.notas',
       exact: true,
       redirect: true,
-      to: `${appRoot}/dashboards/`,
+      to: `${appRoot}/principal/inicio`,
       subs: [
         { path: '/calificacion', label: 'menu.calificacion', icon: 'note', component: dashboards.calificacion },
         { path: '/secciones-admin', label: 'menu.admin_secciones', icon: 'folders', component: dashboards.adminSecciones },
@@ -80,7 +80,7 @@ const routesAndMenuItems = {
       label: 'menu.admin',
       exact: true,
       redirect: true,
-      to: `${appRoot}/dashboards/`,
+      to: `${appRoot}/principal/inicio`,
       subs: [
 
         { path: '/avisos', label: 'menu.avisos', icon: 'notification', component: dashboards.avisos },
