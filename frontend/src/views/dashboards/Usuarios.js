@@ -47,7 +47,7 @@ const Usuarios = () => {
 
   
 
-  const validUrl = (link) => {
+  const validUrl = (link = '') => {
     return link.includes('profile_upload');
   }
 
