@@ -33,7 +33,7 @@ const ElearningDashboard = () => {
         <Row>
           {/* Title Start */}
           <Col md="7">
-            <h1 className="mb-0 pb-0 display-4">{title}</h1>
+            <h1 className="mb-0 pb-4 display-4">{title}</h1>
             {/* <BreadcrumbList items={breadcrumbs} /> */}
           </Col>
           {/* Title End */}
@@ -41,7 +41,7 @@ const ElearningDashboard = () => {
       </div>
       {/* Title and Top Buttons End */}
 
-      <Row>
+      <Row >
         {/* Continue Learning Start */}
         <Col xl="6" className="mb-5">
           <h2 className="small-title">Avisos</h2>
@@ -99,8 +99,8 @@ const ElearningDashboard = () => {
                 /> */}
               </div>
               <div>
-                <NavLink to="/courses/detail" className="btn btn-icon btn-icon-start btn-outline-primary mt-3 stretched-link">
-                  <CsLineIcons icon="chevron-right" /> <span>Ver más</span>
+                <NavLink to="/dashboards/Contacto" className="btn btn-icon btn-icon-start btn-outline-primary mt-3 stretched-link">
+                  <CsLineIcons icon="chevron-right" /> <span>Contacto</span>
                 </NavLink>
               </div>
             </div>
