@@ -32,7 +32,7 @@ const routesAndMenuItems = {
     },
 
     {
-      path: `${appRoot}/principal`,
+      path: `${appRoot}/dashboards`,
       icon: 'home-garage',
       label: 'menu.dashboards',
       exact: true,
