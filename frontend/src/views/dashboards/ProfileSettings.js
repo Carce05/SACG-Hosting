@@ -33,7 +33,7 @@ const ProfileSettings = () => {
 
   const onActualizarPerfil = () => {
 
-    if(formPass === 'passvacia') {
+    if(formPass !== 'passvacia') {
       dispatch(actualizarUsuario(formState, id));
     } else {
       dispatch(actualizarUsuario({...formState, formPass: pass}, id));
