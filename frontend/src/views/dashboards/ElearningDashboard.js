@@ -298,7 +298,7 @@ const ElearningDashboard = () => {
               <Card className="h-100 hover-scale-up">
                 <Card.Body className="text-center">
                   <NavLink to="#">
-                    <CsLineIcons icon="inbox" className="text-primary" />
+                    <CsLineIcons icon="news" className="text-primary" />
                     <p className="heading mt-3 text-body">Matricula</p>
                   </NavLink>
                 </Card.Body>
@@ -308,7 +308,7 @@ const ElearningDashboard = () => {
               <Card className="h-100 hover-scale-up">
                 <Card.Body className="text-center">
                   <NavLink to="#">
-                    <CsLineIcons icon="bell" className="text-primary" />
+                    <CsLineIcons icon="notification" className="text-primary" />
                     <p className="heading mt-3 text-body">Avisos</p>
                   </NavLink>
                 </Card.Body>

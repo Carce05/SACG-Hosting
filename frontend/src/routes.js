@@ -30,16 +30,17 @@ const routesAndMenuItems = {
       redirect: true,
       to: `${appRoot}/login`,
     },
+
     {
-      path: `${appRoot}/dashboards`,
+      path: `${appRoot}/principal`,
       icon: 'home-garage',
       label: 'menu.dashboards',
       exact: true,
       redirect: true,
-      to: `${appRoot}/dashboards/elearning`,
+      to: `${appRoot}/dashboards`,
       subs: [
-        { path: '/elearning', label: 'menu.elearning', icon: 'home', component: dashboards.elearning },
-        { path: '/perfil', label: 'menu.perfil', icon: 'user', component: dashboards.perfil }
+        { path: '/inicio', label: 'menu.elearning', icon: 'home', component: dashboards.elearning },
+        { path: '/mi-perfil', label: 'menu.perfil', icon: 'user', component: dashboards.perfil }
       
         
         
@@ -47,25 +48,25 @@ const routesAndMenuItems = {
       ],
     },
     {
-      path: `${appRoot}/dashboards`,
+      path: `${appRoot}/matricular`,
       icon: 'news',
       label: 'menu.matricular-modulo',
       exact: true,
       redirect: true,
-      to: `${appRoot}/dashboards/elearning`,
+      to: `${appRoot}/dashboards/`,
       subs: [
         { path: '/matricula', label: 'menu.matricula', icon : 'content',  component: dashboards.matricula },
-        { path: '/estudiantes', label: 'menu.estudiantes', icon : 'clock',  component: dashboards.estudiantes },
+        { path: '/estudiantes-por-matricular', label: 'menu.estudiantes', icon : 'clock',  component: dashboards.estudiantes },
       ],
     },
 
     {
-      path: `${appRoot}/dashboards`,
+      path: `${appRoot}/notas`,
       icon: 'book',
       label: 'menu.notas',
       exact: true,
       redirect: true,
-      to: `${appRoot}/dashboards/elearning`,
+      to: `${appRoot}/dashboards/`,
       subs: [
         { path: '/calificacion', label: 'menu.calificacion', icon: 'note', component: dashboards.calificacion },
         { path: '/secciones-admin', label: 'menu.admin_secciones', icon: 'folders', component: dashboards.adminSecciones },
@@ -74,12 +75,12 @@ const routesAndMenuItems = {
     },
 
     {
-      path: `${appRoot}/dashboards`,
+      path: `${appRoot}/admin`,
       icon: 'shield',
       label: 'menu.admin',
       exact: true,
       redirect: true,
-      to: `${appRoot}/dashboards/elearning`,
+      to: `${appRoot}/dashboards/`,
       subs: [
 
         { path: '/avisos', label: 'menu.avisos', icon: 'notification', component: dashboards.avisos },
