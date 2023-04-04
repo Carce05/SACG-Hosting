@@ -30,41 +30,74 @@ const routesAndMenuItems = {
       redirect: true,
       to: `${appRoot}/login`,
     },
+
     {
-      path: `${appRoot}/dashboards`,
+      path: `${appRoot}/principal`,
       icon: 'home-garage',
       label: 'menu.dashboards',
       exact: true,
       redirect: true,
-      to: `${appRoot}/dashboards/elearning`,
+      to: `${appRoot}/dashboards`,
       subs: [
-        { path: '/elearning', label: 'menu.elearning', component: dashboards.elearning },
-        { path: '/secciones', label: 'menu.secciones', component: dashboards.secciones },
-        { path: '/usuarios', label: 'menu.usuarios', component: dashboards.usuarios },
-        { path: '/estudiantes', label: 'menu.estudiantes', component: dashboards.estudiantes },
-        { path: '/perfil', label: 'menu.perfil', component: dashboards.perfil },
-        { path: '/avisos', label: 'menu.avisos', component: dashboards.avisos },
-        { path: '/calificacion', label: 'menu.calificacion', component: dashboards.calificacion },
-        { path: '/matricula', label: 'menu.matricula', component: dashboards.matricula },
-        { path: '/secciones-admin', label: 'menu.admin_secciones', component: dashboards.adminSecciones },
-        { path: '/contacto', label: 'menu.contacto', component: dashboards.contacto }
+        { path: '/inicio', label: 'menu.elearning', icon: 'home', component: dashboards.elearning },
+        { path: '/mi-perfil', label: 'menu.perfil', icon: 'user', component: dashboards.perfil }
+      
+        
+        
         
       ],
     },
+    {
+      path: `${appRoot}/matricular`,
+      icon: 'news',
+      label: 'menu.matricular-modulo',
+      exact: true,
+      redirect: true,
+      to: `${appRoot}/dashboards/`,
+      subs: [
+        { path: '/matricula', label: 'menu.matricula', icon : 'content',  component: dashboards.matricula },
+        { path: '/estudiantes-por-matricular', label: 'menu.estudiantes', icon : 'clock',  component: dashboards.estudiantes },
+      ],
+    },
+
+    {
+      path: `${appRoot}/notas`,
+      icon: 'book',
+      label: 'menu.notas',
+      exact: true,
+      redirect: true,
+      to: `${appRoot}/dashboards/`,
+      subs: [
+        { path: '/calificacion', label: 'menu.calificacion', icon: 'note', component: dashboards.calificacion },
+        { path: '/secciones-admin', label: 'menu.admin_secciones', icon: 'folders', component: dashboards.adminSecciones },
+        { path: '/secciones', label: 'menu.secciones', icon: 'folders', component: dashboards.secciones },
+      ],
+    },
+
+    {
+      path: `${appRoot}/admin`,
+      icon: 'shield',
+      label: 'menu.admin',
+      exact: true,
+      redirect: true,
+      to: `${appRoot}/dashboards/`,
+      subs: [
+
+        { path: '/avisos', label: 'menu.avisos', icon: 'notification', component: dashboards.avisos },
+        { path: '/usuarios', label: 'menu.usuarios', icon : 'user', component: dashboards.usuarios }
+        
+      ],
+    },
+
+    
+
+
+    { path: '/contacto', label: 'menu.contacto', icon: 'phone', component: dashboards.contacto },
+
   ],
   sidebarItems: [],
   footerItems: [
-    {
-      path: `${appRoot}/dashboards`,
-      icon: 'home-garage',
-      label: 'menu.dashboards',
-      exact: true,
-      redirect: true,
-      to: `${appRoot}/dashboards/contacto`,
-      subs: [
-        { path: '/contacto', label: 'menu.contacto', component: dashboards.contacto },
-      ],
-    },
+    { path: '/contacto', label: 'menu.contacto', icon: 'phone', component: dashboards.contacto },
   ],
 };
 export default routesAndMenuItems;

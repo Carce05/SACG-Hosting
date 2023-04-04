@@ -13,22 +13,31 @@ const NotFound = () => {
       <div className="sw-lg-60 px-5">
         <div className="sh-11">
           <NavLink to="/">
-            <div className="logo-default" />
+          <img src="/img/logo/image2vector.svg" alt="Logo" width="75" height="75"/>
           </NavLink>
         </div>
         <div className="mb-5">
-          <h2 className="cta-1 mb-0 text-primary">Ooops, it looks like an error!</h2>
-          <h2 className="display-2 text-primary">404 Not Found</h2>
+          <h2 className="cta-1 mb-0 text-primary">¡Parece que ha ocurrido un error!</h2>
+          <h2 className="display-2 text-primary">404 Página no encontrada</h2>
         </div>
         <div className="mb-5">
-          <p className="h6">It looks like the page you are looking for is not available.</p>
+        
+          <br/>
           <p className="h6">
-            If you think that is a mistake, please <NavLink to="/">contact</NavLink> us.
+            Si crees que es un error, por favor comunicate con nosotros a traves de los siguientes canales de comunicación: 
+            
+          </p>
+          <br/>
+          <p>
+          Correo electrónico:  lic.diurnodeguarari@mep.go.cr
+          </p>
+          <p>
+          Teléfono: 2237-4033.
           </p>
         </div>
         <div>
           <NavLink to="/" className="btn btn-icon btn-icon-start btn-primary">
-            <CsLineIcons icon="arrow-left" /> <span>Back to Home</span>
+            <CsLineIcons icon="arrow-left" /> <span>Volver al Inicio</span>
           </NavLink>
         </div>
       </div>

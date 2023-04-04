@@ -16,9 +16,11 @@ const ResetPassword = () => {
 	const [password, setPassword] = useState("");
 	const [msg, setMsg] = useState("");
 	const [error, setError] = useState("");
-	const param = useParams();
-   /* Mandando los parametros como undefined */
-	const url = `http://localhost:8080/api/reset-password/${param.id}/${param.token}`;
+  const queryParameters = new URLSearchParams(window.location.search)
+  const id = queryParameters.get("id")
+  const token = queryParameters.get("token")
+  
+	const url = `http://localhost:8080/api/reset-password/${id}/${token}`;
 
   
  
@@ -46,7 +48,7 @@ const ResetPassword = () => {
 			}
 		};
 		verifyUrl();
-	}, [param, url]);
+	}, [ url]);
 
 
 
