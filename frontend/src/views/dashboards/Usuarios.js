@@ -48,8 +48,7 @@ const Usuarios = () => {
   
 
   const validUrl = (link) => {
-    const pattern = new RegExp(`\\blocalhost:8080/public/images/profile_upload/\\b`, 'i');
-    return pattern.test(link);
+    return link.includes('profile_upload');
   }
 
   const columns = React.useMemo(() => {
