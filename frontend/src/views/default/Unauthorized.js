@@ -13,7 +13,7 @@ const Unauthorized = () => {
       <div className="sw-lg-60 px-5">
         <div className="sh-11">
           <NavLink to="/">
-            <div className="logo-default" />
+          <img src="/img/logo/image2vector.svg" alt="Logo" width="75" height="75"/>
           </NavLink>
         </div>
         <div className="mb-5">
