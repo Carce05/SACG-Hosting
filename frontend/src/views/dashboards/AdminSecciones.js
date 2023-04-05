@@ -224,8 +224,8 @@ const AdminSecciones = (props) => {
 
 
 
-  const title = 'Mis Secciones';
-  const description = 'Elearning Portal School Dashboard Page';
+  const title = 'Secciones Administrador';
+  const description = 'Calificaciones Administrador';
 
   const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
 
