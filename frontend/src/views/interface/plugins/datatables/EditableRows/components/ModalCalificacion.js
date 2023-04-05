@@ -5,6 +5,8 @@ import { useFormik, Formik } from 'formik';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import { NavLink, Redirect, useHistory } from 'react-router-dom';
 import axios from "axios";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ModalCalificacion = ({ tableInstance, calificaciones, setCalificaciones, estudiantes, setEstudiantes }) => {
 const history = useHistory();
@@ -141,7 +143,7 @@ const history = useHistory();
         anio: 2023,
         trimestre: 'II'        
       });
-      alert('Calificación actualizada correctamente');
+      toast('Calificación Actualizada!', { className: 'success' });
       setIsOpenAddEditModal(false);
       
       axios
