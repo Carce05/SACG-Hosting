@@ -1,7 +1,7 @@
 const { response } = require('express');
 
 const bcryptjs = require('bcryptjs')
-
+const bitacora = require("../controllers/bitacora");
 const Estudiante = require('../models/estudiante')
 
 //Get all Method
@@ -25,7 +25,10 @@ const usuariosPost = async (req, res = response) => {
 
     if (existEmail) {
         return res.status(400).json({
-            msg: 'Email already taken'
+            
+            msg: 'Ya existe un usuario este email'
+            
+            
         })
     }
 
@@ -70,6 +73,7 @@ const EstudiantesAsocidados = async (req, res) => {
         res.json(data)
     }
     catch(error){
+        bitacora.log('error', "El encargado legal no tiene estudiantes asignados")
         res.status(500).json({message: error.message})
     }
 }
