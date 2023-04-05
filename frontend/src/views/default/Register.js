@@ -6,6 +6,7 @@ import { useFormik } from 'formik';
 import LayoutFullpage from 'layout/LayoutFullpage';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import HtmlHead from 'components/html-head/HtmlHead';
+import apiSACG from 'api/apiSACG';
 
 const Register = () => {
   const history = useHistory();
@@ -22,7 +23,7 @@ const Register = () => {
   const initialValues = { name: '', thumb: '', email: '', password: '', terms: false };
   
   const onSubmit = async ({ name, thumb, email, password }) => { 
-    const rawResponse = await fetch('http://localhost:8080/api/usuarios', {
+    const rawResponse = await fetch(apiSACG.concat('/usuarios'), {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

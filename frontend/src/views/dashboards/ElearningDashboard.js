@@ -6,6 +6,7 @@ import Glide from 'components/carousel/Glide';
 import HtmlHead from 'components/html-head/HtmlHead';
 import BreadcrumbList from 'components/breadcrumb-list/BreadcrumbList';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
+import apiSACG from 'api/apiSACG';
 import YourTimeChart from './components/YourTimeChart';
 
 const ElearningDashboard = () => {
@@ -16,7 +17,7 @@ const ElearningDashboard = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await fetch('http://localhost:8080/api/comunicados');
+      const result = await fetch(apiSACG.concat('/comunicados'));
       const data = await result.json();
       setAnnouncements(data);
     };

@@ -5,6 +5,7 @@ import { useFormik, Formik } from 'formik';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import { NavLink, Redirect, useHistory } from 'react-router-dom';
 import axios from "axios";
+import apiSACG from 'api/apiSACG';
 
 const ModalCalificacion = ({ tableInstance, calificaciones, setCalificaciones, estudiantes, setEstudiantes }) => {
 const history = useHistory();
@@ -31,7 +32,7 @@ const history = useHistory();
 
   /*
   async function updateCalificaciones(cedulaP, materiaP) {
-    const response = await axios.get('http://localhost:8080/api/calificaciones/buscarCalificacion', {
+    const response = await axios.get(apiSACG.concat('/calificaciones/buscarCalificacion'), {
       params: {
         estudiante: cedulaP,
         materia: materiaP
@@ -127,7 +128,7 @@ const history = useHistory();
   const onSubmit = async ({ estudiante, materia, cotidiano, tarea,  examen1, examen2, proyecto, asistencia, total, observaciones, anio, trimestre }) => {
     if (idRes !== "") {
     try {
-      await axios.put(`http://localhost:8080/api/calificaciones/${idRes}`, {
+      await axios.put(apiSACG.concat(`/calificaciones/${idRes}`), {
         estudiante: cedula,
         materia: materiaRes,
         cotidiano,
@@ -145,7 +146,7 @@ const history = useHistory();
       setIsOpenAddEditModal(false);
       
       axios
-          .get("http://localhost:8080/api/calificaciones")
+          .get(apiSACG.concat("/calificaciones"))
           .then((res) => {
            setCalificaciones(res.data);
             })
@@ -178,7 +179,7 @@ const history = useHistory();
   }
   else {
     try {
-      const response = await axios.post('http://localhost:8080/api/calificaciones', {
+      const response = await axios.post(apiSACG.concat('/calificaciones'), {
         estudiante: cedula,
         materia: materiaRes,
         cotidiano,
@@ -195,7 +196,7 @@ const history = useHistory();
     alert('guardado con exito');
           setIsOpenAddEditModal(false);
           axios
-          .get("http://localhost:8080/api/calificaciones")
+          .get(apiSACG.concat("/calificaciones"))
           .then((res) => {
            setCalificaciones(res.data);
             })
@@ -218,7 +219,7 @@ const history = useHistory();
   }
   /*
   axios
-  .get("http://localhost:8080/api/calificaciones")
+  .get(apiSACG.concat("/calificaciones"))
   .then((res) => {
     setData(res.data);
   })

@@ -20,6 +20,7 @@ import ModalAddEdit from 'views/interface/plugins/datatables/EditableRows/compon
 import TablePagination from 'views/interface/plugins/datatables/EditableRows/components/TablePagination';
 import axios from "axios";
 import ModalAddAnnouncement from 'views/interface/plugins/datatables/EditableRows/components/ModalAddAnnouncement';
+import apiSACG from 'api/apiSACG';
 
 
 const SchoolDashboard = () => {
@@ -36,7 +37,7 @@ const SchoolDashboard = () => {
   useEffect(() => {
 
     axios
-      .get("http://localhost:8080/api/comunicados")
+      .get(apiSACG.concat('/comunicados'))
       .then((res) => {
         setData(res.data);
       })

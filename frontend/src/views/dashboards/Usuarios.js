@@ -21,6 +21,7 @@ import ModalAddEdit from 'views/interface/plugins/datatables/EditableRows/compon
 import TablePagination from 'views/interface/plugins/datatables/EditableRows/components/TablePagination';
 import axios from "axios";
 import { useSelector } from 'react-redux';
+import apiSACG from 'api/apiSACG';
 
 const Usuarios = () => {
   const { currentUser, isUpdated } = useSelector((state) => state.auth);
@@ -35,7 +36,7 @@ const Usuarios = () => {
   };
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/usuarios")
+      .get(apiSACG.concat("/usuarios"))
       .then((res) => {
         setData(res.data);
       })

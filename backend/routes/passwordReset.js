@@ -27,7 +27,7 @@ router.post("/", async (req, res) => {
         }
 
         //Quemado de momento, falta definirlo como variable de ambiente. 
-        const link = `http://localhost:3000/reset-password?id=${user._id}&token=${token.token}`;
+        const link = `https://sacg-frontend-test.netlify.app/reset-password?id=${user._id}&token=${token.token}`;
         await sendEmail(user.email, "Reestablecimiento de contraseña Liceo Diurno de Guararí", "Para reestablecer su contraseña por favor haga click en el siguiente enlace: "+"\n"+link);
 
         res.send("Enlace de restablecimiento de contraseña enviado a su cuenta de correo electrónico");

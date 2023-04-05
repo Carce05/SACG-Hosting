@@ -9,6 +9,7 @@ import LayoutFullpage from 'layout/LayoutFullpage';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import HtmlHead from 'components/html-head/HtmlHead';
 // const bitacora = require ('...../backend/controllers/bitacora');
+import apiSACG from 'api/apiSACG';
 
 const ForgotPassword = () => {
   const title = 'Restablecer Contraseña';
@@ -30,7 +31,7 @@ const ForgotPassword = () => {
   const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
-			const url = `http://localhost:8080/api/reset-password`;
+			const url = apiSACG.concat(`/reset-password`);
 			const { data } = await axios.post(url, { email });
 			setMsg(data.message);
 			setError("");

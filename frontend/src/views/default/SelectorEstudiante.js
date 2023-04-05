@@ -9,6 +9,7 @@ import HtmlHead from 'components/html-head/HtmlHead';
 import Select from 'react-select';
 import AsyncSelect from 'react-select/async';
 import { useSelector } from 'react-redux';
+import apiSACG from 'api/apiSACG';
 
 import axios from "axios";
 
@@ -26,7 +27,7 @@ const SelectorEstudiante = (props) => {
   useEffect(() => {
     async function fetchData() {
       // Fetch data
-      const { data } = await axios.get(`http://localhost:8080/api/estudiantes/EstudiantesAsocidados/${usuario}`);
+      const { data } = await axios.get(apiSACG.concat(`/estudiantes/EstudiantesAsocidados/${usuario}`));
       const results = []
       // Store results in the results array
       data.forEach((value) => {

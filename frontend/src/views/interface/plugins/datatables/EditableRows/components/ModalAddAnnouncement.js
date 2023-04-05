@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useFormik, Formik } from 'formik';
 import * as Yup from 'yup';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
+import apiSACG from 'api/apiSACG';
 
 const ModalAddAnnouncement = ({ showModal, setShowModal, setData, setShowSuccessAlert, setShowDangerAlert }) => {
   const initialValues = {
@@ -16,12 +17,12 @@ const ModalAddAnnouncement = ({ showModal, setShowModal, setData, setShowSuccess
   });
   const onSubmit = async (values) => {
     try {
-      const response = await axios.post('http://localhost:8080/api/comunicados', {
+      const response = await axios.post(apiSACG.concat('/comunicados'), {
         title: values.title,
         description: values.description,
       });
       axios
-        .get("http://localhost:8080/api/comunicados")
+        .get(apiSACG.concat("/comunicados"))
         .then((res) => {
           setData(res.data);
           setShowSuccessAlert(true);

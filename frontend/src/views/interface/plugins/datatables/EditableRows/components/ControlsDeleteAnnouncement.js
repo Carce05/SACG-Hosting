@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import axios from "axios";
+import apiSACG from 'api/apiSACG';
 
 const ControlsDeleteAnnouncement = ({ tableInstance }) => {
   const {
@@ -12,7 +13,7 @@ const ControlsDeleteAnnouncement = ({ tableInstance }) => {
   } = tableInstance;
   const onClick = () => {
     const {_id: id} = selectedFlatRows[0].original;
-    axios.delete(`http://localhost:8080/api/comunicados/${id}`)
+    axios.delete(apiSACG.concat(`/comunicados/${id}`))
       .then(response => {
         setData(data.filter((x, index) => selectedRowIds[index] !== true));
       })

@@ -10,6 +10,7 @@ import React, { useState, useEffect } from 'react';
 import ModalEditContact from 'views/interface/plugins/datatables/EditableRows/components/ModalEditContact';
 import TablePagination from 'views/interface/plugins/datatables/EditableRows/components/TablePagination';
 import axios from "axios";
+import apiSACG from 'api/apiSACG';
 
 const Contacto = () => {
   const [data, setData] = useState(null);
@@ -23,7 +24,7 @@ const Contacto = () => {
   };
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/contacto/63f92ab00cd67a1ade5e243e")
+      .get(apiSACG.concat("/contacto/63f92ab00cd67a1ade5e243e"))
       .then((res) => {
         setData(res.data[0]);
       })

@@ -3,6 +3,8 @@ const bcryptjs = require('bcryptjs')
 const Usuario = require('../models/user')
 const bitacora = require("./bitacora");
 
+import apiSACG from 'api/apiSACG';
+
 const usuariosGet = async (req, res = response) => {
 
     try{

@@ -10,6 +10,7 @@ import HtmlHead from 'components/html-head/HtmlHead';
 import { useDispatch } from 'react-redux';
 import { setCurrentUser } from 'auth/authSlice';
 import { useLogin } from 'hooks/useLogin';
+import apiSACG from 'api/apiSACG';
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -33,7 +34,7 @@ const Login = () => {
   });
   const initialValues = { email: '', password: '' };
   const onSubmit = async ({ email,password }) => {
-    const rawResponse = await fetch('http://localhost:8080/api/usuarios/login', {
+    const rawResponse = await fetch(apiSACG.concat('/usuarios/login'), {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

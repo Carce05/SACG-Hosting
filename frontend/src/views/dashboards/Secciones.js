@@ -22,6 +22,7 @@ import TablePagination from 'views/interface/plugins/datatables/EditableRows/com
 import axios from "axios";
 import { useFormik } from 'formik';
 import { useSelector } from 'react-redux';
+import apiSACG from 'api/apiSACG';
 
 
 const Secciones = (props) => {
@@ -44,7 +45,7 @@ const Secciones = (props) => {
   useEffect(() => {
     async function fetchData() {
       // Fetch data
-      const response = await axios.get(`http://localhost:8080/api/docentes_materias_secciones/DocenteAsignado/${docente}`);
+      const response = await axios.get(apiSACG.concat(`/docentes_materias_secciones/DocenteAsignado/${docente}`));
       const resultsMaterias = []
       const resultsSecciones = []
       let contador = 0;
@@ -88,7 +89,7 @@ const Secciones = (props) => {
   useEffect(() => {
 
     axios
-      .get("http://localhost:8080/api/estudiantes/")
+      .get(apiSACG.concat("/estudiantes/"))
       .then((res) => {
         setData(res.data);
       })
@@ -103,7 +104,7 @@ const Secciones = (props) => {
   useEffect(() => {
     async function fetchData() {
       // Fetch data
-      const response = await axios.get("http://localhost:8080/api/estudiantes/");
+      const response = await axios.get(apiSACG.concat("/estudiantes/"));
       const resultsEstudiantes = []
       // Store results in the results array
       response.data.forEach((val) => {
@@ -129,7 +130,7 @@ const Secciones = (props) => {
   useEffect(() => {
   async function fetchData() {
     // Fetch data
-    const response = await axios.get('http://localhost:8080/api/calificaciones');
+    const response = await axios.get(apiSACG.concat('/calificaciones'));
     const resultsCalificaciones = []
     // Store results in the results array
 

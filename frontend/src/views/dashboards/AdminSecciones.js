@@ -23,6 +23,7 @@ import TablePagination from 'views/interface/plugins/datatables/EditableRows/com
 import axios from "axios";
 import { useFormik } from 'formik';
 import { useSelector } from 'react-redux';
+import apiSACG from 'api/apiSACG';
 
 const AdminSecciones = (props) => {
   const [value, setValue] = useState([]);
@@ -38,6 +39,8 @@ const AdminSecciones = (props) => {
   const formik = useFormik({ initialValues });
   const { handleSubmit, handleChange, materia, docentee, seccionn, touched, errors } = formik;
   const { setSelectedMateria, setSeccionn } = useState();
+
+  const url = apiSACG.concat('/usuarios/login');
   
   
  
@@ -46,7 +49,7 @@ const AdminSecciones = (props) => {
   useEffect(() => {
     async function fetchData() {
       // Fetch data
-      const response = await axios.get(`http://localhost:8080/api/docentes_materias_secciones/`);
+      const response = await axios.get(apiSACG.concat(`/docentes_materias_secciones/`));
       const resultsMaterias = []
       const resultsDocentes = []
       const resultsSecciones = []
@@ -130,7 +133,7 @@ const AdminSecciones = (props) => {
   useEffect(() => {
     async function fetchData() {
       // Fetch data
-      const response = await axios.get('http://localhost:8080/api/calificaciones');
+      const response = await axios.get(apiSACG.concat('/calificaciones'));
       const resultsCalificaciones = []
       // Store results in the results array
   
@@ -164,7 +167,7 @@ const AdminSecciones = (props) => {
   useEffect(() => {
     async function fetchData() {
       // Fetch data
-      const response = await axios.get("http://localhost:8080/api/estudiantes/");
+      const response = await axios.get(apiSACG.concat("/estudiantes/"));
       const resultsEstudiantes = []
       // Store results in the results array
       response.data.forEach((val) => {
