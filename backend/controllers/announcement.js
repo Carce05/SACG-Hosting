@@ -1,11 +1,14 @@
 const { response } = require('express');
 const Announcement = require('../models/announcement')
+const bitacoraAccion = require("./bitacoraAccion");
 
 const announcementPost = async (req, res = response) => {
     try {
         const { title, description } = req.body;
         const announcement = new Announcement({ title, description, createdAt: new Date().toLocaleDateString() });
         await announcement.save();
+        const emailLoggedGlobal = global.email;
+        bitacoraAccion.log('debug', `El usuario ${emailLoggedGlobal}, creó un nuevo aviso bajo el titulo de ${req.body.title}`);
         res.json({
             msg: 'POST | CONTROLLER',
             announcement
@@ -29,7 +32,10 @@ const announcementGet = async (req, res = response) => {
 
 const announcementDelete = async (req, res) => {
     try {
+        const avisoEliminado = req.params.announcementId;
         await Announcement.findByIdAndDelete({ _id: req.params.announcementId }, req.body);
+        const emailLoggedGlobal = global.email;
+        bitacoraAccion.log('debug', `El usuario ${emailLoggedGlobal}, eliminó un aviso bajo el ID de ${avisoEliminado}`);
         res.status(200).send({
             msg: 'Eliminado con exito '
         });
