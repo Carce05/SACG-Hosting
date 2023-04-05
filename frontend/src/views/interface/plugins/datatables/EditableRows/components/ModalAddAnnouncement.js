@@ -58,6 +58,7 @@ const ModalAddAnnouncement = ({ showModal, setShowModal, setData, setShowSuccess
             {({ handleSubmit, handleChange, values, touched, errors }) => (
               <form id="editForm" className="tooltip-end-bottom" onSubmit={handleSubmit}>
                 <Form.Group controlId="title" className="mb-2">
+                <div className="mb-3 filled form-group tooltip-end-top">
                   <Form.Label>Titulo del aviso</Form.Label>
                   <Form.Control type="text"
                     name="title"
@@ -67,8 +68,10 @@ const ModalAddAnnouncement = ({ showModal, setShowModal, setData, setShowSuccess
                   {errors.title && touched.title && (
                     <div className="d-block invalid-tooltip">{errors.title}</div>
                   )}
+                  </div>
                 </Form.Group>
                 <Form.Group controlId="description" className="mb-2">
+                <div className="mb-3 filled form-group tooltip-end-top">
                   <Form.Label>Descripción del aviso</Form.Label>
                   <Form.Control type="text"
                     name="description"
@@ -77,6 +80,7 @@ const ModalAddAnnouncement = ({ showModal, setShowModal, setData, setShowSuccess
                   {errors.description && touched.description && (
                     <div className="d-block invalid-tooltip">{errors.description}</div>
                   )}
+                  </div>
                 </Form.Group>
                 <Row className="mb-3">
                   <Col className="text-center">
