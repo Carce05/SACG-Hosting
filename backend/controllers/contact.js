@@ -1,5 +1,6 @@
 const { response } = require('express');
 const Contact = require('../models/contact')
+const bitacoraAccion = require("./bitacoraAccion");
 
 //Get all Method
 const contactGet = async (req, res) => {
@@ -27,6 +28,8 @@ const contactPost = async (req, res = response) => {
 const contactPut = async(req, res) => {
     try {
         await Contact.updateOne({ _id: req.params.contactId }, req.body);
+        const emailLoggedGlobal = global.email;
+        bitacoraAccion.log('debug', `El contacto de la institución fue actualizado por ${emailLoggedGlobal}`);
         res.status(200).send({
             msg: 'PUT | CONTROLLER',
             id: req.params.contactId
