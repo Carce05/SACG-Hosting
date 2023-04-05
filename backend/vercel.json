@@ -1,6 +1,6 @@
 {
     "version": 2,
-    "name": "sacgbackendtest",
+    "name": "sacolegioguarari-backend",
     "builds": [
       { "src": "script.js", "use": "@vercel/node" }
     ],
