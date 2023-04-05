@@ -2,6 +2,7 @@ const { response } = require('express');
 
 const bcryptjs = require('bcryptjs')
 
+const bitacora = require("../controllers/bitacora");
 const DMS = require('../models/docente_materia_seccion')
 
 //Get all Method

@@ -67,7 +67,6 @@ const usuariosPostImage = async (req, res = response) => {
 
 const usuariosPut = async(req, res) => {
     const currentUserReq = await Usuario.findOne({ _id: req.params.userId })
-    console.log(req.body)
     try {
         if(currentUserReq.password !== req.body.password) {
             const bcryptPass = bcryptjs.hashSync(req.body.password, bcryptjs.genSaltSync())
@@ -92,29 +91,39 @@ const usuariosDelete = (req, res = response) => {
 
 const usuarioLogin = async (req, res = response) => {
     const { email, password  } = req.body;
-    const { id, name, thumb, role, password : pass } = await Usuario.findOne({ email })
-    const validate = await bcryptjs.compare(password, pass);
-    if (validate) {
-        res.json({
-            status: true,
-            usuario: {
-                id,
-                name,
-                thumb,
-                role,
-                email,
-                pass
-            }
-        }) 
+    const usuarioObtenido = await Usuario.findOne({ email });
+
+    if(usuarioObtenido) {
+        const { id, name, thumb, role, password : pass } = usuarioObtenido;
+        const validate = await bcryptjs.compare(password, pass);
+        if (validate) {
+            res.json({
+                status: true,
+                usuario: {
+                    id,
+                    name,
+                    thumb,
+                    role,
+                    email,
+                    pass
+                }
+            }) 
+        } else {
+            res.json({
+                status: false,
+                mgs: 'LOGIN INCORRECTO'
+                
+            })
+            bitacora.log('error', "Error al intentar loguearse al sistema");
+        }
     } else {
         res.json({
             status: false,
-            mgs: 'LOGIN INCORRECTO'
+            mgs: 'USUARIO NO ENCONTRADO'
             
         })
         bitacora.log('error', "Error al intentar loguearse al sistema");
     }
-
 }
 
 

@@ -28,15 +28,14 @@ const ProfileSettings = () => {
   useForm({
     formName: name,
     formEmail: email,
-    formPass: ''
+    formPass: 'passvacia'
   });
 
   const onActualizarPerfil = () => {
 
-    if(formPass.length !== 0) {
+    if(formPass !== 'passvacia') {
       dispatch(actualizarUsuario(formState, id));
     } else {
-      console.log(pass)
       dispatch(actualizarUsuario({...formState, formPass: pass}, id));
     }
     ref.current.handleSubmit()
@@ -85,7 +84,7 @@ const ProfileSettings = () => {
                     <Form.Label className="col-form-label">Email</Form.Label>
                   </Col>
                   <Col sm="8" md="9" lg="10">
-                    <Form.Control type="email" name='formEmail' onChange={ onInputChange } defaultValue={ formEmail } />
+                    <Form.Control type="email" name='formEmail' onChange={ onInputChange } defaultValue={ formEmail } disabled />
                   </Col>
                 </Row>
                 <Row className="mb-3">

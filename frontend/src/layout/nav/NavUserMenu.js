@@ -22,7 +22,7 @@ const NavUserMenuContent = () => {
       <Col xs="6" className="ps-1 pe-1">
         <ul className="list-unstyled">
           <li>
-            <a href="/dashboards/perfil">
+            <a href="/dashboards/mi-perfil">
               <CsLineIcons icon="tool" className="me-2" size="17" /> <span className="align-middle">Perfil</span>
             </a>
           </li>
@@ -52,8 +52,7 @@ const NavUserMenuContent = () => {
 )};
 
 const validUrl = (link) => {
-  const pattern = new RegExp(`\\blocalhost:8080/public/images/profile_upload/\\b`, 'i');
-  return pattern.test(link);
+  return link.includes('profile_upload');
 }
 
 const NavUserMenuDropdownToggle = React.memo(

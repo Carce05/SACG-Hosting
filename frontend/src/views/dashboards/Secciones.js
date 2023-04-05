@@ -14,7 +14,7 @@ import ButtonsCheckAll from 'views/interface/plugins/datatables/EditableRows/com
 import ButtonsAddNew from 'views/interface/plugins/datatables/EditableRows/components/ButtonsAddNew';
 import ControlsPageSize from 'views/interface/plugins/datatables/EditableRows/components/ControlsPageSize';
 import ControlsAdd from 'views/interface/plugins/datatables/EditableRows/components/ControlsAdd';
-import ControlsEdit from 'views/interface/plugins/datatables/EditableRows/components/ControlsEdit';
+import ControlsCalificacion from 'views/interface/plugins/datatables/EditableRows/components/ControlsCalificacion';
 import ControlsDelete from 'views/interface/plugins/datatables/EditableRows/components/ControlsDelete';
 import ControlsSearch from 'views/interface/plugins/datatables/EditableRows/components/ControlsSearch';
 import ModalCalificacion from 'views/interface/plugins/datatables/EditableRows/components/ModalCalificacion';
@@ -36,7 +36,6 @@ const Secciones = (props) => {
   const formik = useFormik({ initialValues });
   const { handleSubmit, handleChange, materia, seccionn, touched, errors } = formik;
   const { setSelectedMateria, setSeccionn } = useState();
-  let student = "";
   
   const { currentUser, isLogin } = useSelector((state) => state.auth);
   const docente  = currentUser.email;
@@ -114,6 +113,7 @@ const Secciones = (props) => {
           apellido: val.apellido,
           seccion: val.seccion,
           materia: "",
+          total: 0,
         });
       });
       setEstudiantes([ 
@@ -125,21 +125,18 @@ const Secciones = (props) => {
     fetchData();
   }, []);
 
-  async function getCalificacion(cedulaRow, materiaRow) {
+  
+  useEffect(() => {
+  async function fetchData() {
     // Fetch data
-    const response = await axios.get('http://localhost:8080/api/calificaciones/buscarCalificacion', {
-      params: {
-        estudiante: cedulaRow,
-        materia: materiaRow
-      }
-    });
+    const response = await axios.get('http://localhost:8080/api/calificaciones');
     const resultsCalificaciones = []
     // Store results in the results array
 
     /* eslint no-underscore-dangle: 0 */
     response.data.forEach((val) => {
       resultsCalificaciones.push({
-        id: val._id,
+        _id: val._id,
         estudiante: val.estudiante,
         materia: val.materia,
         cotidiano: val.cotidiano,
@@ -150,23 +147,39 @@ const Secciones = (props) => {
         asistencia: val.asistencia,
         total: val.total,
         observaciones: val.observaciones,
+        anio: val.anio,
+        trimestre: val.trimestre,
       });
     });
     setCalificaciones([ 
       ...resultsCalificaciones
     ])
-
-      student = cedulaRow;
-
   }
+
+      // Trigger the fetch
+      fetchData();
+}, []);
 
   
 
-  const [data, setData] = React.useState(estudiantes);
+
 
   const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
 
+  const insertarCalificaciones = () => {
+    estudiantes.forEach((val) => {
+      calificaciones.forEach((cali) => {
+        if (val.cedula === cali.estudiante && val.materia === cali.materia) {
+          val.total = cali.total;
+        }
+      })
+    });
+  }
+
+  const [data, setData] = React.useState(estudiantes);
+
   const handleSeccion = (id) => {
+    insertarCalificaciones();
     const dt = estudiantes.filter(x => x.seccion === id.seccion);
     setData(dt);
   }
@@ -181,16 +194,7 @@ const Secciones = (props) => {
     handleSeccion(id);
   }
 
-  const handleCalificacion = (row) => {
-    const cedulaRow = row.cells[0].value;
-    const materiaRow = row.cells[3].value;
 
-
-
-    getCalificacion(cedulaRow,materiaRow);
-
-    setIsOpenAddEditModal(true)
-  }
 
 
 
@@ -206,6 +210,8 @@ const Secciones = (props) => {
       { Header: 'Apellido', accessor: 'apellido', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       { Header: 'Materia', accessor: 'materia', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       { Header: 'Seccion', accessor: 'seccion', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
+      { Header: 'Total', accessor: 'total', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
+      /*
       {
         Header: '',
         id: 'action',
@@ -213,6 +219,16 @@ const Secciones = (props) => {
         Cell: ({ row }) => {
           const { checked, onChange } = row.getToggleRowSelectedProps();
           return <Button onClick={() => handleCalificacion(row) } variant="outline-primary" >Nota</Button>;
+        },
+      },
+      */
+      {
+        Header: '',
+        id: 'action',
+        headerClassName: 'empty w-10',
+        Cell: ({ row }) => {
+          const { checked, onChange } = row.getToggleRowSelectedProps();
+          return <Form.Check className="form-check float-end mt-1" type="checkbox" checked={checked} onChange={onChange}/>;
         },
       },
     ];
@@ -298,9 +314,9 @@ const tableInstance = useTable(
         <Col>
           <div className="d-flex justify-content-between">
               <h2 className="small-title">Estudiantes</h2>
-              <NavLink to="/quiz/result" className="btn btn-icon btn-icon-end btn-xs btn-background-alternate p-0 text-small">
-                <span className="align-bottom">Ver Todos</span> <CsLineIcons icon="chevron-right" className="align-middle" size="12" />
-              </NavLink>
+              <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
+                <h2 className="small-title">Nota</h2> 
+              </div>
           </div>
           <div>
             <Row className="mb-3">
@@ -310,8 +326,11 @@ const tableInstance = useTable(
                 </div>
               </Col>
               <Col sm="12" md="7" lg="9" xxl="10" className="text-end">
-                <div className="d-inline-block">
-                  <ControlsPageSize tableInstance={tableInstance} />
+                <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
+                  <Button onClick={insertarCalificaciones} variant="outline-primary" >Refrescar</Button>
+                </div>
+                <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
+                  <ControlsCalificacion tableInstance={tableInstance} />
                 </div>
               </Col>
             </Row>
@@ -324,9 +343,12 @@ const tableInstance = useTable(
               </Col>
             </Row>
           </div>
-          <ModalCalificacion tableInstance={tableInstance} 
-            calificaciones={calificaciones} 
-            student={student} />
+          <ModalCalificacion onHide={insertarCalificaciones}
+           tableInstance={tableInstance} 
+           calificaciones={calificaciones}
+           setCalificaciones={setCalificaciones}
+           estudiantes={estudiantes}
+           setEstudiantes={setEstudiantes}/>
         </Col>
       </Row>
     </>

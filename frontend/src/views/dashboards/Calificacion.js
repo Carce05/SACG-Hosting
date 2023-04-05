@@ -22,17 +22,42 @@ import { da } from 'date-fns/locale';
 
 
 const Calificacion = (props) => {
-  const [value, setValue] = useState([]);
+  const [estudiantes, setEstudiantes] = useState([]);
   const [calificaciones, setCalificaciones] = useState([]);
-  const [anios, setAnios] = useState();
+  const [anios, setAnios] = useState([]);
   const [periodos, setPeriodos] = useState();
   const [trimestre, setTrimestre] = useState([]);
   const { label, name, ...rest } = props;
   const initialValues = { email: '' };
   const formik = useFormik({ initialValues });
-  const { handleSubmit, handleChange, anioo, trimestree, touched, errors } = formik;
+  const { handleSubmit, handleChange, anioo, trimestree, estudiante, touched, errors } = formik;
   const { currentUser, isLogin, isUpdated } = useSelector((state) => state.auth);
   const encargado  = currentUser.email;
+
+  // const usuario  = userInfo?.email;
+  const usuario  = currentUser.email;
+
+  useEffect(() => {
+    async function fetchData() {
+      // Fetch data
+      const response = await axios.get(`http://localhost:8080/api/estudiantes/EstudiantesAsocidados/${usuario}`);
+      const resultsEstudiantes = []
+      // Store results in the results array
+      response.data.forEach((value) => {
+        resultsEstudiantes.push({
+          value: value.cedula,
+          label: `${value.nombre} ${value.apellido} (${value.cedula})`,
+        });
+      });
+      // Update the options state
+      setEstudiantes([ 
+        ...resultsEstudiantes
+      ])
+    }
+
+    // Trigger the fetch
+    fetchData();
+  }, []);
 
 
   useEffect(() => {
@@ -42,35 +67,23 @@ const Calificacion = (props) => {
       const resultsAnios = []
       const resultsPeriodo= []
 
-      let contador = 0;
-      let contador2 = 0;
+      // let contador = 0;
+      // let contador2 = 0;
 
 
       response.data.forEach((val) => {
-        resultsAnios.forEach((dup) => {
-        contador2 = 0;
-          if (val.anio === dup.anio) {
-            contador2+=1;
-          }
-        })
-        if (contador2 === 0)
         resultsAnios.push({
-          anio: val.anio,
+          anio: val.anio.toString(),
+          estudiante: val.estudiante,
           label: `${val.anio}`,
           });
         });
 
         response.data.forEach((val) => {
-          resultsPeriodo.forEach((dup) => {
-            contador = 0;
-            if (val.trimestre === dup.trimestre) {
-              contador+=1;
-            }
-          })
-          if (contador === 0)
           resultsPeriodo.push({
             trimestre: val.trimestre,
-            anio: val.anio,
+            anio: val.anio.toString(),
+            estudiante: val.estudiante,
             label: `${val.trimestre}`,
           })
         });
@@ -112,7 +125,7 @@ const Calificacion = (props) => {
               examen2: val.examen2,
               asistencia: val.asistencia,
               total: val.total,
-              anio: val.anio,
+              anio: val.anio.toString(),
               trimestre: val.trimestre,
               observaciones: val.observaciones,
             });
@@ -135,6 +148,7 @@ const Calificacion = (props) => {
 
   const [data, setData] = React.useState(calificaciones);
 
+
   const handlePeriodo = (id) => {
     const dt = calificaciones.filter(x => x.anio === id.anio);
     const td = dt.filter(x => x.trimestre === id.trimestre);
@@ -143,9 +157,17 @@ const Calificacion = (props) => {
 
   const handleAnio= (id) => {
     const dt = periodos.filter(x => x.anio=== id.anio);
-    setTrimestre(dt);
-    handlePeriodo(id);
+    const td = dt.filter(x => x.estudiante === id.estudiante);
+    setTrimestre(td);
+    // handlePeriodo(id);
    
+  }
+
+  const handleEstudiante = (id) => {
+    const dt = anios.filter(x => x.estudiante === id.value);
+
+    setAnios(dt);
+    // handleAnio(id);
   }
 
   
@@ -261,6 +283,23 @@ const Calificacion = (props) => {
       </div>
 
       <Row className="row-cols-1 row-cols-lg-5 g-2 mb-5">
+        <Col>
+          <Card className="h-100">
+            <Card.Body className="mb-5">
+              <p className="text-primary heading mb-8">Estudiante</p>
+              <div className="d-flex flex-column flex-md-row flex-lg-column align-items-center mb-n5 justify-content-md-between justify-content-center text-center text-md-start text-lg-center">
+                <Col xs="12" lg="12">
+                  <Select classNamePrefix="react-select" 
+                    options={estudiantes} 
+                    value={estudiante} 
+                    onChange={handleEstudiante} 
+                    placeholder="Seleccione" 
+                  />
+                </Col>          
+              </div>
+            </Card.Body>
+          </Card>
+        </Col>
         <Col>
           <Card className="h-100">
             <Card.Body className="mb-5">

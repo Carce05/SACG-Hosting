@@ -2,6 +2,8 @@ const { response } = require('express');
 
 const bcryptjs = require('bcryptjs')
 
+const bitacora = require("../controllers/bitacora");
+
 const Calificacion = require('../models/calificacion')
 
 //Get all Method
@@ -12,6 +14,7 @@ const calificacionesGet = async (req, res) => {
     }
     catch(error){
         res.status(500).json({message: error.message})
+        bitacora.log('error', "Fallo en la busqueda de la calificación del estudiante");
     }
 }
 
@@ -53,6 +56,7 @@ const calificacionesPut = async(req, res) => {
         })
     } catch (err) {
         res.status(500).send(err);
+        bitacora.log('error', "Fallo en la actualización de calificación del estudiante");
     }
 }
 
@@ -80,6 +84,7 @@ const buscarCalificacion = async (req, res) => {
     }
     catch(error){
         res.status(500).json({message: error.message})
+        bitacora.log('error', "Fallo en la busqueda de la calificación del estudiante");
     }
 }
 

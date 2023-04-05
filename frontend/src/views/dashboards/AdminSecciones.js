@@ -16,6 +16,7 @@ import ControlsPageSize from 'views/interface/plugins/datatables/EditableRows/co
 import ControlsAdd from 'views/interface/plugins/datatables/EditableRows/components/ControlsAdd';
 import ControlsEdit from 'views/interface/plugins/datatables/EditableRows/components/ControlsEdit';
 import ControlsDelete from 'views/interface/plugins/datatables/EditableRows/components/ControlsDelete';
+import ControlsCalificacion from 'views/interface/plugins/datatables/EditableRows/components/ControlsCalificacion';
 import ControlsSearch from 'views/interface/plugins/datatables/EditableRows/components/ControlsSearch';
 import ModalCalificacion from 'views/interface/plugins/datatables/EditableRows/components/ModalCalificacion';
 import TablePagination from 'views/interface/plugins/datatables/EditableRows/components/TablePagination';
@@ -126,37 +127,39 @@ const AdminSecciones = (props) => {
   
   
 
-useEffect(() => {
-  async function fetchData() {
-    // Fetch data
-    const response = await axios.get("http://localhost:8080/api/calificaciones/");
-    const resultsCalificaciones = []
-    // Store results in the results array
-
-    /* eslint no-underscore-dangle: 0 */
-    response.data.forEach((val) => {
-      resultsCalificaciones.push({
-        id: val._id,
-        estudiante: val.estudiante,
-        materia: val.materia,
-        cotidiano: val.cotidiano,
-        tarea: val.tarea,
-        examen1: val.examen1,
-        examen2: val.examen2,
-        proyecto: val.proyecto,
-        asistencia: val.asistencia,
-        total: val.total,
-        observaciones: val.observaciones,
+  useEffect(() => {
+    async function fetchData() {
+      // Fetch data
+      const response = await axios.get('http://localhost:8080/api/calificaciones');
+      const resultsCalificaciones = []
+      // Store results in the results array
+  
+      /* eslint no-underscore-dangle: 0 */
+      response.data.forEach((val) => {
+        resultsCalificaciones.push({
+          _id: val._id,
+          estudiante: val.estudiante,
+          materia: val.materia,
+          cotidiano: val.cotidiano,
+          tarea: val.tarea,
+          examen1: val.examen1,
+          examen2: val.examen2,
+          proyecto: val.proyecto,
+          asistencia: val.asistencia,
+          total: val.total,
+          observaciones: val.observaciones,
+          anio: val.anio,
+          trimestre: val.trimestre,
+        });
       });
-    });
-    setCalificaciones([ 
-      ...resultsCalificaciones
-    ])
-  }
-
-  // Trigger the fetch
-  fetchData();
-}, []);
+      setCalificaciones([ 
+        ...resultsCalificaciones
+      ])
+    }
+  
+        // Trigger the fetch
+        fetchData();
+  }, []);
   
   useEffect(() => {
     async function fetchData() {
@@ -181,11 +184,20 @@ useEffect(() => {
     fetchData();
   }, []);
 
+  const insertarCalificaciones = () => {
+    estudiantes.forEach((val) => {
+      calificaciones.forEach((cali) => {
+        if (val.cedula === cali.estudiante && val.materia === cali.materia) {
+          val.total = cali.total;
+        }
+      })
+    });
+  }
+
   const [data, setData] = React.useState(estudiantes);
 
-
-
   const handleSeccion = (id) => {
+    insertarCalificaciones();
     const dt = estudiantes.filter(x => x.seccion === id.seccion);
     setData(dt);
   }
@@ -194,7 +206,7 @@ useEffect(() => {
     const dt = secciones.filter(x => x.docente === id.docente);
     const td = dt.filter(x => x.materia === id.materia);
     setSeccion(td);
-    handleSeccion(id);
+    // handleSeccion(id);
    
   }
 
@@ -204,7 +216,7 @@ useEffect(() => {
     });
     const dt = docentes.filter(x => x.materia === id.materia);
     setDocentesFiltrados(dt);
-    handleDocente(id);
+    // handleDocente(id);
     
   }
 
@@ -212,8 +224,8 @@ useEffect(() => {
 
 
 
-  const title = 'Mis Secciones';
-  const description = 'Elearning Portal School Dashboard Page';
+  const title = 'Secciones Administrador';
+  const description = 'Calificaciones Administrador';
 
   const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
 
@@ -242,13 +254,14 @@ useEffect(() => {
       { Header: 'Apellido', accessor: 'apellido', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       { Header: 'Materia', accessor: 'materia', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       { Header: 'Seccion', accessor: 'seccion', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
+      { Header: 'Total', accessor: 'total', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       {
         Header: '',
         id: 'action',
         headerClassName: 'empty w-10',
         Cell: ({ row }) => {
           const { checked, onChange } = row.getToggleRowSelectedProps();
-          return <Button onClick={() => setIsOpenAddEditModal(true)} variant="outline-primary" >Nota</Button>;
+          return <Form.Check className="form-check float-end mt-1" type="checkbox" checked={checked} onChange={onChange}/>;
         },
       },
     ];
@@ -359,7 +372,12 @@ useEffect(() => {
                   <ControlsSearch tableInstance={tableInstance} />
                 </div>
               </Col>
-              
+              <Col sm="12" md="7" lg="9" xxl="10" className="text-end">
+                <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
+                  <ControlsCalificacion tableInstance={tableInstance} />
+                </div>
+              </Col>
+
             </Row>
             <Row>
               <Col xs="12">
@@ -370,7 +388,12 @@ useEffect(() => {
               </Col>
             </Row>
           </div>
-          <ModalCalificacion tableInstance={tableInstance} calificaciones={calificaciones}/>
+          <ModalCalificacion onHide={insertarCalificaciones}
+           tableInstance={tableInstance} 
+           calificaciones={calificaciones}
+           setCalificaciones={setCalificaciones}
+           estudiantes={estudiantes}
+           setEstudiantes={setEstudiantes}/>
         </Col>
       </Row>
     </>

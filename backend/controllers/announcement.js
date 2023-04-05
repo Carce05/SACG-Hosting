@@ -1,5 +1,6 @@
 const { response } = require('express');
 const Announcement = require('../models/announcement')
+const bitacora = require("../controllers/bitacora");
 
 const announcementPost = async (req, res = response) => {
     try {
@@ -35,7 +36,10 @@ const announcementDelete = async (req, res) => {
         });
     }
     catch (err) {
+        bitacora.log('error', "Fallo al eliminar el aviso")
         res.status(500).send(err);
+        
+        
     }
 }
 module.exports = {
