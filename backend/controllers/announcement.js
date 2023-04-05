@@ -1,6 +1,5 @@
 const { response } = require('express');
 const Announcement = require('../models/announcement')
-const bitacora = require("../controllers/bitacora");
 const bitacoraAccion = require("./bitacoraAccion");
 
 const announcementPost = async (req, res = response) => {
