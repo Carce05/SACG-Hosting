@@ -1,9 +1,11 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
-const { matriculaPost, matriculaGet } = require('../controllers/matricula');
+const { matriculaPost, matriculaGet, matriculaModificarEstado } = require('../controllers/matricula');
 const router = Router();
 
 router.get('/', matriculaGet )
+
+router.put('/matriculaModificarEstado/:matriculaEstudianteId', matriculaModificarEstado )
 
 // router.put('/:userId', usuariosPut)
 

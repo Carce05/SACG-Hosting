@@ -26,7 +26,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const AdminMatricula = () => {
   const [data, setData] = useState([]);
-  const title = 'Matricula';
+  const title = 'Matriculas';
   const description = 'Administración de Matricula';
   const dispatch = useDispatch();
   const { matriculas, matriculasLoading, onShowAlert } = useSelector((state) => state.matricula);
@@ -34,7 +34,7 @@ const AdminMatricula = () => {
   useEffect(() => {
     if(matriculas.length > 0){
       if (currentUser.role !== 'Administrador'){
-        const matriculasPerUser = matriculas.filter(e => e.encargadoId === currentUser.id );
+        const matriculasPerUser = matriculas.filter(e => e.encargadoId === currentUser.personalId );
         setData(matriculasPerUser);
       } else {
         setData(matriculas);
@@ -48,18 +48,18 @@ const AdminMatricula = () => {
     }
   }, [matriculas, onShowAlert]);
 
-
 const onRefrescar = () => {
     dispatch(obtenerMatriculas());
 }
   const columns = React.useMemo(() => {
     return [
+      { Header: 'Cédula Encargado', accessor: 'encargadoId', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       { Header: 'Nombre Completo', accessor: 'nombreCompleto', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       {
         Header: 'Nacionalidad',
         accessor: 'nacionalidad',
         sortable: true,
-        headerClassName: 'text-muted text-small text-uppercase w-30',
+        headerClassName: 'text-muted text-small text-uppercase w-10',
         Cell: ({ cell }) => {
           return (
             <a
@@ -74,9 +74,29 @@ const onRefrescar = () => {
           );
         },
       },    
-            { Header: 'Fecha Nacimiento', accessor: 'fechaNacimiento', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-20' },
+            { Header: 'Fecha Nacimiento', accessor: 'fechaNacimiento', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       { Header: 'Telefono', accessor: 'telefono', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       { Header: 'Centro Educativo Procedencia', accessor: 'centroEducativoProcedencia', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-20' },
+      { Header: 'Estado Matricula', accessor: 'estadoMatriculaAdmin', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10',
+      Cell: ({ cell }) => {
+        if (cell.value === "Pendiente") {
+          return <p className='matricula-pendiente matricula-estado'>Pendiente</p>
+        }
+        if (cell.value === "Rechazado") {
+          return <p className='matricula-rechazada matricula-estado'>Rechazado</p>
+        }
+        return <p className='matricula-estado'>Aprobado</p>
+      } },
+      { Header: 'Sección', accessor: 'seccionMatriculaAdmin', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-20',
+        Cell: ({ cell }) => {
+          if (!cell.value) {
+            return <p>Pendiente Asignar</p>
+          }
+          return <p>{ cell.value }</p>
+        }
+      },
+
+      
       {
         Header: '',
         id: 'action',
@@ -155,12 +175,6 @@ const onRefrescar = () => {
           </div>
           <ModalAddEditMatricula tableInstance={tableInstance} />
         </Col>
-        { 
-          onShowAlert && (
-            toast('¡Matricula agregada con éxito!')
-          )
-        }
-
       </Row>
     </>
   );

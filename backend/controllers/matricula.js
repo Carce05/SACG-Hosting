@@ -22,10 +22,28 @@ const matriculaPost = async (req, res = response) => {
     })
 }
 
+const matriculaModificarEstado = async (req, res) => {
+    try {
+        await Matricula.updateOne({ _id: req.params.matriculaEstudianteId }, {
+            $set: {
+                'estadoMatriculaAdmin': req.body.estadoMatriculaAdmin,
+                'seccionMatriculaAdmin': req.body.seccion
+            }
+        });
+
+        res.status(200).send({
+            msg: 'TODO CORRECTO',
+        })
+    } catch (err) {
+        res.status(500).send(err);
+    }
+}
+
 
 
 
 module.exports = {
     matriculaPost,
-    matriculaGet
+    matriculaGet,
+    matriculaModificarEstado
 }

@@ -6,16 +6,19 @@ import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import { NavLink, Redirect, useHistory } from 'react-router-dom';
 import axios from "axios";
 import { useDispatch, useSelector } from 'react-redux';
-import { agregarMatricula, obtenerMatriculas, onShowAlert } from 'store/slices/matricula/matriculaThunk';
+import { agregarMatricula, matriculaModificarEstado, obtenerMatriculas, onShowAlert } from 'store/slices/matricula/matriculaThunk';
 import { setMatriculasLoaded, setMatriculasLoading } from 'store/slices/matricula/matriculaSlice';
+import { toast } from 'react-toastify';
+import paises from './data/listaPais.json';
 
 const ModalAddEditMatricula = ({ tableInstance }) => {
 
   const { selectedFlatRows, data, setData, setIsOpenAddEditModal, isOpenAddEditModal } = tableInstance;
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.auth);
+  
   const initialValues = {
-    encargadoId : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoId : currentUser.id,
+    encargadoId : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoId : currentUser.personalId,
     encargadoLegal : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoLegal : currentUser.name,
     nombreCompleto : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.nombreCompleto : '',
     fechaNacimiento : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.fechaNacimiento : '',
@@ -32,6 +35,8 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
     tieneAdecuancion : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.tieneAdecuancion : '',
     cualAdecuancion : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.cualAdecuancion : '',
     razonesEntrar : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.razonesEntrar : '',
+    estadoMatriculaAdmin : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.estadoMatriculaAdmin : '',
+    seccionMatriculaAdmin : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.seccionMatriculaAdmin : '',
   };
   const [selectedItem, setSelectedItem] = useState(initialValues);
 
@@ -56,18 +61,42 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
   }
   
   const onSubmit = async (values) => {
-    dispatch(setMatriculasLoading())
-    dispatch(agregarMatricula(values));
+    if(selectedFlatRows.length !== 1) {
+      dispatch(setMatriculasLoading())
+      dispatch(agregarMatricula(values));
+      dispatch(onShowAlert());
+      toast('¡Matricula agregada con éxito!')
+    } else {
+      const {_id: id} = selectedFlatRows[0].original;
+      const matriculaEstado  = {
+        "seccionAsiganada": "8-2",
+        "estadoMatriculaAdmin": values.estadoMatriculaAdmin,
+        "apellido": "Guillén",
+        "cedula": "1-1828-0064",
+        "correo_encargado": "arcecris123@gmail.com",
+        "nombre": "Erick",
+        "seccion": values.estadoMatriculaAdmin === "Aprobado" ? values.seccionMatriculaAdmin : ""
+      }
+      dispatch(matriculaModificarEstado(id, matriculaEstado));
+      toast('¡Estado de la matricula, actualizado!')
+    }
+    dispatch(setMatriculasLoading());
     dispatch(onShowAlert());
-    setIsOpenAddEditModal(false)
+    setIsOpenAddEditModal(false);
     cancelRegister();
   }
+
+
+const meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+const fecha = new Date();
+const fechaFormateada = `${fecha.getDate()} de ${meses[fecha.getMonth()]} del ${fecha.getFullYear()}`;
+
 
   const formik = useFormik({ initialValues, validationSchema, onSubmit });
 
   return (
 
-    <Modal className="full-screen modal-right fade" show={isOpenAddEditModal} onHide={() => setIsOpenAddEditModal(false)}>
+    <Modal className="large-xl modal-right fade" show={isOpenAddEditModal} onHide={() => setIsOpenAddEditModal(false)}>
       <Modal.Header>
         <Modal.Title>{selectedFlatRows.length === 1 ? 'Ver Matricula' : 'Agregar Matricula'}</Modal.Title>
       </Modal.Header>
@@ -84,10 +113,10 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
 
             <form id="registerForm" className="tooltip-end-bottom" onSubmit={handleSubmit}>
               <Form.Group controlId="name" className='form-input-hori'>
-                <p>Encargado Legal: { values.encargadoLegal } | ID: {  values.encargadoId }</p>
+                <p><b>Encargado Legal:</b> { values.encargadoLegal } | <b>Cédula de identidad:</b> {  values.encargadoId }</p>
               </Form.Group>
-              <Form.Group controlId="name" className='form-input-hori'>
-                <p>1. Nombre completo: </p>
+              <Form.Group controlId="name" className='form-input-hori label-arriba'>
+                <p>1. Nombre completo </p>
                 <div className="mb-3 form-group tooltip-end-top invalid-tooltip-matricula-container">
                   <Form.Control
                     type="text"
@@ -102,27 +131,32 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                 </div>
               </Form.Group>
               <div className='form-input-hori'>
-                <p>2. Fecha de Nacimiento: </p>
-                <Form.Group controlId="name">
-                  <div className="mb-3 form-group tooltip-end-top">
-                    <Form.Control
-                      type="date"
-                      name="fechaNacimiento"
-                      value={values.fechaNacimiento}
-                      onChange={handleChange}
-                       disabled={ selectedFlatRows.length === 1 }
-                    />
-                  {errors.fechaNacimiento && touched.fechaNacimiento && (
-                    <div className="invalid-tooltip-matricula">{errors.fechaNacimiento}</div>
-                  )}
-                  </div>
-                </Form.Group>
-                <p>Edad Cumplida: al 15 de febrero del 2023:  </p>
+                <div className='form-input-hori label-arriba mr-40px'>
+                  <p>2. Fecha de Nacimiento </p>
+                  <Form.Group controlId="name">
+                    <div className="mb-3 form-group tooltip-end-top">
+                      <Form.Control
+                        type="date"
+                        name="fechaNacimiento"
+                        value={values.fechaNacimiento}
+                        onChange={handleChange}
+                        disabled={ selectedFlatRows.length === 1 }
+                      />
+                    {errors.fechaNacimiento && touched.fechaNacimiento && (
+                      <div className="invalid-tooltip-matricula">{errors.fechaNacimiento}</div>
+                    )}
+                    </div>
+                  </Form.Group>
+                </div>
+                <div className='form-input-hori label-arriba'>
+                <p>Edad Cumplida al <b>{ fechaFormateada }</b></p>
+                <div className='form-input-hori'>
                 <Form.Group controlId="name">
                   <div className="mb-3 form-group tooltip-end-top">
                     <Form.Control
                       type="text"
                       name="edadCumplidaAnios"
+                      placeholder='Años'
                       value={values.edadCumplidaAnios}
                       onChange={handleChange}
                        disabled={ selectedFlatRows.length === 1 }
@@ -132,13 +166,12 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                   )}
                   </div>
                 </Form.Group>
-                <p>(años)</p>
                 <Form.Group controlId="name">
                 <div className="mb-3 form-group tooltip-end-top">
                   <Form.Control
                     type="text"
                     name="edadCumplidaMeses"
-
+                    placeholder='Meses'
                     value={values.edadCumplidaMeses}
                     onChange={handleChange}
                     disabled={ selectedFlatRows.length === 1 }
@@ -148,25 +181,35 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                   )}
                 </div>
               </Form.Group>
-              <p>(meses)</p>
+              </div>
+              </div>
               </div>
               <div className='form-input-hori'>
-                <p>3. Nacionalidad: </p>
+              <div className='form-input-hori label-arriba mr-40px'>
+                <p>3. Nacionalidad </p>
                 <Form.Group controlId="name">
                   <div className="mb-3 form-group tooltip-end-top">
-                    <Form.Control
-                      type="text"
+                    <Form.Select 
                       name="nacionalidad"
-                      value={values.nacionalidad}
+                      defaultValue={values.nacionalidad}
                       onChange={handleChange}
                        disabled={ selectedFlatRows.length === 1 }
-                    />
+                    >
+                      <option>Seleccionar</option>
+                      {
+                        paises.map(({ nombrePais  }) => (
+                          <option key={nombrePais} value={ nombrePais }>{ nombrePais }</option>
+                        ))
+                      }
+                    </Form.Select>
                   {errors.nacionalidad && touched.nacionalidad && (
                     <div className="invalid-tooltip-matricula">{errors.nacionalidad}</div>
                   )}
                   </div>
                 </Form.Group>
-                <p>Telefono: </p>
+                </div>
+                <div className='form-input-hori label-arriba'>
+                <p>Telefono </p>
                 <Form.Group controlId="name">
                   <div className="mb-3 form-group tooltip-end-top">
                     <Form.Control
@@ -181,12 +224,13 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                   )}
                   </div>
                 </Form.Group>
+                </div>
               </div>
 
 
 
-              <Form.Group controlId="name" className='form-input-hori'>
-              <p>4. Domicilio: </p>
+              <Form.Group controlId="name" className='form-input-hori label-arriba'>
+              <p>4. Domicilio </p>
                 <div className="mb-3 form-group tooltip-end-top">
                   <Form.Control
                     type="text"
@@ -201,7 +245,8 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                 </div>
               </Form.Group>
               <div className='form-input-hori'>
-              <p>5. Centro Educativo de procendencia: </p>
+              <div className='form-input-hori label-arriba mr-40px'>
+              <p>5. Centro Educativo de procendencia </p>
                 <Form.Group controlId="name">
                   <div className="mb-3 form-group tooltip-end-top">
                     <Form.Control
@@ -216,7 +261,9 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                   )}
                   </div>
                 </Form.Group>
-                <p>Nivel Anterior: </p>
+                </div>
+                <div className='form-input-hori label-arriba'>
+                <p>Nivel Anterior </p>
                 <Form.Group controlId="name">
                 
                   <div className="mb-3 form-group tooltip-end-top">
@@ -232,10 +279,11 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                   )}
                   </div>
                 </Form.Group>
+                </div>
               </div>
 
-              <Form.Group controlId="name" className='form-input-hori'>
-              <p>6. Matricularé en el nivel de 7: </p>
+              <Form.Group controlId="name" className='form-input-hori label-arriba'>
+              <p>6. Matricularé en el nivel de 7 </p>
                 <div className="mb-3 form-group tooltip-end-top">
                   <Form.Control
                     type="text"
@@ -250,9 +298,10 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                 </div>
               </Form.Group>
               <div className='form-input-hori'>
-              <p>7. La persona estudiante Convive Con: </p>
+              <div className='form-input-hori label-arriba'>
+              <p>7. La persona estudiante Convive Con </p>
               <Form.Group controlId="name">
-                <div className="mb-3 form-group tooltip-end-top">
+              <div className="mb-3 form-group tooltip-end-top form-input-hori">
                     <Form.Select 
                       name="estudianteConviveCon"
                       defaultValue={values.estudianteConviveCon}
@@ -268,13 +317,9 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                       <option value="Abuelos">Abuelos</option>
                       <option value="Otro">Otro</option>
                     </Form.Select>
-                    {errors.estudianteConviveCon && touched.estudianteConviveCon && (
-                    <div className="invalid-tooltip-matricula">{errors.estudianteConviveCon}</div>
-                  )}
-                </div>
-              </Form.Group>
-              <Form.Group controlId="name" className={(values.estudianteConviveCon === 'Otro') ? 'show-element' : 'hide-element' }>
-                <div className="mb-3 form-group tooltip-end-top">
+                    <Form.Group controlId="name" className={(values.estudianteConviveCon === 'Otro') ? 'show-element form-input-hori' : 'hide-element' }>
+              <p className='mb-0'>Cual: </p>
+                <div className="form-group tooltip-end-top">
                   <Form.Control
                     type="text"
                     name="estudianteConviveConOtros"
@@ -287,11 +332,19 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                   )}
                 </div>
               </Form.Group>
+                    {errors.estudianteConviveCon && touched.estudianteConviveCon && (
+                    <div className="invalid-tooltip-matricula">{errors.estudianteConviveCon}</div>
+                  )}
+                </div>
+              </Form.Group>
+              </div>
+
               </div>
               <div className='form-input-hori'>
-              <p>8. Posee algun tipo de adecuación: </p>
+              <div className='form-input-hori label-arriba'>
+              <p>8. Posee algun tipo de adecuación </p>
               <Form.Group controlId="name">
-                <div className="mb-3 form-group tooltip-end-top">
+                <div className="mb-3 form-group tooltip-end-top form-input-hori">
                   <Form.Select 
                        name="tieneAdecuancion"
                       defaultValue={values.tieneAdecuancion}
@@ -302,30 +355,32 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                       <option value="true">Si</option>
                       <option value="false">No</option>
                     </Form.Select>
+                    <div className={(values.tieneAdecuancion === 'true') ? 'form-input-hori show-element' : 'form-input-hori hide-element' }>
+                      <div className='form-input-hori'>
+                        <p>Cual: </p>
+                        <Form.Group controlId="name">
+                          <div className="form-group tooltip-end-top">
+                            <Form.Control
+                              type="text"
+                              name="cualAdecuancion"
+                              value={values.cualAdecuancion}
+                              onChange={handleChange}
+                              disabled={ selectedFlatRows.length === 1 }
+                            />
+                            {errors.cualAdecuancion && touched.cualAdecuancion && (
+                            <div className="invalid-tooltip-matricula">{errors.cualAdecuancion}</div>
+                          )}
+                          </div>
+                        </Form.Group>
+                      </div>
+                    </div>
 
                     {errors.tieneAdecuancion && touched.tieneAdecuancion && (
                     <div className="invalid-tooltip-matricula">{errors.tieneAdecuancion}</div>
                   )}
                 </div>
               </Form.Group>
-              <div className={(values.tieneAdecuancion === 'true') ? 'form-input-hori show-element' : 'form-input-hori hide-element' }>
-                <p>Cual: </p>
-                <Form.Group controlId="name">
-                  <div className="mb-3 form-group tooltip-end-top">
-                    <Form.Control
-                      type="text"
-                      name="cualAdecuancion"
-                      value={values.cualAdecuancion}
-                      onChange={handleChange}
-                       disabled={ selectedFlatRows.length === 1 }
-                    />
-                    {errors.cualAdecuancion && touched.cualAdecuancion && (
-                    <div className="invalid-tooltip-matricula">{errors.cualAdecuancion}</div>
-                  )}
-                  </div>
-                </Form.Group>
-              </div>
-
+               </div>
               </div>
 
               <Form.Group controlId="name">
@@ -344,8 +399,54 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                   )}
                 </div>
               </Form.Group>
-              <Button variant="primary" className={(selectedFlatRows.length) === 1 ? 'hide-element' : ''} type="submit">{selectedFlatRows.length === 1 ? 'Actualizar' : 'Agregar Matricula'}
-              </Button>
+                      {
+                        (selectedFlatRows.length === 1 && currentUser.role === 'Administrador') && (
+                          <>   
+                           <Modal.Title>Modificar estado de la matricula</Modal.Title>
+                          
+                          <hr/>
+                          <div className='form-input-hori label-arriba'>
+                            <p>Estado Actual de la matricula</p>
+                            <Form.Group controlId="name">
+                              <div className="mb-3 form-group tooltip-end-top form-input-hori">
+                                <Form.Select 
+                                  name="estadoMatriculaAdmin"
+                                  defaultValue={values.estadoMatriculaAdmin}
+                                  onChange={handleChange}
+                                  >
+                                    <option value="Pendiente">Pendiente</option>
+                                    <option value="Aprobado">Aprobado</option>
+                                    <option value="Rechazado">Rechazado</option>
+                                  </Form.Select>
+                                  <div className={(values.estadoMatriculaAdmin === 'Aprobado') ? 'form-input-hori show-element' : 'form-input-hori hide-element' }>
+                                    <div className='form-input-hori'>
+                                      <p>Sección: </p>
+                                      <Form.Group controlId="name">
+                                        <div className="mb-3 form-group tooltip-end-top">
+                                          <Form.Control
+                                            type="text"
+                                            name="seccionMatriculaAdmin"
+                                            value={values.seccionMatriculaAdmin}
+                                            onChange={handleChange}
+                                          />
+                                          {errors.seccionMatriculaAdmin && touched.seccionMatriculaAdmin && ( <div className="invalid-tooltip-matricula">{errors.cualAdecuancion}</div> )}
+                                        </div>
+                                      </Form.Group>
+                                    </div>
+                                  </div>
+                                  {errors.estadoMatriculaAdmin && touched.estadoMatriculaAdmin && (<div className="invalid-tooltip-matricula">{errors.estadoMatriculaAdmin}</div> )}
+                              </div>
+                            </Form.Group>
+                          </div>
+                        </>
+
+
+
+                        )
+                      }
+
+              <Button variant="primary" className={(selectedFlatRows.length) === 1 ? 'hide-element' : ''} type="submit">{selectedFlatRows.length === 1 ? 'Actualizar' : 'Agregar Matricula'}</Button>
+              <Button variant="primary" className={(selectedFlatRows.length) !== 1 ? 'hide-element' : ''} type="submit">Modificar estado</Button>
               <Button variant="outline-primary" onClick={() => setIsOpenAddEditModal(false) || cancelRegister()}>
                 Cerrar
               </Button>

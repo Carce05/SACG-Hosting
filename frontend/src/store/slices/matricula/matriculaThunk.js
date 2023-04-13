@@ -7,7 +7,10 @@ const agregarMatricula = (matricula) => {
     const { data } = await mainEndpoint.post(
       `matricula`,
       {
-        ...matricula
+        ...matricula,
+        estadoMatriculaAdmin: "Pendiente",
+        seccionMatriculaAdmin: "",
+        fechaCreacionMatricula: new Date().toISOString().slice(0, 10)
       },
     );
     dispatch(setMatriculasLoaded())
@@ -36,8 +39,22 @@ const onShowAlert = () => {
   }
 }  
 
+const matriculaModificarEstado = (id, matriculaEstado) => {
+  return async (dispatch, getState) => {
+    console.log('first gd')
+    const { data } = await mainEndpoint.put(
+      `/matricula/matriculaModificarEstado/${ id }`,
+      {
+        ...matriculaEstado
+      }
+    );
+    console.log(data)
+  }
+}
+
 export {
     obtenerMatriculas,
     agregarMatricula,
-    onShowAlert
+    onShowAlert,
+    matriculaModificarEstado
 };
