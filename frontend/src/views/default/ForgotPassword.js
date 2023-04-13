@@ -8,6 +8,8 @@ import React,  { useState } from 'react';
 import LayoutFullpage from 'layout/LayoutFullpage';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import HtmlHead from 'components/html-head/HtmlHead';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 // const bitacora = require ('...../backend/controllers/bitacora');
 
 const ForgotPassword = () => {
@@ -33,6 +35,7 @@ const ForgotPassword = () => {
 			const url = `http://localhost:8080/api/reset-password`;
 			const { data } = await axios.post(url, { email });
 			setMsg(data.message);
+      toast('Correo de Restablecimiento Enviado!');
 			setError("");
 		} catch (ec) {
 			if (

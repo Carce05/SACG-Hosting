@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { useFormik, Formik } from 'formik';
 import * as Yup from 'yup';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ModalAddAnnouncement = ({ showModal, setShowModal, setData, setShowSuccessAlert, setShowDangerAlert }) => {
   const initialValues = {
@@ -29,6 +31,7 @@ const ModalAddAnnouncement = ({ showModal, setShowModal, setData, setShowSuccess
         .catch((err) => {
           console.error(err);
         });
+        toast('¡Aviso Agregado con Éxito!');
       // setShowModal(false);
     } catch (e) {
       if (e.response && e.response.status === 400) {

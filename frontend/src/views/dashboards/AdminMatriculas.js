@@ -21,6 +21,8 @@ import ModalAddEditMatricula from 'views/interface/plugins/datatables/EditableRo
 import TablePagination from 'views/interface/plugins/datatables/EditableRows/components/TablePagination';
 import { useDispatch, useSelector } from 'react-redux';
 import { obtenerMatriculas } from 'store/slices/matricula/matriculaThunk';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AdminMatricula = () => {
   const [data, setData] = useState([]);
@@ -136,9 +138,6 @@ const onRefrescar = () => {
                 <Button variant="outline-primary" className={ (currentUser.role === 'Administrador') ? 'show-element' : 'hide-element'} onClick={ onRefrescar }>
                     Refrescar
                 </Button>
-                <div className={ (currentUser.role === 'Administrador') ? 'show-element d-inline-block' : 'hide-element'}>
-                  <ControlsPageSize tableInstance={tableInstance} />
-                </div>
               </Col>
              
               <div className={ (currentUser.role !== 'Administrador') ? 'show-element d-inline-block me-0 me-sm-3 float-start float-md-none' : 'hide-element'}>
@@ -158,9 +157,7 @@ const onRefrescar = () => {
         </Col>
         { 
           onShowAlert && (
-            <Alert variant="success">
-              Matricula agregada con exito
-            </Alert>
+            toast('¡Matricula agregada con éxito!')
           )
         }
 

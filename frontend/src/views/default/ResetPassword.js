@@ -7,6 +7,8 @@ import { useFormik } from 'formik';
 import LayoutFullpage from 'layout/LayoutFullpage';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import HtmlHead from 'components/html-head/HtmlHead';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const ResetPassword = () => {
@@ -68,6 +70,7 @@ const ResetPassword = () => {
 			) {
 				setError(ec.response.data.message);
 				setMsg("Error al reestablecer contraseña");
+        toast(msg, { className: 'danger' });
 			}
 		}
 	};
