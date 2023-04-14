@@ -40,16 +40,33 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
   };
   const [selectedItem, setSelectedItem] = useState(initialValues);
 
+  const telephoneRegExp = /^[0-9]{8}$/;
+
   const validationSchema = Yup.object().shape({
-    nombreCompleto: Yup.string().required('Nombre completo es requerido'),
+    nombreCompleto: Yup.string()
+    .required('Nombre Completo es requerido')
+    .min(2, 'Nombre debe tener al menos 2 caracteres')
+    .max(50, 'Nombre no debe tener mas de 50 caracteres')
+    .matches(/^[a-zA-Z ]+$/, 'Nombre solo debe tener palabras y espacios'),
     fechaNacimiento: Yup.string().required('Fecha Nacimiento es requerida'),
-    edadCumplidaAnios : Yup.string().required('Años son requeridos'),
-    edadCumplidaMeses : Yup.string().required('Meses son requeridos'),
+    edadCumplidaAnios: Yup.number()
+    .required('Años cumplidos es requerido')
+    .min(8, 'Debe ser mayor a 8 años')
+    .max(120, 'Ingrese una edad valida'),
+    edadCumplidaMeses: Yup.number()
+    .required('Meses cumplidos es requerido')
+    .min(1, 'Ingrese un mes valido valida')
+    .max(12, 'Ingrese un mes valido valida'),
     nacionalidad : Yup.string().required('Nacionalidad es requerida'),
-    telefono : Yup.string().required('Telefono es requerido'),
+    telefono: Yup.string()
+    .matches(telephoneRegExp, 'Teléfono no es válido')
+    .required('Teléfono no es requerido'),
     domicilio : Yup.string().required('Domicilio es requerido'),
     centroEducativoProcedencia : Yup.string().required('Centro Educativo Procedencia es requerido'),
-    nivelAnterior : Yup.string().required('Nivel Anterior es requerido'),
+    nivelAnterior: Yup.number()
+    .required('Nivel anterior es requerido')
+    .min(1, 'Ingrese un Nivel valido valida')
+    .max(12, 'Ingrese un Nivel valido valida'),
     matricularNivelDe : Yup.string().required('Matricula en nivel requerido'),
     estudianteConviveCon : Yup.string().required('Convive con es requerido'),
     tieneAdecuancion : Yup.string().required('Tiene adecuación es requerido'),

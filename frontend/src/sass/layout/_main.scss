@@ -169,3 +169,19 @@ html[data-placement='vertical'] {
     background-color: #ff0000;
   }
 }
+
+.mostrar-filtro-informe {
+  padding: 10px 20px;
+  border-radius: 10px;
+  margin-top: 10px;
+  border: 2px dashed  var(--primary);
+  h1 {
+    font-weight: bolder;
+    b {
+      color: var(--primary);
+    } 
+  }
+  select {
+    max-width: 200px;
+  }
+}

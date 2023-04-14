@@ -20,16 +20,39 @@ import ControlsSearch from 'views/interface/plugins/datatables/EditableRows/comp
 import ModalAddEditMatricula from 'views/interface/plugins/datatables/EditableRows/components/ModalAddEditMatricula';
 import TablePagination from 'views/interface/plugins/datatables/EditableRows/components/TablePagination';
 import { useDispatch, useSelector } from 'react-redux';
-import { obtenerMatriculas } from 'store/slices/matricula/matriculaThunk';
+import { matriculaFiltrar, obtenerMatriculas } from 'store/slices/matricula/matriculaThunk';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
+import { useForm } from 'hooks/useForm';
+import ReporteMatriculas from '../../pdf/ReporteMatriculas';
+
 
 const AdminMatricula = () => {
   const [data, setData] = useState([]);
+  const [mostrarFiltroInforme, setMostrarFiltroInforme] = useState(false);
+  const [formState, setFormState] = useState({
+    anioMostrarInforme: "no-filtrar-anio",
+    estadoMostrarInforme: "no-filtrar-estado"
+  });
+
+  
+  const onInputChange = ({ target }) => {
+    const { name, value } = target;
+    setFormState({
+      ...formState,
+      [name]: value,
+    });
+    dispatch(matriculaFiltrar({
+      ...formState,
+      [name]: value,
+    }))
+  };
+  
   const title = 'Matriculas';
   const description = 'Administración de Matricula';
   const dispatch = useDispatch();
-  const { matriculas, matriculasLoading, onShowAlert } = useSelector((state) => state.matricula);
+  const { matriculas, matriculasLoading, onShowAlert, matriculasFiltradas, cantidadMatriculasFiltradas } = useSelector((state) => state.matricula);
   const { currentUser } = useSelector((state) => state.auth);
   useEffect(() => {
     if(matriculas.length > 0){
@@ -51,6 +74,14 @@ const AdminMatricula = () => {
 const onRefrescar = () => {
     dispatch(obtenerMatriculas());
 }
+
+
+const onGenerarInforme = () => {
+  setMostrarFiltroInforme(!mostrarFiltroInforme)
+}
+
+
+
   const columns = React.useMemo(() => {
     return [
       { Header: 'Cédula Encargado', accessor: 'encargadoId', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
@@ -74,8 +105,6 @@ const onRefrescar = () => {
           );
         },
       },    
-            { Header: 'Fecha Nacimiento', accessor: 'fechaNacimiento', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
-      { Header: 'Telefono', accessor: 'telefono', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       { Header: 'Centro Educativo Procedencia', accessor: 'centroEducativoProcedencia', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-20' },
       { Header: 'Estado Matricula', accessor: 'estadoMatriculaAdmin', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10',
       Cell: ({ cell }) => {
@@ -90,9 +119,9 @@ const onRefrescar = () => {
       { Header: 'Sección', accessor: 'seccionMatriculaAdmin', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-20',
         Cell: ({ cell }) => {
           if (!cell.value) {
-            return <p>Pendiente Asignar</p>
+            return <p className='mb-0'>Pendiente Asignar</p>
           }
-          return <p>{ cell.value }</p>
+          return <p className='mb-0'>{ cell.value }</p>
         }
       },
 
@@ -164,6 +193,66 @@ const onRefrescar = () => {
                 <h3 className={ (currentUser.role !== 'Administrador') ? 'show-element d-inline-block mb-10 pb-0 mr-3' : 'hide-element'}>Tus Matriculas</h3> <ControlsVer tableInstance={tableInstance} />
               </div>
             </Row>
+            <Button variant="outline-primary" className={ (currentUser.role === 'Administrador') ? 'show-element' : 'hide-element'} onClick={ onGenerarInforme }>
+                    Mostrar Filtros Informe
+            </Button>
+
+            {
+              mostrarFiltroInforme && 
+              <div className='mostrar-filtro-informe'>
+                <h1><b>CANTIDAD MATRICULAS FILTRADAS:</b> { cantidadMatriculasFiltradas }</h1>
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                   Año a generar reporte
+                  </label>
+                  <select
+                    name="anioMostrarInforme"
+                    value={formState.anioMostrarInforme}
+                    onChange={onInputChange}
+                    className="form-select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  >
+                    <option value="no-filtrar-anio">No filtrar por año</option>
+                    <option value="2020">2020</option>
+                    <option value="2021">2021</option>
+                    <option value="2022">2022</option>
+                    <option value="2023">2023</option>
+                    <option value="2024">2024</option>
+                  </select>
+
+                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                   Estado a generar reporte
+                  </label>
+                  <select
+                    name="estadoMostrarInforme"
+                    value={formState.estadoMostrarInforme}
+                    onChange={onInputChange}
+                    className="form-select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  >
+                    <option value="no-filtrar-estado">No filtrar por estado</option>
+                    <option value="Aprobado">Aprobado</option>
+                    <option value="Pendiente">Pendiente</option>
+                    <option value="Rechazado">Rechazado</option>
+                  </select>
+
+                  <Button
+                    className='mt-3 mb-2'
+                    variant="outline-primary"
+                    disabled={ cantidadMatriculasFiltradas > 0 ? false : true }
+                  >
+                                      <PDFDownloadLink
+              document={
+                <ReporteMatriculas matriculas={ matriculasFiltradas } filtroSettings={ formState } />
+              }
+              fileName="informeMatriculas.pdf"
+            >
+              {({ blob, url, loading, error }) =>
+                loading ? " Cargando PDF..." : " Imprimir Informe Matriculas"
+              }
+        </PDFDownloadLink>
+                  </Button>
+
+
+              </div>
+            }
             <Row>
               <Col xs="12">
                 <Table className="react-table rows" tableInstance={tableInstance} />

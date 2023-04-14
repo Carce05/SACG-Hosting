@@ -1,5 +1,5 @@
 import { mainEndpoint } from "api/apiConfig";
-import { setMatriculas, setMatriculasLoaded, setMatriculasLoading, setOnHideAlert, setOnShowAlert } from "./matriculaSlice";
+import { setMatriculas, setMatriculasFiltradas, setMatriculasLoaded, setMatriculasLoading, setOnHideAlert, setOnShowAlert } from "./matriculaSlice";
 
 
 const agregarMatricula = (matricula) => {
@@ -52,9 +52,23 @@ const matriculaModificarEstado = (id, matriculaEstado) => {
   }
 }
 
+const matriculaFiltrar = ({ anioMostrarInforme, estadoMostrarInforme }) => {
+  return async (dispatch, getState) => {
+    const { data } = await mainEndpoint.post(
+      `/matricula/matricular-filter`,
+      {
+        anioMostrarInforme: anioMostrarInforme,
+        estadoMostrarInforme: estadoMostrarInforme
+      },
+    );
+    console.log(estadoMostrarInforme)
+    dispatch(setMatriculasFiltradas( data ));
+  }}
+
 export {
     obtenerMatriculas,
     agregarMatricula,
     onShowAlert,
-    matriculaModificarEstado
+    matriculaModificarEstado,
+    matriculaFiltrar
 };
