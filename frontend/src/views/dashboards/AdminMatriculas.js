@@ -24,8 +24,7 @@ import { matriculaFiltrar, obtenerMatriculas } from 'store/slices/matricula/matr
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
-import { useForm } from 'hooks/useForm';
-import ReporteMatriculas from '../../pdf/ReporteMatriculas';
+import ReporteMatriculas from './pdf/ReporteMatriculas';
 
 
 const AdminMatricula = () => {
