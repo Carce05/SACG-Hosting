@@ -1,5 +1,6 @@
 const { response } = require('express');
 const Matricula = require('../models/matricula');
+const Estudiante = require('../models/estudiante')
 
 const matriculaGet = async (req, res) => {
     try{
@@ -23,17 +24,38 @@ const matriculaPost = async (req, res = response) => {
 }
 
 const matriculaModificarEstado = async (req, res) => {
+    const { cedula, estadoMatriculaAdmin, seccion, nombreCompleto, correo_encargado } = req.body;
     try {
+        if (estadoMatriculaAdmin === "Aprobado") {
+            const estudianteObtenido = await Estudiante.findOne({ cedula });
+            if (estudianteObtenido) {
+                const {_id: id} = estudianteObtenido
+                await Estudiante.updateOne({ _id: id }, {
+                    $set: {
+                        "seccion": seccion
+                    }
+                });
+                res.status(200).send(estudianteObtenido);
+            } else {
+                const estudiante = new Estudiante( {
+                    "nombreCompleto": nombreCompleto,
+                    "cedula": cedula,
+                    "correo_encargado": correo_encargado,
+                    "seccion": seccion,
+                    "id_matricula": req.params.matriculaEstudianteId
+                });
+                await estudiante.save();
+                res.status(200).send('NO ENCONTRADO | SE GUARDO UNO NUEVO ');
+            }
+        } else {
+            res.status(200).send('SE HA MODIFICADO LA MATRICULA');
+        }
         await Matricula.updateOne({ _id: req.params.matriculaEstudianteId }, {
             $set: {
-                'estadoMatriculaAdmin': req.body.estadoMatriculaAdmin,
-                'seccionMatriculaAdmin': req.body.seccion
+                'estadoMatriculaAdmin': estadoMatriculaAdmin,
+                'seccionMatriculaAdmin': seccion
             }
         });
-
-        res.status(200).send({
-            msg: 'TODO CORRECTO',
-        })
     } catch (err) {
         res.status(500).send(err);
     }

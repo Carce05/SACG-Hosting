@@ -19,6 +19,7 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
   
   const initialValues = {
     encargadoId : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoId : currentUser.personalId,
+    encargadoCorreo : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoCorreo : currentUser.email,
     encargadoLegal : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoLegal : currentUser.name,
     nombreCompleto : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.nombreCompleto : '',
     fechaNacimiento : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.fechaNacimiento : '',
@@ -86,12 +87,10 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
     } else {
       const {_id: id} = selectedFlatRows[0].original;
       const matriculaEstado  = {
-        "seccionAsiganada": "8-2",
+        "nombreCompleto": values.nombreCompleto,
         "estadoMatriculaAdmin": values.estadoMatriculaAdmin,
-        "apellido": "Guillén",
-        "cedula": "1-1828-0064",
-        "correo_encargado": "arcecris123@gmail.com",
-        "nombre": "Erick",
+        "cedula": values.encargadoId,
+        "correo_encargado": values.encargadoCorreo,
         "seccion": values.estadoMatriculaAdmin === "Aprobado" ? values.seccionMatriculaAdmin : ""
       }
       dispatch(matriculaModificarEstado(id, matriculaEstado));
@@ -127,10 +126,70 @@ const fechaFormateada = `${fecha.getDate()} de ${meses[fecha.getMonth()]} del ${
           initialValues={initialValues}
         >
           {({ handleSubmit, handleChange, values, errors, touched }) => (
-
             <form id="registerForm" className="tooltip-end-bottom" onSubmit={handleSubmit}>
+                                  {
+                        (selectedFlatRows.length === 1 && currentUser.role === 'Administrador') && (
+                          <>   
+                           <Modal.Title>Modificar estado de la matricula</Modal.Title>
+                          
+                          <hr/>
+                          <div className='form-input-hori label-arriba'>
+                            <p>Estado Actual de la matricula</p>
+                            <Form.Group controlId="name">
+                              <div className="mb-3 form-group tooltip-end-top form-input-hori">
+                                <Form.Select 
+                                  name="estadoMatriculaAdmin"
+                                  defaultValue={values.estadoMatriculaAdmin}
+                                  onChange={handleChange}
+                                  >
+                                    <option value="Pendiente">Pendiente</option>
+                                    <option value="Aprobado">Aprobado</option>
+                                    <option value="Rechazado">Rechazado</option>
+                                  </Form.Select>
+                                  <div className={(values.estadoMatriculaAdmin === 'Aprobado') ? 'form-input-hori show-element' : 'form-input-hori hide-element' }>
+                                    <div className='form-input-hori'>
+                                      <p>Sección: </p>
+                                      <Form.Group controlId="name">
+                                        <div className="mb-3 form-group tooltip-end-top">
+                                          <Form.Control
+                                            type="text"
+                                            name="seccionMatriculaAdmin"
+                                            value={values.seccionMatriculaAdmin}
+                                            onChange={handleChange}
+                                          />
+                                          {errors.seccionMatriculaAdmin && touched.seccionMatriculaAdmin && ( <div className="invalid-tooltip-matricula">{errors.cualAdecuancion}</div> )}
+                                        </div>
+                                      </Form.Group>
+                                    </div>
+                                  </div>
+                                  {errors.estadoMatriculaAdmin && touched.estadoMatriculaAdmin && (<div className="invalid-tooltip-matricula">{errors.estadoMatriculaAdmin}</div> )}
+                              </div>
+                            </Form.Group>
+                          </div>
+                        </>
+                        )
+                      }
+              <h5>Información del encargado Legal</h5>
               <Form.Group controlId="name" className='form-input-hori'>
-                <p><b>Encargado Legal:</b> { values.encargadoLegal } | <b>Cédula de identidad:</b> {  values.encargadoId }</p>
+                <p><b>Nombre Completo:</b> { values.encargadoLegal }<br/>
+                <b>Cédula de identidad:</b> {  values.encargadoId }<br/>
+                <b>Correo Electrónico:</b> {  values.encargadoCorreo }<br/>
+                </p>
+              </Form.Group>
+              <Form.Group controlId="name" className='form-input-hori label-arriba'>
+                <p>Cédula del estudiante</p>
+                <div className="mb-3 form-group tooltip-end-top invalid-tooltip-matricula-container">
+                  <Form.Control
+                    type="text"
+                    name="nombreCompleto"
+                    value={values.nombreCompleto}
+                    onChange={handleChange}
+                    disabled={ selectedFlatRows.length === 1 }
+                  />
+                  {errors.nombreCompleto && touched.nombreCompleto && (
+                    <div className="invalid-tooltip-matricula">{errors.nombreCompleto}</div>
+                  )}
+                </div>
               </Form.Group>
               <Form.Group controlId="name" className='form-input-hori label-arriba'>
                 <p>1. Nombre completo </p>
@@ -416,52 +475,6 @@ const fechaFormateada = `${fecha.getDate()} de ${meses[fecha.getMonth()]} del ${
                   )}
                 </div>
               </Form.Group>
-                      {
-                        (selectedFlatRows.length === 1 && currentUser.role === 'Administrador') && (
-                          <>   
-                           <Modal.Title>Modificar estado de la matricula</Modal.Title>
-                          
-                          <hr/>
-                          <div className='form-input-hori label-arriba'>
-                            <p>Estado Actual de la matricula</p>
-                            <Form.Group controlId="name">
-                              <div className="mb-3 form-group tooltip-end-top form-input-hori">
-                                <Form.Select 
-                                  name="estadoMatriculaAdmin"
-                                  defaultValue={values.estadoMatriculaAdmin}
-                                  onChange={handleChange}
-                                  >
-                                    <option value="Pendiente">Pendiente</option>
-                                    <option value="Aprobado">Aprobado</option>
-                                    <option value="Rechazado">Rechazado</option>
-                                  </Form.Select>
-                                  <div className={(values.estadoMatriculaAdmin === 'Aprobado') ? 'form-input-hori show-element' : 'form-input-hori hide-element' }>
-                                    <div className='form-input-hori'>
-                                      <p>Sección: </p>
-                                      <Form.Group controlId="name">
-                                        <div className="mb-3 form-group tooltip-end-top">
-                                          <Form.Control
-                                            type="text"
-                                            name="seccionMatriculaAdmin"
-                                            value={values.seccionMatriculaAdmin}
-                                            onChange={handleChange}
-                                          />
-                                          {errors.seccionMatriculaAdmin && touched.seccionMatriculaAdmin && ( <div className="invalid-tooltip-matricula">{errors.cualAdecuancion}</div> )}
-                                        </div>
-                                      </Form.Group>
-                                    </div>
-                                  </div>
-                                  {errors.estadoMatriculaAdmin && touched.estadoMatriculaAdmin && (<div className="invalid-tooltip-matricula">{errors.estadoMatriculaAdmin}</div> )}
-                              </div>
-                            </Form.Group>
-                          </div>
-                        </>
-
-
-
-                        )
-                      }
-
               <Button variant="primary" className={(selectedFlatRows.length) === 1 ? 'hide-element' : ''} type="submit">{selectedFlatRows.length === 1 ? 'Actualizar' : 'Agregar Matricula'}</Button>
               <Button variant="primary" className={(selectedFlatRows.length) !== 1 ? 'hide-element' : ''} type="submit">Modificar estado</Button>
               <Button variant="outline-primary" onClick={() => setIsOpenAddEditModal(false) || cancelRegister()}>
