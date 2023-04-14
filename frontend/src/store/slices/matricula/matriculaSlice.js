@@ -3,7 +3,9 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
     matriculas: [],
     matriculasLoading: true,
-    onShowAlert: false
+    onShowAlert: false,
+    matriculasFiltradas: [],
+    cantidadMatriculasFiltradas: 0,
 };
 
 const matriculaSlice = createSlice({
@@ -25,11 +27,16 @@ const matriculaSlice = createSlice({
     },
     setOnHideAlert: (state) => {
       state.onShowAlert = false;
-    }
+    },
+    setMatriculasFiltradas: (state, action) => {
+      console.log()
+      state.matriculasFiltradas = action.payload.matriculasfiltradas;
+      state.cantidadMatriculasFiltradas = action.payload.cantidadMatriculasFiltradas
+    },
   },
 });
 
-export const { setMatriculas, setMatriculasLoading, setMatriculasLoaded, setOnShowAlert, setOnHideAlert } = matriculaSlice.actions;
+export const { setMatriculas, setMatriculasLoading, setMatriculasLoaded, setOnShowAlert, setOnHideAlert, setMatriculasFiltradas } = matriculaSlice.actions;
 const matriculaReducer = matriculaSlice.reducer;
 
 export default matriculaReducer;

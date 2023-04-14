@@ -53,6 +53,15 @@ const MatriculaSchema = Schema({
     razonesEntrar: {
         type: String
     },
+    estadoMatriculaAdmin: {
+        type: String
+    },
+    seccionMatriculaAdmin: {
+        type: String
+    },
+    fechaCreacionMatricula: {
+        type: String
+    },
 });
 
 module.exports = model( 'Matriculas', MatriculaSchema );

@@ -56,7 +56,7 @@ const routesAndMenuItems = {
       to: `${appRoot}/dashboards/inicio`,
       subs: [
         { path: '/matricula', label: 'menu.matricula', icon : 'content',  component: dashboards.matricula },
-        { path: '/estudiantes-por-matricular', label: 'menu.estudiantes', icon : 'clock',  component: dashboards.estudiantes },
+        // { path: '/estudiantes-por-matricular', label: 'menu.estudiantes', icon : 'clock',  component: dashboards.estudiantes },
       ],
     },
 

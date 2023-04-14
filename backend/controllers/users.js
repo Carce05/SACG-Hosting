@@ -104,7 +104,8 @@ const usuarioLogin = async (req, res = response) => {
     const usuarioObtenido = await Usuario.findOne({ email });
     
     if (usuarioObtenido) {
-        const { id, name, thumb, role, password: pass } = usuarioObtenido;
+        const { id, name, thumb, role, password: pass, personalId } = usuarioObtenido;
+        console.log(personalId)
         const validate = await bcryptjs.compare(password, pass);
         if (validate) {
             
@@ -116,7 +117,8 @@ const usuarioLogin = async (req, res = response) => {
                     thumb,
                     role,
                     email,
-                    pass
+                    pass,
+                    personalId
                 }
             })
         } else {
