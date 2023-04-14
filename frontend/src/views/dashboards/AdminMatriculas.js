@@ -1,29 +1,18 @@
-import { Row, Col, Card, Button, Badge, Dropdown, Form, Alert } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
-import Rating from 'react-rating';
+import { Row, Col, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import HtmlHead from 'components/html-head/HtmlHead';
-import BreadcrumbList from 'components/breadcrumb-list/BreadcrumbList';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
-import ScrollByCount from 'components/scroll-by-count/ScrollByCount';
-import { OverlayScrollbarsComponent } from 'overlayscrollbars-react';
 import React, { useState, useEffect } from 'react';
-import Select from 'react-select';
 import { useTable, useGlobalFilter, useSortBy, usePagination, useRowSelect, useRowState } from 'react-table';
 import Table from 'views/interface/plugins/datatables/EditableRows/components/Table';
-import ButtonsCheckAll from 'views/interface/plugins/datatables/EditableRows/components/ButtonsCheckAll';
-import ButtonsAddNew from 'views/interface/plugins/datatables/EditableRows/components/ButtonsAddNew';
-import ControlsPageSize from 'views/interface/plugins/datatables/EditableRows/components/ControlsPageSize';
 import ControlsAdd from 'views/interface/plugins/datatables/EditableRows/components/ControlsAdd';
 import ControlsVer from 'views/interface/plugins/datatables/EditableRows/components/ControlsVer';
-import ControlsDelete from 'views/interface/plugins/datatables/EditableRows/components/ControlsDelete';
 import ControlsSearch from 'views/interface/plugins/datatables/EditableRows/components/ControlsSearch';
 import ModalAddEditMatricula from 'views/interface/plugins/datatables/EditableRows/components/ModalAddEditMatricula';
 import TablePagination from 'views/interface/plugins/datatables/EditableRows/components/TablePagination';
 import { useDispatch, useSelector } from 'react-redux';
 import { matriculaFiltrar, obtenerMatriculas } from 'store/slices/matricula/matriculaThunk';
-import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 import ReporteMatriculas from './pdf/ReporteMatriculas';
 
 
@@ -78,66 +67,75 @@ const onRefrescar = () => {
 const onGenerarInforme = () => {
   setMostrarFiltroInforme(!mostrarFiltroInforme)
 }
-
+const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
 
 
   const columns = React.useMemo(() => {
     return [
-      { Header: 'Cédula Encargado', accessor: 'encargadoId', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
-      { Header: 'Nombre Completo', accessor: 'nombreCompleto', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
-      {
-        Header: 'Nacionalidad',
-        accessor: 'nacionalidad',
-        sortable: true,
-        headerClassName: 'text-muted text-small text-uppercase w-10',
-        Cell: ({ cell }) => {
-          return (
-            <a
-              className="list-item-heading body"
-              href="#!"
-              onClick={(e) => {
-                e.preventDefault();
-              }}
-            >
-              {cell.value}
-            </a>
-          );
-        },
-      },    
-      { Header: 'Centro Educativo Procedencia', accessor: 'centroEducativoProcedencia', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-20' },
-      { Header: 'Estado Matricula', accessor: 'estadoMatriculaAdmin', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10',
+      { Header: 'Cédula Encargado', accessor: 'encargadoId', sortable: true, headerClassName: 'text-small text-uppercase w-10' },
+      { Header: 'Nombre Completo', accessor: 'nombreCompleto', sortable: true, headerClassName: 'text-small text-uppercase w-10' },
+      { Header: 'Nacionalidad', accessor: 'nacionalidad', sortable: true, headerClassName: 'text-small text-uppercase w-10' },
+      { Header: 'Centro Educativo Procedencia', accessor: 'centroEducativoProcedencia', sortable: true, headerClassName: 'text-small text-uppercase w-20' },
+      { Header: 'Estado Matricula', accessor: 'estadoMatriculaAdmin', sortable: true, headerClassName: 'text-small text-uppercase w-10',
       Cell: ({ cell }) => {
         if (cell.value === "Pendiente") {
           return <p className='matricula-pendiente matricula-estado'>Pendiente</p>
         }
         if (cell.value === "Rechazado") {
-          return <p className='matricula-rechazada matricula-estado'>Rechazado</p>
+          return (
+            <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-top-edit">Para más información de porque fue rechazodo, contactar al Administrador</Tooltip>}>
+                <p className='matricula-rechazada matricula-estado'>Rechazado</p>
+            </OverlayTrigger>
+          )
         }
         return <p className='matricula-estado'>Aprobado</p>
       } },
-      { Header: 'Sección', accessor: 'seccionMatriculaAdmin', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-20',
+      // { Header: 'Sección', accessor: 'seccionMatriculaAdmin', sortable: true, headerClassName: 'text-small text-uppercase w-20',
+      //   Cell: ({ cell }) => {
+      //     if (!cell.value) {
+      //       return <p className='mb-0'>Pendiente Asignar</p>
+      //     }
+      //     return <p className='mb-0'>{ cell.value }</p>
+      //   }
+      // },
+      
+      {
+        Header: 'Sección Asignada',
+        accessor: 'seccionMatriculaAdmin',
+        sortable: true,
+        headerClassName: 'text-small text-uppercase w-10',
         Cell: ({ cell }) => {
-          if (!cell.value) {
-            return <p className='mb-0'>Pendiente Asignar</p>
-          }
-          return <p className='mb-0'>{ cell.value }</p>
-        }
-      },
+          return (
+            <button
+              className="btn-icon btn-icon-only shadow edit-datatable btn btn-foreground-alternate"
+              href="#!"
+              onClick={(e) => {
+                e.preventDefault();
+                setIsOpenAddEditModal(!isOpenAddEditModal)
+              }}
+            >
+              {cell.value}
+            </button>
+          );
+        },
+      }, 
 
       
       {
-        Header: '',
-        id: 'action',
+        Header: 'Opciones',
+        id: 'name',
         headerClassName: 'empty w-10',
-        Cell: ({ row }) => {
-          const { checked, onChange } = row.getToggleRowSelectedProps();
-          return <Form.Check className="form-check float-end mt-1" type="checkbox" checked={checked} onChange={onChange} />;
-        },
+        Cell: ({ row }) => (
+          
+          <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-top-edit">Editar</Tooltip>}>
+          <Button variant="foreground-alternate" className="btn-icon btn-icon-only shadow edit-datatable">
+            <CsLineIcons icon="edit" />
+          </Button>
+        </OverlayTrigger>
+        ),
       },
     ];
   }, []);
-
-  const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
 
   const tableInstance = useTable(
     { columns, data, setData, isOpenAddEditModal, setIsOpenAddEditModal, initialState: { pageIndex: 0 } },
@@ -147,8 +145,6 @@ const onGenerarInforme = () => {
     useRowSelect,
     useRowState
   );
-
-  const breadcrumbs = [{ to: '', text: 'Home' }];
 
   return (
     <>
