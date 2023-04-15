@@ -16,29 +16,38 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
   const { selectedFlatRows, data, setData, setIsOpenAddEditModal, isOpenAddEditModal } = tableInstance;
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.auth);
+  const { matriculas } = useSelector((state) => state.matricula);
+  const [initialValues, setInitialValues] = useState({});
+  const [matriculasPorUsuario, setMatriculasPorUsuario] = useState([]);
+
+  useEffect(() => {
+    setInitialValues({
+      encargadoId : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoId : currentUser.personalId,
+      encargadoCorreo : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoCorreo : currentUser.email,
+      encargadoLegal : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoLegal : currentUser.name,
+      nombreCompleto : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.nombreCompleto : '',
+      fechaNacimiento : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.fechaNacimiento : '',
+      edadCumplidaAnios : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.edadCumplidaAnios : '',
+      edadCumplidaMeses : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.edadCumplidaMeses : '',
+      nacionalidad : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.nacionalidad : '',
+      telefono : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.telefono : '',
+      domicilio : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.domicilio : '',
+      centroEducativoProcedencia : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.centroEducativoProcedencia : '',
+      nivelAnterior : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.nivelAnterior : '',
+      matricularNivelDe : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.matricularNivelDe : '',
+      estudianteConviveCon : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.estudianteConviveCon : '',
+      estudianteConviveConOtros : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.estudianteConviveConOtros : '',
+      tieneAdecuancion : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.tieneAdecuancion : '',
+      cualAdecuancion : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.cualAdecuancion : '',
+      razonesEntrar : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.razonesEntrar : '',
+      estadoMatriculaAdmin : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.estadoMatriculaAdmin : '',
+      seccionMatriculaAdmin : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.seccionMatriculaAdmin : '',
+    })
+    const matriculasPorUsuarioFiltradas = matriculas.filter(element => element.encargadoId === currentUser.personalId);
+    setMatriculasPorUsuario(matriculasPorUsuarioFiltradas);
+    console.log(matriculasPorUsuario)
+  }, [selectedFlatRows])
   
-  const initialValues = {
-    encargadoId : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoId : currentUser.personalId,
-    encargadoCorreo : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoCorreo : currentUser.email,
-    encargadoLegal : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoLegal : currentUser.name,
-    nombreCompleto : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.nombreCompleto : '',
-    fechaNacimiento : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.fechaNacimiento : '',
-    edadCumplidaAnios : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.edadCumplidaAnios : '',
-    edadCumplidaMeses : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.edadCumplidaMeses : '',
-    nacionalidad : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.nacionalidad : '',
-    telefono : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.telefono : '',
-    domicilio : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.domicilio : '',
-    centroEducativoProcedencia : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.centroEducativoProcedencia : '',
-    nivelAnterior : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.nivelAnterior : '',
-    matricularNivelDe : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.matricularNivelDe : '',
-    estudianteConviveCon : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.estudianteConviveCon : '',
-    estudianteConviveConOtros : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.estudianteConviveConOtros : '',
-    tieneAdecuancion : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.tieneAdecuancion : '',
-    cualAdecuancion : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.cualAdecuancion : '',
-    razonesEntrar : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.razonesEntrar : '',
-    estadoMatriculaAdmin : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.estadoMatriculaAdmin : '',
-    seccionMatriculaAdmin : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.seccionMatriculaAdmin : '',
-  };
   const [selectedItem, setSelectedItem] = useState(initialValues);
 
   const telephoneRegExp = /^[0-9]{8}$/;
@@ -108,6 +117,58 @@ const fecha = new Date();
 const fechaFormateada = `${fecha.getDate()} de ${meses[fecha.getMonth()]} del ${fecha.getFullYear()}`;
 
 
+const onCargarExistenteMatricula = ({ target }) => {
+  const { value } = target;
+  if (value === "seleccionar-prellenado") {
+    setInitialValues({
+      encargadoId : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoId : currentUser.personalId,
+      encargadoCorreo : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoCorreo : currentUser.email,
+      encargadoLegal : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoLegal : currentUser.name,
+      nombreCompleto : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.nombreCompleto : '',
+      fechaNacimiento : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.fechaNacimiento : '',
+      edadCumplidaAnios : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.edadCumplidaAnios : '',
+      edadCumplidaMeses : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.edadCumplidaMeses : '',
+      nacionalidad : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.nacionalidad : '',
+      telefono : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.telefono : '',
+      domicilio : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.domicilio : '',
+      centroEducativoProcedencia : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.centroEducativoProcedencia : '',
+      nivelAnterior : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.nivelAnterior : '',
+      matricularNivelDe : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.matricularNivelDe : '',
+      estudianteConviveCon : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.estudianteConviveCon : '',
+      estudianteConviveConOtros : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.estudianteConviveConOtros : '',
+      tieneAdecuancion : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.tieneAdecuancion : '',
+      cualAdecuancion : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.cualAdecuancion : '',
+      razonesEntrar : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.razonesEntrar : '',
+      estadoMatriculaAdmin : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.estadoMatriculaAdmin : '',
+      seccionMatriculaAdmin : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.seccionMatriculaAdmin : '',
+    })
+  } else {
+    const { encargadoId, encargadoCorreo, nombreCompleto, encargadoLegal, fechaNacimiento, edadCumplidaAnios, edadCumplidaMeses, nacionalidad, telefono, domicilio, centroEducativoProcedencia, nivelAnterior, matricularNivelDe, estudianteConviveCon, estudianteConviveConOtros, tieneAdecuancion, cualAdecuancion, razonesEntrar, estadoMatriculaAdmin, seccionMatriculaAdmin } = matriculas.find(({ _id:id }) => id === value );
+    setInitialValues({
+      encargadoId,
+      encargadoCorreo,
+      encargadoLegal,
+      nombreCompleto,
+      fechaNacimiento,
+      edadCumplidaAnios,
+      edadCumplidaMeses,
+      nacionalidad,
+      telefono,
+      domicilio,
+      centroEducativoProcedencia,
+      nivelAnterior,
+      matricularNivelDe,
+      estudianteConviveCon,
+      estudianteConviveConOtros,
+      tieneAdecuancion,
+      cualAdecuancion,
+      razonesEntrar,
+      estadoMatriculaAdmin,
+      seccionMatriculaAdmin
+    })
+  }
+}
+
   const formik = useFormik({ initialValues, validationSchema, onSubmit });
 
   return (
@@ -119,6 +180,7 @@ const fechaFormateada = `${fecha.getDate()} de ${meses[fecha.getMonth()]} del ${
       <Modal.Body>
 
         <Formik
+          enableReinitialize
           validationSchema={validationSchema}
           onSubmit={(values) => {
             onSubmit(values);
@@ -176,6 +238,33 @@ const fechaFormateada = `${fecha.getDate()} de ${meses[fecha.getMonth()]} del ${
                 <b>Correo Electrónico:</b> {  values.encargadoCorreo }<br/>
                 </p>
               </Form.Group>
+              {
+                (selectedFlatRows.length !== 1 && matriculasPorUsuario.length > 0) && (
+                  <div className='form-input-hori label-arriba mr-40px'>
+                  <p>Prellenar información de matricula por estudiante</p>
+                  <Form.Group controlId="name">
+                    <div className="mb-3 form-group tooltip-end-top">
+                      <Form.Select 
+                        name="nacionalidad"
+                        defaultValue={values.nacionalidad}
+                        onChange={ onCargarExistenteMatricula }
+                        disabled={ selectedFlatRows.length === 1 }
+                      >
+                        <option value="seleccionar-prellenado">Nuevo Ingreso</option>
+                        {
+                          matriculasPorUsuario.map(({ nombreCompleto, _id  }) => (
+                            <option key={_id} value={ _id }>{ nombreCompleto }</option>
+                          ))
+                        }
+                      </Form.Select>
+                    {errors.nacionalidad && touched.nacionalidad && (
+                      <div className="invalid-tooltip-matricula">{errors.nacionalidad}</div>
+                    )}
+                    </div>
+                  </Form.Group>
+                  </div>
+                )
+              }
               <Form.Group controlId="name" className='form-input-hori label-arriba'>
                 <p>Cédula del estudiante</p>
                 <div className="mb-3 form-group tooltip-end-top invalid-tooltip-matricula-container">
