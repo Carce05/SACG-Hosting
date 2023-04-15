@@ -90,46 +90,25 @@ const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
         }
         return <p className='matricula-estado'>Aprobado</p>
       } },
-      // { Header: 'Sección', accessor: 'seccionMatriculaAdmin', sortable: true, headerClassName: 'text-small text-uppercase w-20',
-      //   Cell: ({ cell }) => {
-      //     if (!cell.value) {
-      //       return <p className='mb-0'>Pendiente Asignar</p>
-      //     }
-      //     return <p className='mb-0'>{ cell.value }</p>
-      //   }
-      // },
-      
-      {
-        Header: 'Sección Asignada',
-        accessor: 'seccionMatriculaAdmin',
-        sortable: true,
-        headerClassName: 'text-small text-uppercase w-10',
+      { Header: 'Sección Asignada', accessor: 'seccionMatriculaAdmin', sortable: true, headerClassName: 'text-small text-uppercase w-20',
         Cell: ({ cell }) => {
-          return (
-            <button
-              className="btn-icon btn-icon-only shadow edit-datatable btn btn-foreground-alternate"
-              href="#!"
-              onClick={(e) => {
-                e.preventDefault();
-                setIsOpenAddEditModal(!isOpenAddEditModal)
-              }}
-            >
-              {cell.value}
-            </button>
-          );
-        },
-      }, 
-
+          if (!cell.value) {
+            return <p className='mb-0'>Pendiente Asignar</p>
+          }
+          return <p className='mb-0'>{ cell.value }</p>
+        }
+      },
       
       {
         Header: 'Opciones',
         id: 'name',
         headerClassName: 'empty w-10',
         Cell: ({ row }) => (
-          
           <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-top-edit">Editar</Tooltip>}>
           <Button variant="foreground-alternate" className="btn-icon btn-icon-only shadow edit-datatable">
-            <CsLineIcons icon="edit" />
+            {
+              (currentUser.role === 'Administrador') ?  <CsLineIcons icon="edit" /> :  <CsLineIcons icon="eye" /> 
+            }
           </Button>
         </OverlayTrigger>
         ),
