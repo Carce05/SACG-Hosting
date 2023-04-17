@@ -171,6 +171,7 @@ const enMessages = {
   'menu.estudiantes' : 'Estudiantes Por Matricular',
   'menu.elearning': 'Inicio',
   'menu.perfil': 'Mi Perfil',
+  'menu.general': 'General',
   'menu.school': 'School',
   'menu.courses': 'Courses',
   'menu.explore': 'Explore',
