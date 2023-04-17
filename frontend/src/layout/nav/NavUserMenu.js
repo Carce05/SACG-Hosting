@@ -22,7 +22,7 @@ const NavUserMenuContent = () => {
       <Col xs="6" className="ps-1 pe-1">
         <ul className="list-unstyled">
           <li>
-            <a href="/dashboards/mi-perfil">
+            <a href="https://sacg-frontend-test.netlify.app/dashboards/mi-perfil">
               <CsLineIcons icon="tool" className="me-2" size="17" /> <span className="align-middle">Perfil</span>
             </a>
           </li>
@@ -41,7 +41,7 @@ const NavUserMenuContent = () => {
             </a>
           </li>
           <li>
-            <a onClick={ onLogout } href="/login">
+            <a onClick={ onLogout } href="https://sacg-frontend-test.netlify.app">
               <CsLineIcons icon="logout" className="me-2" size="17" /> <span className="align-middle">Cerrar Sesión</span>
             </a>
           </li>
