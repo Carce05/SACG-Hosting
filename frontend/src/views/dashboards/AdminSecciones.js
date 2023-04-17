@@ -41,6 +41,7 @@ const AdminSecciones = (props) => {
   const [trimestres, setTrimestres] = useState([]);
   const [trimestresFiltrados, setTrimestresFiltrados] = useState();
   const { label, name, ...rest } = props;
+  const url = apiSACG.concat('/usuarios/login');
   const initialValues = { email: '' };
   const formik = useFormik({ initialValues });
   const { handleSubmit, handleChange, materia, docentee, seccionn, trimestre, anio, touched, errors } = formik;
