@@ -17,8 +17,32 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.auth);
   const { matriculas } = useSelector((state) => state.matricula);
+  const { secciones } = useSelector((state) => state.seccion);
   const [initialValues, setInitialValues] = useState({});
   const [matriculasPorUsuario, setMatriculasPorUsuario] = useState([]);
+
+  const initValues = {
+    encargadoId : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoId : currentUser.personalId,
+    encargadoCorreo : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoCorreo : currentUser.email,
+    encargadoLegal : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoLegal : currentUser.name,
+    nombreCompleto : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.nombreCompleto : '',
+    fechaNacimiento : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.fechaNacimiento : '',
+    edadCumplidaAnios : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.edadCumplidaAnios : '',
+    edadCumplidaMeses : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.edadCumplidaMeses : '',
+    nacionalidad : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.nacionalidad : '',
+    telefono : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.telefono : '',
+    domicilio : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.domicilio : '',
+    centroEducativoProcedencia : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.centroEducativoProcedencia : '',
+    nivelAnterior : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.nivelAnterior : '',
+    matricularNivelDe : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.matricularNivelDe : '',
+    estudianteConviveCon : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.estudianteConviveCon : '',
+    estudianteConviveConOtros : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.estudianteConviveConOtros : '',
+    tieneAdecuancion : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.tieneAdecuancion : '',
+    cualAdecuancion : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.cualAdecuancion : '',
+    razonesEntrar : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.razonesEntrar : '',
+    estadoMatriculaAdmin : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.estadoMatriculaAdmin : '',
+    seccionMatriculaAdmin : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.seccionMatriculaAdmin : '',
+  } 
 
   useEffect(() => {
     setInitialValues({
@@ -45,7 +69,6 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
     })
     const matriculasPorUsuarioFiltradas = matriculas.filter(element => element.encargadoId === currentUser.personalId);
     setMatriculasPorUsuario(matriculasPorUsuarioFiltradas);
-    console.log(matriculasPorUsuario)
   }, [selectedFlatRows])
   
   const [selectedItem, setSelectedItem] = useState(initialValues);
@@ -185,7 +208,7 @@ const onCargarExistenteMatricula = ({ target }) => {
           onSubmit={(values) => {
             onSubmit(values);
           }}
-          initialValues={initialValues}
+          initialValues={(selectedFlatRows.length === 1 && currentUser.role === 'Administrador') ? initValues: initialValues }
         >
           {({ handleSubmit, handleChange, values, errors, touched }) => (
             <form id="registerForm" className="tooltip-end-bottom" onSubmit={handleSubmit}>
@@ -196,9 +219,9 @@ const onCargarExistenteMatricula = ({ target }) => {
                           
                           <hr/>
                           <div className='form-input-hori label-arriba'>
-                            <p>Estado Actual de la matricula</p>
+                            <p>Estado Actual de la matricula:</p>
                             <Form.Group controlId="name">
-                              <div className="mb-3 form-group tooltip-end-top form-input-hori">
+                              <div className="mb-2 form-group tooltip-end-top form-input-hori">
                                 <Form.Select 
                                   name="estadoMatriculaAdmin"
                                   defaultValue={values.estadoMatriculaAdmin}
@@ -208,24 +231,25 @@ const onCargarExistenteMatricula = ({ target }) => {
                                     <option value="Aprobado">Aprobado</option>
                                     <option value="Rechazado">Rechazado</option>
                                   </Form.Select>
-                                  <div className={(values.estadoMatriculaAdmin === 'Aprobado') ? 'form-input-hori show-element' : 'form-input-hori hide-element' }>
-                                    <div className='form-input-hori'>
-                                      <p>Sección: </p>
-                                      <Form.Group controlId="name">
-                                        <div className="mb-3 form-group tooltip-end-top">
-                                          <Form.Control
-                                            type="text"
-                                            name="seccionMatriculaAdmin"
-                                            value={values.seccionMatriculaAdmin}
-                                            onChange={handleChange}
-                                          />
-                                          {errors.seccionMatriculaAdmin && touched.seccionMatriculaAdmin && ( <div className="invalid-tooltip-matricula">{errors.cualAdecuancion}</div> )}
-                                        </div>
-                                      </Form.Group>
-                                    </div>
-                                  </div>
                                   {errors.estadoMatriculaAdmin && touched.estadoMatriculaAdmin && (<div className="invalid-tooltip-matricula">{errors.estadoMatriculaAdmin}</div> )}
                               </div>
+                              <div className={(values.estadoMatriculaAdmin === 'Aprobado') ? 'form-input-hori show-element' : 'form-input-hori hide-element' }>
+                                    <div className='form-input-hori mb-3 label-arriba'>
+                                      <p>Sección: </p>
+                                      <Form.Select 
+                                        name="seccionMatriculaAdmin"
+                                        defaultValue={ values.seccionMatriculaAdmin }
+                                        onChange={handleChange}
+                                      >
+                                        {
+                                         
+                                          secciones.map(({ nombreSeccion  }) => (
+                                            <option key={nombreSeccion} value={ nombreSeccion }>{ nombreSeccion }</option>
+                                          ))
+                                        }
+                                        </Form.Select>
+                                    </div>
+                                  </div>
                             </Form.Group>
                           </div>
                         </>
