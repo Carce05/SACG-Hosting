@@ -14,10 +14,11 @@ const ControlsCalificacion = ({ tableInstance }) => {
     );
   }
   return (
-    
+    <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-top-add">Calificación</Tooltip>}>
       <Button onClick={() => setIsOpenAddEditModal(true)} variant="foreground-alternate" className="btn-icon btn-icon-only shadow edit-datatable">
         <CsLineIcons icon="diploma" />
       </Button>
+    </OverlayTrigger>
   );
 
 
