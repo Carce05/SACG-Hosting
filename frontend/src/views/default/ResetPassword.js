@@ -7,6 +7,7 @@ import { useFormik } from 'formik';
 import LayoutFullpage from 'layout/LayoutFullpage';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import HtmlHead from 'components/html-head/HtmlHead';
+import apiSACG from 'api/apiSACG';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -22,7 +23,7 @@ const ResetPassword = () => {
   const id = queryParameters.get("id")
   const token = queryParameters.get("token")
   
-	const url = `http://localhost:8080/api/reset-password/${id}/${token}`;
+	const url = apiSACG.concat(`/reset-password/${id}/${token}`);
 
   
  

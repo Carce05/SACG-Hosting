@@ -3,17 +3,18 @@ import axios from "axios";
 import React, { useState, useEffect } from 'react';
 import { Formik } from 'formik';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
+import apiSACG from 'api/apiSACG';
 
 const ModalEditContact = ({ contact, showModal, setShowModal, setData, setShowSuccessAlert, setShowDangerAlert }) => {
     const onSubmit = async (values) => {
         try {
-            const response = await axios.put('http://localhost:8080/api/contacto/63f92ab00cd67a1ade5e243e', {
+            const response = await axios.put(apiSACG.concat('/contacto/63f92ab00cd67a1ade5e243e'), {
                 phone: values.phone,
                 location: values.location,
                 email: values.email,
             });
             axios
-                .get("http://localhost:8080/api/contacto/63f92ab00cd67a1ade5e243e")
+                .get(apiSACG.concat("/contacto/63f92ab00cd67a1ade5e243e"))
                 .then((res) => {
                     setData(res.data[0]);
                     setShowSuccessAlert(true);

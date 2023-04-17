@@ -18,7 +18,7 @@ import ModalAddEdit from 'views/interface/plugins/datatables/EditableRows/compon
 import TablePagination from 'views/interface/plugins/datatables/EditableRows/components/TablePagination';
 import axios from "axios";
 import { da } from 'date-fns/locale';
-
+import apiSACG from 'api/apiSACG';
 
 
 const Calificacion = (props) => {
@@ -41,7 +41,7 @@ const Calificacion = (props) => {
   useEffect(() => {
     async function fetchData() {
       // Fetch data
-      const response = await axios.get(`http://localhost:8080/api/estudiantes/EstudiantesAsocidados/${usuario}`);
+      const response = await axios.get(apiSACG.concat(`/estudiantes/EstudiantesAsocidados/${usuario}`));
       const resultsEstudiantes = []
       // Store results in the results array
       response.data.forEach((value) => {
@@ -64,7 +64,7 @@ const Calificacion = (props) => {
   useEffect(() => {
     async function fetchData() {
       // Fetch data
-      const response = await axios.get("http://localhost:8080/api/calificaciones/");
+      const response = await axios.get(apiSACG.concat("/calificaciones/"));
       const resultsCalificaciones = []
       const resultsAnios = []
       const resultsPeriodo= []
@@ -126,7 +126,7 @@ const Calificacion = (props) => {
   useEffect(() => {
     async function fetchData() {
       // Fetch data
-      const response = await axios.get("http://localhost:8080/api/calificaciones/");
+      const response = await axios.get(apiSACG.concat("/calificaciones/"));
       const resultsCalificaciones = []
 
      

@@ -8,6 +8,7 @@ import axios from "axios";
 import { actualizarUsuario, actualizarUsuarioFromAdmin, agregarUsuarioNuevo } from 'store/slices/usuarios/usuarioThunk';
 import { useDispatch } from 'react-redux';
 import { UploadProfileImages } from 'views/interface/components/UploadProfileImages';
+import apiSACG from 'api/apiSACG';
 
 const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }) => {
   const dispatch = useDispatch();
@@ -55,7 +56,7 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
     if (selectedFlatRows.length === 1) {
       try {
         const { _id: id } = selectedFlatRows[0].original;
-        const response = await axios.put(`http://localhost:8080/api/usuarios/${id}`, {
+        const response = await axios.put(apiSACG.concat(`/usuarios/${id}`), {
           name,
           thumb,
           email,
@@ -104,7 +105,7 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
       }
     }
     axios
-      .get("http://localhost:8080/api/usuarios")
+      .get(apiSACG.concat("/usuarios"))
       .then((res) => {
         setData(res.data);
       })
