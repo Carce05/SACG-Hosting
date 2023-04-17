@@ -4,7 +4,6 @@ const Usuario = require('../models/user')
 const bitacora = require("./bitacora");
 const bitacoraAccion = require("./bitacoraAccion");
 
-import apiSACG from 'api/apiSACG';
 
 const usuariosGet = async (req, res = response) => {
 
