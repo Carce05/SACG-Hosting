@@ -12,7 +12,6 @@ import { useTable, useGlobalFilter, useSortBy, usePagination, useRowSelect, useR
 import Table from 'views/interface/plugins/datatables/EditableRows/components/Table';
 import ButtonsCheckAll from 'views/interface/plugins/datatables/EditableRows/components/ButtonsCheckAll';
 import ButtonsAddNew from 'views/interface/plugins/datatables/EditableRows/components/ButtonsAddNew';
-import ControlsPageSize from 'views/interface/plugins/datatables/EditableRows/components/ControlsPageSize';
 import ControlsEdit from 'views/interface/plugins/datatables/EditableRows/components/ControlsEdit';
 import ControlsDeleteAnnouncement from 'views/interface/plugins/datatables/EditableRows/components/ControlsDeleteAnnouncement';
 import ControlsSearch from 'views/interface/plugins/datatables/EditableRows/components/ControlsSearch';
@@ -150,9 +149,6 @@ const SchoolDashboard = () => {
                   <Button onClick={handleEditClick} variant="foreground-alternate" className="btn-icon btn-icon-only shadow add-datatable">
                     <CsLineIcons icon="plus" />
                   </Button>{/* <ControlsEdit tableInstance={tableInstance} /> */} <ControlsDeleteAnnouncement tableInstance={tableInstance} />
-                </div>
-                <div className="d-inline-block">
-                  <ControlsPageSize tableInstance={tableInstance} />
                 </div>
               </Col>
             </Row>
