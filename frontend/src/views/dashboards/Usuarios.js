@@ -139,7 +139,6 @@ const Usuarios = () => {
                 <div className="d-inline-block me-2">
                   <ControlsAdd tableInstance={tableInstance} />
                 </div>
-                
                 <div className="d-inline-block me-2">
                   <ControlsEdit tableInstance={tableInstance} />
                 </div>
