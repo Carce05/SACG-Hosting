@@ -10,7 +10,7 @@ const ButtonsAddNew = ({ tableInstance }) => {
     setIsOpenAddEditModal(true);
   };
   return (
-    <Button variant="outline-primary" className="btn-icon btn-icon-start w-100 w-md-auto add-datatable" onClick={addButtonClick}>
+    <Button variant="outline-primary" className="btn-xl btn-icon-start w-100 w-md-auto add-datatable" onClick={addButtonClick}>
       <CsLineIcons icon="plus" /> <span>Add New</span>
     </Button>
   );

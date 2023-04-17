@@ -23,14 +23,14 @@ const ControlsDeleteAnnouncement = ({ tableInstance }) => {
 
   if (selectedFlatRows.length === 0) {
     return (
-      <Button variant="foreground-alternate" className="btn-icon btn-icon-only shadow delete-datatable" disabled>
+      <Button variant="foreground-alternate" className="btn-xl btn-icon-only shadow delete-datatable" disabled>
         <CsLineIcons icon="bin" />
       </Button>
     );
   }
   return (
-    <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-top-delete">Delete</Tooltip>}>
-      <Button onClick={onClick} variant="foreground-alternate" className="btn-icon btn-icon-only shadow delete-datatable">
+    <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-top-delete">Eliminar</Tooltip>}>
+      <Button onClick={onClick} variant="foreground-alternate" className="btn-xl btn-icon-only shadow delete-datatable">
         <CsLineIcons icon="bin" />
       </Button>
     </OverlayTrigger>

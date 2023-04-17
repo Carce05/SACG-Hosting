@@ -1,0 +1,26 @@
+{"level":"debug","message":"El usuario erick@gmail.com, creó un nuevo aviso bajo el titulo de ultimo","timestamp":"2023-04-15T14:23:53.482Z"}
+{"level":"debug","message":"El usuario erick@gmail.com, eliminó un aviso bajo el ID de 64375ae6fcc34373b6dd83ad","timestamp":"2023-04-15T14:29:40.071Z"}
+{"level":"debug","message":"El usuario undefined, creó un nuevo aviso bajo el titulo de test3","timestamp":"2023-04-15T15:38:34.127Z"}
+{"level":"debug","message":"El usuario undefined, creó un nuevo aviso bajo el titulo de test 2","timestamp":"2023-04-15T15:39:24.563Z"}
+{"level":"debug","message":"El usuario undefined, creó un nuevo aviso bajo el titulo de test1","timestamp":"2023-04-15T15:39:40.734Z"}
+{"level":"debug","message":"El usuario undefined, eliminó un aviso bajo el ID de 642b608e80dfa63228a0f070","timestamp":"2023-04-15T15:57:33.682Z"}
+{"level":"debug","message":"El usuario undefined, eliminó un aviso bajo el ID de 6412250e84ec2c2d814bb327","timestamp":"2023-04-15T15:57:44.189Z"}
+{"level":"debug","message":"El usuario undefined, eliminó un aviso bajo el ID de 642b63618b9d473d1c344553","timestamp":"2023-04-15T15:57:47.089Z"}
+{"level":"debug","message":"El usuario undefined, eliminó un aviso bajo el ID de 642b64108b9d473d1c34455e","timestamp":"2023-04-15T15:57:51.770Z"}
+{"level":"debug","message":"El usuario undefined, eliminó un aviso bajo el ID de 643ab3790d8f09633d66027d","timestamp":"2023-04-15T15:57:56.841Z"}
+{"level":"debug","message":"El usuario undefined, creó un nuevo aviso bajo el titulo de Clases suspendidas","timestamp":"2023-04-15T16:08:48.956Z"}
+{"level":"debug","message":"El usuario undefined, creó un nuevo aviso bajo el titulo de Merienda Compartida","timestamp":"2023-04-15T16:10:37.378Z"}
+{"level":"debug","message":"El usuario erick@gmail.com, creó un nuevo aviso bajo el titulo de prueba tamaño 1","timestamp":"2023-04-15T16:29:47.042Z"}
+{"level":"debug","message":"erick@gmail.com creó un nuevo usuario con el siguiente correo: TESTING","timestamp":"2023-04-17T15:51:06.465Z"}
+{"level":"debug","message":"erick@gmail.com creó un nuevo usuario con el siguiente correo: t@gmail.com","timestamp":"2023-04-17T16:00:38.564Z"}
+{"level":"debug","message":"erick@gmail.com creó un nuevo usuario con el siguiente correo: sa@gmail.com","timestamp":"2023-04-17T16:35:53.570Z"}
+{"level":"debug","message":"erick@gmail.com creó un nuevo usuario con el siguiente correo: aLERT@gmail.com","timestamp":"2023-04-17T16:37:45.889Z"}
+{"level":"debug","message":"undefined creó un nuevo usuario con el siguiente correo: q@gmail.com","timestamp":"2023-04-17T17:28:05.707Z"}
+{"level":"debug","message":"El usuario undefined, creó un nuevo aviso bajo el titulo de hola","timestamp":"2023-04-17T17:29:58.994Z"}
+{"level":"debug","message":"El usuario undefined, eliminó un aviso bajo el ID de 643ac4f90a6a84082535533c","timestamp":"2023-04-17T17:30:36.195Z"}
+{"level":"debug","message":"erick@gmail.com creó un nuevo usuario con el siguiente correo: d@gmail.com","timestamp":"2023-04-17T17:35:27.269Z"}
+{"level":"debug","message":"erick@gmail.com creó un nuevo usuario con el siguiente correo: h@gmail.com","timestamp":"2023-04-17T17:38:17.449Z"}
+{"level":"debug","message":"erick@gmail.com actualizó datos del usuario con el siguiente correo: chux@gmail.com","timestamp":"2023-04-17T17:38:55.455Z"}
+{"level":"debug","message":"undefined actualizó datos del usuario con el siguiente correo: chux@gmail.com","timestamp":"2023-04-17T20:05:20.043Z"}
+{"level":"debug","message":"undefined actualizó datos del usuario con el siguiente correo: bitacoraAccion@gmail.com","timestamp":"2023-04-17T20:08:56.975Z"}
+{"level":"debug","message":"undefined actualizó datos del usuario con el siguiente correo: chux@gmail.com","timestamp":"2023-04-17T20:09:07.302Z"}

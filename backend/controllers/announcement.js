@@ -5,7 +5,7 @@ const bitacoraAccion = require("./bitacoraAccion");
 const announcementPost = async (req, res = response) => {
     try {
         const { title, description } = req.body;
-        const announcement = new Announcement({ title, description, createdAt: new Date().toLocaleDateString() });
+        const announcement = new Announcement({ title, description, createdAt: new Date()});
         await announcement.save();
         const emailLoggedGlobal = global.email;
         bitacoraAccion.log('debug', `El usuario ${emailLoggedGlobal}, creó un nuevo aviso bajo el titulo de ${req.body.title}`);
