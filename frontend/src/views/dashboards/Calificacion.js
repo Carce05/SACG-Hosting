@@ -25,6 +25,7 @@ const Calificacion = (props) => {
   const [estudiantes, setEstudiantes] = useState([]);
   const [calificaciones, setCalificaciones] = useState([]);
   const [anios, setAnios] = useState([]);
+  const [aniosFiltrados, setAniosFiltrados] = useState([]);
   const [periodos, setPeriodos] = useState();
   const [trimestre, setTrimestre] = useState([]);
   const { label, name, ...rest } = props;
@@ -64,41 +65,56 @@ const Calificacion = (props) => {
     async function fetchData() {
       // Fetch data
       const response = await axios.get("http://localhost:8080/api/calificaciones/");
+      const resultsCalificaciones = []
       const resultsAnios = []
       const resultsPeriodo= []
 
-      // let contador = 0;
-      // let contador2 = 0;
-
-
+      response.data.forEach((val) => {
+        resultsCalificaciones.push({
+          estudiante: val.estudiante,
+          materia: val.materia,
+          cotidiano: val.cotidiano,
+          tarea: val.tarea,
+          examen1: val.examen1,
+          examen2: val.examen2,
+          asistencia: val.asistencia,
+          total: val.total,
+          anio: val.anio.toString(),
+          trimestre: val.trimestre,
+          observaciones: val.observaciones,
+        });
+  
+      });
       response.data.forEach((val) => {
         resultsAnios.push({
           anio: val.anio.toString(),
           estudiante: val.estudiante,
           label: `${val.anio}`,
           });
-        });
+      });
 
-        response.data.forEach((val) => {
+
+
+      response.data.forEach((val) => {
           resultsPeriodo.push({
             trimestre: val.trimestre,
             anio: val.anio.toString(),
             estudiante: val.estudiante,
             label: `${val.trimestre}`,
           })
-        });
+      });
 
-          
+      setCalificaciones([ 
+        ...resultsCalificaciones
+      ])    
 
-        setAnios([ 
-          ...resultsAnios
-        ])
-        setPeriodos([ 
-          ...resultsPeriodo
-        ])
+      setAnios([ 
+        ...resultsAnios
+      ])
+      setPeriodos([ 
+        ...resultsPeriodo
+      ])
 
-       
-        
       }
       
       // Trigger the fetch
@@ -106,7 +122,7 @@ const Calificacion = (props) => {
     }, []);
 
 
-
+/*
   useEffect(() => {
     async function fetchData() {
       // Fetch data
@@ -143,22 +159,20 @@ const Calificacion = (props) => {
       // Trigger the fetch
       fetchData();
     }, []);
-
+*/
 
 
   const [data, setData] = React.useState(calificaciones);
 
 
-  const handlePeriodo = (id) => {
-    const dt = calificaciones.filter(x => x.anio === id.anio);
-    const td = dt.filter(x => x.trimestre === id.trimestre);
-    setData(td);
+  const handlePeriodo = (id) => {    
+    const dt = calificaciones.filter(x => x.anio === id.anio && x.trimestre === id.trimestre && x.estudiante === id.estudiante);
+    setData(dt);
   }
 
   const handleAnio= (id) => {
-    const dt = periodos.filter(x => x.anio=== id.anio);
-    const td = dt.filter(x => x.estudiante === id.estudiante);
-    setTrimestre(td);
+    const dt = periodos.filter(x => x.anio === id.anio && x.estudiante === id.estudiante);
+    setTrimestre(dt);
     // handlePeriodo(id);
    
   }
@@ -166,7 +180,7 @@ const Calificacion = (props) => {
   const handleEstudiante = (id) => {
     const dt = anios.filter(x => x.estudiante === id.value);
 
-    setAnios(dt);
+    setAniosFiltrados(dt);
     // handleAnio(id);
   }
 
@@ -307,7 +321,7 @@ const Calificacion = (props) => {
               <div className="d-flex flex-column flex-md-row flex-lg-column align-items-center mb-n5 justify-content-md-between justify-content-center text-center text-md-start text-lg-center">
                 <Col xs="12" lg="12">
                   <Select classNamePrefix="react-select" 
-                    options={anios} 
+                    options={aniosFiltrados} 
                     value={anioo} 
                     onChange={handleAnio} 
                     placeholder="Seleccione" 
