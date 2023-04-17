@@ -99,7 +99,7 @@ const ElearningDashboard = () => {
                 /> */}
               </div>
               <div>
-                <NavLink to="/dashboards/Contacto" className="btn btn-icon btn-icon-start btn-outline-primary mt-3 stretched-link">
+                <NavLink to="/contacto" className="btn btn-icon btn-icon-start btn-outline-primary mt-3 stretched-link">
                   <CsLineIcons icon="chevron-right" /> <span>Contacto</span>
                 </NavLink>
               </div>

@@ -84,7 +84,9 @@ const routesAndMenuItems = {
       subs: [
 
         { path: '/avisos', label: 'menu.avisos', icon: 'notification', component: dashboards.avisos },
+        { path: '/general', label: 'menu.general', icon : 'tool', component: dashboards.general },
         { path: '/usuarios', label: 'menu.usuarios', icon : 'user', component: dashboards.usuarios }
+        
         
       ],
     },
