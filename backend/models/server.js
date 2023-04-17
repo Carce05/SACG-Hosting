@@ -48,6 +48,7 @@ class Server {
         this.app.use('/api/calificaciones', require('../routes/calificacion'))
         this.app.use('/api/contacto', require('../routes/contact'))
         this.app.use('/api/comunicados', require('../routes/announcement'))
+        this.app.use('/api/seccion', require('../routes/seccion'))
     }
 
     listen() {
