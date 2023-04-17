@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Row, Col, Card, ProgressBar, Button, Badge } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import Rating from 'react-rating';
@@ -10,7 +10,6 @@ import YourTimeChart from './components/YourTimeChart';
 
 const ElearningDashboard = () => {
   const [announcements, setAnnouncements] = useState([]);
-
   const title = 'Inicio';
   const description = 'Inicio del Sistema Acádemico';
 
@@ -23,7 +22,6 @@ const ElearningDashboard = () => {
 
     fetchData();
   }, []);
-
   const breadcrumbs = [{ to: '', text: '' }];
   return (
     <>
@@ -43,39 +41,36 @@ const ElearningDashboard = () => {
 
       <Row >
         {/* Continue Learning Start */}
+
         <Col xl="6" className="mb-5">
           <h2 className="small-title">Avisos</h2>
-          {announcements.map((announcement) => (
-            <Card key={`${announcement.description}-${announcement.createdAt}`} className="row g-0 h-auto sh-md-19 card mb-3">
-              <Row className="g-0 sh-14">
-                <Col xs="auto" className="position-relative">
-                  <img src="/img/logo/LiceoGuarari.jpg" 
-                  alt="alternate text" 
-                  className="card-img card-img-horizontal sw-14 sw-lg-25" />
-                </Col>
-                <Col>
-                  <Card.Body className="py-0 h-100 d-flex align-items-center">
-                    <div className="w-100">
-                      <div className="d-flex flex-row justify-content-between mb-2">
-                      <NavLink to="#">
-                      <p className="card-text">{announcement.title}</p>
-                        </NavLink>
-                        {/* 
-                        <NavLink to="/courses/detail">
-                        </NavLink>
-                        <div className="text-muted">67%</div> */}
+          {announcements.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 4).map((announcement) => {
+            const createdAtDate = new Date(announcement.createdAt);
+            return (
+              <Card key={`${announcement.description}-${announcement.createdAt}`} className="card mb-3">
+                <Row className="g-0 flex-wrap">
+                  <Col xs="auto" className="position-relative">
+                    <img src="/img/logo/LiceoGuarari.jpg"
+                      alt="alternate text"
+                      className="card-img card-img-horizontal sw-14 sw-lg-25" />
+                  </Col>
+                  <Col>
+                    <Card.Body className="py-0 d-flex align-items-stretch style={{ maxHeight: '100%' }}">
+                      <div className="w-100">
+                        <div className="d-flex flex-row justify-content-between mb-2">
+                          <NavLink to="#">
+                            <p className="card-text mt-2">{announcement.title}</p>
+                          </NavLink>
+                        </div>
+                        <p className="text-semi-large">{announcement.description}</p>
+                        <p className="text-muted">Publicado el {createdAtDate.toLocaleDateString()}</p>
                       </div>
-                      <p className="card-text">{announcement.description}</p>
-                      <p className="text-muted">Publicado el {announcement.createdAt}</p>
-                    </div>
-                  </Card.Body>
-                </Col>
-              </Row>
-            </Card>
-          ))}
-                      
-          
-          
+                    </Card.Body>
+                  </Col>
+                </Row>
+              </Card>
+            );
+          })}
         </Col>
         {/* Continue Learning End */}
 
@@ -99,7 +94,7 @@ const ElearningDashboard = () => {
                 /> */}
               </div>
               <div>
-                <NavLink to="/dashboards/Contacto" className="btn btn-icon btn-icon-start btn-outline-primary mt-3 stretched-link">
+                <NavLink to="/contacto" className="btn btn-icon btn-icon-start btn-outline-primary mt-3 stretched-link">
                   <CsLineIcons icon="chevron-right" /> <span>Contacto</span>
                 </NavLink>
               </div>

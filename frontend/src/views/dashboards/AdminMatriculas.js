@@ -14,6 +14,7 @@ import { matriculaFiltrar, obtenerMatriculas } from 'store/slices/matricula/matr
 import 'react-toastify/dist/ReactToastify.css';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import ReporteMatriculas from './pdf/ReporteMatriculas';
+import { obtenerTodasSecciones } from 'store/slices/seccion/seccionThunk';
 
 
 const AdminMatricula = () => {
@@ -53,14 +54,17 @@ const AdminMatricula = () => {
       
     } else {
       dispatch(obtenerMatriculas());
+      dispatch(obtenerTodasSecciones());
     }
     if (onShowAlert) {
       dispatch(obtenerMatriculas());
+      dispatch(obtenerTodasSecciones());
     }
   }, [matriculas, onShowAlert]);
 
 const onRefrescar = () => {
     dispatch(obtenerMatriculas());
+    dispatch(obtenerTodasSecciones());
 }
 
 

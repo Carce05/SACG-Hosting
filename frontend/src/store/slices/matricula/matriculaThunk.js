@@ -35,7 +35,7 @@ const onShowAlert = () => {
     setTimeout(() => {
       dispatch(setOnHideAlert());
       dispatch(setMatriculasLoaded())
-    }, 2000)
+    }, 1000)
   }
 }  
 
