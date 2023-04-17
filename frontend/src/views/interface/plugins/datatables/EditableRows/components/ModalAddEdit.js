@@ -6,6 +6,8 @@ import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import { NavLink, Redirect, useHistory } from 'react-router-dom';
 import axios from "axios";
 import { actualizarUsuario, actualizarUsuarioFromAdmin, agregarUsuarioNuevo } from 'store/slices/usuarios/usuarioThunk';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch } from 'react-redux';
 import { UploadProfileImages } from 'views/interface/components/UploadProfileImages';
 
@@ -40,11 +42,10 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
     .required('Correo electrónico requerido'),
     password: Yup.string()
       .min(6, 'Se necesitan mínimo 6 caracteres!')
-      .max(20, 'Se permiten máximo 20 caracteres!')
-      .matches(
+      /*.matches(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]+$/,
         'se requiere: mayúscula, minúscula, número'
-      )
+      ) */
       .notOneOf(['password', '123456', 'qwerty'], 'Contraseña común no permitida')
       .required('Favor ingresar contraseña'),
     personalId: Yup.string().min(9, 'Cedula debe contener 9 digitos al menos!').required('Favor ingresar cedula').max(9, 'Cedula debe contener 9 digitos maximo!'),
@@ -65,16 +66,18 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
           status
         });
         ref.current.handleSubmit();
-        setShowSuccessAlert(true);
+        // setShowSuccessAlert(true);
+        toast('¡Usuario actualizado con Éxito!'),{className:'success'};
       } catch (e) {
         console.log(e.message);
         setShowDangerAlert(true);
         if (e.response && e.response.status === 400) {
           // console.log(e.response.data.msg);
-          setShowDangerAlert(true);
+          // setShowDangerAlert(true);
+          toast('¡Correo o cedula en uso!'),{className:'success'};
         }
         else {
-          setShowDangerAlert(true);
+          toast('¡Ocurrio un error!'),{className:'success'};
         }
       }
     }
@@ -90,15 +93,17 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
           status
         }
         dispatch(agregarUsuarioNuevo(userToSave, ref.current.returnImage()));
-        setShowSuccessAlert(true);
+        toast('Usuario Agregado con Éxito!');
       } catch (e) {
         if (e.response && e.response.status === 400) {
           setIsOpenAddEditModal(true);
-          console.log(e.response.data.msg);
-          alert(e.response.data.msg, { onDismiss: () => setIsOpenAddEditModal(true) });
+          // console.log(e.response.data.msg);
+          /// alert(e.response.data.msg, { onDismiss: () => setIsOpenAddEditModal(true) });
+          toast('¡Correo o cedula en uso!');
         }
         else {
-          setShowDangerAlert(true);
+          toast('¡Ocurrio un error!');
+          // setShowDangerAlert(true);
           // alert('Problema al guardar el usuario', { onDismiss: () => setIsOpenAddEditModal(true) });
         }
       }
@@ -203,9 +208,8 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
                   )}
                 </div>
               </Form.Group>
-
+              
               <Form.Group controlId="password">
-
                 <div className="mb-3 filled form-group tooltip-end-top">
                   <CsLineIcons icon="eye-off" />
                   <Form.Control
@@ -220,7 +224,7 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
                   )}
                 </div>
               </Form.Group>
-
+             
               <div className="mb-3">
                 <Form.Label>Rol</Form.Label>
                 <Form.Group controlId="role">
