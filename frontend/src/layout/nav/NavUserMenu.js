@@ -23,7 +23,16 @@ const NavUserMenuContent = () => {
         <ul className="list-unstyled">
           <li>
             <a href="https://sacg-frontend-test.netlify.app/dashboards/mi-perfil">
-              <CsLineIcons icon="tool" className="me-2" size="17" /> <span className="align-middle">Perfil</span>
+            <CsLineIcons icon="online-class" className="me-2" size="18" /> <span className="align-middle">Perfil</span>
+            </a>
+          </li>
+        </ul>
+      </Col>
+      <Col xs="6" className="ps-1 pe-1">
+        <ul className="list-unstyled">
+          <li>
+            <a href="https://sacg-frontend-test.netlify.app/dashboards/mi-perfil">
+              <CsLineIcons icon="tool" className="me-2" size="17" /> <span className="align-middle">General</span>
             </a>
           </li>
         </ul>
@@ -35,11 +44,7 @@ const NavUserMenuContent = () => {
       </Col>
       <Col xs="10" className="ps-1 pe-1">
         <ul className="list-unstyled">
-          <li>
-            <a href="/selector-estudiante">
-              <CsLineIcons icon="sync-horizontal" className="me-2" size="17" /> <span className="align-middle">Cambiar Estudiante</span>
-            </a>
-          </li>
+         
           <li>
             <a onClick={ onLogout } href="https://sacg-frontend-test.netlify.app">
               <CsLineIcons icon="logout" className="me-2" size="17" /> <span className="align-middle">Cerrar Sesión</span>
