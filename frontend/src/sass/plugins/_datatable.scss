@@ -32,8 +32,8 @@ table.react-table {
       &:after {
         content: ' ' !important;
         display: inline-block;
-        width: 10px;
-        height: 10px;
+        width: 15px;
+        height: 15px;
         position: relative;
         left: 10px;
         top: 0;
@@ -90,8 +90,7 @@ table.react-table {
     tbody {
       tr {
         &:hover,
-        &.selected,
-        {
+        &.selected{
           background-color: rgba(var(--separator-rgb), 0.3);
         }
 
@@ -191,8 +190,7 @@ table.react-table {
 
       tr {
         &:hover,
-        &.selected,
-        {
+        &.selected{
           background-color: rgba(var(--separator-rgb), 0.3);
         }
 
