@@ -1,6 +1,9 @@
 const { Schema, model } = require('mongoose');
 
 const MatriculaSchema = Schema({
+    encargadoCorreo : {
+        type: String
+    },
     encargadoId : {
         type: String
     },
@@ -51,6 +54,15 @@ const MatriculaSchema = Schema({
         type: String
     },
     razonesEntrar: {
+        type: String
+    },
+    estadoMatriculaAdmin: {
+        type: String
+    },
+    seccionMatriculaAdmin: {
+        type: String
+    },
+    fechaCreacionMatricula: {
         type: String
     },
 });

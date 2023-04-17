@@ -6,16 +6,24 @@ import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import { NavLink, Redirect, useHistory } from 'react-router-dom';
 import axios from "axios";
 import { useDispatch, useSelector } from 'react-redux';
-import { agregarMatricula, obtenerMatriculas, onShowAlert } from 'store/slices/matricula/matriculaThunk';
+import { agregarMatricula, matriculaModificarEstado, obtenerMatriculas, onShowAlert } from 'store/slices/matricula/matriculaThunk';
 import { setMatriculasLoaded, setMatriculasLoading } from 'store/slices/matricula/matriculaSlice';
+import { toast } from 'react-toastify';
+import paises from './data/listaPais.json';
 
 const ModalAddEditMatricula = ({ tableInstance }) => {
 
   const { selectedFlatRows, data, setData, setIsOpenAddEditModal, isOpenAddEditModal } = tableInstance;
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.auth);
-  const initialValues = {
-    encargadoId : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoId : currentUser.id,
+  const { matriculas } = useSelector((state) => state.matricula);
+  const { secciones } = useSelector((state) => state.seccion);
+  const [initialValues, setInitialValues] = useState({});
+  const [matriculasPorUsuario, setMatriculasPorUsuario] = useState([]);
+
+  const initValues = {
+    encargadoId : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoId : currentUser.personalId,
+    encargadoCorreo : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoCorreo : currentUser.email,
     encargadoLegal : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoLegal : currentUser.name,
     nombreCompleto : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.nombreCompleto : '',
     fechaNacimiento : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.fechaNacimiento : '',
@@ -32,19 +40,66 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
     tieneAdecuancion : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.tieneAdecuancion : '',
     cualAdecuancion : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.cualAdecuancion : '',
     razonesEntrar : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.razonesEntrar : '',
-  };
+    estadoMatriculaAdmin : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.estadoMatriculaAdmin : '',
+    seccionMatriculaAdmin : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.seccionMatriculaAdmin : '',
+  } 
+
+  useEffect(() => {
+    setInitialValues({
+      encargadoId : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoId : currentUser.personalId,
+      encargadoCorreo : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoCorreo : currentUser.email,
+      encargadoLegal : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoLegal : currentUser.name,
+      nombreCompleto : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.nombreCompleto : '',
+      fechaNacimiento : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.fechaNacimiento : '',
+      edadCumplidaAnios : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.edadCumplidaAnios : '',
+      edadCumplidaMeses : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.edadCumplidaMeses : '',
+      nacionalidad : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.nacionalidad : '',
+      telefono : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.telefono : '',
+      domicilio : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.domicilio : '',
+      centroEducativoProcedencia : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.centroEducativoProcedencia : '',
+      nivelAnterior : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.nivelAnterior : '',
+      matricularNivelDe : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.matricularNivelDe : '',
+      estudianteConviveCon : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.estudianteConviveCon : '',
+      estudianteConviveConOtros : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.estudianteConviveConOtros : '',
+      tieneAdecuancion : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.tieneAdecuancion : '',
+      cualAdecuancion : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.cualAdecuancion : '',
+      razonesEntrar : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.razonesEntrar : '',
+      estadoMatriculaAdmin : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.estadoMatriculaAdmin : '',
+      seccionMatriculaAdmin : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.seccionMatriculaAdmin : '',
+    })
+    const matriculasPorUsuarioFiltradas = matriculas.filter(element => element.encargadoId === currentUser.personalId);
+    setMatriculasPorUsuario(matriculasPorUsuarioFiltradas);
+  }, [selectedFlatRows])
+  
   const [selectedItem, setSelectedItem] = useState(initialValues);
 
+  const telephoneRegExp = /^[0-9]{8}$/;
+
   const validationSchema = Yup.object().shape({
-    nombreCompleto: Yup.string().required('Nombre completo es requerido'),
+    nombreCompleto: Yup.string()
+    .required('Nombre Completo es requerido')
+    .min(2, 'Nombre debe tener al menos 2 caracteres')
+    .max(50, 'Nombre no debe tener mas de 50 caracteres')
+    .matches(/^[a-zA-Z ]+$/, 'Nombre solo debe tener palabras y espacios'),
     fechaNacimiento: Yup.string().required('Fecha Nacimiento es requerida'),
-    edadCumplidaAnios : Yup.string().required('Años son requeridos'),
-    edadCumplidaMeses : Yup.string().required('Meses son requeridos'),
+    edadCumplidaAnios: Yup.number()
+    .required('Años cumplidos es requerido')
+    .min(8, 'Debe ser mayor a 8 años')
+    .max(120, 'Ingrese una edad valida'),
+    edadCumplidaMeses: Yup.number()
+    .required('Meses cumplidos es requerido')
+    .min(1, 'Ingrese un mes valido valida')
+    .max(12, 'Ingrese un mes valido valida'),
     nacionalidad : Yup.string().required('Nacionalidad es requerida'),
-    telefono : Yup.string().required('Telefono es requerido'),
+    telefono: Yup.string()
+    .matches(telephoneRegExp, 'Teléfono no es válido')
+    .required('Teléfono no es requerido'),
     domicilio : Yup.string().required('Domicilio es requerido'),
     centroEducativoProcedencia : Yup.string().required('Centro Educativo Procedencia es requerido'),
-    nivelAnterior : Yup.string().required('Nivel Anterior es requerido'),
+    nivelAnterior: Yup.number()
+    .required('Nivel anterior es requerido')
+    .min(1, 'Ingrese un Nivel valido valida')
+    .max(12, 'Ingrese un Nivel valido valida'),
     matricularNivelDe : Yup.string().required('Matricula en nivel requerido'),
     estudianteConviveCon : Yup.string().required('Convive con es requerido'),
     tieneAdecuancion : Yup.string().required('Tiene adecuación es requerido'),
@@ -56,38 +111,201 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
   }
   
   const onSubmit = async (values) => {
-    dispatch(setMatriculasLoading())
-    dispatch(agregarMatricula(values));
+    if(selectedFlatRows.length !== 1) {
+      dispatch(setMatriculasLoading())
+      dispatch(agregarMatricula(values));
+      dispatch(onShowAlert());
+      toast('¡Matricula agregada con éxito!')
+    } else {
+      const {_id: id} = selectedFlatRows[0].original;
+      const matriculaEstado  = {
+        "nombreCompleto": values.nombreCompleto,
+        "estadoMatriculaAdmin": values.estadoMatriculaAdmin,
+        "cedula": values.encargadoId,
+        "correo_encargado": values.encargadoCorreo,
+        "seccion": values.estadoMatriculaAdmin === "Aprobado" ? values.seccionMatriculaAdmin : ""
+      }
+      dispatch(matriculaModificarEstado(id, matriculaEstado));
+      toast('¡Estado de la matricula, actualizado!')
+    }
+    dispatch(setMatriculasLoading());
     dispatch(onShowAlert());
-    setIsOpenAddEditModal(false)
+    setIsOpenAddEditModal(false);
     cancelRegister();
   }
+
+
+const meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+const fecha = new Date();
+const fechaFormateada = `${fecha.getDate()} de ${meses[fecha.getMonth()]} del ${fecha.getFullYear()}`;
+
+
+const onCargarExistenteMatricula = ({ target }) => {
+  const { value } = target;
+  if (value === "seleccionar-prellenado") {
+    setInitialValues({
+      encargadoId : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoId : currentUser.personalId,
+      encargadoCorreo : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoCorreo : currentUser.email,
+      encargadoLegal : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoLegal : currentUser.name,
+      nombreCompleto : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.nombreCompleto : '',
+      fechaNacimiento : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.fechaNacimiento : '',
+      edadCumplidaAnios : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.edadCumplidaAnios : '',
+      edadCumplidaMeses : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.edadCumplidaMeses : '',
+      nacionalidad : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.nacionalidad : '',
+      telefono : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.telefono : '',
+      domicilio : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.domicilio : '',
+      centroEducativoProcedencia : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.centroEducativoProcedencia : '',
+      nivelAnterior : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.nivelAnterior : '',
+      matricularNivelDe : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.matricularNivelDe : '',
+      estudianteConviveCon : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.estudianteConviveCon : '',
+      estudianteConviveConOtros : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.estudianteConviveConOtros : '',
+      tieneAdecuancion : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.tieneAdecuancion : '',
+      cualAdecuancion : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.cualAdecuancion : '',
+      razonesEntrar : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.razonesEntrar : '',
+      estadoMatriculaAdmin : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.estadoMatriculaAdmin : '',
+      seccionMatriculaAdmin : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.seccionMatriculaAdmin : '',
+    })
+  } else {
+    const { encargadoId, encargadoCorreo, nombreCompleto, encargadoLegal, fechaNacimiento, edadCumplidaAnios, edadCumplidaMeses, nacionalidad, telefono, domicilio, centroEducativoProcedencia, nivelAnterior, matricularNivelDe, estudianteConviveCon, estudianteConviveConOtros, tieneAdecuancion, cualAdecuancion, razonesEntrar, estadoMatriculaAdmin, seccionMatriculaAdmin } = matriculas.find(({ _id:id }) => id === value );
+    setInitialValues({
+      encargadoId,
+      encargadoCorreo,
+      encargadoLegal,
+      nombreCompleto,
+      fechaNacimiento,
+      edadCumplidaAnios,
+      edadCumplidaMeses,
+      nacionalidad,
+      telefono,
+      domicilio,
+      centroEducativoProcedencia,
+      nivelAnterior,
+      matricularNivelDe,
+      estudianteConviveCon,
+      estudianteConviveConOtros,
+      tieneAdecuancion,
+      cualAdecuancion,
+      razonesEntrar,
+      estadoMatriculaAdmin,
+      seccionMatriculaAdmin
+    })
+  }
+}
 
   const formik = useFormik({ initialValues, validationSchema, onSubmit });
 
   return (
 
-    <Modal className="full-screen modal-right fade" show={isOpenAddEditModal} onHide={() => setIsOpenAddEditModal(false)}>
+    <Modal className="large-xl modal-right fade" show={isOpenAddEditModal} onHide={() => setIsOpenAddEditModal(false)}>
       <Modal.Header>
         <Modal.Title>{selectedFlatRows.length === 1 ? 'Ver Matricula' : 'Agregar Matricula'}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
 
         <Formik
+          enableReinitialize
           validationSchema={validationSchema}
           onSubmit={(values) => {
             onSubmit(values);
           }}
-          initialValues={initialValues}
+          initialValues={(selectedFlatRows.length === 1 && currentUser.role === 'Administrador') ? initValues: initialValues }
         >
           {({ handleSubmit, handleChange, values, errors, touched }) => (
-
             <form id="registerForm" className="tooltip-end-bottom" onSubmit={handleSubmit}>
+                                  {
+                        (selectedFlatRows.length === 1 && currentUser.role === 'Administrador') && (
+                          <>   
+                           <Modal.Title>Modificar estado de la matricula</Modal.Title>
+                          
+                          <hr/>
+                          <div className='form-input-hori label-arriba'>
+                            <p>Estado Actual de la matricula:</p>
+                            <Form.Group controlId="name">
+                              <div className="mb-2 form-group tooltip-end-top form-input-hori">
+                                <Form.Select 
+                                  name="estadoMatriculaAdmin"
+                                  defaultValue={values.estadoMatriculaAdmin}
+                                  onChange={handleChange}
+                                  >
+                                    <option value="Pendiente">Pendiente</option>
+                                    <option value="Aprobado">Aprobado</option>
+                                    <option value="Rechazado">Rechazado</option>
+                                  </Form.Select>
+                                  {errors.estadoMatriculaAdmin && touched.estadoMatriculaAdmin && (<div className="invalid-tooltip-matricula">{errors.estadoMatriculaAdmin}</div> )}
+                              </div>
+                              <div className={(values.estadoMatriculaAdmin === 'Aprobado') ? 'form-input-hori show-element' : 'form-input-hori hide-element' }>
+                                    <div className='form-input-hori mb-3 label-arriba'>
+                                      <p>Sección: </p>
+                                      <Form.Select 
+                                        name="seccionMatriculaAdmin"
+                                        defaultValue={ values.seccionMatriculaAdmin }
+                                        onChange={handleChange}
+                                      >
+                                        {
+                                         
+                                          secciones.map(({ nombreSeccion  }) => (
+                                            <option key={nombreSeccion} value={ nombreSeccion }>{ nombreSeccion }</option>
+                                          ))
+                                        }
+                                        </Form.Select>
+                                    </div>
+                                  </div>
+                            </Form.Group>
+                          </div>
+                        </>
+                        )
+                      }
+              <h5>Información del encargado Legal</h5>
               <Form.Group controlId="name" className='form-input-hori'>
-                <p>Encargado Legal: { values.encargadoLegal } | ID: {  values.encargadoId }</p>
+                <p><b>Nombre Completo:</b> { values.encargadoLegal }<br/>
+                <b>Cédula de identidad:</b> {  values.encargadoId }<br/>
+                <b>Correo Electrónico:</b> {  values.encargadoCorreo }<br/>
+                </p>
               </Form.Group>
-              <Form.Group controlId="name" className='form-input-hori'>
-                <p>1. Nombre completo: </p>
+              {
+                (selectedFlatRows.length !== 1 && matriculasPorUsuario.length > 0) && (
+                  <div className='form-input-hori label-arriba mr-40px'>
+                  <p>Prellenar información de matricula por estudiante</p>
+                  <Form.Group controlId="name">
+                    <div className="mb-3 form-group tooltip-end-top">
+                      <Form.Select 
+                        name="nacionalidad"
+                        defaultValue={values.nacionalidad}
+                        onChange={ onCargarExistenteMatricula }
+                        disabled={ selectedFlatRows.length === 1 }
+                      >
+                        <option value="seleccionar-prellenado">Nuevo Ingreso</option>
+                        {
+                          matriculasPorUsuario.map(({ nombreCompleto, _id  }) => (
+                            <option key={_id} value={ _id }>{ nombreCompleto }</option>
+                          ))
+                        }
+                      </Form.Select>
+                    {errors.nacionalidad && touched.nacionalidad && (
+                      <div className="invalid-tooltip-matricula">{errors.nacionalidad}</div>
+                    )}
+                    </div>
+                  </Form.Group>
+                  </div>
+                )
+              }
+              <Form.Group controlId="name" className='form-input-hori label-arriba'>
+                <p>Cédula del estudiante</p>
+                <div className="mb-3 form-group tooltip-end-top invalid-tooltip-matricula-container">
+                  <Form.Control
+                    type="text"
+                    name="nombreCompleto"
+                    value={values.nombreCompleto}
+                    onChange={handleChange}
+                    disabled={ selectedFlatRows.length === 1 }
+                  />
+                  {errors.nombreCompleto && touched.nombreCompleto && (
+                    <div className="invalid-tooltip-matricula">{errors.nombreCompleto}</div>
+                  )}
+                </div>
+              </Form.Group>
+              <Form.Group controlId="name" className='form-input-hori label-arriba'>
+                <p>1. Nombre completo </p>
                 <div className="mb-3 form-group tooltip-end-top invalid-tooltip-matricula-container">
                   <Form.Control
                     type="text"
@@ -102,27 +320,32 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                 </div>
               </Form.Group>
               <div className='form-input-hori'>
-                <p>2. Fecha de Nacimiento: </p>
-                <Form.Group controlId="name">
-                  <div className="mb-3 form-group tooltip-end-top">
-                    <Form.Control
-                      type="date"
-                      name="fechaNacimiento"
-                      value={values.fechaNacimiento}
-                      onChange={handleChange}
-                       disabled={ selectedFlatRows.length === 1 }
-                    />
-                  {errors.fechaNacimiento && touched.fechaNacimiento && (
-                    <div className="invalid-tooltip-matricula">{errors.fechaNacimiento}</div>
-                  )}
-                  </div>
-                </Form.Group>
-                <p>Edad Cumplida: al 15 de febrero del 2023:  </p>
+                <div className='form-input-hori label-arriba mr-40px'>
+                  <p>2. Fecha de Nacimiento </p>
+                  <Form.Group controlId="name">
+                    <div className="mb-3 form-group tooltip-end-top">
+                      <Form.Control
+                        type="date"
+                        name="fechaNacimiento"
+                        value={values.fechaNacimiento}
+                        onChange={handleChange}
+                        disabled={ selectedFlatRows.length === 1 }
+                      />
+                    {errors.fechaNacimiento && touched.fechaNacimiento && (
+                      <div className="invalid-tooltip-matricula">{errors.fechaNacimiento}</div>
+                    )}
+                    </div>
+                  </Form.Group>
+                </div>
+                <div className='form-input-hori label-arriba'>
+                <p>Edad Cumplida al <b>{ fechaFormateada }</b></p>
+                <div className='form-input-hori'>
                 <Form.Group controlId="name">
                   <div className="mb-3 form-group tooltip-end-top">
                     <Form.Control
                       type="text"
                       name="edadCumplidaAnios"
+                      placeholder='Años'
                       value={values.edadCumplidaAnios}
                       onChange={handleChange}
                        disabled={ selectedFlatRows.length === 1 }
@@ -132,13 +355,12 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                   )}
                   </div>
                 </Form.Group>
-                <p>(años)</p>
                 <Form.Group controlId="name">
                 <div className="mb-3 form-group tooltip-end-top">
                   <Form.Control
                     type="text"
                     name="edadCumplidaMeses"
-
+                    placeholder='Meses'
                     value={values.edadCumplidaMeses}
                     onChange={handleChange}
                     disabled={ selectedFlatRows.length === 1 }
@@ -148,25 +370,35 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                   )}
                 </div>
               </Form.Group>
-              <p>(meses)</p>
+              </div>
+              </div>
               </div>
               <div className='form-input-hori'>
-                <p>3. Nacionalidad: </p>
+              <div className='form-input-hori label-arriba mr-40px'>
+                <p>3. Nacionalidad </p>
                 <Form.Group controlId="name">
                   <div className="mb-3 form-group tooltip-end-top">
-                    <Form.Control
-                      type="text"
+                    <Form.Select 
                       name="nacionalidad"
-                      value={values.nacionalidad}
+                      defaultValue={values.nacionalidad}
                       onChange={handleChange}
                        disabled={ selectedFlatRows.length === 1 }
-                    />
+                    >
+                      <option>Seleccionar</option>
+                      {
+                        paises.map(({ nombrePais  }) => (
+                          <option key={nombrePais} value={ nombrePais }>{ nombrePais }</option>
+                        ))
+                      }
+                    </Form.Select>
                   {errors.nacionalidad && touched.nacionalidad && (
                     <div className="invalid-tooltip-matricula">{errors.nacionalidad}</div>
                   )}
                   </div>
                 </Form.Group>
-                <p>Telefono: </p>
+                </div>
+                <div className='form-input-hori label-arriba'>
+                <p>Telefono </p>
                 <Form.Group controlId="name">
                   <div className="mb-3 form-group tooltip-end-top">
                     <Form.Control
@@ -181,12 +413,13 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                   )}
                   </div>
                 </Form.Group>
+                </div>
               </div>
 
 
 
-              <Form.Group controlId="name" className='form-input-hori'>
-              <p>4. Domicilio: </p>
+              <Form.Group controlId="name" className='form-input-hori label-arriba'>
+              <p>4. Domicilio </p>
                 <div className="mb-3 form-group tooltip-end-top">
                   <Form.Control
                     type="text"
@@ -201,7 +434,8 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                 </div>
               </Form.Group>
               <div className='form-input-hori'>
-              <p>5. Centro Educativo de procendencia: </p>
+              <div className='form-input-hori label-arriba mr-40px'>
+              <p>5. Centro Educativo de procendencia </p>
                 <Form.Group controlId="name">
                   <div className="mb-3 form-group tooltip-end-top">
                     <Form.Control
@@ -216,7 +450,9 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                   )}
                   </div>
                 </Form.Group>
-                <p>Nivel Anterior: </p>
+                </div>
+                <div className='form-input-hori label-arriba'>
+                <p>Nivel Anterior </p>
                 <Form.Group controlId="name">
                 
                   <div className="mb-3 form-group tooltip-end-top">
@@ -232,10 +468,11 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                   )}
                   </div>
                 </Form.Group>
+                </div>
               </div>
 
-              <Form.Group controlId="name" className='form-input-hori'>
-              <p>6. Matricularé en el nivel de 7: </p>
+              <Form.Group controlId="name" className='form-input-hori label-arriba'>
+              <p>6. Matricularé en el nivel de 7 </p>
                 <div className="mb-3 form-group tooltip-end-top">
                   <Form.Control
                     type="text"
@@ -250,9 +487,10 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                 </div>
               </Form.Group>
               <div className='form-input-hori'>
-              <p>7. La persona estudiante Convive Con: </p>
+              <div className='form-input-hori label-arriba'>
+              <p>7. La persona estudiante Convive Con </p>
               <Form.Group controlId="name">
-                <div className="mb-3 form-group tooltip-end-top">
+              <div className="mb-3 form-group tooltip-end-top form-input-hori">
                     <Form.Select 
                       name="estudianteConviveCon"
                       defaultValue={values.estudianteConviveCon}
@@ -268,13 +506,9 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                       <option value="Abuelos">Abuelos</option>
                       <option value="Otro">Otro</option>
                     </Form.Select>
-                    {errors.estudianteConviveCon && touched.estudianteConviveCon && (
-                    <div className="invalid-tooltip-matricula">{errors.estudianteConviveCon}</div>
-                  )}
-                </div>
-              </Form.Group>
-              <Form.Group controlId="name" className={(values.estudianteConviveCon === 'Otro') ? 'show-element' : 'hide-element' }>
-                <div className="mb-3 form-group tooltip-end-top">
+                    <Form.Group controlId="name" className={(values.estudianteConviveCon === 'Otro') ? 'show-element form-input-hori' : 'hide-element' }>
+              <p className='mb-0'>Cual: </p>
+                <div className="form-group tooltip-end-top">
                   <Form.Control
                     type="text"
                     name="estudianteConviveConOtros"
@@ -287,11 +521,19 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                   )}
                 </div>
               </Form.Group>
+                    {errors.estudianteConviveCon && touched.estudianteConviveCon && (
+                    <div className="invalid-tooltip-matricula">{errors.estudianteConviveCon}</div>
+                  )}
+                </div>
+              </Form.Group>
+              </div>
+
               </div>
               <div className='form-input-hori'>
-              <p>8. Posee algun tipo de adecuación: </p>
+              <div className='form-input-hori label-arriba'>
+              <p>8. Posee algun tipo de adecuación </p>
               <Form.Group controlId="name">
-                <div className="mb-3 form-group tooltip-end-top">
+                <div className="mb-3 form-group tooltip-end-top form-input-hori">
                   <Form.Select 
                        name="tieneAdecuancion"
                       defaultValue={values.tieneAdecuancion}
@@ -302,30 +544,32 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                       <option value="true">Si</option>
                       <option value="false">No</option>
                     </Form.Select>
+                    <div className={(values.tieneAdecuancion === 'true') ? 'form-input-hori show-element' : 'form-input-hori hide-element' }>
+                      <div className='form-input-hori'>
+                        <p>Cual: </p>
+                        <Form.Group controlId="name">
+                          <div className="form-group tooltip-end-top">
+                            <Form.Control
+                              type="text"
+                              name="cualAdecuancion"
+                              value={values.cualAdecuancion}
+                              onChange={handleChange}
+                              disabled={ selectedFlatRows.length === 1 }
+                            />
+                            {errors.cualAdecuancion && touched.cualAdecuancion && (
+                            <div className="invalid-tooltip-matricula">{errors.cualAdecuancion}</div>
+                          )}
+                          </div>
+                        </Form.Group>
+                      </div>
+                    </div>
 
                     {errors.tieneAdecuancion && touched.tieneAdecuancion && (
                     <div className="invalid-tooltip-matricula">{errors.tieneAdecuancion}</div>
                   )}
                 </div>
               </Form.Group>
-              <div className={(values.tieneAdecuancion === 'true') ? 'form-input-hori show-element' : 'form-input-hori hide-element' }>
-                <p>Cual: </p>
-                <Form.Group controlId="name">
-                  <div className="mb-3 form-group tooltip-end-top">
-                    <Form.Control
-                      type="text"
-                      name="cualAdecuancion"
-                      value={values.cualAdecuancion}
-                      onChange={handleChange}
-                       disabled={ selectedFlatRows.length === 1 }
-                    />
-                    {errors.cualAdecuancion && touched.cualAdecuancion && (
-                    <div className="invalid-tooltip-matricula">{errors.cualAdecuancion}</div>
-                  )}
-                  </div>
-                </Form.Group>
-              </div>
-
+               </div>
               </div>
 
               <Form.Group controlId="name">
@@ -344,8 +588,8 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
                   )}
                 </div>
               </Form.Group>
-              <Button variant="primary" className={(selectedFlatRows.length) === 1 ? 'hide-element' : ''} type="submit">{selectedFlatRows.length === 1 ? 'Actualizar' : 'Agregar Matricula'}
-              </Button>
+              <Button variant="primary" className={(selectedFlatRows.length) === 1 ? 'hide-element' : ''} type="submit">{selectedFlatRows.length === 1 ? 'Actualizar' : 'Agregar Matricula'}</Button>
+              <Button variant="primary" className={(selectedFlatRows.length) !== 1 ? 'hide-element' : ''} type="submit">Modificar estado</Button>
               <Button variant="outline-primary" onClick={() => setIsOpenAddEditModal(false) || cancelRegister()}>
                 Cerrar
               </Button>

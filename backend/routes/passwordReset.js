@@ -6,6 +6,7 @@ const Joi = require("joi");
 const router = require("express").Router();
 const mongoose = require('mongoose');
 const bitacora = require("../controllers/bitacora");
+const bcrypt = require('bcryptjs')
 
 //Enviar email de reset de contraseña
 router.post("/", async (req, res) => {
@@ -76,7 +77,11 @@ router.post("/:userId/:token", async (req, res) => {
         });
         if (!token) return res.status(400).send("Link invalido o expirado");
 
-        user.password = req.body.password;
+        const salt = await bcrypt.genSalt(Number(process.env.SALT));
+		const hashPassword = await bcrypt.hash(req.body.password, salt);
+
+   
+        user.password = hashPassword;
         await user.save();
         await token.delete();
 

@@ -33,8 +33,21 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required('Nombre completo es requerido'),
-    email: Yup.string().email().required('Correo Electronico requerido'),
-    password: Yup.string().min(6, 'Debe tener como minimo 6 caracteres!').required('Favor ingresar contraseña'),
+    email: Yup.string()
+    .email('Favor ingresar un correo valido')
+    .test('contains-at', 'Correo electrónico requerido', (value) =>
+      value ? value.includes('@') : false
+    )
+    .required('Correo electrónico requerido'),
+    password: Yup.string()
+      .min(6, 'Se necesitan mínimo 6 caracteres!')
+      .max(20, 'Se permiten máximo 20 caracteres!')
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]+$/,
+        'se requiere: mayúscula, minúscula, número'
+      )
+      .notOneOf(['password', '123456', 'qwerty'], 'Contraseña común no permitida')
+      .required('Favor ingresar contraseña'),
     personalId: Yup.string().min(9, 'Cedula debe contener 9 digitos al menos!').required('Favor ingresar cedula').max(9, 'Cedula debe contener 9 digitos maximo!'),
     // terms: Yup.bool().required().oneOf([true], 'Es necesario aceptar los terminos'),
   });
@@ -42,7 +55,7 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
   const onSubmit = async ({ name, thumb, email, role, password, personalId, status }) => {
     if (selectedFlatRows.length === 1) {
       try {
-        const {_id: id} = selectedFlatRows[0].original;
+        const { _id: id } = selectedFlatRows[0].original;
         const response = await axios.put(apiSACG.concat(`/usuarios/${id}`), {
           name,
           thumb,
@@ -60,7 +73,7 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
         if (e.response && e.response.status === 400) {
           // console.log(e.response.data.msg);
           setShowDangerAlert(true);
-        } 
+        }
         else {
           setShowDangerAlert(true);
         }
@@ -84,7 +97,7 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
           setIsOpenAddEditModal(true);
           console.log(e.response.data.msg);
           alert(e.response.data.msg, { onDismiss: () => setIsOpenAddEditModal(true) });
-        } 
+        }
         else {
           setShowDangerAlert(true);
           // alert('Problema al guardar el usuario', { onDismiss: () => setIsOpenAddEditModal(true) });
@@ -92,14 +105,14 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
       }
     }
     axios
-            .get(apiSACG.concat("/usuarios"))
-            .then((res) => {
-              setData(res.data);
-            })
-            .catch((err) => {
-              console.error(err);
-            });
-            setIsOpenAddEditModal(false);
+      .get(apiSACG.concat("/usuarios"))
+      .then((res) => {
+        setData(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    setIsOpenAddEditModal(false);
   }
   const cancelRegister = () => {
     document.getElementById("registerForm").reset();
@@ -128,20 +141,20 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
             <form id="registerForm" className="tooltip-end-bottom" onSubmit={handleSubmit}>
               <Form.Group controlId="name">
 
-              {
-                selectedFlatRows.length === 1 
-                ? <UploadProfileImages userData={{
-                  userId: values.userMongoId,
-                  updateImage: true,
-                  thumb: values.thumb
-                }} ref={ ref }/>
-                : <UploadProfileImages userData={{
-                  userId: values.userMongoId,
-                  updateImage: false,
-                  thumb: values.thumb
-                }} ref={ ref }/>
+                {
+                  selectedFlatRows.length === 1
+                    ? <UploadProfileImages userData={{
+                      userId: values.userMongoId,
+                      updateImage: true,
+                      thumb: values.thumb
+                    }} ref={ref} />
+                    : <UploadProfileImages userData={{
+                      userId: values.userMongoId,
+                      updateImage: false,
+                      thumb: values.thumb
+                    }} ref={ref} />
 
-              }
+                }
 
               </Form.Group>
               <Form.Group controlId="name">
@@ -264,7 +277,7 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
               </Button>
               <Button variant="outline-primary" onClick={() => setIsOpenAddEditModal(false) || cancelRegister()}>
                 Cancelar
-              </Button>   
+              </Button>
             </form>
           )}
         </Formik>

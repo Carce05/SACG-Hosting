@@ -1,5 +1,5 @@
 import { mainEndpoint } from "api/apiConfig";
-import { setMatriculas, setMatriculasLoaded, setMatriculasLoading, setOnHideAlert, setOnShowAlert } from "./matriculaSlice";
+import { setMatriculas, setMatriculasFiltradas, setMatriculasLoaded, setMatriculasLoading, setOnHideAlert, setOnShowAlert } from "./matriculaSlice";
 
 
 const agregarMatricula = (matricula) => {
@@ -7,7 +7,10 @@ const agregarMatricula = (matricula) => {
     const { data } = await mainEndpoint.post(
       `matricula`,
       {
-        ...matricula
+        ...matricula,
+        estadoMatriculaAdmin: "Pendiente",
+        seccionMatriculaAdmin: "",
+        fechaCreacionMatricula: new Date().toISOString().slice(0, 10)
       },
     );
     dispatch(setMatriculasLoaded())
@@ -32,12 +35,40 @@ const onShowAlert = () => {
     setTimeout(() => {
       dispatch(setOnHideAlert());
       dispatch(setMatriculasLoaded())
-    }, 2000)
+    }, 1000)
   }
 }  
+
+const matriculaModificarEstado = (id, matriculaEstado) => {
+  return async (dispatch, getState) => {
+    console.log('first gd')
+    const { data } = await mainEndpoint.put(
+      `/matricula/matriculaModificarEstado/${ id }`,
+      {
+        ...matriculaEstado
+      }
+    );
+    console.log(data)
+  }
+}
+
+const matriculaFiltrar = ({ anioMostrarInforme, estadoMostrarInforme }) => {
+  return async (dispatch, getState) => {
+    const { data } = await mainEndpoint.post(
+      `/matricula/matricular-filter`,
+      {
+        anioMostrarInforme: anioMostrarInforme,
+        estadoMostrarInforme: estadoMostrarInforme
+      },
+    );
+    console.log(estadoMostrarInforme)
+    dispatch(setMatriculasFiltradas( data ));
+  }}
 
 export {
     obtenerMatriculas,
     agregarMatricula,
-    onShowAlert
+    onShowAlert,
+    matriculaModificarEstado,
+    matriculaFiltrar
 };

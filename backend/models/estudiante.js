@@ -10,7 +10,16 @@ const EstudianteSchema = Schema({
     apellido: {
         type: String
     },
+    nombreCompleto: {
+        type: String
+    },
     correo_encargado: {
+        type: String
+    },
+    seccion: {
+        type: String
+    },
+    id_matricula: {
         type: String
     }
 });

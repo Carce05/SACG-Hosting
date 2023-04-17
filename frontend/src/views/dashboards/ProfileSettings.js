@@ -5,7 +5,11 @@ import Select from 'react-select';
 import { actualizarUsuario } from 'store/slices/usuarios/usuarioThunk';
 import { useDispatch, useSelector } from 'react-redux';
 import { UploadProfileImages } from 'views/interface/components/UploadProfileImages';
+import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 import { useForm } from "../../hooks/useForm";
+
+
 
 const ProfileSettings = () => {
   const dispatch = useDispatch();
@@ -108,9 +112,7 @@ const ProfileSettings = () => {
           </Card>
           { 
           isUpdated && (
-            <Alert variant="success">
-              Perfil Actualizado con exito
-            </Alert>
+            toast('¡Perfil Actualizado!')
           )
         }
           {/* Public Info End */}
