@@ -12,7 +12,6 @@ import { useTable, useGlobalFilter, useSortBy, usePagination, useRowSelect, useR
 import Table from 'views/interface/plugins/datatables/EditableRows/components/Table';
 import ButtonsCheckAll from 'views/interface/plugins/datatables/EditableRows/components/ButtonsCheckAll';
 import ButtonsAddNew from 'views/interface/plugins/datatables/EditableRows/components/ButtonsAddNew';
-import ControlsPageSize from 'views/interface/plugins/datatables/EditableRows/components/ControlsPageSize';
 import ControlsAdd from 'views/interface/plugins/datatables/EditableRows/components/ControlsAdd';
 import ControlsEdit from 'views/interface/plugins/datatables/EditableRows/components/ControlsEdit';
 import ControlsDelete from 'views/interface/plugins/datatables/EditableRows/components/ControlsDelete';
@@ -138,9 +137,7 @@ const Usuarios = () => {
                 <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
                    <ControlsAdd tableInstance={tableInstance}  /><ControlsEdit tableInstance={tableInstance} /> <ControlsDelete tableInstance={tableInstance} />
                 </div>
-                <div className="d-inline-block">
-                  <ControlsPageSize tableInstance={tableInstance} />
-                </div>
+               
               </Col>
             </Row>
             <Col className="mb-3 d-flex align-items-center justify-content-center">
