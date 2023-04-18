@@ -2,7 +2,7 @@ import { Row, Col, Card, Button, Badge, Dropdown, Form, Alert } from 'react-boot
 import HtmlHead from 'components/html-head/HtmlHead';
 import React, { useState, useRef } from 'react';
 import Select from 'react-select';
-import { actualizarUsuario } from 'store/slices/usuarios/usuarioThunk';
+import { actualizarUsuario } from 'store/slices/general/generalThunk';
 import { useDispatch, useSelector } from 'react-redux';
 import { UploadProfileImages } from 'views/interface/components/UploadProfileImages';
 import 'react-toastify/dist/ReactToastify.css';
@@ -15,18 +15,18 @@ const General = () => {
   const dispatch = useDispatch();
   const ref = useRef();
   const { currentUser, isUpdated } = useSelector((state) => state.auth);
-  const { id, name, email, role, thumb, pass } = currentUser;
+  const { id, anio, periodo, role, thumb, pass } = currentUser;
   const title = 'General';
   const description = 'Configuraciones del Curso Lectivo';
 
-  const genderOptions = [
-    { value: 'Encargado', label: 'Encargado' },
-    { value: 'Profesor', label: 'Profesor' },
-    { value: 'Admin', label: 'Admin' },
+  const periodoOptions = [
+    { value: 'I', label: 'Primer periodo' },
+    { value: 'II', label: 'Segundo Periodo' },
+    { value: 'III', label: 'Tercer Periodo' },
   ];
 
   const [startDate, setStartDate] = useState(new Date());
-  const [genderValue, setGenderValue] = useState( { value: role, label: role });
+  const [periodoValue, setGenderValue] = useState( { value: role, label: role });
 
   const { formName, formEmail, formPass, onInputChange, formState } =
   useForm({
@@ -80,7 +80,7 @@ const General = () => {
                     <Form.Label className="col-form-label">Rol</Form.Label>
                   </Col>
                   <Col sm="8" md="9" lg="10">
-                    <Select classNamePrefix="react-select" options={genderOptions} value={genderValue} onChange={setGenderValue} isDisabled/>
+                    <Select classNamePrefix="react-select" options={periodoOptions} value={periodoValue} onChange={setGenderValue} isDisabled/>
                   </Col>
                 </Row>
                 <Row className="mb-3">
