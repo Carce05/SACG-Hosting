@@ -9,6 +9,7 @@ import { MENU_PLACEMENT } from 'constants.js';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import { layoutShowingNavMenu } from 'layout/layoutSlice';
 import { menuChangeCollapseAll } from './menuSlice';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 const HorizontalMenuDropdownToggle = memo(
   forwardRef(({ children, onClick, href = '#', active = false }, ref) => (
@@ -43,16 +44,19 @@ const MainMenuItem = memo(({ item, id, isSubItem = false, menuPlacement = DEFAUL
     <>
       {icon && (
         <>
-          <CsLineIcons icon={icon} size={18} className="cs-icon icon" />{' '}
+          <CsLineIcons icon={icon} size={25} className="cs-icon icon" />{' '}
         </>
       )}
       <span className="label">{USE_MULTI_LANGUAGE ? f({ id: label }) : label}</span>
     </>
   );
 
-  const onToggleItem = (isOpen) => {
+  /*const onToggleItem = (isOpen) => {
     setHorizontalDropdownIsOpen(isOpen);
-  };
+  };*/
+  <OverlayTrigger placement="top" overlay={<Tooltip>Bloquear barra</Tooltip>}>
+  <span onClick={(isOpen) => setHorizontalDropdownIsOpen(isOpen)}>setHorizontalDropdownIsOpen(isOpen);</span>
+  </OverlayTrigger>
 
   const onVerticalMenuCollapseClick = (e) => {
     e.preventDefault();

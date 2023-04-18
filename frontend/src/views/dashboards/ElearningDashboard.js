@@ -44,9 +44,9 @@ const ElearningDashboard = () => {
       <Row >
         {/* Continue Learning Start */}
         <Col xl="6" className="mb-5">
-          <h2 className="small-title">Avisos</h2>
+          <h2 className="small-title" style={{ fontSize: '25px' }}>Avisos</h2>
           {announcements.map((announcement) => (
-            <Card key={`${announcement.description}-${announcement.createdAt}`} className="row g-0 h-auto sh-md-19 card mb-3">
+            <Card key={`${announcement.description}-${announcement.createdAt}`} className="row g-0 h-auto sh-md-19 card mb-3"  style={{overflow: 'auto', fontSize: '18px'}}>
               <Row className="g-0 sh-14">
                 <Col xs="auto" className="position-relative">
                   <img src="/img/logo/LiceoGuarari.jpg" 
@@ -81,14 +81,14 @@ const ElearningDashboard = () => {
 
         {/* Recommended Courses Start */}
         <Col xl="6" className="mb-5">
-          <h2 className="small-title">Sobre el Liceo</h2>
+          <h1 className="small-title" style={{ fontSize: '25px' }}>Sobre el Liceo</h1>
           <Card className="sh-50 sh-md-40 h-xl-100-card hover-img-scale-up">
             <img src="/img/logo/HistoriaFondo.png" className="card-img h-100 scale position-absolute" alt="card image" />
-            <div className="card-img-overlay d-flex flex-column justify-content-between bg-transparent">
+            <div className="card-img-overlay d-flex flex-column justify-content-between bg-transparent" style={{overflow: 'auto', fontSize: '18px'}}>
               <div>
                 <div className="cta-1 mb-3 text-black w-75 w-sm-50">Historia</div>
                 <div className="w-50 text-black mb-3">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ac odio tempor orci dapibus ultrices in. Mauris ultrices eros in cursus. Duis at tellus at urna condimentum mattis pellentesque id. Pretium viverra suspendisse potenti nullam ac tortor vitae. Donec ultrices tincidunt arcu non sodales neque sodales ut. Sed libero enim sed faucibus turpis in. Ornare quam viverra orci sagittis.
+                El Liceo Diurno de Guararí es una institución  educativa inspirada en altos valores organizacionales, éticos y sociales con el respeto y tolerancia a la dignidad humana y siempre consciente del compromiso con la comunidad de Guararí y de la provincia de Heredia  y sobre todo, con los jóvenes que son nuestra razón de ser, buscando una formación integral y la maximización de los recursos existentes, con lo que alcanzaremos el ideal de "Ser  el mejor Liceo Diurno para la formación profesional de Costa Rica, con un modelo de innovación educativa y sostenible con el medio"
                 </div>
                 {/* <Rating
                   className="mb-2"
@@ -281,14 +281,14 @@ const ElearningDashboard = () => {
       <Row>
         {/* Related Subjects Start */}
         <Col xl="12" className="mb-5">
-          <h2 className="small-title">Accesos rápidos</h2>
+          <h2 className="small-title" style={{ fontSize: '25px' }}>Accesos rápidos</h2>
           <Row className="g-2">
             <Col xs="6" xl="6" className="sh-19">
               <Card className="h-100 hover-scale-up">
                 <Card.Body className="text-center">
                   <NavLink to="#">
                     <CsLineIcons icon="book" className="text-primary" />
-                    <p className="heading mt-3 text-body">Calificaciones</p>
+                    <p className="heading mt-3 text-body" style={{ fontSize: '18px', fontWeight: 'bold' }}>Calificaciones</p>
 
                   </NavLink>
                 </Card.Body>
@@ -299,7 +299,7 @@ const ElearningDashboard = () => {
                 <Card.Body className="text-center">
                   <NavLink to="#">
                     <CsLineIcons icon="news" className="text-primary" />
-                    <p className="heading mt-3 text-body">Matricula</p>
+                    <p className="heading mt-3 text-body" style={{ fontSize: '18px', fontWeight: 'bold' }}>Matricula</p>
                   </NavLink>
                 </Card.Body>
               </Card>
@@ -307,9 +307,9 @@ const ElearningDashboard = () => {
             <Col xs="6" xl="6" className="sh-19">
               <Card className="h-100 hover-scale-up">
                 <Card.Body className="text-center">
-                  <NavLink to="#">
+                  <NavLink to="/admin/avisos">
                     <CsLineIcons icon="notification" className="text-primary" />
-                    <p className="heading mt-3 text-body">Avisos</p>
+                    <p className="heading mt-3 text-body" style={{ fontSize: '18px', fontWeight: 'bold' }}>Avisos</p>
                   </NavLink>
                 </Card.Body>
               </Card>
@@ -317,10 +317,10 @@ const ElearningDashboard = () => {
             <Col xs="6" xl="6" className="sh-19">
               <Card className="h-100 hover-scale-up">
                 <Card.Body className="text-center">
-                  <NavLink to="#">
-                    <CsLineIcons icon="user" className="text-primary" />
-                    <p className="heading mt-3 text-body">Usuarios</p>
-                  </NavLink>
+                <NavLink to="/admin/usuarios">
+                <CsLineIcons icon="user" className="text-primary" style={{ fontSize: '50px' }} />
+                <p className="heading mt-3 text-body" style={{ fontSize: '18px', fontWeight: 'bold' }}>Usuarios</p>
+                </NavLink>
                 </Card.Body>
               </Card>
             </Col>

@@ -22,6 +22,7 @@ import axios from "axios";
 import ModalAddAnnouncement from 'views/interface/plugins/datatables/EditableRows/components/ModalAddAnnouncement';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 
 const SchoolDashboard = () => {
@@ -146,15 +147,19 @@ const SchoolDashboard = () => {
                 </div>
               </Col>
               <Col sm="12" md="7" lg="9" xxl="10" className="text-end">
-                <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
+              <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
+                <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-top-add">Agregar</Tooltip>}>
                   <Button onClick={handleEditClick} variant="foreground-alternate" className="btn-icon btn-icon-only shadow add-datatable">
                     <CsLineIcons icon="plus" />
-                  </Button>{/* <ControlsEdit tableInstance={tableInstance} /> */} <ControlsDeleteAnnouncement tableInstance={tableInstance} />
-                </div>
-                <div className="d-inline-block">
-                  <ControlsPageSize tableInstance={tableInstance} />
-                </div>
-              </Col>
+                  </Button>
+                </OverlayTrigger>
+                {/* <ControlsEdit tableInstance={tableInstance} /> */}
+                <ControlsDeleteAnnouncement tableInstance={tableInstance} />
+              </div>
+              <div className="d-inline-block">
+                <ControlsPageSize tableInstance={tableInstance} />
+              </div>
+            </Col>
             </Row>
 
             <Col className="mb-3 d-flex align-items-center justify-content-center">

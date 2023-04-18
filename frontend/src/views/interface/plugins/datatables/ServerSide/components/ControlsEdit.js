@@ -12,7 +12,7 @@ const ControlsEdit = ({ tableInstance }) => {
     );
   }
   return (
-    <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-top-edit">Edit</Tooltip>}>
+    <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-top-edit">Editar</Tooltip>}>
       <Button onClick={() => setIsOpenAddEditModal(true)} variant="foreground-alternate" className="btn-icon btn-icon-only shadow edit-datatable">
         <CsLineIcons icon="edit" />
       </Button>

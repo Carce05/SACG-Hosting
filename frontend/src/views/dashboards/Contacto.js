@@ -41,7 +41,7 @@ const Contacto = () => {
             <h1 className="medium-title">{title}</h1>
           </Col>
           <Col md="5" className="d-flex justify-content-end align-items-center">
-            <Button variant="outline-primary" onClick={handleEditClick} className="mb-3">Editar Contacto</Button>
+            <Button variant="outline-primary" onClick={handleEditClick} className="mb-3" style={{ fontSize: '1rem' }}>Editar Contacto</Button>
           </Col>
           <Col className="mb-3 d-flex align-items-center justify-content-center">
             {showSuccessAlert && (
@@ -67,7 +67,7 @@ const Contacto = () => {
                 <div className="card sh-48">
                   <div className="card-body text-center d-flex flex-column justify-content-center align-items-center">
                     <img src="/img/logo/LiceoGuarari.jpg" className="mb-3" alt="card image" style={{ width: '600px', height: '300px' }} />
-                    <h1 className="medium-title">Liceo Diurno de Guararí</h1>
+                    <h1 className="medium-title" style={{ fontSize: '2rem' }}>Liceo Diurno de Guararí</h1>
                   </div>
                 </div>
               </Col>
@@ -78,7 +78,7 @@ const Contacto = () => {
                   <div className="card-body text-center d-flex flex-column justify-content-center align-items-center">
                     <CsLineIcons icon="phone" size="25" className="text-primary mb-2" />
                     <p className="heading mb-3 text-primary">Telefono</p>
-                    <p className="card-title mb-0">{data.phone}</p>
+                    <p className="card-title mb-0" style={{ fontSize: '20px' }}>{data.phone}</p>
                   </div>
                 </div>
               </Col>
@@ -87,16 +87,16 @@ const Contacto = () => {
                   <div className="card-body text-center d-flex flex-column justify-content-center align-items-center">
                     <CsLineIcons icon="email" size="25" className="text-primary mb-2" />
                     <p className="heading mb-3 text-primary">Correo Electronico</p>
-                    <p className="card-title mb-0">{data.email}</p>
+                    <p className="card-title mb-0" style={{ fontSize: '20px' }}>{data.email}</p>
                   </div>
                 </div>
               </Col>
               <Col xl="4" className="mb-5">
                 <div className="card sh-19">
                   <div className="card-body text-center d-flex flex-column justify-content-center align-items-center">
-                    <CsLineIcons icon="destination" size="25" className="text-primary mb-2" />
+                    <CsLineIcons icon="destination" size="18" className="text-primary mb-2" />
                     <p className="heading mb-3 text-primary">Dirección</p>
-                    <p className="card-title mb-0">{data.location}</p>
+                    <p className="card-title mb-0" style={{ fontSize: '20px' }}>{data.location}</p>
                   </div>
                 </div>
               </Col>

@@ -8,6 +8,7 @@ import { LAYOUT, MENU_BEHAVIOUR, NAV_COLOR, RADIUS, THEME_COLOR } from 'constant
 import { menuChangeBehaviour } from 'layout/nav/main-menu/menuSlice';
 import { settingsChangeColor, settingsChangeLayout, settingsChangeNavColor, settingsChangeRadius } from 'settings/settingsSlice';
 
+
 const OptionGroup = ({ label = '', children, noContainer = false }) => (
   <div className="mb-5">
     <label className="mb-3 d-inline-block">{label}</label>
@@ -45,7 +46,7 @@ const SettingsModal = ({ handleClose, show = false }) => {
         scrollable
       >
         <Modal.Header>
-          <Modal.Title as="h5">Theme Settings</Modal.Title>
+          <Modal.Title as="h5">Colores del sistema</Modal.Title>
           <button type="button" className="btn-close" onClick={handleClose} />
         </Modal.Header>
         <Modal.Body>
@@ -54,7 +55,7 @@ const SettingsModal = ({ handleClose, show = false }) => {
               <>
                 <div className="row d-flex g-3 justify-content-between flex-wrap mb-3">
                   <OptionItem
-                    label="LIGHT BLUE"
+                    label="AZUL CLARO"
                     active={color === THEME_COLOR.LightBlue}
                     onClick={() => handleChange(settingsChangeColor, THEME_COLOR.LightBlue)}
                   >
@@ -62,7 +63,7 @@ const SettingsModal = ({ handleClose, show = false }) => {
                       <div className="blue-light" />
                     </Card>
                   </OptionItem>
-                  <OptionItem label="DARK BLUE" active={color === THEME_COLOR.DarkBlue} onClick={() => handleChange(settingsChangeColor, THEME_COLOR.DarkBlue)}>
+                  <OptionItem label="AZUL OSCURO" active={color === THEME_COLOR.DarkBlue} onClick={() => handleChange(settingsChangeColor, THEME_COLOR.DarkBlue)}>
                     <Card className="rounded-md p-3 mb-1 no-shadow color">
                       <div className="blue-dark" />
                     </Card>
@@ -70,7 +71,7 @@ const SettingsModal = ({ handleClose, show = false }) => {
                 </div>
                 <div className="row d-flex g-3 justify-content-between flex-wrap mb-3">
                   <OptionItem
-                    label="LIGHT GREEN"
+                    label="VERDE CLARO"
                     active={color === THEME_COLOR.LightGreen}
                     onClick={() => handleChange(settingsChangeColor, THEME_COLOR.LightGreen)}
                   >
@@ -79,7 +80,7 @@ const SettingsModal = ({ handleClose, show = false }) => {
                     </Card>
                   </OptionItem>
                   <OptionItem
-                    label="DARK GREEN"
+                    label="VERDE OSCURO"
                     active={color === THEME_COLOR.DarkGreen}
                     onClick={() => handleChange(settingsChangeColor, THEME_COLOR.DarkGreen)}
                   >
@@ -90,7 +91,7 @@ const SettingsModal = ({ handleClose, show = false }) => {
                 </div>
                 <div className="row d-flex g-3 justify-content-between flex-wrap mb-3">
                   <OptionItem
-                    label="LIGHT PINK"
+                    label="ROSA CLARO"
                     active={color === THEME_COLOR.LightPink}
                     onClick={() => handleChange(settingsChangeColor, THEME_COLOR.LightPink)}
                   >
@@ -98,7 +99,7 @@ const SettingsModal = ({ handleClose, show = false }) => {
                       <div className="pink-light" />
                     </Card>
                   </OptionItem>
-                  <OptionItem label="DARK PINK" active={color === THEME_COLOR.DarkPink} onClick={() => handleChange(settingsChangeColor, THEME_COLOR.DarkPink)}>
+                  <OptionItem label="ROSA OSCURO" active={color === THEME_COLOR.DarkPink} onClick={() => handleChange(settingsChangeColor, THEME_COLOR.DarkPink)}>
                     <Card className="rounded-md p-3 mb-1 no-shadow color">
                       <div className="pink-dark" />
                     </Card>
@@ -106,7 +107,7 @@ const SettingsModal = ({ handleClose, show = false }) => {
                 </div>
                 <div className="row d-flex g-3 justify-content-between flex-wrap mb-3">
                   <OptionItem
-                    label="LIGHT PURPLE"
+                    label="MORADO CLARO"
                     className="w-50"
                     active={color === THEME_COLOR.LightPurple}
                     onClick={() => handleChange(settingsChangeColor, THEME_COLOR.LightPurple)}
@@ -116,7 +117,7 @@ const SettingsModal = ({ handleClose, show = false }) => {
                     </Card>
                   </OptionItem>
                   <OptionItem
-                    label="DARK PURPLE"
+                    label="MORADO OSCURO"
                     active={color === THEME_COLOR.DarkPurple}
                     onClick={() => handleChange(settingsChangeColor, THEME_COLOR.DarkPurple)}
                   >
@@ -126,126 +127,17 @@ const SettingsModal = ({ handleClose, show = false }) => {
                   </OptionItem>
                 </div>
                 <div className="row d-flex g-3 justify-content-between flex-wrap mb-3">
-                  <OptionItem label="LIGHT RED" active={color === THEME_COLOR.LightRed} onClick={() => handleChange(settingsChangeColor, THEME_COLOR.LightRed)}>
+                  <OptionItem label="ROJO CLARO" active={color === THEME_COLOR.LightRed} onClick={() => handleChange(settingsChangeColor, THEME_COLOR.LightRed)}>
                     <Card className="rounded-md p-3 mb-1 no-shadow color">
                       <div className="red-light" />
                     </Card>
                   </OptionItem>
-                  <OptionItem label="DARK RED" active={color === THEME_COLOR.DarkRed} onClick={() => handleChange(settingsChangeColor, THEME_COLOR.DarkRed)}>
+                  <OptionItem label="ROJO OSCURO" active={color === THEME_COLOR.DarkRed} onClick={() => handleChange(settingsChangeColor, THEME_COLOR.DarkRed)}>
                     <Card className="rounded-md p-3 mb-1 no-shadow color">
                       <div className="red-dark" />
                     </Card>
                   </OptionItem>
                 </div>
-              </>
-            </OptionGroup>
-            <OptionGroup label="Override Nav Palette">
-              <>
-                <OptionItem
-                  label="DEFAULT"
-                  className="w-33"
-                  active={navColor === NAV_COLOR.Default}
-                  onClick={() => handleChange(settingsChangeNavColor, NAV_COLOR.Default)}
-                >
-                  <Card className="rounded-md p-3 mb-1 no-shadow">
-                    <Figure className="figure-primary top" />
-                    <Figure className="figure-secondary bottom" />
-                  </Card>
-                </OptionItem>
-                <OptionItem
-                  label="LIGHT"
-                  className="w-33"
-                  active={navColor === NAV_COLOR.Light}
-                  onClick={() => handleChange(settingsChangeNavColor, NAV_COLOR.Light)}
-                >
-                  <Card className="rounded-md p-3 mb-1 no-shadow">
-                    <Figure className="figure-primary figure-light top" />
-                    <Figure className="figure-secondary bottom" />
-                  </Card>
-                </OptionItem>
-                <OptionItem
-                  label="DARK"
-                  className="w-33"
-                  active={navColor === NAV_COLOR.Dark}
-                  onClick={() => handleChange(settingsChangeNavColor, NAV_COLOR.Dark)}
-                >
-                  <Card className="rounded-md p-3 mb-1 no-shadow">
-                    <Figure className="figure-primary figure-dark top" />
-                    <Figure className="figure-secondary bottom" />
-                  </Card>
-                </OptionItem>
-              </>
-            </OptionGroup>
-            <OptionGroup label="Menu Behaviour">
-              <>
-                <OptionItem
-                  label="PINNED"
-                  active={behaviour === MENU_BEHAVIOUR.Pinned}
-                  onClick={() => handleChange(menuChangeBehaviour, MENU_BEHAVIOUR.Pinned)}
-                >
-                  <Card className="rounded-md p-3 mb-1 no-shadow">
-                    <Figure className="figure-primary left large" />
-                    <Figure className="figure-secondary right small" />
-                  </Card>
-                </OptionItem>
-                <OptionItem
-                  label="UNPINNED"
-                  active={behaviour === MENU_BEHAVIOUR.Unpinned}
-                  onClick={() => handleChange(menuChangeBehaviour, MENU_BEHAVIOUR.Unpinned)}
-                >
-                  <Card className="rounded-md p-3 mb-1 no-shadow">
-                    <Figure className="figure-primary left" />
-                    <Figure className="figure-secondary right" />
-                  </Card>
-                </OptionItem>
-              </>
-            </OptionGroup>
-            <OptionGroup label="Layout">
-              <>
-                <OptionItem label="FLUID" active={layout === LAYOUT.Fluid} onClick={() => handleChange(settingsChangeLayout, LAYOUT.Fluid)}>
-                  <Card className="rounded-md p-3 mb-1 no-shadow">
-                    <Figure className="figure-primary top" />
-                    <Figure className="figure-secondary bottom" />
-                  </Card>
-                </OptionItem>
-                <OptionItem label="BOXED" active={layout === LAYOUT.Boxed} onClick={() => handleChange(settingsChangeLayout, LAYOUT.Boxed)}>
-                  <Card className="rounded-md p-3 mb-1 no-shadow">
-                    <Figure className="figure-primary top" />
-                    <Figure className="figure-secondary bottom small" />
-                  </Card>
-                </OptionItem>
-              </>
-            </OptionGroup>
-            <OptionGroup label="Radius">
-              <>
-                <OptionItem
-                  label="ROUNDED"
-                  className="w-33"
-                  active={radius === RADIUS.Rounded}
-                  onClick={() => handleChange(settingsChangeRadius, RADIUS.Rounded)}
-                >
-                  <Card className="radius-rounded rounded-md p-3 mb-1 no-shadow">
-                    <Figure className="figure-primary top" />
-                    <Figure className="figure-secondary bottom" />
-                  </Card>
-                </OptionItem>
-                <OptionItem
-                  label="STANDARD"
-                  className="w-33"
-                  active={radius === RADIUS.Standard}
-                  onClick={() => handleChange(settingsChangeRadius, RADIUS.Standard)}
-                >
-                  <Card className="radius-regular rounded-md p-3 mb-1 no-shadow">
-                    <Figure className="figure-primary top" />
-                    <Figure className="figure-secondary bottom" />
-                  </Card>
-                </OptionItem>
-                <OptionItem label="FLAT" active={radius === RADIUS.Flat} onClick={() => handleChange(settingsChangeRadius, RADIUS.Flat)}>
-                  <Card className="radius-flat rounded-md p-3 mb-1 no-shadow">
-                    <Figure className="figure-primary top" />
-                    <Figure className="figure-secondary bottom" />
-                  </Card>
-                </OptionItem>
               </>
             </OptionGroup>
           </OverlayScrollbarsComponent>

@@ -87,7 +87,7 @@ const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
         }
         if (cell.value === "Rechazado") {
           return (
-            <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-top-edit">Para más información de porque fue rechazodo, contactar al Administrador</Tooltip>}>
+            <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-top-edit">Para más información de porque fue rechazado, contactar al Administrador</Tooltip>}>
                 <p className='matricula-rechazada matricula-estado'>Rechazado</p>
             </OverlayTrigger>
           )

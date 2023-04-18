@@ -41,8 +41,8 @@ const NavIconMenu = () => {
     <>
       <ul className="list-unstyled list-inline text-center menu-icons">
         <li className="list-inline-item">
-          <a href="#/" onClick={onSearchIconClick}>
-            <CsLineIcons icon="search" size="18" />
+          <a href="#/" onClick={onSearchIconClick} title='Buscar'>
+            <CsLineIcons icon="search" size="25" />
           </a>
         </li>
         <li className="list-inline-item">
@@ -51,15 +51,16 @@ const NavIconMenu = () => {
             id="pinButton"
             onClick={pinButtonEnable ? onPinButtonClick : onDisabledPinButtonClick}
             className={classNames('pin-button', { disabled: !pinButtonEnable })}
+            title='Bloquear/Desbloquear Barra'
           >
-            <CsLineIcons icon="lock-on" size="18" className="unpin" />
-            <CsLineIcons icon="lock-off" size="18" className="pin" />
+            <CsLineIcons icon="lock-on" size="25" className="unpin"/>
+            <CsLineIcons icon="lock-off" size="25" className="pin"/>
           </a>
         </li>
         <li className="list-inline-item">
-          <a href="#/" id="colorButton" onClick={onLightDarkModeClick}>
-            <CsLineIcons icon="light-on" size="18" className="light" />
-            <CsLineIcons icon="light-off" size="18" className="dark" />
+          <a href="#/" id="colorButton" onClick={onLightDarkModeClick} title='Modo Claro/Oscuro'>
+            <CsLineIcons icon="light-on" size="25" className="light"/>
+            <CsLineIcons icon="light-off" size="25" className="dark"/>
           </a>
         </li>
       </ul>

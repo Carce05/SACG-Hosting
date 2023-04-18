@@ -13,8 +13,8 @@ const ControlsPageSize = ({ tableInstance }) => {
     setPageSize(size);
     gotoPage(0);
   };
-  return (
-    <OverlayTrigger placement="top" delay={{ show: 1000, hide: 0 }} overlay={<Tooltip>Item Count</Tooltip>}>
+  return ( null
+    /*<OverlayTrigger placement="top" delay={{ show: 1000, hide: 0 }} overlay={<Tooltip>Item Count</Tooltip>}>
       {({ ref, ...triggerHandler }) => (
         <Dropdown className="d-inline-block" align="end">
           <Dropdown.Toggle ref={ref} {...triggerHandler} variant="foreground-alternate" className="shadow">
@@ -41,7 +41,7 @@ const ControlsPageSize = ({ tableInstance }) => {
           </Dropdown.Menu>
         </Dropdown>
       )}
-    </OverlayTrigger>
+    </OverlayTrigger>*/
   );
 };
 

@@ -58,7 +58,7 @@ const initialState = {
 };
 
 const settingsSlice = createSlice({
-  name: 'settings',
+  name: 'Colores',
   initialState,
   reducers: {
     setColor(state, action) {
