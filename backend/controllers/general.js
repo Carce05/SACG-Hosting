@@ -4,12 +4,14 @@ const bcryptjs = require('bcryptjs')
 
 const bitacora = require("../controllers/bitacora");
 
+const bitacoraAccion = require("./bitacoraAccion");
+
 const General = require('../models/general')
 
 //Get all Method
 const generalesGet = async (req, res) => {
     try{
-        const data = await General.find();
+        const data = await General.find({ _id: req.params.generalId});
         res.json(data)
     }
     catch(error){
@@ -18,38 +20,29 @@ const generalesGet = async (req, res) => {
     }
 }
 
-const generalesPost = async (req, res) => {
-    const { anio, periodo } = req.body;
+const generalesPost = async (req, res = response) => {
+    try{
+        const { anio, periodo } = req.body;
     const general = new General( {anio, periodo } );
 
-
-    //Check if the email exist
-    // const existEmail = await General.findOne({ email })
-
-    /*
-    if (existEmail) {
-        return res.status(400).json({
-            msg: 'Email already taken'
-        })
-    }
-    */
-
-    // Encrypt password
-    // const salt =  bcryptjs.genSaltSync();
-    // usuario.password = bcryptjs.hashSync(password, salt)
-
     await general.save();
-    // await usuarios.insertOne(usuario)
 
     res.json({
         msg: 'POST | CONTROLLER',
         general
     })
+    }
+    catch (err) {
+        res.status(500).send(err);
+    }
+    
 }
 
 const generalesPut = async(req, res) => {
+    const emailLoggedGlobal = global.email;
     try {
-        await General.updateOne({ _id: req.params.idRes }, req.body);
+        await General.updateOne({ _id: req.params.generalId }, req.body);
+        bitacoraAccion.log('debug', `${emailLoggedGlobal} actualizó datos del usuario con el siguiente correo: ${req.body.email}`);
         res.status(200).send({
             msg: 'PUT | CONTROLLER',
             id: req.params.idRes

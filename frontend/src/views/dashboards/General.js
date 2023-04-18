@@ -1,125 +1,126 @@
 import { Row, Col, Card, Button, Badge, Dropdown, Form, Alert } from 'react-bootstrap';
+import { NavLink } from 'react-router-dom';
+import Rating from 'react-rating';
 import HtmlHead from 'components/html-head/HtmlHead';
-import React, { useState, useRef } from 'react';
-import Select from 'react-select';
-import { actualizarUsuario } from 'store/slices/general/generalThunk';
-import { useDispatch, useSelector } from 'react-redux';
-import { UploadProfileImages } from 'views/interface/components/UploadProfileImages';
-import 'react-toastify/dist/ReactToastify.css';
-import { toast } from 'react-toastify';
-import { useForm } from "../../hooks/useForm";
+import BreadcrumbList from 'components/breadcrumb-list/BreadcrumbList';
+import CsLineIcons from 'cs-line-icons/CsLineIcons';
+import ScrollByCount from 'components/scroll-by-count/ScrollByCount';
+import { OverlayScrollbarsComponent } from 'overlayscrollbars-react';
+import React, { useState, useEffect } from 'react';
+import ModalEditContact from 'views/interface/plugins/datatables/EditableRows/components/ModalEditContact';
+import TablePagination from 'views/interface/plugins/datatables/EditableRows/components/TablePagination';
+import axios from "axios";
 
-
-
-const General = () => {
-  const dispatch = useDispatch();
-  const ref = useRef();
-  const { currentUser, isUpdated } = useSelector((state) => state.auth);
-  const { id, anio, periodo, role, thumb, pass } = currentUser;
-  const title = 'General';
-  const description = 'Configuraciones del Curso Lectivo';
-
-  const periodoOptions = [
-    { value: 'I', label: 'Primer periodo' },
-    { value: 'II', label: 'Segundo Periodo' },
-    { value: 'III', label: 'Tercer Periodo' },
-  ];
-
-  const [startDate, setStartDate] = useState(new Date());
-  const [periodoValue, setGenderValue] = useState( { value: role, label: role });
-
-  const { formName, formEmail, formPass, onInputChange, formState } =
-  useForm({
-    formName: name,
-    formEmail: email,
-    formPass: 'passvacia'
-  });
-
-  const onActualizarPerfil = () => {
-
-    if(formPass !== 'passvacia') {
-      dispatch(actualizarUsuario(formState, id));
-    } else {
-      dispatch(actualizarUsuario({...formState, formPass: pass}, id));
-    }
-    ref.current.handleSubmit()
-  }
-  
-  console.log(thumb)
-
-
+const Contacto = () => {
+  const [data, setData] = useState(null);
+  const title = 'Contacto';
+  const description = 'Información de contacto';
+  const [showModal, setShowModal] = useState(false);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showDangerAlert, setShowDangerAlert] = useState(false);
+  const handleEditClick = () => {
+    setShowModal(true);
+  };
+  useEffect(() => {
+    axios
+      .get("http://localhost:8080/api/contacto/63f92ab00cd67a1ade5e243e")
+      .then((res) => {
+        setData(res.data[0]);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
   return (
     <>
       <HtmlHead title={title} description={description} />
-
-      <Row>
-
-        <Col>
-
-
-          {/* Public Info Start */}
-          <h2 className="small-title">Información del Usuario</h2>
-          <Card className="mb-5">
-            <Card.Body>
-            <UploadProfileImages userData={{
-                userId: id,
-                updateImage: true,
-                thumb
-              }} ref={ ref }/>
-              <Form>
-                <Row className="mb-3">
-                  <Col lg="2" md="3" sm="4">
-                    <Form.Label className="col-form-label">Nombre</Form.Label>
-                  </Col>
-                  <Col sm="8" md="9" lg="10">
-                    <Form.Control type="text" name='formName' onChange={ onInputChange } defaultValue={ formName } />
-                  </Col>
-                </Row>
-                <Row className="mb-3">
-                  <Col lg="2" md="3" sm="4">
-                    <Form.Label className="col-form-label">Rol</Form.Label>
-                  </Col>
-                  <Col sm="8" md="9" lg="10">
-                    <Select classNamePrefix="react-select" options={periodoOptions} value={periodoValue} onChange={setGenderValue} isDisabled/>
-                  </Col>
-                </Row>
-                <Row className="mb-3">
-                  <Col lg="2" md="3" sm="4">
-                    <Form.Label className="col-form-label">Email</Form.Label>
-                  </Col>
-                  <Col sm="8" md="9" lg="10">
-                    <Form.Control type="email" name='formEmail' onChange={ onInputChange } defaultValue={ formEmail } disabled />
-                  </Col>
-                </Row>
-                <Row className="mb-3">
-                  <Col lg="2" md="3" sm="4">
-                    <Form.Label className="col-form-label">Contraseña</Form.Label>
-                  </Col>
-                  <Col sm="8" md="9" lg="10">
-                    <Form.Control type="password" name='formPass' onChange={ onInputChange } defaultValue={ formPass } />
-                  </Col>
-                </Row>
-                <Row className="mt-5">
-                  <Col lg="2" md="3" sm="4" />
-                  <Col sm="8" md="9" lg="10">
-                    <Button variant="outline-primary" className="mb-1" onClick={ onActualizarPerfil }>
-                      Actualizar
-                    </Button>
-                  </Col>
-                </Row>
-              </Form>
-            </Card.Body>
-          </Card>
-          { 
-          isUpdated && (
-            toast('¡Perfil Actualizado!')
-          )
-        }
-          {/* Public Info End */}
-        </Col>
-      </Row>
+      {/* Title and Top Buttons Start */}
+      <div className="page-title-container">
+        <Row>
+          <Col md="7">
+            <h1 className="medium-title">{title}</h1>
+          </Col>
+          <Col md="5" className="d-flex justify-content-end align-items-center">
+            <Button variant="outline-primary" onClick={handleEditClick} className="mb-3">Editar Contacto</Button>
+          </Col>
+          <Col className="mb-3 d-flex align-items-center justify-content-center">
+            {showSuccessAlert && (
+                  <Alert variant="success" onClose={() => setShowSuccessAlert(false)} dismissible>
+                    Contacto actualizado correctamente.
+                  </Alert>
+                )}
+            </Col>
+            <Col className="mb-3 d-flex align-items-center justify-content-center">
+            {showDangerAlert && (
+                  <Alert variant="danger" onClose={() => setShowDangerAlert(false)} dismissible>
+                    Un error ha ocurrido al intentar actualizar el contacto.
+                  </Alert>
+                )}
+            </Col>
+        </Row>
+      </div>
+      <div>
+        {data ? (
+          <div key={data.id}>
+            <Row className="justify-content-center">
+              <Col xl="7" className="mb-5">
+                <div className="card sh-48">
+                  <div className="card-body text-center d-flex flex-column justify-content-center align-items-center">
+                    <img src="/img/logo/LiceoGuarari.jpg" className="mb-3" alt="card image" style={{ width: '600px', height: '300px' }} />
+                    <h1 className="medium-title">Liceo Diurno de Guararí</h1>
+                  </div>
+                </div>
+              </Col>
+            </Row>
+            <Row className="justify-content-center">
+              <Col xl="4" className="mb-5">
+                <div className="card sh-19">
+                  <div className="card-body text-center d-flex flex-column justify-content-center align-items-center">
+                    <CsLineIcons icon="phone" size="25" className="text-primary mb-2" />
+                    <p className="heading mb-3 text-primary">Telefono</p>
+                    <p className="card-title mb-0">{data.phone}</p>
+                  </div>
+                </div>
+              </Col>
+              <Col xl="4" className="mb-5">
+                <div className="card sh-19">
+                  <div className="card-body text-center d-flex flex-column justify-content-center align-items-center">
+                    <CsLineIcons icon="email" size="25" className="text-primary mb-2" />
+                    <p className="heading mb-3 text-primary">Correo Electronico</p>
+                    <p className="card-title mb-0">{data.email}</p>
+                  </div>
+                </div>
+              </Col>
+              <Col xl="4" className="mb-5">
+                <div className="card sh-19">
+                  <div className="card-body text-center d-flex flex-column justify-content-center align-items-center">
+                    <CsLineIcons icon="destination" size="25" className="text-primary mb-2" />
+                    <p className="heading mb-3 text-primary">Dirección</p>
+                    <p className="card-title mb-0">{data.location}</p>
+                  </div>
+                </div>
+              </Col>
+            </Row>
+            <Row className="justify-content-center">
+              <Col xl="8" className="mb-5">
+                <div className="card sh-60">
+                  <div className="card-body text-center d-flex flex-column justify-content-center align-items-center">
+                    <CsLineIcons icon="pin" size="25" className="text-primary mb-2" />
+                    <p className="heading mb-3 text-primary">Ubicación</p>
+                    <iframe className="h-70 w-70 text-center" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3929.3564093874397!2d-84.11884098520592!3d9.987389292859756!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8fa0fad92ee9eef1%3A0xdbadcff68c3ff7aa!2sLiceo%20Diurno%20De%20Guarar%C3%AD!5e0!3m2!1ses!2scr!4v1677693059238!5m2!1ses!2scr"
+                      title="GoogleMaps" width="400" height="300" loading="lazy" referrerpolicy="no-referrer-when-downgrade" />
+                  </div>
+                </div>
+              </Col>
+            </Row>
+          </div>
+        ) : (
+          <p>Cargando...</p>
+        )}
+      </div>
+      <ModalEditContact contact={data} showModal={showModal} setShowModal={setShowModal} setData={setData} setShowSuccessAlert={setShowSuccessAlert} setShowDangerAlert= {setShowDangerAlert} />
     </>
   );
 };
 
-export default General;
+export default Contacto;

@@ -1,4 +1,4 @@
-const { number } = require('joi');
+
 const { Schema, model } = require('mongoose');
 
 const GeneralSchema = Schema({
@@ -10,4 +10,4 @@ const GeneralSchema = Schema({
     }
 });
 
-module.exports = model( 'general', GeneralSchema );
+module.exports = model( 'General', GeneralSchema );
