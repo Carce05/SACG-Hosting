@@ -79,7 +79,6 @@ const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
       { Header: 'Cédula Encargado', accessor: 'encargadoId', sortable: true, headerClassName: 'text-small text-uppercase w-10' },
       { Header: 'Nombre Completo', accessor: 'nombreCompleto', sortable: true, headerClassName: 'text-small text-uppercase w-10' },
       { Header: 'Nacionalidad', accessor: 'nacionalidad', sortable: true, headerClassName: 'text-small text-uppercase w-10' },
-      { Header: 'Centro Educativo Procedencia', accessor: 'centroEducativoProcedencia', sortable: true, headerClassName: 'text-small text-uppercase w-20' },
       { Header: 'Estado Matricula', accessor: 'estadoMatriculaAdmin', sortable: true, headerClassName: 'text-small text-uppercase w-10',
       Cell: ({ cell }) => {
         if (cell.value === "Pendiente") {
@@ -94,7 +93,7 @@ const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
         }
         return <p className='matricula-estado'>Aprobado</p>
       } },
-      { Header: 'Sección Asignada', accessor: 'seccionMatriculaAdmin', sortable: true, headerClassName: 'text-small text-uppercase w-20',
+      { Header: 'Sección Asignada', accessor: 'seccionMatriculaAdmin', sortable: true, headerClassName: 'text-small text-uppercase w-10',
         Cell: ({ cell }) => {
           if (!cell.value) {
             return <p className='mb-0'>Pendiente Asignar</p>
@@ -189,11 +188,8 @@ const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
                     className="form-select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   >
                     <option value="no-filtrar-anio">No filtrar por año</option>
-                    <option value="2020">2020</option>
-                    <option value="2021">2021</option>
                     <option value="2022">2022</option>
                     <option value="2023">2023</option>
-                    <option value="2024">2024</option>
                   </select>
 
                   <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
