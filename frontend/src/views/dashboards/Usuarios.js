@@ -19,9 +19,10 @@ import ControlsSearch from 'views/interface/plugins/datatables/EditableRows/comp
 import ModalAddEdit from 'views/interface/plugins/datatables/EditableRows/components/ModalAddEdit';
 import TablePagination from 'views/interface/plugins/datatables/EditableRows/components/TablePagination';
 import axios from "axios";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';;
+import 'react-toastify/dist/ReactToastify.css';import { obtenerTodasSecciones } from 'store/slices/seccion/seccionThunk';
+;
 
 const Usuarios = () => {
   const { currentUser, isUpdated } = useSelector((state) => state.auth);
@@ -31,6 +32,7 @@ const Usuarios = () => {
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showDangerAlert, setShowDangerAlert] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const dispatch = useDispatch();
   const handleEditClick = () => {
     setShowModal(true);
   };
@@ -43,7 +45,7 @@ const Usuarios = () => {
       .catch((err) => {
         console.error(err);
       });
-    console.log(showSuccessAlert)
+    dispatch(obtenerTodasSecciones());
   }, [isUpdated, showSuccessAlert]);
 
 

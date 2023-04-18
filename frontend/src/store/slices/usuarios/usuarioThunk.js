@@ -90,6 +90,7 @@ const agregarUsuarioNuevo = (userToSave, image) => {
       formData.append('role', userToSave.role)
       formData.append('personalId', userToSave.personalId)
       formData.append('status', userToSave.status)
+      formData.append('seccionesAsignadas', userToSave.seccionesAsignadas)
 
       const { data } = await mainEndpoint.post(
         `/usuarios/withimage`,

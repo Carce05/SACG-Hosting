@@ -24,6 +24,12 @@ const UsuarioSchema = Schema({
     },
     status: {
         type: String
+    },
+    seccionesAsignadas: {
+        type: String
+    },
+    materiasAsignadas: {
+        type: String
     }
 });
 

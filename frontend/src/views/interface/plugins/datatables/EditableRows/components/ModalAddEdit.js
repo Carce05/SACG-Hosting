@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Button, Form, Modal, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import * as Yup from 'yup';
 import { useFormik, Formik } from 'formik';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
@@ -8,13 +8,15 @@ import axios from "axios";
 import { actualizarUsuario, actualizarUsuarioFromAdmin, agregarUsuarioNuevo } from 'store/slices/usuarios/usuarioThunk';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { UploadProfileImages } from 'views/interface/components/UploadProfileImages';
 
 const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const ref = useRef();
+  const { secciones } = useSelector((state) => state.seccion);
+  const [seccionAsignadasState, setSeccionAsignadasState] = useState([])
 
   const { selectedFlatRows, data, setData, setIsOpenAddEditModal, isOpenAddEditModal } = tableInstance;
   const initialValues = {
@@ -28,6 +30,7 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
     password: selectedFlatRows.length === 1 ? selectedFlatRows[0].original.password : '',
     personalId: selectedFlatRows.length === 1 ? selectedFlatRows[0].original.personalId : '',
     status: selectedFlatRows.length === 1 ? selectedFlatRows[0].original.status : 'Activo',
+    seccionesAsignadas: ( selectedFlatRows.length === 1 && typeof selectedFlatRows[0].original.seccionesAsignadas === "string" && selectedFlatRows[0].original.role === 'Profesor') ? JSON.parse(selectedFlatRows[0].original.seccionesAsignadas) : [{"seccionAsignada":"10-1", "materiasAsignada":"Mate"}],
     terms: false
   };
   const [selectedItem, setSelectedItem] = useState(initialValues);
@@ -63,7 +66,8 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
           password,
           role,
           personalId,
-          status
+          status,
+          seccionesAsignadas: JSON.stringify(seccionAsignadasState),
         });
         ref.current.handleSubmit();
         // setShowSuccessAlert(true);
@@ -90,7 +94,8 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
           password,
           role,
           personalId,
-          status
+          status,
+          seccionesAsignadas: JSON.stringify(seccionAsignadasState)
         }
         dispatch(agregarUsuarioNuevo(userToSave, ref.current.returnImage()));
         toast('Usuario Agregado con Éxito!');
@@ -122,6 +127,97 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
     document.getElementById("registerForm").reset();
   }
 
+  useEffect(() => {
+    setSeccionAsignadasState(initialValues.seccionesAsignadas);
+  }, [initialValues.userMongoId])
+  
+
+  const MultiSecciones = () => {
+
+    const handleFormChange = (index, event) => {
+      let data = [...seccionAsignadasState];
+      data[index][event.target.name] = event.target.value;
+      setSeccionAsignadasState(data);
+    }
+  
+  const addFields = () => {
+    let newfield = { seccionAsignada: '', materiasAsignada: '' }
+    setSeccionAsignadasState([...seccionAsignadasState, newfield])
+  }
+
+  const removeFields = (index) => {
+    let data = [...seccionAsignadasState];
+    data.splice(index, 1)
+    setSeccionAsignadasState(data)
+  }
+
+    return (
+      <>
+        <Form.Label>Secciónes Asignadas</Form.Label>
+          <div className='form-input-hori label-arriba mb-3'>
+            {
+              seccionAsignadasState.map((input, index) => (
+                 <Form.Group controlId="name" key={ index }>
+                    <div className="form-group tooltip-end-top form-input-hori">
+                      <Form.Select 
+                        name="seccionAsignada"
+                        value={ input.seccionAsignada }
+                        onChange={event => handleFormChange(index, event)}
+                      >
+                        {
+                          secciones.map(({ nombreSeccion  }) => (
+                            <option key={nombreSeccion} value={ nombreSeccion }>{ nombreSeccion }</option>
+                          ))
+                        }
+                      </Form.Select>
+                          <Button onClick={ addFields } variant="foreground-alternate" className="btn-icon-only shadow add-datatable ">
+                            <CsLineIcons icon="plus"/>
+                          </Button>
+                          <Button onClick={ removeFields } variant="foreground-alternate" className="btn-icon-only shadow add-datatable ">
+                            <CsLineIcons icon="bin"/>
+                          </Button>
+                    </div>
+                  </Form.Group>
+              ))
+            }
+          </div>
+          <Form.Label>Materias Asignadas</Form.Label>
+          <div className='form-input-hori label-arriba mb-3'>
+            {
+              seccionAsignadasState.map((input, index) => (
+                 <Form.Group controlId="name" key={ index }>
+                    <div className="form-group tooltip-end-top form-input-hori">
+                      <Form.Select 
+                        name="materiasAsignada"
+                        value={ input.materiasAsignada }
+                        onChange={event => handleFormChange(index, event)}
+                      >
+                        <option value="Matemáticas">Matemáticas</option>
+                        <option value="Español">Español</option>
+                        <option value="Estudios Sociales">Estudios Sociales</option>
+                        <option value="Educación Cívica">Educación Cívica</option>
+                        <option value="Biología">Biología</option>
+                        <option value="Física">Física</option>
+                        <option value="Química">Química</option>
+                        <option value="Inglés">Inglés</option>
+                        <option value="Francés">Francés</option>
+                        <option value="Filosofía">Filosofía</option>
+                        <option value="Psicología">Psicología</option>
+                        <option value="Educación para la Afectividad y Sexualidad">Educación para la Afectividad y Sexualidad</option>
+                        <option value="Educación Física">Educación Física</option>
+                        <option value="Informática">Informática</option>
+                        <option value="Orientación">Orientación</option>
+                        <option value="Ética de la vida cotidiana">Ética de la vida cotidiana</option>
+                        <option value="Ética y Valores">Ética y Valores</option>
+                      </Form.Select>
+                    </div>
+                  </Form.Group>
+              ))
+            }
+          </div>
+      </>
+    )
+  }
   const formik = useFormik({ initialValues, validationSchema, onSubmit });
 
 
@@ -254,6 +350,12 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
                   />
                 </Form.Group>
               </div>
+
+
+              {
+                values.role === "Profesor" && <MultiSecciones seccionesAsignadasForm={ values.seccionesAsignadas }/>
+
+              }
 
               <div className="mb-3">
                 <Form.Label>Estado del usuario</Form.Label>
