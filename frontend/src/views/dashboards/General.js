@@ -1,59 +1,124 @@
-import { Row, Col, Card, Button, Badge, Alert, Form } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
-import Rating from 'react-rating';
+import { Row, Col, Card, Button, Badge, Dropdown, Form, Alert } from 'react-bootstrap';
 import HtmlHead from 'components/html-head/HtmlHead';
-import BreadcrumbList from 'components/breadcrumb-list/BreadcrumbList';
-import CsLineIcons from 'cs-line-icons/CsLineIcons';
-import ScrollByCount from 'components/scroll-by-count/ScrollByCount';
-import { OverlayScrollbarsComponent } from 'overlayscrollbars-react';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import Select from 'react-select';
-import { useTable, useGlobalFilter, useSortBy, usePagination, useRowSelect, useRowState } from 'react-table';
-import Table from 'views/interface/plugins/datatables/EditableRows/components/Table';
-import ButtonsCheckAll from 'views/interface/plugins/datatables/EditableRows/components/ButtonsCheckAll';
-import ButtonsAddNew from 'views/interface/plugins/datatables/EditableRows/components/ButtonsAddNew';
-import ControlsEdit from 'views/interface/plugins/datatables/EditableRows/components/ControlsEdit';
-import ControlsDeleteAnnouncement from 'views/interface/plugins/datatables/EditableRows/components/ControlsDeleteAnnouncement';
-import ControlsSearch from 'views/interface/plugins/datatables/EditableRows/components/ControlsSearch';
-import ModalAddEdit from 'views/interface/plugins/datatables/EditableRows/components/ModalAddEdit';
-import TablePagination from 'views/interface/plugins/datatables/EditableRows/components/TablePagination';
-import axios from "axios";
-import ModalAddAnnouncement from 'views/interface/plugins/datatables/EditableRows/components/ModalAddAnnouncement';
-import { toast } from 'react-toastify';
+import { actualizarUsuario } from 'store/slices/usuarios/usuarioThunk';
+import { useDispatch, useSelector } from 'react-redux';
+import { UploadProfileImages } from 'views/interface/components/UploadProfileImages';
 import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
+import { useForm } from "../../hooks/useForm";
+
+
 
 const General = () => {
-  const [datos, setDatos] = useState([]);
+  const dispatch = useDispatch();
+  const ref = useRef();
+  const { currentUser, isUpdated } = useSelector((state) => state.auth);
+  const { id, name, email, role, thumb, pass } = currentUser;
+  const title = 'General';
+  const description = 'Configuraciones del Curso Lectivo';
 
-  useEffect(() => {
-    fetch('http://localhost:8080/api/comunicados')
-      .then(response => response.json())
-      .then(data => setDatos(data))
-      .catch(error => console.error(error));
-  }, []);
+  const genderOptions = [
+    { value: 'Encargado', label: 'Encargado' },
+    { value: 'Profesor', label: 'Profesor' },
+    { value: 'Admin', label: 'Admin' },
+  ];
+
+  const [startDate, setStartDate] = useState(new Date());
+  const [genderValue, setGenderValue] = useState( { value: role, label: role });
+
+  const { formName, formEmail, formPass, onInputChange, formState } =
+  useForm({
+    formName: name,
+    formEmail: email,
+    formPass: 'passvacia'
+  });
+
+  const onActualizarPerfil = () => {
+
+    if(formPass !== 'passvacia') {
+      dispatch(actualizarUsuario(formState, id));
+    } else {
+      dispatch(actualizarUsuario({...formState, formPass: pass}, id));
+    }
+    ref.current.handleSubmit()
+  }
+  
+  console.log(thumb)
+
 
   return (
-    <div>
-      {/* Renderizar las cards con los datos obtenidos */}
-      {datos.map(data => (
-        <div
-          key={data.id}
-          style={{
-            border: '1px solid #000',
-            borderRadius: '5px',
-            padding: '10px',
-            margin: '10px',
-            width: '200px',
-          }}
-        >
-          <h2>{data.title}</h2>
-          <p>Edad: {data.edad}</p>
-          <p>Profesión: {data.profesion}</p>
-          
-          {}
-        </div>
-      ))}
-    </div>
+    <>
+      <HtmlHead title={title} description={description} />
+
+      <Row>
+
+        <Col>
+
+
+          {/* Public Info Start */}
+          <h2 className="small-title">Información del Usuario</h2>
+          <Card className="mb-5">
+            <Card.Body>
+            <UploadProfileImages userData={{
+                userId: id,
+                updateImage: true,
+                thumb
+              }} ref={ ref }/>
+              <Form>
+                <Row className="mb-3">
+                  <Col lg="2" md="3" sm="4">
+                    <Form.Label className="col-form-label">Nombre</Form.Label>
+                  </Col>
+                  <Col sm="8" md="9" lg="10">
+                    <Form.Control type="text" name='formName' onChange={ onInputChange } defaultValue={ formName } />
+                  </Col>
+                </Row>
+                <Row className="mb-3">
+                  <Col lg="2" md="3" sm="4">
+                    <Form.Label className="col-form-label">Rol</Form.Label>
+                  </Col>
+                  <Col sm="8" md="9" lg="10">
+                    <Select classNamePrefix="react-select" options={genderOptions} value={genderValue} onChange={setGenderValue} isDisabled/>
+                  </Col>
+                </Row>
+                <Row className="mb-3">
+                  <Col lg="2" md="3" sm="4">
+                    <Form.Label className="col-form-label">Email</Form.Label>
+                  </Col>
+                  <Col sm="8" md="9" lg="10">
+                    <Form.Control type="email" name='formEmail' onChange={ onInputChange } defaultValue={ formEmail } disabled />
+                  </Col>
+                </Row>
+                <Row className="mb-3">
+                  <Col lg="2" md="3" sm="4">
+                    <Form.Label className="col-form-label">Contraseña</Form.Label>
+                  </Col>
+                  <Col sm="8" md="9" lg="10">
+                    <Form.Control type="password" name='formPass' onChange={ onInputChange } defaultValue={ formPass } />
+                  </Col>
+                </Row>
+                <Row className="mt-5">
+                  <Col lg="2" md="3" sm="4" />
+                  <Col sm="8" md="9" lg="10">
+                    <Button variant="outline-primary" className="mb-1" onClick={ onActualizarPerfil }>
+                      Actualizar
+                    </Button>
+                  </Col>
+                </Row>
+              </Form>
+            </Card.Body>
+          </Card>
+          { 
+          isUpdated && (
+            toast('¡Perfil Actualizado!')
+          )
+        }
+          {/* Public Info End */}
+        </Col>
+      </Row>
+    </>
   );
 };
 
