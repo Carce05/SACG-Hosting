@@ -9,56 +9,125 @@ import axios from "axios";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const ModalAsignarDocente = ({ tableInstance, docentes, setDocentes }) => {
-const history = useHistory();
+const ModalAsignarDocente = ({ tableInstance, docentes, setDocentes, DMS, setDMS }) => {
+  const history = useHistory();
  
   const { selectedFlatRows, data, setData, setIsOpenAddEditModal, isOpenAddEditModal } = tableInstance;
 
-  /*
+  const [selectedOption, setSelectedOption] = useState("");
+
+  let dmsId = "";
   let materiaRes = "";
+  let seccionRes = "";
 
-  let cedula = "";
-
-  let idRes = "";
-  let cotidianoRes = 0;
-  let tareaRes = 0;
-  let examen1Res = 0;
-  let examen2Res = 0;
-  let proyectoRes = 0;
-  let asistenciaRes = 0;
-  let totalRes = 0;
-  let observacionesRes = "";
-  */
-
-
-
-
-  // const {coti} = calificaciones.length === 2 ? calificaciones[0].cotidiano :'';
-
-
-  // const estudiante = selectedFlatRows[0].original.cedula;
-
-
-  // const [selectedItem, setSelectedItem] = useState(initialValues);
-
+  if (selectedFlatRows.length === 1) {
+    dmsId = selectedFlatRows[0].original._id;
+    materiaRes = selectedFlatRows[0].original.materia;
+    seccionRes = selectedFlatRows[0].original.seccion;
+  }
 
   
+  const initialValues = {
+    docente:''
+  };
 
-  /*
-  axios
-  .get("http://localhost:8080/api/calificaciones")
-  .then((res) => {
-    setData(res.data);
-  })
-  .catch((err) => {
-    console.error(err);
+  const validationSchema = Yup.object().shape({
+    docente: Yup.string().required('Un docente es requerido')
   });
-  */
 
+  //const { docente } = Formik;
 
-  const { docente } = Formik;
+  const handleTypeSelect = (e) => {
+    setSelectedOption(e.value);
+  };
 
+  const cancelRegister = () => {
+    document.getElementById("agregarDocenteForm").reset();
+  }
 
+  const onSubmit = async () => {
+    if (idRes !== "") {
+    try {
+      await axios.put(`http://localhost:8080/api/docentes_materias_secciones/${dmsId}`, {
+        docente: selectedOption,
+        materia: materiaRes,
+        seccion: seccionRes
+      });
+      toast('¡Docente Asignado!', { className: 'success' });
+      setIsOpenAddEditModal(false);
+      
+      axios
+          .get("http://localhost:8080/api/docentes_materias_secciones")
+          .then((res) => {
+           setDMS(res.data);
+            })
+            .catch((err) => {
+               console.error(err);
+             });
+
+      /*
+      estudiantes.forEach((val) => {
+        calificaciones.forEach((cali) => {
+          if (val.cedula === cali.estudiante && val.materia === cali.materia) {
+            val.total = cali.total;
+          }
+        })
+      });    
+      */         
+
+    } catch (e) {
+      console.log(e.message);
+      if (e.response && e.response.status === 400) {
+        console.log(e.response.data.msg);
+        alert(e.response.data.msg);
+        setIsOpenAddEditModal(true);
+      }  else {
+        alert('Problema al actualizar la calificación');
+        setIsOpenAddEditModal(true);
+      }
+    }
+    
+  }
+  else {
+    try {
+      const response = await axios.post('http://localhost:8080/api/calificaciones', {
+        estudiante: cedula,
+        materia: materiaRes,
+        cotidiano,
+        tarea, 
+        examen1,
+        examen2,
+        proyecto,
+        asistencia,
+        total,
+        observaciones,
+        anio: 2023,
+        trimestre: 'II'  
+    });
+    alert('guardado con exito');
+          setIsOpenAddEditModal(false);
+          axios
+          .get("http://localhost:8080/api/calificaciones")
+          .then((res) => {
+           setCalificaciones(res.data);
+            })
+            .catch((err) => {
+               console.error(err);
+             });
+    } catch (e) {
+      console.log(e.message);
+      if (e.response && e.response.status === 400) {
+        setIsOpenAddEditModal(true);
+        console.log(e.response.data.msg);
+        alert(e.response.data.msg, { onDismiss: () => setIsOpenAddEditModal(true) });
+      } 
+      else {
+        alert('Problema al guardar el usuario', { onDismiss: () => setIsOpenAddEditModal(true) });
+        setIsOpenAddEditModal(true);
+      }
+    }
+  }
+  }
 
   return (
 
@@ -68,53 +137,37 @@ const history = useHistory();
       </Modal.Header>
       <Modal.Body>
 
-        <Formik
-          onSubmit={(values) => {
-            onSubmit(values);
-          }}
-        >
-          {({ handleSubmit, handleChange, values, errors, touched }) => (
 
-            <form id="calificacionForm" className="tooltip-end-bottom" onSubmit={handleSubmit}>
+            <form id="agregarDocenteForm" className="tooltip-end-bottom" onSubmit={onSubmit}>
 
-              <Form.Group controlId="cotidiano">
+              <Form.Group controlId="docente">
               <Form.Label>Docentes</Form.Label>
                 <div className="mb-3 filled form-group tooltip-end-top">
+                <CsLineIcons icon="user" />
                 <Select classNamePrefix="react-select" 
                     options={docentes} 
-                    value={docente} 
-                    onChange={""} 
+                    value={docentes.find(function (option) {
+                      return option.value === selectedOption;})} 
                     placeholder="Seleccione" 
+                    onChange={handleTypeSelect}
                   />
                 </div>
               </Form.Group>
-              <div>
-                <Row className="g-6">
-                  <Col md="3">
-                    <Button variant="primary" type="submit">Subir</Button>
-                  </Col>
-                  <Col md="3">
-                    <Button variant="outline-primary" onClick={() => setIsOpenAddEditModal(false)}>
-                    Cancelar
+              <br/>
+              <Row className="mb-3">
+                  <Col className="text-center">
+                    <Button variant="primary" type="submit" style={{ marginRight: '10px' }}>
+                      Actualizar
+                    </Button>
+                    <Button variant="outline-primary" onClick={() => setIsOpenAddEditModal(false) || cancelRegister()} style={{ marginLeft: '10px' }}>
+                      Cancelar
                     </Button>
                   </Col>
                 </Row>
-              </div>
 
 
             </form>
-          )}
-        </Formik>
       </Modal.Body>
-
-      <Modal.Footer>
-        {/* <Button variant="outline-primary" onClick={() => setIsOpenAddEditModal(false)}>
-          Cancelar
-        </Button>
-        <Button variant="primary" type="submit">
-          {selectedFlatRows.length === 1 ? 'Hecho' : 'Agregar'}
-        </Button> */}
-      </Modal.Footer>
     </Modal>
   );
 };

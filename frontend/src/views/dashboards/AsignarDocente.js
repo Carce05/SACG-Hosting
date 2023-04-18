@@ -12,11 +12,11 @@ import { useTable, useGlobalFilter, useSortBy, usePagination, useRowSelect, useR
 import Table from 'views/interface/plugins/datatables/EditableRows/components/Table';
 import ButtonsCheckAll from 'views/interface/plugins/datatables/EditableRows/components/ButtonsCheckAll';
 import ButtonsAddNew from 'views/interface/plugins/datatables/EditableRows/components/ButtonsAddNew';
-import ControlsAdd from 'views/interface/plugins/datatables/EditableRows/components/ControlsAdd';
 import ControlsAsignarDocente from 'views/interface/plugins/datatables/EditableRows/components/ControlsAsignarDocente';
-import ControlsDelete from 'views/interface/plugins/datatables/EditableRows/components/ControlsDelete';
+import ControlsAddMateria from 'views/interface/plugins/datatables/EditableRows/components/ControlsAddMateria';
 import ControlsSearch from 'views/interface/plugins/datatables/EditableRows/components/ControlsSearch';
 import ModalAsignarDocente from 'views/interface/plugins/datatables/EditableRows/components/ModalAsignarDocente';
+import ModalAddMateria from 'views/interface/plugins/datatables/EditableRows/components/ModalAddMateria';
 import TablePagination from 'views/interface/plugins/datatables/EditableRows/components/TablePagination';
 import axios from "axios";
 import { useFormik } from 'formik';
@@ -137,6 +137,7 @@ const AsignarDocente = (props) => {
 
 
   const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
+  const [isOpenAddMateriaModal, setIsOpenAddMateriaModal] = useState(false);
 
   const [data, setData] = React.useState(DMS);
 
@@ -183,7 +184,7 @@ const tableInstance = useTable(
       }
 
       return state;
-   }, isOpenAddEditModal, setIsOpenAddEditModal, initialState: { pageIndex: 0 } },
+   }, isOpenAddEditModal, setIsOpenAddEditModal, isOpenAddMateriaModal, setIsOpenAddMateriaModal, initialState: { pageIndex: 0 } },
     useGlobalFilter,
     useSortBy,
     usePagination,
@@ -251,6 +252,9 @@ const tableInstance = useTable(
                 </div>
                 */}
                 <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
+                  <ControlsAddMateria tableInstance={tableInstance} />
+                </div>
+                <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
                   <ControlsAsignarDocente tableInstance={tableInstance} />
                 </div>
               </Col>
@@ -267,7 +271,11 @@ const tableInstance = useTable(
           <ModalAsignarDocente           
           tableInstance={tableInstance}
           docentes={docentes}
-          setDocentes={setDocentes}/>
+          setDocentes={setDocentes}
+          DMS={DMS}
+          setDMS={setDMS}/>
+          <ModalAddMateria           
+          tableInstance={tableInstance}/>
         </Col>
       </Row>
     </>

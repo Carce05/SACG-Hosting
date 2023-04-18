@@ -16,6 +16,7 @@ const dmsGet = async (req, res) => {
     }
 }
 
+
 const dmsPost = async (req, res = response) => {
     const { name, thumb, role, email,password } = req.body;
     const usuario = new Usuario( { name, thumb, role, email,password } );
@@ -43,13 +44,18 @@ const dmsPost = async (req, res = response) => {
     })
 }
 
-const dmsPut = (req, res = response) => {
 
-    const id = req.params.userId;
-    res.json({
-        msg: 'PUT | CONTROLLER',
-        id
-    })
+const dmsPut = async(req, res) => {
+    try {
+        await DMS.updateOne({ _id: req.params.userId }, req.body);
+        res.status(200).send({
+            msg: 'PUT | CONTROLLER',
+            id: req.params.userId
+        })
+    } catch (err) {
+        res.status(500).send(err);
+        bitacora.log('error', "Fallo en la actualización de calificación del estudiante");
+    }
 }
 
 const dmsDelete = (req, res = response) => {
