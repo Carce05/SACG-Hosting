@@ -116,6 +116,9 @@ const Secciones = (props) => {
           total: 0,
         });
       });
+
+      resultsEstudiantes.sort((s1, s2)=>(s2.apellido < s1.apellido) ? 1 : (s2.apellido > s1.apellido) ? -1 : 0);
+
       setEstudiantes([ 
         ...resultsEstudiantes
       ])
@@ -198,7 +201,7 @@ const Secciones = (props) => {
 
 
   const title = 'Mis Secciones';
-  const description = 'Elearning Portal School Dashboard Page';
+  const description = 'Secciones del profesor logueado.';
 
   
 
@@ -292,7 +295,7 @@ const tableInstance = useTable(
         </Col>
         <Col>
           <Card className="h-100">
-          <Card.Body className="mb-5">
+            <Card.Body className="mb-5">
               <p className="text-primary heading mb-8">Sección</p>
               <div className="d-flex flex-column flex-md-row flex-lg-column align-items-center mb-n5 justify-content-md-between justify-content-center text-center text-md-start text-lg-center">
                 <Col xs="12" lg="12">
@@ -307,15 +310,24 @@ const tableInstance = useTable(
             </Card.Body>
           </Card>
         </Col>
+        <Col>
+          <Card className="h-100">
+            <Card.Body className="mb-5">
+              <p className="small-title">*Los datos mostrados corresponden al año y trimestre actual.*</p>
+            </Card.Body>
+          </Card>
+        </Col>
       </Row>
       {/* Timetable End */}
       <Row>
         <Col>
           <div className="d-flex justify-content-between">
               <h2 className="small-title">Estudiantes</h2>
+              {/*
               <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
                 <h2 className="small-title">Nota</h2> 
               </div>
+              */}
           </div>
           <div>
             <Row className="mb-3">
@@ -325,9 +337,11 @@ const tableInstance = useTable(
                 </div>
               </Col>
               <Col sm="12" md="7" lg="9" xxl="10" className="text-end">
+                {/*
                 <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
                   <Button onClick={insertarCalificaciones} variant="outline-primary" >Refrescar</Button>
                 </div>
+                */}
                 <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
                   <ControlsCalificacion tableInstance={tableInstance} />
                 </div>

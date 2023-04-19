@@ -49,7 +49,11 @@ const SchoolDashboard = () => {
 
   const columns = React.useMemo(() => {
     return [
-      { Header: 'Publicación', accessor: 'createdAt', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
+      { Header: 'Publicación', accessor: 'createdAt', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10', Cell: ({ cell }) => {
+        const date = new Date(cell.value);
+        return date.toLocaleDateString();
+      },
+    },,
       {
         Header: 'Titulo',
         accessor: 'title',
@@ -147,11 +151,10 @@ const SchoolDashboard = () => {
               </Col>
               <Col sm="12" md="7" lg="9" xxl="10" className="text-end">
                 <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
-                  <Button onClick={handleEditClick} variant="foreground-alternate" className="btn-icon btn-icon-only shadow add-datatable">
+                  <Button onClick={handleEditClick} variant="foreground-alternate" className="btn-xl btn-icon-only shadow add-datatable">
                     <CsLineIcons icon="plus" />
                   </Button>{/* <ControlsEdit tableInstance={tableInstance} /> */} <ControlsDeleteAnnouncement tableInstance={tableInstance} />
                 </div>
-              
               </Col>
             </Row>
 
@@ -175,7 +178,7 @@ const SchoolDashboard = () => {
           <ModalAddEdit tableInstance={tableInstance} />
         </Col>
       </Row>
-                <ModalAddAnnouncement  showModal={showModal} setShowModal={setShowModal} setData={setData} setShowSuccessAlert={setShowSuccessAlert} setShowDangerAlert= {setShowDangerAlert} />
+      <ModalAddAnnouncement  showModal={showModal} setShowModal={setShowModal} setData={setData} setShowSuccessAlert={setShowSuccessAlert} setShowDangerAlert= {setShowDangerAlert} />
     </>
   );
 };

@@ -20,6 +20,8 @@ import ModalAddEdit from 'views/interface/plugins/datatables/EditableRows/compon
 import TablePagination from 'views/interface/plugins/datatables/EditableRows/components/TablePagination';
 import axios from "axios";
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';;
 import apiSACG from 'api/apiSACG';
 
 const Usuarios = () => {
@@ -42,10 +44,10 @@ const Usuarios = () => {
       .catch((err) => {
         console.error(err);
       });
-      console.log(showSuccessAlert)
+    console.log(showSuccessAlert)
   }, [isUpdated, showSuccessAlert]);
 
-  
+
 
   const validUrl = (link = '') => {
     return link.includes('profile_upload');
@@ -60,10 +62,10 @@ const Usuarios = () => {
         headerClassName: 'text-muted text-small text-uppercase w-10',
         Cell: ({ cell }) => {
           return (
-            <img className="user-admin-images" src={ validUrl(cell.value) ? cell.value : 'https://cdn3.iconfinder.com/data/icons/vector-icons-6/96/256-512.png' } alt={ cell.value }/>
+            <img className="user-admin-images" src={validUrl(cell.value) ? cell.value : 'https://cdn3.iconfinder.com/data/icons/vector-icons-6/96/256-512.png'} alt={cell.value} />
           );
         },
-      },    
+      },
       { Header: 'Cédula', accessor: 'personalId', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       {
         Header: 'Nombre',
@@ -83,7 +85,7 @@ const Usuarios = () => {
             </a>
           );
         },
-      },    
+      },
       { Header: 'Email', accessor: 'email', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       { Header: 'Rol', accessor: 'role', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       { Header: 'Estado', accessor: 'status', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
@@ -124,7 +126,7 @@ const Usuarios = () => {
           {/* Title End */}
         </Row>
       </div>
-    
+
       <Row>
         <Col>
           <div>
@@ -135,26 +137,30 @@ const Usuarios = () => {
                 </div>
               </Col>
               <Col sm="12" md="7" lg="9" xxl="10" className="text-end">
-                <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
-                   <ControlsAdd tableInstance={tableInstance}  /><ControlsEdit tableInstance={tableInstance} /> <ControlsDelete tableInstance={tableInstance} />
+                <div className="d-inline-block me-2">
+                  <ControlsAdd tableInstance={tableInstance} />
                 </div>
-               
+                <div className="d-inline-block me-2">
+                  <ControlsEdit tableInstance={tableInstance} />
+                </div>
               </Col>
             </Row>
+            {/*
             <Col className="mb-3 d-flex align-items-center justify-content-center">
-            {showSuccessAlert && (
-                  <Alert variant="success" onClose={() => setShowSuccessAlert(false)} dismissible>
-                    Usuario guardado correctamente.
-                  </Alert>
-                )}
+              {showSuccessAlert && (
+                <Alert variant="success" onClose={() => setShowSuccessAlert(false)} dismissible>
+                  Usuario guardado correctamente.
+                </Alert>
+              )}
             </Col>
             <Col className="mb-3 d-flex align-items-center justify-content-center">
-            {showDangerAlert && (
-                  <Alert variant="danger" onClose={() => setShowDangerAlert(false)} dismissible>
-                    Ocurrio un error al intentar guardar la información favor revisar el correo o cedula.
-                  </Alert>
-                )}
+              {showDangerAlert && (
+                <Alert variant="danger" onClose={() => setShowDangerAlert(false)} dismissible>
+                  Ocurrio un error al intentar guardar la información favor revisar el correo o cedula.
+                </Alert>
+              )}
             </Col>
+            */}
             <Row>
               <Col xs="12">
                 <Table className="react-table rows" tableInstance={tableInstance} />
@@ -164,7 +170,7 @@ const Usuarios = () => {
               </Col>
             </Row>
           </div>
-          <ModalAddEdit tableInstance={tableInstance} setShowSuccessAlert={setShowSuccessAlert} setShowDangerAlert={setShowDangerAlert}/>
+          <ModalAddEdit tableInstance={tableInstance} setShowSuccessAlert={setShowSuccessAlert} setShowDangerAlert={setShowDangerAlert} />
         </Col>
       </Row>
     </>

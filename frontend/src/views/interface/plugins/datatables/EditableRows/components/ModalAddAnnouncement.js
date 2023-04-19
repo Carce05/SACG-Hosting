@@ -9,6 +9,12 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const ModalAddAnnouncement = ({ showModal, setShowModal, setData, setShowSuccessAlert, setShowDangerAlert }) => {
+  const [descriptionCount, setDescriptionCount] = useState(0);
+  const maxDescriptionLength = 200;
+  const handleDescriptionChange = (event) => {
+    const count = event.target.value.length;
+    setDescriptionCount(count);
+  };
   const initialValues = {
     title: '',
     description: '',
@@ -77,10 +83,18 @@ const ModalAddAnnouncement = ({ showModal, setShowModal, setData, setShowSuccess
                 <Form.Group controlId="description" className="mb-2">
                 <div className="mb-3 filled form-group tooltip-end-top">
                   <Form.Label>Descripción del aviso</Form.Label>
-                  <Form.Control type="text"
+                  <Form.Control as="textarea"
                     name="description"
                     value={values.description}
-                    onChange={handleChange} />
+                    maxLength={maxDescriptionLength}
+                    onChange={(event) => {
+                      handleDescriptionChange(event);
+                      handleChange(event);
+                    }}
+                  />
+                  <div className="d-block text-muted">
+                    {`${descriptionCount}/${maxDescriptionLength}`}
+                  </div>
                   {errors.description && touched.description && (
                     <div className="d-block invalid-tooltip">{errors.description}</div>
                   )}
