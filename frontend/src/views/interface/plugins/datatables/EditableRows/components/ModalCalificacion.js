@@ -8,7 +8,7 @@ import axios from "axios";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const ModalCalificacion = ({ tableInstance, calificaciones, setCalificaciones, estudiantes, setEstudiantes }) => {
+const ModalCalificacion = ({ tableInstance, calificaciones, setCalificaciones, estudiantes, setEstudiantes, anioActual, periodoActual }) => {
 const history = useHistory();
  
   const { selectedFlatRows, data, setData, setIsOpenAddEditModal, isOpenAddEditModal } = tableInstance;
@@ -130,8 +130,6 @@ const history = useHistory();
     if (idRes !== "") {
     try {
       await axios.put(`http://localhost:8080/api/calificaciones/${idRes}`, {
-        estudiante: cedula,
-        materia: materiaRes,
         cotidiano,
         tarea, 
         examen1,
@@ -139,9 +137,7 @@ const history = useHistory();
         proyecto,
         asistencia,
         total,
-        observaciones,
-        anio: 2023,
-        trimestre: 'II'        
+        observaciones  
       });
       toast('Calificación Actualizada!', { className: 'success' });
       setIsOpenAddEditModal(false);
@@ -191,8 +187,8 @@ const history = useHistory();
         asistencia,
         total,
         observaciones,
-        anio: 2023,
-        trimestre: 'II'  
+        anio: anioActual,
+        trimestre: periodoActual  
     });
     alert('guardado con exito');
           setIsOpenAddEditModal(false);

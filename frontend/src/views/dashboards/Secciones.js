@@ -30,6 +30,7 @@ const Secciones = (props) => {
   const [estudiantes, setEstudiantes] = useState([]);
   const [calificaciones, setCalificaciones] = useState([]);
   const [seccion, setSeccion] = useState([]);
+  const [general, setGeneral] = useState([]);
   const { label, name, ...rest } = props;
   const initialValues = { email: '' };
   const formik = useFormik({ initialValues });
@@ -38,8 +39,13 @@ const Secciones = (props) => {
   
   const { currentUser, isLogin } = useSelector((state) => state.auth);
   const docente  = currentUser.email;
+
+  
+  let anioActual = "";
+  let periodoActual = "";
   
 
+  // Llamados de DMS
   useEffect(() => {
     async function fetchData() {
       // Fetch data
@@ -82,23 +88,32 @@ const Secciones = (props) => {
     fetchData();
   }, []);
   
-  
   /*
-  useEffect(() => {
+  // Llamados de General
+    async function getGeneral() {
+      // Fetch data
+      const response = await axios.get("http://localhost:8080/api/general/643f20fe9a24456baf1c57b1");
+      const resultsGeneral = []
+      // Store results in the results array
+      anioActual = response.data[0].anio;
+      periodoActual = response.data[0].periodo; 
 
-    axios
-      .get("http://localhost:8080/api/estudiantes/")
+      axios
+      .get("http://localhost:8080/api/general/643f20fe9a24456baf1c57b1")
       .then((res) => {
-        setData(res.data);
+        setGeneral(res.data[0]);
       })
       .catch((err) => {
         console.error(err);
       });
-  }, []);
-*/
 
+      setGeneral([ 
+        ...resultsGeneral
+      ])
+    }
+    */
 
-  
+  // Llamados de Estudiantes
   useEffect(() => {
     async function fetchData() {
       // Fetch data
@@ -127,31 +142,46 @@ const Secciones = (props) => {
     fetchData();
   }, []);
 
-  
+  // Llamados de Calificaciones
   useEffect(() => {
   async function fetchData() {
+
+    await axios
+    .get("http://localhost:8080/api/general/643f20fe9a24456baf1c57b1")
+    .then((res) => {
+      anioActual = res.data[0].anio;
+      periodoActual = res.data[0].periodo; 
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+
     // Fetch data
     const response = await axios.get('http://localhost:8080/api/calificaciones');
     const resultsCalificaciones = []
     // Store results in the results array
 
+
+
     /* eslint no-underscore-dangle: 0 */
-    response.data.forEach((val) => {
-      resultsCalificaciones.push({
-        _id: val._id,
-        estudiante: val.estudiante,
-        materia: val.materia,
-        cotidiano: val.cotidiano,
-        tarea: val.tarea,
-        examen1: val.examen1,
-        examen2: val.examen2,
-        proyecto: val.proyecto,
-        asistencia: val.asistencia,
-        total: val.total,
-        observaciones: val.observaciones,
-        anio: val.anio,
-        trimestre: val.trimestre,
-      });
+    response.data.forEach((val) => {     
+      if (val.anio === anioActual && val.trimestre === periodoActual){ 
+        resultsCalificaciones.push({
+          _id: val._id,
+          estudiante: val.estudiante,
+          materia: val.materia,
+          cotidiano: val.cotidiano,
+          tarea: val.tarea,
+          examen1: val.examen1,
+          examen2: val.examen2,
+          proyecto: val.proyecto,
+          asistencia: val.asistencia,
+          total: val.total,
+          observaciones: val.observaciones,
+          anio: val.anio,
+          trimestre: val.trimestre,
+        });
+      }
     });
     setCalificaciones([ 
       ...resultsCalificaciones
@@ -171,7 +201,7 @@ const Secciones = (props) => {
   const insertarCalificaciones = () => {
     estudiantes.forEach((val) => {
       calificaciones.forEach((cali) => {
-        if (val.cedula === cali.estudiante && val.materia === cali.materia) {
+        if (val.cedula === cali.estudiante && val.materia === cali.materia ) {
           val.total = cali.total;
         }
       })
@@ -311,8 +341,10 @@ const tableInstance = useTable(
         </Col>
         <Col>
           <Card className="h-100">
-            <Card.Body className="mb-5">
-              <p className="small-title">*Los datos mostrados corresponden al año y trimestre actual.*</p>
+            <Card.Body className="mb-3">
+            <div className="d-flex flex-column flex-md-row flex-lg-column align-items-center mb-n5 justify-content-md-between justify-content-center text-center text-md-start text-lg-center">
+              <b className="text-primary heading mb-8">*Los datos mostrados corresponden al año y trimestre actual.*</b>
+              </div>
             </Card.Body>
           </Card>
         </Col>
@@ -360,7 +392,9 @@ const tableInstance = useTable(
            calificaciones={calificaciones}
            setCalificaciones={setCalificaciones}
            estudiantes={estudiantes}
-           setEstudiantes={setEstudiantes}/>
+           setEstudiantes={setEstudiantes}
+           anioActual={anioActual}
+           periodoActual={periodoActual}/>
         </Col>
       </Row>
     </>
