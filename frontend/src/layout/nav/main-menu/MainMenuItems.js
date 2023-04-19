@@ -171,8 +171,28 @@ const MainMenuItem = memo(({ item, id, isSubItem = false, menuPlacement = DEFAUL
         <></>
       );
     }
+    if (item.label === 'menu.admin_secciones' && currentUser.role === 'Profesor'){
+      return (
+        <></>
+      );
+    }
+    if (item.label === 'menu.secciones' && currentUser.role === 'Administrador'){
+      return (
+        <></>
+      );
+    }
+    if (item.label === 'menu.secciones' && currentUser.role === 'Encargado'){
+      return (
+        <></>
+      );
+    }
+    if (item.label === 'menu.admin_secciones' && currentUser.role === 'Encargado'){
+      return (
+        <></>
+      );
+    }
     return (
-      <li className={(item.label === 'menu.matricula' && currentUser.role === 'Profesor') ? 'hide-element' : ''}>
+      <li className={(item.label === 'menu.matricular-modulo' && currentUser.role === 'Profesor') ? 'hide-element' : ''}>
         <NavLink to={item.path} className={classNames({ active: isActive })} activeClassName="">
           {getLabel(item.icon, item.label)}
         </NavLink>

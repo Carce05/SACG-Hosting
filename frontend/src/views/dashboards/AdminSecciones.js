@@ -360,6 +360,7 @@ const AdminSecciones = (props) => {
       { Header: 'Materia', accessor: 'materia', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       { Header: 'Seccion', accessor: 'seccion', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       { Header: 'Total', accessor: 'total', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
+      /*
       {
         Header: '',
         id: 'action',
@@ -369,6 +370,7 @@ const AdminSecciones = (props) => {
           return <Form.Check className="form-check float-end mt-1" type="checkbox" checked={checked} onChange={onChange}/>;
         },
       },
+      */
     ];
   }, []);
 
@@ -493,13 +495,7 @@ const AdminSecciones = (props) => {
                 <div className="d-inline-block float-md-start me-1 mb-1 mb-md-0 search-input-container w-100 shadow bg-foreground">
                   <ControlsSearch tableInstance={tableInstance} />
                 </div>
-              </Col>
-              <Col sm="12" md="7" lg="9" xxl="10" className="text-end">
-                <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
-                  <ControlsCalificacion tableInstance={tableInstance} />
-                </div>
-              </Col>
-
+              </Col>              
             </Row>
             <Row>
               <Col xs="12">

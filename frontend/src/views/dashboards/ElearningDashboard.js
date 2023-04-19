@@ -39,7 +39,7 @@ const ElearningDashboard = () => {
       </div>
       {/* Title and Top Buttons End */}
 
-      <Row >
+      <Row className="row-cols-1 row-cols-lg-5 g-2 mb-5">
         {/* Continue Learning Start */}
 
         <Col xl="6" className="mb-5">
@@ -83,8 +83,15 @@ const ElearningDashboard = () => {
               <div>
                 <div className="cta-1 mb-3 text-black w-75 w-sm-50">Historia</div>
                 <div className="w-50 text-black mb-3">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ac odio tempor orci dapibus ultrices in. Mauris ultrices eros in cursus. Duis at tellus at urna condimentum mattis pellentesque id. Pretium viverra suspendisse potenti nullam ac tortor vitae. Donec ultrices tincidunt arcu non sodales neque sodales ut. Sed libero enim sed faucibus turpis in. Ornare quam viverra orci sagittis.
+                  Nuestro colegio fue fundado en 1988 con el objetivo de brindar oportunidades educativas a la comunidad local. Desde sus inicios, ha experimentado un crecimiento significativo en términos de infraestructura, programas académicos y cantidad de estudiantes. La escuela ha enfrentado desafíos como la falta de recursos y el aumento de la población estudiantil, pero ha superado estos obstáculos con el apoyo de la comunidad y el compromiso de sus educadores.
+                  </div>
+                  <div className="w-50 text-black mb-3">
+                  A lo largo de su historia, el Liceo de Guararí ha graduado a miles de estudiantes que han continuado sus estudios en universidades y han obtenido empleos en diversos sectores. El Liceo ha contribuido al desarrollo social y económico de la comunidad de Guararí y sus alrededores, brindando oportunidades educativas y formando ciudadanos responsables y comprometidos.
+                  </div>
+                  <div className="w-50 text-black mb-3">
+                  El Liceo de Guararí también ha recibido reconocimientos por su labor educativa, destacándose como una institución que promueve la excelencia académica y el desarrollo integral de los estudiantes. Es considerada un referente educativo en la provincia de Heredia y continúa siendo un pilar en la formación de las nuevas generaciones en la comunidad local.
                 </div>
+
                 {/* <Rating
                   className="mb-2"
                   initialRating={5}

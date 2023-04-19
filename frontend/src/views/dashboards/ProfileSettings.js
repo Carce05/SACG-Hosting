@@ -43,10 +43,8 @@ const ProfileSettings = () => {
       dispatch(actualizarUsuario({...formState, formPass: pass}, id));
     }
     ref.current.handleSubmit()
+    toast('¡Perfil Actualizado!');
   }
-  
-  console.log(thumb)
-
 
   return (
     <>
@@ -110,11 +108,6 @@ const ProfileSettings = () => {
               </Form>
             </Card.Body>
           </Card>
-          { 
-          isUpdated && (
-            toast('¡Perfil Actualizado!')
-          )
-        }
           {/* Public Info End */}
         </Col>
       </Row>

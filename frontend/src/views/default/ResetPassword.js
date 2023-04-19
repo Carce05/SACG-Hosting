@@ -89,11 +89,6 @@ const ResetPassword = () => {
             Consultas al correo: lic.diurnodeguarari@mep.go.cr   
             Teléfono: 2237-4033
           </p>
-          {/* <div className="mb-5">
-            <Button size="lg" variant="outline-white" href="/">
-              Learn More
-            </Button>
-          </div> */}
         </div>
       </div>
     </div>
@@ -105,15 +100,21 @@ const ResetPassword = () => {
       <div className="sw-lg-50 px-5">
         <div className="sh-11">
           <NavLink to="/">
+            <center>
           <img src="/img/logo/image2vector.svg" alt="Logo" width="75" height="75"/>
+           </center>
           </NavLink>
         </div>
         <div className="mb-5">
+          <center>
           <h2 className="cta-1 mb-0 text-primary">¿Desea cambiar su contraseña?</h2>
           <h2 className="cta-1 text-primary">¡Restablézcala aquí!</h2>
+          </center>
         </div>
         <div className="mb-5">
+          <center>
           <p className="h6">Por favor ingrese su nueva contraseña</p>
+          </center>
         </div>
         <div>
           <form id="resetForm" className="tooltip-end-bottom" onSubmit={handleSubmit}>

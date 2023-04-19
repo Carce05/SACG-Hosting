@@ -65,6 +65,9 @@ const MatriculaSchema = Schema({
     fechaCreacionMatricula: {
         type: String
     },
+    cedulaEstudiante: {
+        type: String
+    },
 });
 
 module.exports = model( 'Matriculas', MatriculaSchema );
