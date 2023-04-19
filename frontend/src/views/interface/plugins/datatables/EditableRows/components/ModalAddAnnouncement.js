@@ -11,6 +11,11 @@ import 'react-toastify/dist/ReactToastify.css';
 const ModalAddAnnouncement = ({ showModal, setShowModal, setData, setShowSuccessAlert, setShowDangerAlert }) => {
   const [descriptionCount, setDescriptionCount] = useState(0);
   const maxDescriptionLength = 200;
+  useEffect(() => {
+    if (!showModal) {
+      setDescriptionCount(0);
+    }
+  }, [showModal]);
   const handleDescriptionChange = (event) => {
     const count = event.target.value.length;
     setDescriptionCount(count);
@@ -38,7 +43,7 @@ const ModalAddAnnouncement = ({ showModal, setShowModal, setData, setShowSuccess
         .catch((err) => {
           console.error(err);
         });
-        toast('¡Aviso Agregado con Éxito!');
+        toast.success('¡Aviso Agregado con Éxito!');
       // setShowModal(false);
     } catch (e) {
       if (e.response && e.response.status === 400) {

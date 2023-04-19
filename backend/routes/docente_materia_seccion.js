@@ -5,11 +5,9 @@ const router = Router();
 
 router.get('/', dmsGet)
 
-router.put('/:userId', dmsPut)
+router.put('/:dmsId', dmsPut)
 
-router.post('/',[
-    check('correo', 'Email is not valid').isEmail()
-], dmsPost)
+router.post('/', dmsPost)
 
 router.delete('/', dmsDelete)
 router.get('/DocenteAsignado/:docente', DocenteAsignado)

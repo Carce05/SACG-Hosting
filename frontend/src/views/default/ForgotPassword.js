@@ -4,7 +4,7 @@ import { Button, Form } from 'react-bootstrap';
 import * as Yup from 'yup';
 import axios from "axios";
 import { useFormik } from 'formik';
-import React,  { useState } from 'react';
+import React, { useState } from 'react';
 import LayoutFullpage from 'layout/LayoutFullpage';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import HtmlHead from 'components/html-head/HtmlHead';
@@ -28,7 +28,7 @@ const ForgotPassword = () => {
 
   const [email, setEmail] = useState("");
   const [msg, setMsg] = useState("");
-	const [error, setError] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -37,25 +37,25 @@ const ForgotPassword = () => {
 			const { data } = await axios.post(url, { email });
 			setMsg(data.message);
       toast('Correo de Restablecimiento Enviado!');
-			setError("");
-		} catch (ec) {
-			if (
-				ec.response &&
-				ec.response.status >= 400 &&
-				ec.response.status <= 500
-			) {
-				setError(ec.response.data.message);
-				setMsg("Usuario no registrado en el sistema");
+      setError("");
+    } catch (ec) {
+      if (
+        ec.response &&
+        ec.response.status >= 400 &&
+        ec.response.status <= 500
+      ) {
+        setError(ec.response.data.message);
+        setMsg("Usuario no registrado en el sistema");
 
-			}else{
+      } else {
         setError(ec.response.data.message);
         setMsg("Correo de reestablecimiento de contraseña enviado exitosamente");
       }
-      
-		}
-	};
 
-	
+    }
+  };
+
+
   const leftSide = (
     <div className="min-h-100 d-flex align-items-center">
       <div className="w-100 w-lg-75 w-xxl-60">
@@ -65,15 +65,10 @@ const ForgotPassword = () => {
             <h1 className="display-3 text-white">del Liceo Diurno de Guararí</h1>
           </div>
           <p className="h6 text-white lh-1-5 mb-5">
-          Ven y sigue formado parte de la Familia del Liceo Diurno de Guararí.
-            Consultas al correo: lic.diurnodeguarari@mep.go.cr   
+            Ven y sigue formado parte de la Familia del Liceo Diurno de Guararí.
+            Consultas al correo: lic.diurnodeguarari@mep.go.cr
             Teléfono: 2237-4033
           </p>
-          {/* <div className="mb-5">
-            <Button size="lg" variant="outline-white" href="/">
-              Learn More
-            </Button>
-          </div> */}
         </div>
       </div>
     </div>
@@ -84,30 +79,35 @@ const ForgotPassword = () => {
       <div className="sw-lg-50 px-5">
         <div className="sh-11">
           <NavLink to="/">
-          <img src="/img/logo/image2vector.svg" alt="Logo" width="75" height="75"/>
+            <center>
+              <img src="/img/logo/image2vector.svg" alt="Logo" width="75" height="75" />
+            </center>
           </NavLink>
         </div>
-        <div className="mb-5">
-          <h2 className="cta-1 mb-0 text-primary">¿Olvidó su contraseña?</h2>
-          <h2 className="cta-1 text-primary">¡Restablézcala aquí!</h2>
+        <div className="mb-5" >
+          <center>
+            <h2 className="cta-1 mb-0 text-primary">¿Olvidó su contraseña?</h2>
+            <h2 className="cta-1 text-primary">¡Restablézcala aquí!</h2>
+          </center>
         </div>
         <div className="mb-5">
-          <p className="h6">Por favor ingrese su correo electrónico, pronto recibirá un enlace para restablecer su contraseña.</p>
-
+          <center>
+            <p className="h6">Por favor ingrese su correo electrónico, pronto recibirá un enlace para restablecer su contraseña.</p>
+          </center>
         </div>
         <div>
           <form id="forgotPasswordForm" className="tooltip-end-bottom" onSubmit={handleSubmit}>
             <div className="mb-3 filled form-group tooltip-end-top">
               <CsLineIcons icon="email" />
               <Form.Control type="email"
-					        placeholder="Email"
-					        name="email"
-					        onChange={(e) => setEmail(e.target.value)}
-					        value={email}
-					        required />
+                placeholder="Email"
+                name="email"
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+                required />
               {errors.email && touched.email && <div className="d-block invalid-tooltip">{errors.email}</div>}
               {error && <div className={formik.error_msg}>{error}</div>}
-				      {msg && <div className={formik.success_msg}>{msg}</div>}  
+              {msg && <div className={formik.success_msg}>{msg}</div>}
             </div>
             <Button size="lg" type="submit">
               Enviar correo

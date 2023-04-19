@@ -305,7 +305,7 @@ const SchoolDashboard = () => {
                 <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
                   <ControlsAdd tableInstance={tableInstance} /> <ControlsEdit tableInstance={tableInstance} /> <ControlsDelete tableInstance={tableInstance} />
                 </div>
-               
+                
               </Col>
             </Row>
             <Row>

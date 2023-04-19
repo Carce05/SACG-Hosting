@@ -8,7 +8,7 @@ import ScrollByCount from 'components/scroll-by-count/ScrollByCount';
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-react';
 import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
-import { useTable, useGlobalFilter, useSortBy, usePagination, useRowSelect, useRowState } from 'react-table';
+import { useTable, useGlobalFilter, useSortBy, usePagination, useRowSelect, useRowState, useBlockLayout } from 'react-table';
 import Table from 'views/interface/plugins/datatables/EditableRows/components/Table';
 import ButtonsCheckAll from 'views/interface/plugins/datatables/EditableRows/components/ButtonsCheckAll';
 import ButtonsAddNew from 'views/interface/plugins/datatables/EditableRows/components/ButtonsAddNew';
@@ -22,6 +22,7 @@ import ModalAddAnnouncement from 'views/interface/plugins/datatables/EditableRow
 import apiSACG from 'api/apiSACG';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useSelector } from 'react-redux';
 
 
 const SchoolDashboard = () => {
@@ -31,9 +32,10 @@ const SchoolDashboard = () => {
   const [showModal, setShowModal] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showDangerAlert, setShowDangerAlert] = useState(false);
-  const handleEditClick = () => {
+  const handleAddClick = () => {
     setShowModal(true);
   };
+
 
   useEffect(() => {
 
@@ -46,14 +48,15 @@ const SchoolDashboard = () => {
         console.error(err);
       });
   }, []);
-
+  const { currentUser } = useSelector((state) => state.auth);
   const columns = React.useMemo(() => {
     return [
-      { Header: 'Publicación', accessor: 'createdAt', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10', Cell: ({ cell }) => {
-        const date = new Date(cell.value);
-        return date.toLocaleDateString();
-      },
-    },,
+      {
+        Header: 'Publicación', accessor: 'createdAt', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10', Cell: ({ cell }) => {
+          const date = new Date(cell.value);
+          return date.toLocaleDateString();
+        },
+      }, ,
       {
         Header: 'Titulo',
         accessor: 'title',
@@ -77,18 +80,12 @@ const SchoolDashboard = () => {
         Header: 'Descripción',
         accessor: 'description',
         sortable: true,
-        headerClassName: 'text-muted text-small text-uppercase w-30',
+        headerClassName: 'text-muted text-small text-uppercase',
         Cell: ({ cell }) => {
           return (
-            <a
-              className="list-item-heading body"
-              href="#!"
-              onClick={(e) => {
-                e.preventDefault();
-              }}
-            >
+            <div style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word', maxWidth: '400px' }}>
               {cell.value}
-            </a>
+            </div>
           );
         },
       },
@@ -108,19 +105,21 @@ const SchoolDashboard = () => {
   const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
 
   const tableInstance = useTable(
-    { columns, data, setData, stateReducer: (state, action) => {
-      if (action.type === 'toggleRowSelected' && Object.keys(state.selectedRowIds).length) {
-         const newState = { ...state };
+    {
+      columns, data, setData, stateReducer: (state, action) => {
+        if (action.type === 'toggleRowSelected' && Object.keys(state.selectedRowIds).length) {
+          const newState = { ...state };
 
-         newState.selectedRowIds = {
-           [action.id]: true,
-         };
+          newState.selectedRowIds = {
+            [action.id]: true,
+          };
 
-         return newState;
-      }
+          return newState;
+        }
 
-      return state;
-   }, isOpenAddEditModal, setIsOpenAddEditModal, initialState: { pageIndex: 0 } },
+        return state;
+      }, isOpenAddEditModal, setIsOpenAddEditModal, initialState: { pageIndex: 0 }
+    },
     useGlobalFilter,
     useSortBy,
     usePagination,
@@ -149,23 +148,28 @@ const SchoolDashboard = () => {
                   <ControlsSearch tableInstance={tableInstance} />
                 </div>
               </Col>
-              <Col sm="12" md="7" lg="9" xxl="10" className="text-end">
-                <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
-                  <Button onClick={handleEditClick} variant="foreground-alternate" className="btn-xl btn-icon-only shadow add-datatable">
-                    <CsLineIcons icon="plus" />
-                  </Button>{/* <ControlsEdit tableInstance={tableInstance} /> */} <ControlsDeleteAnnouncement tableInstance={tableInstance} />
-                </div>
-              </Col>
+              {currentUser.role !== 'Administrador' ? (
+                <></>
+              ) : (
+                <Col sm="12" md="7" lg="9" xxl="10" className="text-end">
+                  <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
+                    <Button onClick={handleAddClick} variant="foreground-alternate" className="btn-xl btn-icon-only shadow add-datatable">
+                      <CsLineIcons icon="plus" />
+                    </Button>
+                    <ControlsDeleteAnnouncement tableInstance={tableInstance} />
+                  </div>
+                </Col>
+              )}
             </Row>
 
             <Col className="mb-3 d-flex align-items-center justify-content-center">
-            {showDangerAlert && (
-                  <Alert variant="danger" onClose={() => setShowDangerAlert(false)} dismissible>
-                    Un error ha ocurrido al intentar crear el aviso.
-                  </Alert>
-                )}
+              {showDangerAlert && (
+                <Alert variant="danger" onClose={() => setShowDangerAlert(false)} dismissible>
+                  Un error ha ocurrido al intentar crear el aviso.
+                </Alert>
+              )}
             </Col>
-            
+
             <Row>
               <Col xs="12">
                 <Table className="react-table rows" tableInstance={tableInstance} />
@@ -178,7 +182,8 @@ const SchoolDashboard = () => {
           <ModalAddEdit tableInstance={tableInstance} />
         </Col>
       </Row>
-      <ModalAddAnnouncement  showModal={showModal} setShowModal={setShowModal} setData={setData} setShowSuccessAlert={setShowSuccessAlert} setShowDangerAlert= {setShowDangerAlert} />
+      <ModalAddAnnouncement showModal={showModal} setShowModal={setShowModal} setData={setData} setShowSuccessAlert={setShowSuccessAlert} setShowDangerAlert={setShowDangerAlert} />
+
     </>
   );
 };

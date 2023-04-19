@@ -14,7 +14,8 @@ const dashboards = {
   calificacion: lazy(() => import('views/dashboards/Calificacion')),
   matricula: lazy(() => import('views/dashboards/AdminMatriculas')),
   adminSecciones : lazy(() => import('views/dashboards/AdminSecciones')),
-  contacto: lazy(() => import('views/dashboards/Contacto'))
+  contacto: lazy(() => import('views/dashboards/Contacto')),
+  asignarDocente: lazy(() => import('views/dashboards/AsignarDocente'))
 
 };
 const footer = {
@@ -86,7 +87,9 @@ const routesAndMenuItems = {
 
         { path: '/avisos', label: 'menu.avisos', icon: 'notification', component: dashboards.avisos },
         { path: '/general', label: 'menu.general', icon : 'tool', component: dashboards.general },
-        { path: '/usuarios', label: 'menu.usuarios', icon : 'user', component: dashboards.usuarios }
+        { path: '/usuarios', label: 'menu.usuarios', icon : 'user', component: dashboards.usuarios },
+        { path: '/asignarDocente', label: 'menu.asignarDocente', icon : 'list', component: dashboards.asignarDocente },
+        
         
         
       ],

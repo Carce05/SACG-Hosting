@@ -12,7 +12,7 @@ const NavUserMenuContent = () => {
   const onLogout = () => {
     localStorage.removeItem("loginState"); 
   }
-  
+  const { currentUser } = useSelector((state) => state.auth);
   return( 
   <div>
     <Row className="mb-3 ms-0 me-0">

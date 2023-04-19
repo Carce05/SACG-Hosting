@@ -5,6 +5,8 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import LayoutFullpage from 'layout/LayoutFullpage';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import HtmlHead from 'components/html-head/HtmlHead';
 import { useDispatch } from 'react-redux';
@@ -57,6 +59,7 @@ const Login = () => {
       onUserLogin(usuario)
     } else {
       setError(true);
+      toast.error('¡Ocurrió un error! Por favor verifica tus credenciales e inténtalo de nuevo.');
     }
   } 
 
@@ -76,11 +79,6 @@ const Login = () => {
             Consultas al correo: lic.diurnodeguarari@mep.go.cr   
             Teléfono: 2237-4033
           </p>
-          {/* <div className="mb-5">
-            <Button size="lg" variant="outline-white" href="/">
-              Learn More
-            </Button>
-          </div> */}
         </div>
       </div>
     </div>
@@ -138,9 +136,7 @@ const Login = () => {
             <p className="h6"> </p>
             <p className="h6"> </p>
             <p className="h6">**En caso de no poseer una cuenta por favor contactar al administrador</p>
-            {
-              error && 'LOGIN INCORECTO'
-            }
+            
           </form>
         </div>
       </div>

@@ -7,6 +7,7 @@ import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import ScrollByCount from 'components/scroll-by-count/ScrollByCount';
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-react';
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import ModalEditContact from 'views/interface/plugins/datatables/EditableRows/components/ModalEditContact';
 import TablePagination from 'views/interface/plugins/datatables/EditableRows/components/TablePagination';
 import axios from "axios";
@@ -32,6 +33,7 @@ const Contacto = () => {
         console.error(err);
       });
   }, []);
+  const { currentUser } = useSelector((state) => state.auth);
   return (
     <>
       <HtmlHead title={title} description={description} />
@@ -41,9 +43,13 @@ const Contacto = () => {
           <Col md="7">
             <h1 className="medium-title">{title}</h1>
           </Col>
-          <Col md="5" className="d-flex justify-content-end align-items-center">
-            <Button variant="outline-primary" onClick={handleEditClick} className="mb-3">Editar Contacto</Button>
-          </Col>
+          {currentUser.role !== 'Administrador' ? (
+            <></>
+          ) : (
+            <Col md="5" className="d-flex justify-content-end align-items-center">
+              <Button variant="outline-primary" onClick={handleEditClick} className="mb-3">Editar Contacto</Button>
+            </Col>
+          )}
           <Col className="mb-3 d-flex align-items-center justify-content-center">
             {showSuccessAlert && (
                   <Alert variant="success" onClose={() => setShowSuccessAlert(false)} dismissible>

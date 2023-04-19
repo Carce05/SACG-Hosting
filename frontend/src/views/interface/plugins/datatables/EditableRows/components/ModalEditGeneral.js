@@ -10,7 +10,7 @@ import apiSACG from 'api/apiSACG';
 const ModalEditGeneral = ({ general, showModal, setShowModal, setData, setShowSuccessAlert, setShowDangerAlert }) => {
     const onSubmit = async (values) => {
         try {
-            const response = await axios.put(apiSACG.concat('general/643f20fe9a24456baf1c57b1'), {
+            const response = await axios.put(apiSACG.concat('/general/643f20fe9a24456baf1c57b1'), {
                 anio: values.anio,
                 periodo: values.periodo,
             });

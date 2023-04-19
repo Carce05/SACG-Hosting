@@ -61,14 +61,14 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
           name,
           thumb,
           email,
-          password,
+          // password,
           role,
           personalId,
           status
         });
         ref.current.handleSubmit();
         // setShowSuccessAlert(true);
-        toast('¡Usuario actualizado con Éxito!'),{className:'success'};
+        toast.success('¡Usuario actualizado con Éxito!'),{className:'success'};
       } catch (e) {
         console.log(e.message);
         setShowDangerAlert(true);
@@ -209,7 +209,7 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
                   )}
                 </div>
               </Form.Group>
-              
+              {selectedFlatRows.length !== 1 &&
               <Form.Group controlId="password">
                 <div className="mb-3 filled form-group tooltip-end-top">
                   <CsLineIcons icon="eye-off" />
@@ -225,7 +225,7 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
                   )}
                 </div>
               </Form.Group>
-             
+             }
               <div className="mb-3">
                 <Form.Label>Rol</Form.Label>
                 <Form.Group controlId="role">
