@@ -12,7 +12,7 @@ const NavUserMenuContent = () => {
   const onLogout = () => {
     localStorage.removeItem("loginState"); 
   }
-  
+  const { currentUser } = useSelector((state) => state.auth);
   return( 
     <div>
       <Row className="mb-3 ms-0 me-0">
@@ -28,6 +28,9 @@ const NavUserMenuContent = () => {
             </li>
           </ul>
         </Col>
+        {currentUser.role !== 'Administrador' ? (
+            <></>
+          ) : (
         <Col xs="6" className="ps-1 pe-1">
           <ul className="list-unstyled">
             <li>
@@ -37,6 +40,7 @@ const NavUserMenuContent = () => {
             </li>
           </ul>
         </Col>
+        )}
       </Row>
       <Row className="mb-1 ms-0 me-0">
         <Col xs="12" className="p-1 mb-3 pt-3">
