@@ -171,6 +171,16 @@ const MainMenuItem = memo(({ item, id, isSubItem = false, menuPlacement = DEFAUL
         <></>
       );
     }
+    if (item.label === 'menu.general' && currentUser.role !== 'Administrador'){
+      return (
+        <></>
+      );
+    }
+    if (item.label === 'menu.asignarDocente' && currentUser.role !== 'Administrador'){
+      return (
+        <></>
+      );
+    }
     if (item.label === 'menu.admin_secciones' && currentUser.role === 'Profesor'){
       return (
         <></>

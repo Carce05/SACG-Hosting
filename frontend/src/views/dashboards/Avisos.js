@@ -21,6 +21,7 @@ import axios from "axios";
 import ModalAddAnnouncement from 'views/interface/plugins/datatables/EditableRows/components/ModalAddAnnouncement';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useSelector } from 'react-redux';
 
 
 const SchoolDashboard = () => {
@@ -33,7 +34,7 @@ const SchoolDashboard = () => {
   const handleAddClick = () => {
     setShowModal(true);
   };
-  
+
 
   useEffect(() => {
 
@@ -46,7 +47,7 @@ const SchoolDashboard = () => {
         console.error(err);
       });
   }, []);
-
+  const { currentUser } = useSelector((state) => state.auth);
   const columns = React.useMemo(() => {
     return [
       {
@@ -82,8 +83,8 @@ const SchoolDashboard = () => {
         Cell: ({ cell }) => {
           return (
             <div style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word', maxWidth: '400px' }}>
-            {cell.value}
-          </div>
+              {cell.value}
+            </div>
           );
         },
       },
@@ -146,17 +147,18 @@ const SchoolDashboard = () => {
                   <ControlsSearch tableInstance={tableInstance} />
                 </div>
               </Col>
-              <Col sm="12" md="7" lg="9" xxl="10" className="text-end">
-                <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
-                  <Button onClick={handleAddClick} variant="foreground-alternate" className="btn-xl btn-icon-only shadow add-datatable">
-                    <CsLineIcons icon="plus" />
-                  </Button>
-                  {/*<Button onClick={handleAddClick2} variant="foreground-alternate" className="btn-xl btn-icon-only shadow add-datatable">
-                    <CsLineIcons icon="bin" />
-                  </Button>*/}
-                  {/* <ControlsEdit tableInstance={tableInstance} /> */} <ControlsDeleteAnnouncement tableInstance={tableInstance} />
-                </div>
-              </Col>
+              {currentUser.role !== 'Administrador' ? (
+                <></>
+              ) : (
+                <Col sm="12" md="7" lg="9" xxl="10" className="text-end">
+                  <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
+                    <Button onClick={handleAddClick} variant="foreground-alternate" className="btn-xl btn-icon-only shadow add-datatable">
+                      <CsLineIcons icon="plus" />
+                    </Button>
+                    <ControlsDeleteAnnouncement tableInstance={tableInstance} />
+                  </div>
+                </Col>
+              )}
             </Row>
 
             <Col className="mb-3 d-flex align-items-center justify-content-center">
@@ -180,7 +182,7 @@ const SchoolDashboard = () => {
         </Col>
       </Row>
       <ModalAddAnnouncement showModal={showModal} setShowModal={setShowModal} setData={setData} setShowSuccessAlert={setShowSuccessAlert} setShowDangerAlert={setShowDangerAlert} />
-      
+
     </>
   );
 };
