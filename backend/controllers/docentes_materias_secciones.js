@@ -3,7 +3,8 @@ const { response } = require('express');
 const bcryptjs = require('bcryptjs')
 
 const bitacora = require("../controllers/bitacora");
-const DMS = require('../models/docente_materia_seccion')
+const DMS = require('../models/docente_materia_seccion');
+
 
 //Get all Method
 const dmsGet = async (req, res) => {
@@ -16,45 +17,32 @@ const dmsGet = async (req, res) => {
     }
 }
 
-
 const dmsPost = async (req, res = response) => {
-    const { name, thumb, role, email,password } = req.body;
-    const usuario = new Usuario( { name, thumb, role, email,password } );
-
-
-    //Check if the email exist
-    const existEmail = await Usuario.findOne({ email })
-
-    if (existEmail) {
-        return res.status(400).json({
-            msg: 'Email already taken'
-        })
-    }
-
-    // Encrypt password
-    // const salt =  bcryptjs.genSaltSync();
-    // usuario.password = bcryptjs.hashSync(password, salt)
-
-    await usuario.save();
-    // await usuarios.insertOne(usuario)
-
+    const { docente} = req.query.docente;
+    const { materia} = req.query.materia;
+    const { seccion} = req.query.seccion;
+    const nuevo = new DMS( { docente, materia, seccion } );
+    
+    await nuevo.save();
+ 
     res.json({
         msg: 'POST | CONTROLLER',
-        usuario
-    })
+        contact
+    });
 }
 
-
 const dmsPut = async(req, res) => {
+
     try {
-        await DMS.updateOne({ _id: req.params.userId }, req.body);
+        const myquery = {_id: ObjectId(req.params.dmsId)};
+        const newvalues = { $set: { docente: req.body.docente } };
+        await DMS.updateOne(myquery, newvalues);
         res.status(200).send({
             msg: 'PUT | CONTROLLER',
-            id: req.params.userId
+            id: req.params.dmsId
         })
     } catch (err) {
         res.status(500).send(err);
-        bitacora.log('error', "Fallo en la actualización de calificación del estudiante");
     }
 }
 

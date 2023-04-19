@@ -46,9 +46,9 @@ const ModalAsignarDocente = ({ tableInstance, docentes, setDocentes, DMS, setDMS
   }
 
   const onSubmit = async () => {
-    if (idRes !== "") {
+    if (dmsId !== "") {
     try {
-      await axios.put(`http://localhost:8080/api/docentes_materias_secciones/${dmsId}`, {
+      const response = await axios.put(`http://localhost:8080/api/docentes_materias_secciones/${dmsId}`, {
         docente: selectedOption,
         materia: materiaRes,
         seccion: seccionRes
