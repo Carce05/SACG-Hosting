@@ -39,7 +39,7 @@ const ElearningDashboard = () => {
       </div>
       {/* Title and Top Buttons End */}
 
-      <Row >
+      <Row className="row-cols-1 row-cols-lg-5 g-2 mb-5">
         {/* Continue Learning Start */}
 
         <Col xl="6" className="mb-5">

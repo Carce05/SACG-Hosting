@@ -8,7 +8,7 @@ import axios from "axios";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const ModalCalificacion = ({ tableInstance, calificaciones, setCalificaciones, estudiantes, setEstudiantes }) => {
+const ModalCalificacion = ({ tableInstance, calificaciones, setCalificaciones, estudiantes, setEstudiantes}) => {
 const history = useHistory();
  
   const { selectedFlatRows, data, setData, setIsOpenAddEditModal, isOpenAddEditModal } = tableInstance;
@@ -26,6 +26,9 @@ const history = useHistory();
   let asistenciaRes = 0;
   let totalRes = 0;
   let observacionesRes = "";
+  let seccionRes = "";
+  let anioActual = "";
+  let periodoActual = "";
 
   // const [calificacion, setCalificaciones] = useState([]);
 
@@ -66,6 +69,7 @@ const history = useHistory();
   if (selectedFlatRows.length === 1) {
     cedula = selectedFlatRows[0].original.cedula;
     materiaRes = selectedFlatRows[0].original.materia;
+    seccionRes = selectedFlatRows[0].original.seccion;
   }
 
   if (isOpenAddEditModal) {
@@ -130,8 +134,6 @@ const history = useHistory();
     if (idRes !== "") {
     try {
       await axios.put(`http://localhost:8080/api/calificaciones/${idRes}`, {
-        estudiante: cedula,
-        materia: materiaRes,
         cotidiano,
         tarea, 
         examen1,
@@ -139,9 +141,7 @@ const history = useHistory();
         proyecto,
         asistencia,
         total,
-        observaciones,
-        anio: 2023,
-        trimestre: 'II'        
+        observaciones  
       });
       toast('Calificación Actualizada!', { className: 'success' });
       setIsOpenAddEditModal(false);
@@ -180,6 +180,16 @@ const history = useHistory();
   }
   else {
     try {
+      await axios
+      .get("http://localhost:8080/api/general/643f20fe9a24456baf1c57b1")
+      .then((res) => {
+        anioActual = res.data[0].anio;
+        periodoActual = res.data[0].periodo; 
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+
       const response = await axios.post('http://localhost:8080/api/calificaciones', {
         estudiante: cedula,
         materia: materiaRes,
@@ -189,12 +199,13 @@ const history = useHistory();
         examen2,
         proyecto,
         asistencia,
-        total,
+        total: 0,
         observaciones,
-        anio: 2023,
-        trimestre: 'II'  
+        anio: anioActual,
+        trimestre: periodoActual,
+        seccion: seccionRes
     });
-    alert('guardado con exito');
+    toast('Calificación Actualizada!', { className: 'success' });
           setIsOpenAddEditModal(false);
           axios
           .get("http://localhost:8080/api/calificaciones")

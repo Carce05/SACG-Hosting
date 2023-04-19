@@ -38,6 +38,9 @@ const CalificacionSchema = Schema({
     trimestre: {
         type: String
     },
+    seccion: {
+        type: String
+    },
 });
 
 module.exports = model( 'calificaciones', CalificacionSchema );
