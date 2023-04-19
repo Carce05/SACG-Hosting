@@ -5,16 +5,17 @@ import { Formik } from 'formik';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import apiSACG from 'api/apiSACG';
 
 const ModalEditGeneral = ({ general, showModal, setShowModal, setData, setShowSuccessAlert, setShowDangerAlert }) => {
     const onSubmit = async (values) => {
         try {
-            const response = await axios.put('http://localhost:8080/api/general/643f20fe9a24456baf1c57b1', {
+            const response = await axios.put(apiSACG.concat('general/643f20fe9a24456baf1c57b1'), {
                 anio: values.anio,
                 periodo: values.periodo,
             });
             axios
-                .get("http://localhost:8080/api/general/643f20fe9a24456baf1c57b1")
+            .get(apiSACG.concat("general/643f20fe9a24456baf1c57b1"))
                 .then((res) => {
                     setData(res.data[0]);
                     setShowSuccessAlert(true);

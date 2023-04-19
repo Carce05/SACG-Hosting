@@ -12,6 +12,7 @@ import TablePagination from 'views/interface/plugins/datatables/EditableRows/com
 import axios from "axios";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import apiSACG from 'api/apiSACG';
 
 const General = () => {
   const [data, setData] = useState(null);
@@ -25,7 +26,7 @@ const General = () => {
   };
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/general/643f20fe9a24456baf1c57b1")
+      .get(apiSACG.concat("general/643f20fe9a24456baf1c57b1"))
       .then((res) => {
         setData(res.data[0]);
       })
