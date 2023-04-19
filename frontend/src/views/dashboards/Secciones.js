@@ -392,9 +392,7 @@ const tableInstance = useTable(
            calificaciones={calificaciones}
            setCalificaciones={setCalificaciones}
            estudiantes={estudiantes}
-           setEstudiantes={setEstudiantes}
-           anioActual={anioActual}
-           periodoActual={periodoActual}/>
+           setEstudiantes={setEstudiantes}/>
         </Col>
       </Row>
     </>
