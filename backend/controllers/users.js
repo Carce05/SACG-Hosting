@@ -160,6 +160,26 @@ const userImageUpload = async (req, res = response) => {
         }
     }
 }
+const usuariosPatch = async (req, res) => {
+    const currentUserReq = await Usuario.findOne({ _id: req.params.userId })
+    const emailLoggedGlobal = global.email;
+  
+    try {
+      // Reemplace currentUserReq con la actualización solo de los campos que vienen en la solicitud PATCH
+      const updatedUser = { ...currentUserReq.toObject(), ...req.body };
+      delete updatedUser.password;
+  
+      await Usuario.updateOne({ _id: req.params.userId }, updatedUser);
+      bitacoraAccion.log('debug', `${emailLoggedGlobal} actualizó datos del usuario con el siguiente correo: ${req.body.email}`);
+  
+      res.status(200).send({
+        msg: 'PATCH | CONTROLLER',
+        id: req.params.userId
+      })
+    } catch (err) {
+      // res.status(500).send(err);
+    }
+  }
 
 module.exports = {
     usuariosGet,
@@ -168,5 +188,6 @@ module.exports = {
     usuariosDelete,
     usuarioLogin,
     userImageUpload,
-    usuariosPostImage
+    usuariosPostImage,
+    usuariosPatch
 }

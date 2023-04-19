@@ -24,3 +24,16 @@
 {"level":"debug","message":"undefined actualizó datos del usuario con el siguiente correo: chux@gmail.com","timestamp":"2023-04-17T20:05:20.043Z"}
 {"level":"debug","message":"undefined actualizó datos del usuario con el siguiente correo: bitacoraAccion@gmail.com","timestamp":"2023-04-17T20:08:56.975Z"}
 {"level":"debug","message":"undefined actualizó datos del usuario con el siguiente correo: chux@gmail.com","timestamp":"2023-04-17T20:09:07.302Z"}
+{"level":"debug","message":"El usuario undefined, creó un nuevo aviso bajo el titulo de hola","timestamp":"2023-04-18T23:01:57.886Z"}
+{"level":"debug","message":"El usuario undefined, eliminó un aviso bajo el ID de 643f03d81e5c1a0fce971cd4","timestamp":"2023-04-18T23:02:04.732Z"}
+{"level":"debug","message":"erick@gmail.com creó un nuevo usuario con el siguiente correo: rolando@gmail.com","timestamp":"2023-04-19T00:47:16.487Z"}
+{"level":"debug","message":"rolando@gmail.com actualizó datos del usuario con el siguiente correo: rolando@gmail.com","timestamp":"2023-04-19T00:48:41.952Z"}
+{"level":"debug","message":"El usuario rolando@gmail.com, eliminó un aviso bajo el ID de 643acc100a6a840825355352","timestamp":"2023-04-19T18:28:00.914Z"}
+{"level":"debug","message":"El usuario rolando@gmail.com, creó un nuevo aviso bajo el titulo de pruebas","timestamp":"2023-04-19T18:28:16.411Z"}
+{"level":"debug","message":"El usuario rolando@gmail.com, creó un nuevo aviso bajo el titulo de asdad","timestamp":"2023-04-19T18:28:21.191Z"}
+{"level":"debug","message":"El usuario rolando@gmail.com, creó un nuevo aviso bajo el titulo de dasdasdas","timestamp":"2023-04-19T18:28:27.276Z"}
+{"level":"debug","message":"El usuario rolando@gmail.com, eliminó un aviso bajo el ID de 644032cb440e25fbf22b62e0","timestamp":"2023-04-19T19:08:25.799Z"}
+{"level":"debug","message":"El usuario rolando@gmail.com, eliminó un aviso bajo el ID de 644032c5440e25fbf22b62dd","timestamp":"2023-04-19T20:47:23.871Z"}
+{"level":"debug","message":"El usuario rolando@gmail.com, eliminó un aviso bajo el ID de 644032c0440e25fbf22b62da","timestamp":"2023-04-19T20:50:01.595Z"}
+{"level":"debug","message":"El usuario rolando@gmail.com, creó un nuevo aviso bajo el titulo de Este aviso de es prueba","timestamp":"2023-04-19T21:30:20.669Z"}
+{"level":"debug","message":"rolando@gmail.com creó un nuevo usuario con el siguiente correo: encargado222@gmail.com","timestamp":"2023-04-19T21:55:27.773Z"}
