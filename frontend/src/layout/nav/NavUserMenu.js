@@ -14,42 +14,47 @@ const NavUserMenuContent = () => {
   }
   
   return( 
-  <div>
-    <Row className="mb-3 ms-0 me-0">
-      <Col xs="12" className="ps-1 mb-2">
-        <div className="text-extra-small text-primary">CUENTA</div>
-      </Col>
-      <Col xs="6" className="ps-1 pe-1">
-        <ul className="list-unstyled">
-          <li>
-            <a href="/dashboards/mi-perfil">
-              <CsLineIcons icon="tool" className="me-2" size="17" /> <span className="align-middle">Perfil</span>
-            </a>
-          </li>
-        </ul>
-      </Col>
-    </Row>
-    <Row className="mb-1 ms-0 me-0">
-      <Col xs="12" className="p-1 mb-3 pt-3">
-        <div className="separator-light" />
-      </Col>
-      <Col xs="10" className="ps-1 pe-1">
-        <ul className="list-unstyled">
-          <li>
-            <a href="/selector-estudiante">
-              <CsLineIcons icon="sync-horizontal" className="me-2" size="17" /> <span className="align-middle">Cambiar Estudiante</span>
-            </a>
-          </li>
-          <li>
-            <a onClick={ onLogout } href="/login">
-              <CsLineIcons icon="logout" className="me-2" size="17" /> <span className="align-middle">Cerrar Sesión</span>
-            </a>
-          </li>
-        </ul>
-      </Col>
-    </Row>
-  </div>
-)};
+    <div>
+      <Row className="mb-3 ms-0 me-0">
+        <Col xs="12" className="ps-1 mb-2">
+          <div className="text-extra-small text-primary">CUENTA</div>
+        </Col>
+        <Col xs="6" className="ps-1 pe-1">
+          <ul className="list-unstyled">
+            <li>
+              <a href="/dashboards/mi-perfil">
+              <CsLineIcons icon="online-class" className="me-2" size="18" /> <span className="align-middle">Perfil</span>
+              </a>
+            </li>
+          </ul>
+        </Col>
+        <Col xs="6" className="ps-1 pe-1">
+          <ul className="list-unstyled">
+            <li>
+              <a href="/admin/general">
+                <CsLineIcons icon="tool" className="me-2" size="17" /> <span className="align-middle">General</span>
+              </a>
+            </li>
+          </ul>
+        </Col>
+      </Row>
+      <Row className="mb-1 ms-0 me-0">
+        <Col xs="12" className="p-1 mb-3 pt-3">
+          <div className="separator-light" />
+        </Col>
+        <Col xs="10" className="ps-1 pe-1">
+          <ul className="list-unstyled">
+           
+            <li>
+              <a onClick={ onLogout } href="/login">
+                <CsLineIcons icon="logout" className="me-2" size="17" /> <span className="align-middle">Cerrar Sesión</span>
+              </a>
+            </li>
+          </ul>
+        </Col>
+      </Row>
+    </div>
+  )};
 
 const validUrl = (link) => {
   return link.includes('profile_upload');

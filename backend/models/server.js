@@ -49,6 +49,7 @@ class Server {
         this.app.use('/api/contacto', require('../routes/contact'))
         this.app.use('/api/comunicados', require('../routes/announcement'))
         this.app.use('/api/seccion', require('../routes/seccion'))
+        this.app.use('/api/general', require('../routes/general'))
     }
 
     listen() {

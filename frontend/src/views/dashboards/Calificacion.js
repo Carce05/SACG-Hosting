@@ -172,7 +172,7 @@ const Calificacion = (props) => {
   const handleAnio= (id) => {
     const dt = periodos.filter(x => x.anio === id.anio && x.estudiante === id.estudiante);
     setTrimestre(dt);
-    // handlePeriodo(id);
+    handlePeriodo(id);
    
   }
 
@@ -180,7 +180,7 @@ const Calificacion = (props) => {
     const dt = anios.filter(x => x.estudiante === id.value);
 
     setAniosFiltrados(dt);
-    // handleAnio(id);
+    handleAnio(id);
   }
 
   
