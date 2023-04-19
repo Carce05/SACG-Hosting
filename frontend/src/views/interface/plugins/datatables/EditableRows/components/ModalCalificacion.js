@@ -26,6 +26,7 @@ const history = useHistory();
   let asistenciaRes = 0;
   let totalRes = 0;
   let observacionesRes = "";
+  let seccionRes = "";
   let anioActual = "";
   let periodoActual = "";
 
@@ -68,6 +69,7 @@ const history = useHistory();
   if (selectedFlatRows.length === 1) {
     cedula = selectedFlatRows[0].original.cedula;
     materiaRes = selectedFlatRows[0].original.materia;
+    seccionRes = selectedFlatRows[0].original.seccion;
   }
 
   if (isOpenAddEditModal) {
@@ -200,9 +202,10 @@ const history = useHistory();
         total: 0,
         observaciones,
         anio: anioActual,
-        trimestre: periodoActual  
+        trimestre: periodoActual,
+        seccion: seccionRes
     });
-    alert('guardado con exito');
+    toast('Calificación Actualizada!', { className: 'success' });
           setIsOpenAddEditModal(false);
           axios
           .get("http://localhost:8080/api/calificaciones")

@@ -88,30 +88,6 @@ const Secciones = (props) => {
     fetchData();
   }, []);
   
-  /*
-  // Llamados de General
-    async function getGeneral() {
-      // Fetch data
-      const response = await axios.get("http://localhost:8080/api/general/643f20fe9a24456baf1c57b1");
-      const resultsGeneral = []
-      // Store results in the results array
-      anioActual = response.data[0].anio;
-      periodoActual = response.data[0].periodo; 
-
-      axios
-      .get("http://localhost:8080/api/general/643f20fe9a24456baf1c57b1")
-      .then((res) => {
-        setGeneral(res.data[0]);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-
-      setGeneral([ 
-        ...resultsGeneral
-      ])
-    }
-    */
 
   // Llamados de Estudiantes
   useEffect(() => {

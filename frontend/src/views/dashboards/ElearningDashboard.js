@@ -39,7 +39,7 @@ const ElearningDashboard = () => {
       </div>
       {/* Title and Top Buttons End */}
 
-      <Row >
+      <Row className="row-cols-1 row-cols-lg-5 g-2 mb-5">
         {/* Continue Learning Start */}
 
         <Col xl="6" className="mb-5">
@@ -85,13 +85,6 @@ const ElearningDashboard = () => {
                 <div className="w-50 text-black mb-3">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ac odio tempor orci dapibus ultrices in. Mauris ultrices eros in cursus. Duis at tellus at urna condimentum mattis pellentesque id. Pretium viverra suspendisse potenti nullam ac tortor vitae. Donec ultrices tincidunt arcu non sodales neque sodales ut. Sed libero enim sed faucibus turpis in. Ornare quam viverra orci sagittis.
                 </div>
-                {/* <Rating
-                  className="mb-2"
-                  initialRating={5}
-                  readonly
-                  emptySymbol={<i className="cs-star text-primary" />}
-                  fullSymbol={<i className="cs-star-full text-primary" />}
-                /> */}
               </div>
               <div>
                 <NavLink to="/contacto" className="btn btn-icon btn-icon-start btn-outline-primary mt-3 stretched-link">
