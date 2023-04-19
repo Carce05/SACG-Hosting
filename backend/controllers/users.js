@@ -75,11 +75,9 @@ const usuariosPut = async (req, res) => {
         if (currentUserReq.password !== req.body.password) {
             const bcryptPass = bcryptjs.hashSync(req.body.password, bcryptjs.genSaltSync())
             await Usuario.updateOne({ _id: req.params.userId }, { ...req.body, password: bcryptPass });
-            // console.log('ojo aqui global',emailLoggedGlobal);
             bitacoraAccion.log('debug', `${emailLoggedGlobal} actualizó datos del usuario con el siguiente correo: ${req.body.email}`);
         } else {
             await Usuario.updateOne({ _id: req.params.userId }, req.body);
-            // console.log('ojo aqui global',emailLoggedGlobal);
             bitacoraAccion.log('debug', `${emailLoggedGlobal} actualizó datos del usuario con el siguiente correo: ${req.body.email}`);
         }
         res.status(200).send({
