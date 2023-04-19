@@ -8,7 +8,8 @@ const router = Router();
 const storageEngine = multer.diskStorage({
     destination: "./public/images/profile_upload",
     filename: (req, file, cb) => {
-        cb(null, `${Date.now()}--${file.originalname.toLowerCase().replaceAll(' ', '')}`);
+        const originalname = file.originalname.toLowerCase().replace(/\s+/g, '');
+        cb(null, `${Date.now()}--${originalname}`);
     },
 });
 

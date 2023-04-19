@@ -10,6 +10,7 @@ const dashboards = {
   estudiantes: lazy(() => import('views/dashboards/Estudiantes')),
   perfil: lazy(() => import('views/dashboards/ProfileSettings')),
   avisos: lazy(() => import('views/dashboards/Avisos')),
+  general: lazy(() => import('views/dashboards/General')),
   calificacion: lazy(() => import('views/dashboards/Calificacion')),
   matricula: lazy(() => import('views/dashboards/AdminMatriculas')),
   adminSecciones : lazy(() => import('views/dashboards/AdminSecciones')),
