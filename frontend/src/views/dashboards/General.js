@@ -26,7 +26,7 @@ const General = () => {
   };
   useEffect(() => {
     axios
-      .get(apiSACG.concat("general/643f20fe9a24456baf1c57b1"))
+      .get(apiSACG.concat("/general/643f20fe9a24456baf1c57b1"))
       .then((res) => {
         setData(res.data[0]);
       })
