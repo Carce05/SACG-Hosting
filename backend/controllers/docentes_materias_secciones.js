@@ -18,9 +18,9 @@ const dmsGet = async (req, res) => {
 }
 
 const dmsPost = async (req, res = response) => {
-    const { docente} = req.query.docente;
-    const { materia} = req.query.materia;
-    const { seccion} = req.query.seccion;
+    const {docente} = (req.query.docente).toString();
+    const {materia} = (req.query.materia).toString();
+    const {seccion} = (req.query.seccion).toString();
     const nuevo = new DMS( { docente, materia, seccion } );
     
     await nuevo.save();
@@ -32,11 +32,9 @@ const dmsPost = async (req, res = response) => {
 }
 
 const dmsPut = async(req, res) => {
-
     try {
-        const myquery = {_id: ObjectId(req.params.dmsId)};
-        const newvalues = { $set: { docente: req.body.docente } };
-        await DMS.updateOne(myquery, newvalues);
+        await DMS.updateOne({_id: req.params.dmsId}, 
+                                { $set: { docente: req.body.docente } });
         res.status(200).send({
             msg: 'PUT | CONTROLLER',
             id: req.params.dmsId

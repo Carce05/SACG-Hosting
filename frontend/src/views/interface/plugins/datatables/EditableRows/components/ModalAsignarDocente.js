@@ -46,7 +46,6 @@ const ModalAsignarDocente = ({ tableInstance, docentes, setDocentes, DMS, setDMS
   }
 
   const onSubmit = async () => {
-    if (dmsId !== "") {
     try {
       const response = await axios.put(`http://localhost:8080/api/docentes_materias_secciones/${dmsId}`, {
         docente: selectedOption,
@@ -86,47 +85,6 @@ const ModalAsignarDocente = ({ tableInstance, docentes, setDocentes, DMS, setDMS
         setIsOpenAddEditModal(true);
       }
     }
-    
-  }
-  else {
-    try {
-      const response = await axios.post('http://localhost:8080/api/calificaciones', {
-        estudiante: cedula,
-        materia: materiaRes,
-        cotidiano,
-        tarea, 
-        examen1,
-        examen2,
-        proyecto,
-        asistencia,
-        total,
-        observaciones,
-        anio: 2023,
-        trimestre: 'II'  
-    });
-    alert('guardado con exito');
-          setIsOpenAddEditModal(false);
-          axios
-          .get("http://localhost:8080/api/calificaciones")
-          .then((res) => {
-           setCalificaciones(res.data);
-            })
-            .catch((err) => {
-               console.error(err);
-             });
-    } catch (e) {
-      console.log(e.message);
-      if (e.response && e.response.status === 400) {
-        setIsOpenAddEditModal(true);
-        console.log(e.response.data.msg);
-        alert(e.response.data.msg, { onDismiss: () => setIsOpenAddEditModal(true) });
-      } 
-      else {
-        alert('Problema al guardar el usuario', { onDismiss: () => setIsOpenAddEditModal(true) });
-        setIsOpenAddEditModal(true);
-      }
-    }
-  }
   }
 
   return (
@@ -138,7 +96,7 @@ const ModalAsignarDocente = ({ tableInstance, docentes, setDocentes, DMS, setDMS
       <Modal.Body>
 
 
-            <form id="agregarDocenteForm" className="tooltip-end-bottom" onSubmit={onSubmit}>
+            <Form id="agregarDocenteForm" className="tooltip-end-bottom" onSubmit={onSubmit}>
 
               <Form.Group controlId="docente">
               <Form.Label>Docentes</Form.Label>
@@ -156,7 +114,7 @@ const ModalAsignarDocente = ({ tableInstance, docentes, setDocentes, DMS, setDMS
               <br/>
               <Row className="mb-3">
                   <Col className="text-center">
-                    <Button variant="primary" type="submit" style={{ marginRight: '10px' }}>
+                    <Button variant="primary" onClick={() => onSubmit()} style={{ marginRight: '10px' }}>
                       Actualizar
                     </Button>
                     <Button variant="outline-primary" onClick={() => setIsOpenAddEditModal(false) || cancelRegister()} style={{ marginLeft: '10px' }}>
@@ -166,7 +124,7 @@ const ModalAsignarDocente = ({ tableInstance, docentes, setDocentes, DMS, setDMS
                 </Row>
 
 
-            </form>
+            </Form>
       </Modal.Body>
     </Modal>
   );
