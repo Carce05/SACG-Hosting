@@ -68,11 +68,6 @@ const ForgotPassword = () => {
             Consultas al correo: lic.diurnodeguarari@mep.go.cr   
             Teléfono: 2237-4033
           </p>
-          {/* <div className="mb-5">
-            <Button size="lg" variant="outline-white" href="/">
-              Learn More
-            </Button>
-          </div> */}
         </div>
       </div>
     </div>
@@ -86,7 +81,7 @@ const ForgotPassword = () => {
           <img src="/img/logo/image2vector.svg" alt="Logo" width="75" height="75"/>
           </NavLink>
         </div>
-        <div className="mb-5">
+        <div className="mb-5" >
           <h2 className="cta-1 mb-0 text-primary">¿Olvidó su contraseña?</h2>
           <h2 className="cta-1 text-primary">¡Restablézcala aquí!</h2>
         </div>

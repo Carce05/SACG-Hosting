@@ -89,11 +89,6 @@ const ResetPassword = () => {
             Consultas al correo: lic.diurnodeguarari@mep.go.cr   
             Teléfono: 2237-4033
           </p>
-          {/* <div className="mb-5">
-            <Button size="lg" variant="outline-white" href="/">
-              Learn More
-            </Button>
-          </div> */}
         </div>
       </div>
     </div>
