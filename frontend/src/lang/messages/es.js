@@ -164,6 +164,7 @@ const enMessages = {
 
   'menu.secciones' : 'Secciones (Docente)',
   'menu.admin_secciones' : 'Secciones (Administrador)',
+  'menu.asignarDocente' : 'Docentes',
   'menu.usuarios' : 'Usuarios',
   'menu.contacto': 'Contacto',
   'menu.avisos' : 'Avisos',

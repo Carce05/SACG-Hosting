@@ -13,71 +13,73 @@ import Table from 'views/interface/plugins/datatables/EditableRows/components/Ta
 import ButtonsCheckAll from 'views/interface/plugins/datatables/EditableRows/components/ButtonsCheckAll';
 import ButtonsAddNew from 'views/interface/plugins/datatables/EditableRows/components/ButtonsAddNew';
 import ControlsAdd from 'views/interface/plugins/datatables/EditableRows/components/ControlsAdd';
-import ControlsCalificacion from 'views/interface/plugins/datatables/EditableRows/components/ControlsCalificacion';
+import ControlsAsignarDocente from 'views/interface/plugins/datatables/EditableRows/components/ControlsAsignarDocente';
 import ControlsDelete from 'views/interface/plugins/datatables/EditableRows/components/ControlsDelete';
 import ControlsSearch from 'views/interface/plugins/datatables/EditableRows/components/ControlsSearch';
-import ModalCalificacion from 'views/interface/plugins/datatables/EditableRows/components/ModalCalificacion';
+import ModalAsignarDocente from 'views/interface/plugins/datatables/EditableRows/components/ModalAsignarDocente';
 import TablePagination from 'views/interface/plugins/datatables/EditableRows/components/TablePagination';
 import axios from "axios";
 import { useFormik } from 'formik';
 import { useSelector } from 'react-redux';
 
 
-const Secciones = (props) => {
+const AsignarDocente = (props) => {
   const [value, setValue] = useState([]);
-  const [materias, setMaterias] = useState();
-  const [secciones, setSecciones] = useState();
-  const [estudiantes, setEstudiantes] = useState([]);
+  const [DMS, setDMS] = useState([]);
+  const [secciones, setSecciones] = useState([]);
+  const [docentes, setDocentes] = useState([]);
   const [calificaciones, setCalificaciones] = useState([]);
-  const [seccion, setSeccion] = useState([]);
-  const [general, setGeneral] = useState([]);
   const { label, name, ...rest } = props;
   const initialValues = { email: '' };
   const formik = useFormik({ initialValues });
-  const { handleSubmit, handleChange, materia, seccionn, touched, errors } = formik;
+  const { handleSubmit, handleChange, materia, seccion, touched, errors } = formik;
   const { setSelectedMateria, setSeccionn } = useState();
   
   const { currentUser, isLogin } = useSelector((state) => state.auth);
   const docente  = currentUser.email;
-
-  
-  let anioActual = "";
-  let periodoActual = "";
   
 
-  // Llamados de DMS
   useEffect(() => {
     async function fetchData() {
       // Fetch data
-      const response = await axios.get(`http://localhost:8080/api/docentes_materias_secciones/DocenteAsignado/${docente}`);
+      const response = await axios.get(`http://localhost:8080/api/docentes_materias_secciones/`);
+      const resultsDMS = []
       const resultsMaterias = []
       const resultsSecciones = []
       let contador = 0;
+
       // Store results in the results array
+
+      /* eslint no-underscore-dangle: 0 */
+      response.data.forEach((val) => {
+        resultsDMS.push({
+          _id: val._id,
+          docente: val.docente,
+          materia: val.materia,
+          seccion: val.seccion
+        });
+      });
+
       response.data.forEach((val) => {
         contador = 0;
-        resultsMaterias.forEach((dup) => {
-          if (val.materia === dup.materia) {
+        resultsSecciones.forEach((dup) => {          
+          if (val.seccion === dup.seccion) {
             contador+=1;
           }
         })
         if (contador === 0)
-        resultsMaterias.push({
-          materia: val.materia,
-          label: `${val.materia}`,
+        resultsSecciones.push({
+          seccion: val.seccion,
+          label: `${val.seccion}`,
         });
 
       });
-      response.data.forEach((val) => {
-        resultsSecciones.push({
-          seccion: val.seccion,
-          materia: val.materia,
-          label: `${val.seccion}`,
-        });
-      });
+
+      resultsSecciones.sort((s1, s2)=>(s2.seccion < s1.seccion) ? 1 : (s2.seccion > s1.seccion) ? -1 : 0);
+
       // Update the options state
-      setMaterias([ 
-        ...resultsMaterias
+      setDMS([ 
+        ...resultsDMS
       ])
       setSecciones([ 
         ...resultsSecciones
@@ -88,29 +90,42 @@ const Secciones = (props) => {
     fetchData();
   }, []);
   
+  
+  /*
+  useEffect(() => {
 
-  // Llamados de Estudiantes
+    axios
+      .get("http://localhost:8080/api/estudiantes/")
+      .then((res) => {
+        setData(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
+*/
+
+
+  
   useEffect(() => {
     async function fetchData() {
       // Fetch data
-      const response = await axios.get("http://localhost:8080/api/estudiantes/");
-      const resultsEstudiantes = []
+      const response = await axios.get("http://localhost:8080/api/usuarios/");
+      const resultsDocentes = []
       // Store results in the results array
       response.data.forEach((val) => {
-        resultsEstudiantes.push({
-          cedula: val.cedula,
-          nombre: val.nombre,
-          apellido: val.apellido,
-          seccion: val.seccion,
-          materia: "",
-          total: 0,
-        });
+        if (val.role === "Profesor" && val.status === "Activo"){
+          resultsDocentes.push({           
+            value: val.email,
+            label: `${val.name} (${val.personalId})`,
+          });
+        }
       });
 
-      resultsEstudiantes.sort((s1, s2)=>(s2.apellido < s1.apellido) ? 1 : (s2.apellido > s1.apellido) ? -1 : 0);
+      resultsDocentes.sort((s1, s2)=>(s2.nombre < s1.nombre) ? 1 : (s2.nombre > s1.nombre) ? -1 : 0);
 
-      setEstudiantes([ 
-        ...resultsEstudiantes
+      setDocentes([ 
+        ...resultsDocentes
       ])
     }
 
@@ -118,117 +133,29 @@ const Secciones = (props) => {
     fetchData();
   }, []);
 
-  // Llamados de Calificaciones
-  useEffect(() => {
-  async function fetchData() {
-
-    await axios
-    .get("http://localhost:8080/api/general/643f20fe9a24456baf1c57b1")
-    .then((res) => {
-      anioActual = res.data[0].anio;
-      periodoActual = res.data[0].periodo; 
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-
-    // Fetch data
-    const response = await axios.get('http://localhost:8080/api/calificaciones');
-    const resultsCalificaciones = []
-    // Store results in the results array
-
-
-
-    /* eslint no-underscore-dangle: 0 */
-    response.data.forEach((val) => {     
-      if (val.anio === anioActual && val.trimestre === periodoActual){ 
-        resultsCalificaciones.push({
-          _id: val._id,
-          estudiante: val.estudiante,
-          materia: val.materia,
-          cotidiano: val.cotidiano,
-          tarea: val.tarea,
-          examen1: val.examen1,
-          examen2: val.examen2,
-          proyecto: val.proyecto,
-          asistencia: val.asistencia,
-          total: val.total,
-          observaciones: val.observaciones,
-          anio: val.anio,
-          trimestre: val.trimestre,
-        });
-      }
-    });
-    setCalificaciones([ 
-      ...resultsCalificaciones
-    ])
-  }
-
-      // Trigger the fetch
-      fetchData();
-}, []);
-
-  
 
 
 
   const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
 
-  const insertarCalificaciones = () => {
-    estudiantes.forEach((val) => {
-      calificaciones.forEach((cali) => {
-        if (val.cedula === cali.estudiante && val.materia === cali.materia ) {
-          val.total = cali.total;
-        }
-      })
-    });
-  }
-
-  const [data, setData] = React.useState(estudiantes);
+  const [data, setData] = React.useState(DMS);
 
   const handleSeccion = (id) => {
-    insertarCalificaciones();
-    const dt = estudiantes.filter(x => x.seccion === id.seccion);
+    const dt = DMS.filter(x => x.seccion === id.seccion);
     setData(dt);
   }
 
-  const handleMateria = (id) => {
-    estudiantes.forEach((val) => {
-        val.materia = id.materia;
-    });
-    const dt = secciones.filter(x => x.materia === id.materia);
-    setSeccion(dt);
-    handleSeccion(id);
-  }
 
-
-
-
-
-  const title = 'Mis Secciones';
+  const title = 'Asignar Docentes';
   const description = 'Secciones del profesor logueado.';
 
   
 
   const columns = React.useMemo(() => {
     return [
-      { Header: 'Cédula', accessor: 'cedula', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
-      { Header: 'Apellido', accessor: 'apellido', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
-      { Header: 'Nombre', accessor: 'nombre', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },    
       { Header: 'Materia', accessor: 'materia', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
-      { Header: 'Seccion', accessor: 'seccion', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
-      { Header: 'Total', accessor: 'total', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
-      /*
-      {
-        Header: '',
-        id: 'action',
-        headerClassName: 'empty w-10',
-        Cell: ({ row }) => {
-          const { checked, onChange } = row.getToggleRowSelectedProps();
-          return <Button onClick={() => handleCalificacion(row) } variant="outline-primary" >Nota</Button>;
-        },
-      },
-      */
+      { Header: 'Sección', accessor: 'seccion', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
+      { Header: 'Docente', accessor: 'docente', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },    
       {
         Header: '',
         id: 'action',
@@ -284,42 +211,16 @@ const tableInstance = useTable(
         <Col>
           <Card className="h-100">
             <Card.Body className="mb-5">
-              <p className="text-primary heading mb-8">Materia</p>
-              <div className="d-flex flex-column flex-md-row flex-lg-column align-items-center mb-n5 justify-content-md-between justify-content-center text-center text-md-start text-lg-center">
-                <Col xs="12" lg="12">
-                  <Select classNamePrefix="react-select" 
-                    options={materias} 
-                    value={materia} 
-                    onChange={handleMateria} 
-                    placeholder="Seleccione" 
-                  />
-                </Col>          
-              </div>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col>
-          <Card className="h-100">
-            <Card.Body className="mb-5">
               <p className="text-primary heading mb-8">Sección</p>
               <div className="d-flex flex-column flex-md-row flex-lg-column align-items-center mb-n5 justify-content-md-between justify-content-center text-center text-md-start text-lg-center">
                 <Col xs="12" lg="12">
                   <Select classNamePrefix="react-select" 
-                    options={seccion} 
-                    value={seccionn} 
+                    options={secciones} 
+                    value={seccion} 
                     onChange={handleSeccion} 
                     placeholder="Seleccione" 
                   />
                 </Col>
-              </div>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col>
-          <Card className="h-100">
-            <Card.Body className="mb-3">
-            <div className="d-flex flex-column flex-md-row flex-lg-column align-items-center mb-n5 justify-content-md-between justify-content-center text-center text-md-start text-lg-center">
-              <b className="text-primary heading mb-8">*Los datos mostrados corresponden al año y trimestre actual.*</b>
               </div>
             </Card.Body>
           </Card>
@@ -329,7 +230,7 @@ const tableInstance = useTable(
       <Row>
         <Col>
           <div className="d-flex justify-content-between">
-              <h2 className="small-title">Estudiantes</h2>
+              <h2 className="small-title">Materias</h2>
               {/*
               <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
                 <h2 className="small-title">Nota</h2> 
@@ -350,7 +251,7 @@ const tableInstance = useTable(
                 </div>
                 */}
                 <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
-                  <ControlsCalificacion tableInstance={tableInstance} />
+                  <ControlsAsignarDocente tableInstance={tableInstance} />
                 </div>
               </Col>
             </Row>
@@ -363,16 +264,16 @@ const tableInstance = useTable(
               </Col>
             </Row>
           </div>
-          <ModalCalificacion onHide={insertarCalificaciones}
-           tableInstance={tableInstance} 
-           calificaciones={calificaciones}
-           setCalificaciones={setCalificaciones}
-           estudiantes={estudiantes}
-           setEstudiantes={setEstudiantes}/>
+          <ModalAsignarDocente           
+          tableInstance={tableInstance}
+          docentes={docentes}
+          setDocentes={setDocentes}
+          DMS={DMS}
+          setDMS={setDMS}/>
         </Col>
       </Row>
     </>
   );
 };
 
-export default Secciones;
+export default AsignarDocente;
