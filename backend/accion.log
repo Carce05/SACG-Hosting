@@ -13,7 +13,7 @@
 {"level":"debug","message":"El usuario erick@gmail.com, creó un nuevo aviso bajo el titulo de prueba tamaño 1","timestamp":"2023-04-15T16:29:47.042Z"}
 {"level":"debug","message":"erick@gmail.com creó un nuevo usuario con el siguiente correo: TESTING","timestamp":"2023-04-17T15:51:06.465Z"}
 {"level":"debug","message":"erick@gmail.com creó un nuevo usuario con el siguiente correo: t@gmail.com","timestamp":"2023-04-17T16:00:38.564Z"}
-{"level":"debug","message":"erick@gmail.com creó un nuevo usuario con el siguiente correo: sa@gmail.com","timestamp":"2023-04-17T16:35:53.570Z"}
+{"level":"debug","message":"erick@gmail.com screó un nuevo usuario con el siguiente correo: sa@gmail.com","timestamp":"2023-04-17T16:35:53.570Z"}
 {"level":"debug","message":"erick@gmail.com creó un nuevo usuario con el siguiente correo: aLERT@gmail.com","timestamp":"2023-04-17T16:37:45.889Z"}
 {"level":"debug","message":"undefined creó un nuevo usuario con el siguiente correo: q@gmail.com","timestamp":"2023-04-17T17:28:05.707Z"}
 {"level":"debug","message":"El usuario undefined, creó un nuevo aviso bajo el titulo de hola","timestamp":"2023-04-17T17:29:58.994Z"}
