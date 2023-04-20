@@ -21,7 +21,7 @@ import TablePagination from 'views/interface/plugins/datatables/EditableRows/com
 import axios from "axios";
 import { useFormik } from 'formik';
 import { useSelector } from 'react-redux';
-
+import apiSACG from 'api/apiSACG';
 
 const AsignarDocente = (props) => {
   const [value, setValue] = useState([]);
@@ -42,7 +42,7 @@ const AsignarDocente = (props) => {
   useEffect(() => {
     async function fetchData() {
       // Fetch data
-      const response = await axios.get(`http://localhost:8080/api/docentes_materias_secciones/`);
+      const response = await axios.get(apiSACG.concat(`/docentes_materias_secciones/`));
       const resultsDMS = []
       const resultsMaterias = []
       const resultsSecciones = []
@@ -110,7 +110,7 @@ const AsignarDocente = (props) => {
   useEffect(() => {
     async function fetchData() {
       // Fetch data
-      const response = await axios.get("http://localhost:8080/api/usuarios/");
+      const response = await axios.get(apiSACG.concat("/usuarios/"));
       const resultsDocentes = []
       // Store results in the results array
       response.data.forEach((val) => {
