@@ -8,6 +8,7 @@ import { NavLink, Redirect, useHistory } from 'react-router-dom';
 import axios from "axios";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import apiSACG from 'api/apiSACG';
 
 const ModalAsignarDocente = ({ tableInstance, docentes, setDocentes, DMS, setDMS }) => {
   const history = useHistory();
@@ -47,16 +48,16 @@ const ModalAsignarDocente = ({ tableInstance, docentes, setDocentes, DMS, setDMS
 
   const onSubmit = async () => {
     try {
-      const response = await axios.put(`http://localhost:8080/api/docentes_materias_secciones/${dmsId}`, {
+      const response = await axios.put(apiSACG.concat(`/docentes_materias_secciones/${dmsId}`, {
         docente: selectedOption,
         materia: materiaRes,
         seccion: seccionRes
-      });
+      }));
       toast('¡Docente Asignado!', { className: 'success' });
       setIsOpenAddEditModal(false);
       
       axios
-          .get("http://localhost:8080/api/docentes_materias_secciones")
+          .get(apiSACG.concat("/docentes_materias_secciones"))
           .then((res) => {
            setDMS(res.data);
             })
