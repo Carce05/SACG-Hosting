@@ -48,11 +48,11 @@ const ModalAsignarDocente = ({ tableInstance, docentes, setDocentes, DMS, setDMS
 
   const onSubmit = async () => {
     try {
-      const response = await axios.put(apiSACG.concat(`/docentes_materias_secciones/${dmsId}`, {
+      const response = await axios.put(apiSACG.concat(`/docentes_materias_secciones/${dmsId}`), {
         docente: selectedOption,
         materia: materiaRes,
         seccion: seccionRes
-      }));
+      });
       toast('¡Docente Asignado!', { className: 'success' });
       setIsOpenAddEditModal(false);
       
