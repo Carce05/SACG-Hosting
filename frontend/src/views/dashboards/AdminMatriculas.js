@@ -78,7 +78,7 @@ const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
     return [
       { Header: 'Cédula Encargado', accessor: 'encargadoId', sortable: true, headerClassName: 'text-small text-uppercase w-10' },
       { Header: 'Nombre Completo', accessor: 'nombreCompleto', sortable: true, headerClassName: 'text-small text-uppercase w-10' },
-      { Header: 'Nacionalidad', accessor: 'nacionalidad', sortable: true, headerClassName: 'text-small text-uppercase w-10' },
+      { Header: 'Pais de procedencia', accessor: 'nacionalidad', sortable: true, headerClassName: 'text-small text-uppercase w-10' },
       { Header: 'Estado Matricula', accessor: 'estadoMatriculaAdmin', sortable: true, headerClassName: 'text-small text-uppercase w-10',
       Cell: ({ cell }) => {
         if (cell.value === "Pendiente") {
@@ -214,7 +214,7 @@ const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
                   >
                                       <PDFDownloadLink
               document={
-                <ReporteMatriculas matriculas={ matriculasFiltradas } filtroSettings={ formState } />
+                <ReporteMatriculas matriculas={ matriculasFiltradas } filtroSettings={ formState } cantidadMatriculasFiltradas={cantidadMatriculasFiltradas}/>
               }
               fileName="informeMatriculas.pdf"
             >

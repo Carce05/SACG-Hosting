@@ -368,6 +368,7 @@ const onCargarExistenteMatricula = ({ target }) => {
                     onChange={handleChange}
                     disabled={ selectedFlatRows.length === 1 }
                     >
+                      <option value="1">0</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
                       <option value="3">3</option>
@@ -391,7 +392,7 @@ const onCargarExistenteMatricula = ({ target }) => {
               </div>
               <div className='form-input-hori'>
               <div className='form-input-hori label-arriba mr-40px'>
-                <p>3. Nacionalidad </p>
+                <p>3. Pais de procedencia </p>
                 <Form.Group controlId="name">
                   <div className="mb-3 form-group tooltip-end-top">
                     <Form.Select 
@@ -478,6 +479,7 @@ const onCargarExistenteMatricula = ({ target }) => {
                     onChange={handleChange}
                     disabled={ selectedFlatRows.length === 1 }
                     >
+                      <option value="0">0</option>
                       <option value="7">7</option>
                       <option value="8">8</option>
                       <option value="9">9</option>
@@ -614,11 +616,30 @@ const onCargarExistenteMatricula = ({ target }) => {
                   )}
                 </div>
               </Form.Group>
-              <Button variant="primary" className={(selectedFlatRows.length) === 1 ? 'hide-element' : ''} type="submit">{selectedFlatRows.length === 1 ? 'Actualizar' : 'Agregar Matricula'}</Button>
-              <Button variant="primary" className={(selectedFlatRows.length) !== 1 ? 'hide-element' : ''} type="submit">Modificar estado</Button>
-              <Button variant="outline-primary" onClick={() => setIsOpenAddEditModal(false) || cancelRegister()}>
-                Cerrar
-              </Button>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '15px' }}>
+                <Button
+                  variant="primary"
+                  className={(selectedFlatRows.length) === 1 ? 'hide-element' : ''}
+                  type="submit"
+                >
+                  {selectedFlatRows.length === 1 ? 'Actualizar' : 'Agregar Matrícula'}
+                </Button>
+
+                <Button
+                  variant="primary"
+                  className={(selectedFlatRows.length) !== 1 ? 'hide-element' : ''}
+                  type="submit"
+                >
+                  Modificar estado
+                </Button>
+
+                <Button
+                  variant="outline-primary"
+                  onClick={() => setIsOpenAddEditModal(false) || cancelRegister()}
+                >
+                  Cerrar
+                </Button>
+              </div>
             </form>
           )}
         </Formik>
