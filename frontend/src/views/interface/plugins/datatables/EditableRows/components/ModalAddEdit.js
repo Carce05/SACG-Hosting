@@ -276,11 +276,10 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
                   />
                 </Form.Group>
               </div>
-              <Button variant="primary" type="submit">{selectedFlatRows.length === 1 ? 'Actualizar' : 'Agregar'}
-              </Button>
-              <Button variant="outline-primary" onClick={() => setIsOpenAddEditModal(false) || cancelRegister()}>
-                Cancelar
-              </Button>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+  <Button variant="primary" type="submit">{selectedFlatRows.length === 1 ? 'Actualizar' : 'Agregar'}</Button>
+  <Button variant="outline-primary" onClick={() => setIsOpenAddEditModal(false) || cancelRegister()}>Cancelar</Button>
+</div>
             </form>
           )}
         </Formik>
