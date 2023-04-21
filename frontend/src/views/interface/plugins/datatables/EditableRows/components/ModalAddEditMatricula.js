@@ -318,6 +318,7 @@ const onCargarExistenteMatricula = ({ target }) => {
                     value={values.nombreCompleto}
                     onChange={handleChange}
                     disabled={ selectedFlatRows.length === 1 }
+                    style={{ width: '650px' }}
                   />
                   {errors.nombreCompleto && touched.nombreCompleto && (
                     <div className="invalid-tooltip-matricula">{errors.nombreCompleto}</div>
@@ -424,6 +425,7 @@ const onCargarExistenteMatricula = ({ target }) => {
                       value={values.telefono}
                       onChange={handleChange}
                        disabled={ selectedFlatRows.length === 1 }
+                       style={{ width: '275px' }}
                     />
                   {errors.telefono && touched.telefono && (
                     <div className="invalid-tooltip-matricula">{errors.telefono}</div>
@@ -444,6 +446,7 @@ const onCargarExistenteMatricula = ({ target }) => {
                     value={values.domicilio}
                     onChange={handleChange}
                     disabled={ selectedFlatRows.length === 1 }
+                    style={{ width: '655px' }}
                   />
                   {errors.domicilio && touched.domicilio && (
                     <div className="invalid-tooltip-matricula">{errors.domicilio}</div>
@@ -461,6 +464,7 @@ const onCargarExistenteMatricula = ({ target }) => {
                       value={values.centroEducativoProcedencia}
                       onChange={handleChange}
                        disabled={ selectedFlatRows.length === 1 }
+                       style={{ width: '450px' }}
                     />
                   {errors.centroEducativoProcedencia && touched.centroEducativoProcedencia && (
                     <div className="invalid-tooltip-matricula">{errors.centroEducativoProcedencia}</div>
@@ -478,8 +482,10 @@ const onCargarExistenteMatricula = ({ target }) => {
                     defaultValue={values.nivelAnterior}
                     onChange={handleChange}
                     disabled={ selectedFlatRows.length === 1 }
+                    style={{ width: '155px' }}
                     >
-                      <option value="0">0</option>
+                      <option value="0">Seleccionar</option>
+                      <option value="1">Escuela</option>
                       <option value="7">7</option>
                       <option value="8">8</option>
                       <option value="9">9</option>
@@ -495,7 +501,7 @@ const onCargarExistenteMatricula = ({ target }) => {
               </div>
 
               <Form.Group controlId="name" className='form-input-hori label-arriba'>
-              <p>6. Que nivel voy a matricular</p>
+              <p>6. Nivel a matricular</p>
                 <div className="mb-3 form-group tooltip-end-top">
                 <Form.Select 
                     name="matricularNivelDe"
@@ -503,6 +509,7 @@ const onCargarExistenteMatricula = ({ target }) => {
                     onChange={handleChange}
                     disabled={ selectedFlatRows.length === 1 }
                     >
+                      <option value="0">Seleccionar</option>
                       <option value="7">7</option>
                       <option value="8">8</option>
                       <option value="9">9</option>
@@ -567,6 +574,7 @@ const onCargarExistenteMatricula = ({ target }) => {
                       defaultValue={values.tieneAdecuancion}
                       onChange={handleChange}
                        disabled={ selectedFlatRows.length === 1 }
+                       style={{ width: '150px' }}
                     >
                       <option>Seleccionar</option>
                       <option value="true">Si</option>
@@ -583,6 +591,7 @@ const onCargarExistenteMatricula = ({ target }) => {
                               value={values.cualAdecuancion}
                               onChange={handleChange}
                               disabled={ selectedFlatRows.length === 1 }
+                              style={{ width: '465px' }}
                             />
                             {errors.cualAdecuancion && touched.cualAdecuancion && (
                             <div className="invalid-tooltip-matricula">{errors.cualAdecuancion}</div>

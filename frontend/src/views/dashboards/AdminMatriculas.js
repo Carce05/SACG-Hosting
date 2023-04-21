@@ -76,7 +76,7 @@ const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
 
   const columns = React.useMemo(() => {
     return [
-      { Header: 'Cédula Encargado', accessor: 'encargadoId', sortable: true, headerClassName: 'text-small text-uppercase w-10' },
+      { Header: 'Cédula Estudiante', accessor: 'cedulaEstudiante', sortable: true, headerClassName: 'text-small text-uppercase w-10' },
       { Header: 'Nombre Completo', accessor: 'nombreCompleto', sortable: true, headerClassName: 'text-small text-uppercase w-10' },
       { Header: 'Pais de procedencia', accessor: 'nacionalidad', sortable: true, headerClassName: 'text-small text-uppercase w-10' },
       { Header: 'Estado Matricula', accessor: 'estadoMatriculaAdmin', sortable: true, headerClassName: 'text-small text-uppercase w-10',
@@ -103,7 +103,7 @@ const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
       },
       
       {
-        Header: 'Opciones',
+        Header: 'OPCIONES',
         id: 'name',
         headerClassName: 'empty w-10',
         Cell: ({ row }) => (
