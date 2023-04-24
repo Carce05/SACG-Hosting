@@ -39,3 +39,6 @@
 {"level":"debug","message":"El usuario rolando@gmail.com, creó un nuevo aviso bajo el titulo de Este aviso de es prueba","timestamp":"2023-04-19T21:30:20.669Z"}
 {"level":"debug","message":"rolando@gmail.com creó un nuevo usuario con el siguiente correo: encargado222@gmail.com","timestamp":"2023-04-19T21:55:27.773Z"}
 {"level":"debug","message":"encargado@gmail.com actualizó datos del usuario con el siguiente correo: yuliana.jimenez@hotmail.com","timestamp":"2023-04-20T00:01:51.988Z"}
+{"level":"debug","message":"undefined creó un nuevo usuario con el siguiente correo: sa@c.com","timestamp":"2023-04-24T20:57:44.973Z"}
+{"level":"debug","message":"undefined creó un nuevo usuario con el siguiente correo: lolol@d.om","timestamp":"2023-04-24T20:58:24.312Z"}
+{"level":"debug","message":"undefined creó un nuevo usuario con el siguiente correo: 123456780@d.com","timestamp":"2023-04-24T20:59:40.274Z"}

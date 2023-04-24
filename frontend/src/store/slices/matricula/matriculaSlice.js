@@ -6,6 +6,7 @@ const initialState = {
     onShowAlert: false,
     matriculasFiltradas: [],
     cantidadMatriculasFiltradas: 0,
+    matricularActivado: false,
 };
 
 const matriculaSlice = createSlice({
@@ -28,6 +29,9 @@ const matriculaSlice = createSlice({
     setOnHideAlert: (state) => {
       state.onShowAlert = false;
     },
+    setmatricularActivado: (state, action) => {
+      state.matricularActivado = action.payload;
+    },
     setMatriculasFiltradas: (state, action) => {
       console.log()
       state.matriculasFiltradas = action.payload.matriculasfiltradas;
@@ -36,7 +40,7 @@ const matriculaSlice = createSlice({
   },
 });
 
-export const { setMatriculas, setMatriculasLoading, setMatriculasLoaded, setOnShowAlert, setOnHideAlert, setMatriculasFiltradas } = matriculaSlice.actions;
+export const { setMatriculas, setMatriculasLoading, setMatriculasLoaded, setOnShowAlert, setOnHideAlert, setMatriculasFiltradas, setmatricularActivado } = matriculaSlice.actions;
 const matriculaReducer = matriculaSlice.reducer;
 
 export default matriculaReducer;

@@ -113,9 +113,16 @@ const agregarUsuarioNuevo = (userToSave, image) => {
     }
 }}
 
+const checkCedulaExiste = ( personalId ) => {
+  return async (dispatch, getState) => {
+    const { data } = await mainEndpoint.get(`/usuarios/checkingUsuarioCedula/${ personalId }`);
+    return data;
+}}
+
 export {
     actualizarUsuario,
     actualizarUsuarioFromAdmin,
     actualizarUserProfileImage,
-    agregarUsuarioNuevo
+    agregarUsuarioNuevo,
+    checkCedulaExiste
 };

@@ -179,6 +179,19 @@ const usuariosPatch = async (req, res) => {
     }
   }
 
+const checkingUsuarioCedula = async (req, res = response) => {
+    const personalId = req.params.personalId;
+    const existPersonalId = await Usuario.findOne({ personalId });
+    if (existPersonalId) {
+        res.json({
+            status: true
+        });
+    } else {
+        res.json({
+            status: false
+        });
+    }
+}
 module.exports = {
     usuariosGet,
     usuariosPost,
@@ -187,5 +200,6 @@ module.exports = {
     usuarioLogin,
     userImageUpload,
     usuariosPostImage,
-    usuariosPatch
+    usuariosPatch,
+    checkingUsuarioCedula
 }

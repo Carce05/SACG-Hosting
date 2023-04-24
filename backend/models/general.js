@@ -7,6 +7,9 @@ const GeneralSchema = Schema({
     },
     periodo: {
         type: String
+    },
+    matriculaActivator: {
+        type: String
     }
 });
 

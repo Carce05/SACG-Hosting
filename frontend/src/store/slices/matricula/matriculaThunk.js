@@ -1,5 +1,5 @@
 import { mainEndpoint } from "api/apiConfig";
-import { setMatriculas, setMatriculasFiltradas, setMatriculasLoaded, setMatriculasLoading, setOnHideAlert, setOnShowAlert } from "./matriculaSlice";
+import { setMatriculas, setMatriculasFiltradas, setMatriculasLoaded, setMatriculasLoading, setOnHideAlert, setOnShowAlert, setmatricularActivado } from "./matriculaSlice";
 
 
 const agregarMatricula = (matricula) => {
@@ -23,8 +23,9 @@ const obtenerMatriculas = () => {
       const matriculas = await mainEndpoint.get(`matricula`);
       if(matriculas){
         dispatch(setMatriculas( {...matriculas} ));
+        const configuracionMatricula = await mainEndpoint.get(`general/643f20fe9a24456baf1c57b1`);
+        dispatch(setmatricularActivado(configuracionMatricula.data[0].matriculaActivator));
       }
-     
     };
 };
 

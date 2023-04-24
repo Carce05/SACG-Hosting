@@ -94,7 +94,16 @@ const General = () => {
                   </div>
                 </div>
               </Col>
-
+              <Col xl="4" className="mb-5">
+                <div className="card sh-19">
+                  <div className="card-body text-center d-flex flex-column justify-content-center align-items-center">
+                    <CsLineIcons icon="content" size="25" className="text-primary mb-2" />
+                    <p className="heading mb-3 text-primary">Estado de la Matricula</p>
+                    <p className="card-title mb-0">{(data.matriculaActivator == 'true') ? 'Activa' : 'NO activa'}
+                    </p>
+                  </div>
+                </div>
+              </Col>
             </Row>
             
           </div>
