@@ -3,7 +3,7 @@ import axios from "axios";
 import React, { useState, useEffect } from 'react';
 import { Formik } from 'formik';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
-import { toast } from 'react-toastify';
+import Select from 'react-select';
 import 'react-toastify/dist/ReactToastify.css';
 
 const ModalEditGeneral = ({ general, showModal, setShowModal, setData, setShowSuccessAlert, setShowDangerAlert }) => {
@@ -12,6 +12,7 @@ const ModalEditGeneral = ({ general, showModal, setShowModal, setData, setShowSu
             const response = await axios.put('http://localhost:8080/api/general/643f20fe9a24456baf1c57b1', {
                 anio: values.anio,
                 periodo: values.periodo,
+                matriculaActivator: values.matriculaActivator,
             });
             axios
                 .get("http://localhost:8080/api/general/643f20fe9a24456baf1c57b1")
@@ -71,6 +72,18 @@ const ModalEditGeneral = ({ general, showModal, setShowModal, setData, setShowSu
                                         value={values.periodo}
                                         onChange={handleChange} />
                                 </Form.Group>
+                                <Form.Group controlId="matriculaActivator" className="mb-2">
+                                    <Form.Label>Estado de la Matricula</Form.Label>
+                                    <Form.Select 
+                                        name="matriculaActivator"
+                                        defaultValue={values.matriculaActivator}
+                                        onChange={handleChange}
+                                    >
+                                        <option value="true">Activa</option>
+                                        <option value="false">NO activa</option>
+                                    </Form.Select>
+                                </Form.Group>
+                                
                                 <Row className="mb-3">
                                     <Col className="text-center">
                                         <Button variant="primary" type="submit" style={{ marginRight: '10px' }}>

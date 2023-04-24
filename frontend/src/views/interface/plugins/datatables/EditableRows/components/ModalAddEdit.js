@@ -5,7 +5,7 @@ import { useFormik, Formik } from 'formik';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import { NavLink, Redirect, useHistory } from 'react-router-dom';
 import axios from "axios";
-import { actualizarUsuario, actualizarUsuarioFromAdmin, agregarUsuarioNuevo } from 'store/slices/usuarios/usuarioThunk';
+import { actualizarUsuario, actualizarUsuarioFromAdmin, agregarUsuarioNuevo, checkCedulaExiste } from 'store/slices/usuarios/usuarioThunk';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch } from 'react-redux';
@@ -53,7 +53,11 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
   });
 
   const onSubmit = async ({ name, thumb, email, role, password, personalId, status }) => {
-    if (selectedFlatRows.length === 1) {
+    const response = await axios.get(`http://localhost:8080/api/usuarios/checkingUsuarioCedula/${ personalId }`);
+    console.log(response.data.status)
+
+    if(!response.data.status) {
+      if (selectedFlatRows.length === 1) {
       try {
         const { _id: id } = selectedFlatRows[0].original;
         const response = await axios.patch(`http://localhost:8080/api/usuarios/${id}`, {
@@ -117,6 +121,9 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
         console.error(err);
       });
     setIsOpenAddEditModal(false);
+    } else {
+      toast.error('¡Cédula en uso!');
+    }
   }
   const cancelRegister = () => {
     document.getElementById("registerForm").reset();
@@ -186,7 +193,7 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
                     name="personalId"
                     placeholder="Cedula"
                     value={values.personalId}
-                    onChange={handleChange}
+                    onChange={ handleChange }
                   />
                   {errors.personalId && touched.personalId && (
                     <div className="d-block invalid-tooltip">{errors.personalId}</div>

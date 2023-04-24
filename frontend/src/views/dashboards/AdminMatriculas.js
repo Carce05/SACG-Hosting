@@ -41,7 +41,7 @@ const AdminMatricula = () => {
   const title = 'Matriculas';
   const description = 'Administración de Matricula';
   const dispatch = useDispatch();
-  const { matriculas, matriculasLoading, onShowAlert, matriculasFiltradas, cantidadMatriculasFiltradas } = useSelector((state) => state.matricula);
+  const { matriculas, matriculasLoading, onShowAlert, matriculasFiltradas, cantidadMatriculasFiltradas, matricularActivado } = useSelector((state) => state.matricula);
   const { currentUser } = useSelector((state) => state.auth);
   useEffect(() => {
     if(matriculas.length > 0){
@@ -139,7 +139,9 @@ const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
           <div className='form-input-hori'>
               <h1 className="mb-0 pb-0 display-4">{(currentUser.role === 'Administrador') ? title : 'Agregar Nueva'}</h1>
               <div className={ (currentUser.role === 'Encargado') ? 'show-element d-inline-block me-0 me-sm-3 float-start float-md-none' : 'hide-element'}>
-                    <ControlsAdd tableInstance={tableInstance} />
+                  {
+                    ( matricularActivado == "true") && <ControlsAdd tableInstance={tableInstance} /> 
+                  } 
               </div>
             </div>
             {/* <BreadcrumbList items={breadcrumbs} /> */}
@@ -159,7 +161,10 @@ const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
               </Col>
               <Col sm="12" md="7" lg="9" xxl="10" className="text-end">
                 <div className={ (currentUser.role === 'Administrador') ? 'show-element d-inline-block me-0 me-sm-3 float-start float-md-none' : 'hide-element'}>
-                  <ControlsAdd tableInstance={tableInstance} />  <ControlsVer tableInstance={tableInstance} />
+                  {
+                    ( matricularActivado == "true") && <ControlsAdd tableInstance={tableInstance} /> 
+                  } 
+                  <ControlsVer tableInstance={tableInstance} />
                 </div>
                 <Button variant="outline-primary" className={ (currentUser.role === 'Administrador') ? 'show-element' : 'hide-element'} onClick={ onRefrescar }>
                     Refrescar

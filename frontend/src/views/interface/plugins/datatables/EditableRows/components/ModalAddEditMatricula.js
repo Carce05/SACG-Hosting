@@ -98,9 +98,9 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
     centroEducativoProcedencia : Yup.string().required('Centro Educativo Procedencia es requerido'),
     nivelAnterior: Yup.number()
     .required('Nivel anterior es requerido')
-    .min(1, 'Ingrese un Nivel valido valida')
+    .min(0, 'Ingrese un Nivel valido valida')
     .max(12, 'Ingrese un Nivel valido valida'),
-    matricularNivelDe : Yup.string().required('Matricula en nivel requerido'),
+    matricularNivelDe : Yup.number().min(Yup.ref('nivelAnterior'), 'El nivel a matricular debe ser mayor que el nivel anterior').required('Nivel anterior es requerido'),
     estudianteConviveCon : Yup.string().required('Convive con es requerido'),
     tieneAdecuancion : Yup.string().required('Tiene adecuación es requerido'),
     razonesEntrar : Yup.string().required('Razones son requeridas'),
@@ -118,7 +118,7 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
       dispatch(setMatriculasLoading())
       dispatch(agregarMatricula(values));
       dispatch(onShowAlert());
-      toast('¡Matricula agregada con éxito!')
+      toast.success('¡Matricula agregada con éxito!')
     } else {
       const {_id: id} = selectedFlatRows[0].original;
       const matriculaEstado  = {
@@ -129,7 +129,7 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
         "seccion": values.estadoMatriculaAdmin === "Aprobado" ? values.seccionMatriculaAdmin : ""
       }
       dispatch(matriculaModificarEstado(id, matriculaEstado));
-      toast('¡Estado de la matricula, actualizado!')
+      toast.success('¡Estado de la matricula, actualizado!');
     }
     dispatch(setMatriculasLoading());
     dispatch(onShowAlert());

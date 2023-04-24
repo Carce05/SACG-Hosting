@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 const multer = require('multer');
-const { usuariosGet, usuariosPut, usuariosPost,usuariosPostImage, usuariosDelete, usuarioLogin, userImageUpload, usuariosPatch } = require('../controllers/users');
+const { usuariosGet, usuariosPut, usuariosPost,usuariosPostImage, usuariosDelete, usuarioLogin, userImageUpload, usuariosPatch, checkingUsuarioCedula } = require('../controllers/users');
 const router = Router();
 
 //Setting storage engine
@@ -37,5 +37,8 @@ router.delete('/', usuariosDelete)
 router.post('/login', usuarioLogin)
 
 router.patch('/:userId', usuariosPatch)
+
+router.get('/checkingUsuarioCedula/:personalId', checkingUsuarioCedula)
+
 
 module.exports = router;
