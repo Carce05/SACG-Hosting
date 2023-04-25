@@ -43,7 +43,7 @@ const ProfileSettings = () => {
       dispatch(actualizarUsuario({...formState, formPass: pass}, id));
     }
     ref.current.handleSubmit()
-    toast('¡Perfil Actualizado!');
+    toast.success('¡Perfil Actualizado!');
   }
 
   return (

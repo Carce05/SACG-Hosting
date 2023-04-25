@@ -49,7 +49,7 @@ const ModalAsignarDocente = ({ tableInstance, docentes, setDocentes, DMS, setDMS
         materia: materiaRes,
         seccion: seccionRes
       });
-      toast('¡Docente Asignado!', { className: 'success' });
+      toast.success('¡Docente asignado exitosamente!', { className: 'success' });
       setIsOpenAddEditModal(false);
       
       axios
@@ -91,10 +91,10 @@ const ModalAsignarDocente = ({ tableInstance, docentes, setDocentes, DMS, setDMS
       console.log(e.message);
       if (e.response && e.response.status === 400) {
         console.log(e.response.data.msg);
-        alert(e.response.data.msg);
+        //alert(e.response.data.msg);
         setIsOpenAddEditModal(true);
       }  else {
-        alert('Problema al actualizar la calificación');
+        toast.error('¡Hubo un problema al asignar el docente!');
         setIsOpenAddEditModal(true);
       }
     }

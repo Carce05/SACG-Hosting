@@ -143,7 +143,7 @@ const history = useHistory();
         total,
         observaciones  
       });
-      toast('¡Calificación Actualizada!', { className: 'success' });
+      toast.success('Calificación Actualizada exitosamente!', { className: 'success' });
       setIsOpenAddEditModal(false);
       
       axios
@@ -187,10 +187,10 @@ const history = useHistory();
       console.log(e.message);
       if (e.response && e.response.status === 400) {
         console.log(e.response.data.msg);
-        alert(e.response.data.msg);
+       // alert(e.response.data.msg);
         setIsOpenAddEditModal(true);
       }  else {
-        alert('Problema al actualizar la calificación');
+        toast.error('¡Hubo un problema al actualizar la calificación!');
         setIsOpenAddEditModal(true);
       }
     }
@@ -222,8 +222,8 @@ const history = useHistory();
         anio: anioActual,
         trimestre: periodoActual,
         seccion: seccionRes
-      });
-    toast('¡Calificación Actualizada!', { className: 'success' });
+    });
+    toast.success('¡Calificación actualizada!', { className: 'success' });
           setIsOpenAddEditModal(false);
           axios
           .get("http://localhost:8080/api/calificaciones")
@@ -241,6 +241,7 @@ const history = useHistory();
         alert(e.response.data.msg, { onDismiss: () => setIsOpenAddEditModal(true) });
       } 
       else {
+        toast.error('¡Problema al guardar el usuario!', { className: 'danger' });
         alert('Problema al guardar el usuario', { onDismiss: () => setIsOpenAddEditModal(true) });
         setIsOpenAddEditModal(true);
       }

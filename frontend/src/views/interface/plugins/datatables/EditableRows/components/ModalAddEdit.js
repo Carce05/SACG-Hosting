@@ -81,7 +81,7 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
           toast('¡Correo o cedula en uso!'),{className:'success'};
         }
         else {
-          toast('¡Ocurrio un error!'),{className:'success'};
+          toast.error('¡Ocurrio un error al intentar atualizar el usuario!'),{className:'danger'};
         }
       }
     }
@@ -97,7 +97,7 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
           status
         }
         dispatch(agregarUsuarioNuevo(userToSave, ref.current.returnImage()));
-        toast('Usuario Agregado con Éxito!');
+        toast.success('Usuario agregado con Éxito!'),{className:'success'};
       } catch (e) {
         if (e.response && e.response.status === 400) {
           setIsOpenAddEditModal(true);
@@ -106,7 +106,7 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
           toast('¡Correo o cedula en uso!');
         }
         else {
-          toast('¡Ocurrio un error!');
+          toast.error('¡Ocurrio un error al intentar agregar el usuario!'),{className:'danger'};
           // setShowDangerAlert(true);
           // alert('Problema al guardar el usuario', { onDismiss: () => setIsOpenAddEditModal(true) });
         }
@@ -122,7 +122,7 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
       });
     setIsOpenAddEditModal(false);
     } else {
-      toast.error('¡Cédula en uso!');
+      toast('¡Cédula en uso!');
     }
   }
   const cancelRegister = () => {
