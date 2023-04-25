@@ -84,6 +84,7 @@ const ModalEditGeneral = ({ general, showModal, setShowModal, setData, setShowSu
                                         <Form.Control type="text"
                                             name="periodo"
                                             value={values.periodo}
+                                            maxLength={maxDescriptionLength}
                                             onChange={(event) => {
                                                 handleDescriptionChange(event);
                                                 handleChange(event);
