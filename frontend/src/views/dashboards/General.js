@@ -46,18 +46,9 @@ const General = () => {
             <Button variant="outline-primary" onClick={handleEditClick} className="mb-3">Editar infomación</Button>
           </Col>
           <Col className="mb-3 d-flex align-items-center justify-content-center">
-            {showSuccessAlert && (
-                  <Alert variant="success" onClose={() => setShowSuccessAlert(false)} dismissible>
-                    Información actualizada correctamente.
-                  </Alert>
-                )}
+           
             </Col>
             <Col className="mb-3 d-flex align-items-center justify-content-center">
-            {showDangerAlert && (
-                  <Alert variant="danger" onClose={() => setShowDangerAlert(false)} dismissible>
-                    Un error ha ocurrido al intentar actualizar la información.
-                  </Alert>
-                )}
             </Col>
         </Row>
       </div>

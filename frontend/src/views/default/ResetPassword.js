@@ -70,7 +70,7 @@ const ResetPassword = () => {
 			) {
 				setError(ec.response.data.message);
 				setMsg("Error al reestablecer contraseña");
-        toast(msg, { className: 'danger' });
+        toast.error(msg, { className: 'danger' });
 			}
 		}
 	};

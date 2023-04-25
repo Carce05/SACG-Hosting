@@ -35,7 +35,7 @@ const ForgotPassword = () => {
       const url = `http://localhost:8080/api/reset-password`;
       const { data } = await axios.post(url, { email });
       setMsg(data.message);
-      toast('Correo de Restablecimiento Enviado!');
+      toast.success('¡Correo de Restablecimiento Enviado!');
       setError("");
     } catch (ec) {
       if (
