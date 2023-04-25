@@ -8,19 +8,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import apiSACG from 'api/apiSACG';
 
 const ModalEditGeneral = ({ general, showModal, setShowModal, setData, setShowSuccessAlert, setShowDangerAlert }) => {
-    const [descriptionCount, setDescriptionCount] = useState(0);
-    const maxDescriptionLength = 3;
-
-    useEffect(() => {
-        if (!showModal) {
-            setDescriptionCount(0);
-        }
-    }, [showModal]);
-    const handleDescriptionChange = (event) => {
-        const count = event.target.value.length;
-        setDescriptionCount(count);
-    };
-
+     const [descriptionCount, setDescriptionCount] = useState(0);
+  const maxDescriptionLength = 200;
+    
     const onSubmit = async (values) => {
         try {
             const response = await axios.put(apiSACG.concat('/general/643f20fe9a24456baf1c57b1'), {
@@ -28,7 +18,7 @@ const ModalEditGeneral = ({ general, showModal, setShowModal, setData, setShowSu
                 periodo: values.periodo,
             });
             axios
-                .get(apiSACG.concat("/general/643f20fe9a24456baf1c57b1"))
+            .get(apiSACG.concat("/general/643f20fe9a24456baf1c57b1"))
                 .then((res) => {
                     setData(res.data[0]);
                     setShowSuccessAlert(true);
@@ -46,14 +36,14 @@ const ModalEditGeneral = ({ general, showModal, setShowModal, setData, setShowSu
                 setShowDangerAlert(true);
             }
         }
-        setShowModal(false);
+         setShowModal(false);
     };
     const periodoOptions = [
         { value: 'I', label: 'Primer periodo' },
         { value: 'II', label: 'Segundo Periodo' },
         { value: 'III', label: 'Tercer Periodo' },
-    ];
-
+      ];
+    
 
     return (
         <>
@@ -79,25 +69,11 @@ const ModalEditGeneral = ({ general, showModal, setShowModal, setData, setShowSu
 
                                 </Form.Group>
                                 <Form.Group controlId="periodo" className="mb-2">
-                                    <div className="mb-3 filled form-group tooltip-end-top">
-                                        <Form.Label>Periodo Actual</Form.Label>
-                                        <Form.Control type="text"
-                                            name="periodo"
-                                            value={values.periodo}
-                                            maxLength={maxDescriptionLength}
-                                            onChange={(event) => {
-                                                handleDescriptionChange(event);
-                                                handleChange(event);
-                                            }} />
-
-                                        <div className="d-block text-muted">
-                                            {`${descriptionCount}/${maxDescriptionLength}`}
-                                        </div>
-                                        {errors.description && touched.description && (
-                                            <div className="d-block invalid-tooltip">{errors.description}</div>
-                                        )}
-
-                                    </div>
+                                    <Form.Label>Periodo Actual</Form.Label>
+                                    <Form.Control type="text"
+                                        name="periodo"
+                                        value={values.periodo}
+                                        onChange={handleChange} />
                                 </Form.Group>
                                 <Row className="mb-3">
                                     <Col className="text-center">
