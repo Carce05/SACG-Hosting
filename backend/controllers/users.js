@@ -103,7 +103,6 @@ const usuarioLogin = async (req, res = response) => {
     
     if (usuarioObtenido) {
         const { id, name, thumb, role, password: pass, personalId } = usuarioObtenido;
-        console.log(personalId)
         const validate = await bcryptjs.compare(password, pass);
         if (validate) {
             

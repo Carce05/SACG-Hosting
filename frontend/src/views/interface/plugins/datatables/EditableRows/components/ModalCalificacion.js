@@ -143,7 +143,7 @@ const history = useHistory();
         total,
         observaciones  
       });
-      toast('Calificación Actualizada!', { className: 'success' });
+      toast('¡Calificación Actualizada!', { className: 'success' });
       setIsOpenAddEditModal(false);
       
       axios
@@ -153,17 +153,35 @@ const history = useHistory();
             })
             .catch((err) => {
                console.error(err);
-             });
+             });     
+             
+      const resultsUpdate = [];
 
-      /*
-      estudiantes.forEach((val) => {
-        calificaciones.forEach((cali) => {
-          if (val.cedula === cali.estudiante && val.materia === cali.materia) {
-            val.total = cali.total;
-          }
-        })
-      });    
-      */         
+      data.forEach((val) => {
+        if (val.cedula === selectedFlatRows[0].original.cedula){
+          resultsUpdate.push({
+            cedula: val.cedula,
+            apellido: val.apellido,
+            nombre: val.nombre,
+            materia: val.materia,
+            seccion: val.seccion,
+            total: total,
+          });
+        } else {
+          resultsUpdate.push({
+            cedula: val.cedula,
+            apellido: val.apellido,
+            nombre: val.nombre,
+            materia: val.materia,
+            seccion: val.seccion,
+            total: val.total,
+          });
+        }
+      });
+
+      setData([ 
+        ...resultsUpdate
+      ])      
 
     } catch (e) {
       console.log(e.message);
@@ -204,8 +222,8 @@ const history = useHistory();
         anio: anioActual,
         trimestre: periodoActual,
         seccion: seccionRes
-    });
-    toast('Calificación Actualizada!', { className: 'success' });
+      });
+    toast('¡Calificación Actualizada!', { className: 'success' });
           setIsOpenAddEditModal(false);
           axios
           .get("http://localhost:8080/api/calificaciones")
@@ -405,13 +423,13 @@ const history = useHistory();
 
               <div>
                 <Row className="g-6">
-                  <Col md="3">
-                    <Button variant="primary" type="submit">Subir</Button>
-                  </Col>
-                  <Col md="3">
-                    <Button variant="outline-primary" onClick={() => setIsOpenAddEditModal(false) || cancelRegister()}>
+                  <Col md="4">
+                    <Button variant="outline-primary" onClick={() => setIsOpenAddEditModal(false) || cancelRegister()} >
                     Cancelar
                     </Button>
+                  </Col>
+                  <Col md="2">
+                    <Button variant="primary" type="submit" >Subir</Button>
                   </Col>
                 </Row>
               </div>
