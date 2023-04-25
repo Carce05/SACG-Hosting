@@ -143,7 +143,7 @@ const history = useHistory();
         total,
         observaciones  
       });
-      toast.success('Calificación Actualizada exitosamente!', { className: 'success' });
+      toast.success('¡Calificación Actualizada!', { className: 'success' });
       setIsOpenAddEditModal(false);
       
       axios
