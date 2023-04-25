@@ -312,7 +312,30 @@ const AdminSecciones = (props) => {
 
   const handleMateria = (id) => {
     const dt = secciones.filter(x => x.anio === id.anio && x.trimestre === id.trimestre && x.materia === id.materia);
-    setSeccionesFiltradas(dt);
+
+    let contador = 0;
+    const td = [];
+
+    dt.forEach((val) => {
+      contador = 0;
+      td.forEach((dup) => {
+        if (val.seccion === dup.seccion) {
+          contador+=1;
+        }
+      })
+      if (contador === 0)
+      td.push({
+        materia: val.materia,
+        trimestre: val.trimestre,
+        anio: val.anio,
+        seccion: val.seccion,
+        label: `${val.seccion}`,
+      });
+    });
+
+    td.sort((s1, s2)=>(s2.seccion < s1.seccion) ? 1 : (s2.seccion > s1.seccion) ? -1 : 0);
+
+    setSeccionesFiltradas(td);
     handleSeccion(id);
   }
 
@@ -338,39 +361,10 @@ const AdminSecciones = (props) => {
     return [
       { Header: 'Cédula', accessor: 'cedula', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       { Header: 'Apellido', accessor: 'apellido', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
-      {
-        Header: 'Nombre',
-        accessor: 'nombre',
-        sortable: true,
-        headerClassName: 'text-muted text-small text-uppercase w-10',
-        Cell: ({ cell }) => {
-          return (
-            <a
-              className="list-item-heading body"
-              href="#!"
-              onClick={(e) => {
-                e.preventDefault();
-              }}
-            >
-              {cell.value}
-            </a>
-          );
-        },
-      },    
+      { Header: 'Nombre', accessor: 'nombre', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },    
       { Header: 'Materia', accessor: 'materia', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       { Header: 'Seccion', accessor: 'seccion', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
-      { Header: 'Total', accessor: 'total', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
-      /*
-      {
-        Header: '',
-        id: 'action',
-        headerClassName: 'empty w-10',
-        Cell: ({ row }) => {
-          const { checked, onChange } = row.getToggleRowSelectedProps();
-          return <Form.Check className="form-check float-end mt-1" type="checkbox" checked={checked} onChange={onChange}/>;
-        },
-      },
-      */
+      { Header: 'Total', accessor: 'total', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' }
     ];
   }, []);
 

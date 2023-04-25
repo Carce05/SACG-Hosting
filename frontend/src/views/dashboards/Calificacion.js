@@ -202,47 +202,34 @@ const Calificacion = (props) => {
       { Header: 'Materia', 
       accessor: 'materia', 
       sortable: true, 
-      headerClassName: 'text-muted  text-small text-uppercase w-5' },
+      headerClassName: 'text-muted  text-small text-uppercase w-10' },
       {
         Header: 'Trabajo Cotidiano',
         accessor: 'cotidiano',
-        sortable: false,
-        headerClassName: 'text-muted  text-small text-uppercase w-5',
-       /* Cell: ({ cell }) => {
-          return (
-            <a
-              className="list-item-heading body"
-              href="#!"
-              onClick={(e) => {
-                e.preventDefault();
-              }}
-            >
-              {cell.value}
-            </a>
-          );
-        }, */
+        sortable: true,
+        headerClassName: 'text-muted  text-small text-uppercase w-10'
       },    
       { Header: 'Tarea', 
       accessor: 'tarea', 
-      sortable: false, 
-      headerClassName: 'text-muted  text-small text-uppercase w-5' },
+      sortable: true, 
+      headerClassName: 'text-muted  text-small text-uppercase w-10' },
 
 
       { Header: 'Primer Examen', 
       accessor: 'examen1', 
-      sortable: false, 
+      sortable: true, 
       headerClassName: 'text-muted  text-small text-uppercase w-10' },
 
 
       { Header: 'Segundo Examen', 
       accessor: 'examen2', 
-      sortable: false, 
+      sortable: true, 
       headerClassName: 'text-muted text-small text-uppercase w-10' },
 
       { Header: 'Asistencia', 
       accessor: 'asistencia', 
-      sortable: false, 
-      headerClassName: 'text-muted text-small text-uppercase w-5' },
+      sortable: true, 
+      headerClassName: 'text-muted text-small text-uppercase w-10' },
 
       { Header: 'Total', 
       accessor: 'total', 
@@ -251,7 +238,7 @@ const Calificacion = (props) => {
 
       { Header: 'Observaciones', 
       accessor: 'observaciones', 
-      sortable: false, 
+      sortable: true, 
       headerClassName: 'text-muted text-small text-uppercase w-50' },
 
     ];

@@ -18,16 +18,14 @@ const dmsGet = async (req, res) => {
 }
 
 const dmsPost = async (req, res = response) => {
-    const {docente} = (req.query.docente).toString();
-    const {materia} = (req.query.materia).toString();
-    const {seccion} = (req.query.seccion).toString();
-    const nuevo = new DMS( { docente, materia, seccion } );
+    const { docente, materia, seccion } = req.body;
+    const dms = new DMS( { docente, materia, seccion } );
     
-    await nuevo.save();
+    await dms.save();
  
     res.json({
         msg: 'POST | CONTROLLER',
-        contact
+        dms
     });
 }
 

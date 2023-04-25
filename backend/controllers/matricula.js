@@ -12,6 +12,36 @@ const matriculaGet = async (req, res) => {
     }
 }
 
+const obtenerAnioMatricula = async (req, res) => {
+    const { role, encargadoId } = req.body;
+    const list = [];
+    try {
+        const data = await Matricula.find();
+        if(role == 'Administrador') {
+            data.forEach((matricula) => {
+                const dateExists = list.some((item) => new Date(item.fechaCreacionMatricula).getFullYear() === new Date(matricula.fechaCreacionMatricula).getFullYear());
+                if (!dateExists) {
+                  list.push(new Date(matricula.fechaCreacionMatricula).getFullYear());
+                }
+            });
+        } else {
+            const matriculasPerUser = data.filter(e => e.encargadoId === encargadoId );
+            matriculasPerUser.forEach((matricula) => {
+                const dateExists = list.some((item) => new Date(item.fechaCreacionMatricula).getFullYear() === new Date(matricula.fechaCreacionMatricula).getFullYear());
+                if (!dateExists) {
+                  list.push(new Date(matricula.fechaCreacionMatricula).getFullYear());
+                }
+            });
+        }
+
+        
+        res.json([...new Set(list)].sort())
+        // res.json(encargadoId)
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+}
 
 const matriculaPost = async (req, res = response) => {
     const matricula = new Matricula( req.body );
@@ -108,5 +138,6 @@ module.exports = {
     matriculaPost,
     matriculaGet,
     matriculaModificarEstado,
-    matriculaRetornaFiltro
+    matriculaRetornaFiltro,
+    obtenerAnioMatricula
 }
