@@ -15,11 +15,16 @@ import 'react-toastify/dist/ReactToastify.css';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import ReporteMatriculas from './pdf/ReporteMatriculas';
 import { obtenerTodasSecciones } from 'store/slices/seccion/seccionThunk';
+import axios from "axios";
 
 
 const AdminMatricula = () => {
   const [data, setData] = useState([]);
   const [mostrarFiltroInforme, setMostrarFiltroInforme] = useState(false);
+  const [mostrarFiltro, setMostrarFiltro] = useState(false);
+  const [anioFiltrar, setAnioFiltrar] = useState(new Date().getFullYear());
+  const [tiempoFiltrar, setTiempoFiltrar] = useState('reciente');
+  const [aniosFiltroApi, setAniosFiltroApi] = useState([]);
   const [formState, setFormState] = useState({
     anioMostrarInforme: "no-filtrar-anio",
     estadoMostrarInforme: "no-filtrar-estado"
@@ -37,6 +42,15 @@ const AdminMatricula = () => {
       [name]: value,
     }))
   };
+
+  const onInputChangeFiltroAnio = ({ target }) => {
+    const { value } = target;
+    setAnioFiltrar(value)
+  };
+  const onInputChangeFiltroTiempo = ({ target }) => {
+    const { value } = target;
+    setTiempoFiltrar(value)
+  };
   
   const title = 'Matriculas';
   const description = 'Administración de Matricula';
@@ -47,9 +61,32 @@ const AdminMatricula = () => {
     if(matriculas.length > 0){
       if (currentUser.role !== 'Administrador'){
         const matriculasPerUser = matriculas.filter(e => e.encargadoId === currentUser.personalId );
-        setData(matriculasPerUser);
+        const matriculasPerYear = matriculasPerUser.filter(e => new Date(e.fechaCreacionMatricula).getFullYear() == anioFiltrar );
+        if ( tiempoFiltrar == 'reciente') {
+          const mostRecentRows = Object.values(matriculasPerYear.reduce((acc, obj) => {
+            if (!acc[obj.cedulaEstudiante] || obj.fechaCreacionMatricula > acc[obj.cedulaEstudiante].fechaCreacionMatricula) {
+              acc[obj.cedulaEstudiante] = obj;
+            }
+            return acc;
+          }, {}));
+          setData(mostRecentRows);
+        } else {
+          setData(matriculasPerYear)
+        }
       } else {
-        setData(matriculas);
+        console.log('first')
+        const matriculasPerYear = matriculas.filter(e => new Date(e.fechaCreacionMatricula).getFullYear() == anioFiltrar );
+        if ( tiempoFiltrar == 'reciente') {
+          const mostRecentRows = Object.values(matriculasPerYear.reduce((acc, obj) => {
+            if (!acc[obj.cedulaEstudiante] || obj.fechaCreacionMatricula > acc[obj.cedulaEstudiante].fechaCreacionMatricula) {
+              acc[obj.cedulaEstudiante] = obj;
+            }
+            return acc;
+          }, {}));
+          setData(mostRecentRows);
+        } else {
+          setData(matriculasPerYear)
+        }
       }
       
     } else {
@@ -60,7 +97,18 @@ const AdminMatricula = () => {
       dispatch(obtenerMatriculas());
       dispatch(obtenerTodasSecciones());
     }
-  }, [matriculas, onShowAlert]);
+    axios.post("http://localhost:8080/api/matricula/obtenerAnioMatricula",
+    {
+      role: currentUser.role,
+      encargadoId: currentUser.personalId
+    })
+    .then((res) => {
+      setAniosFiltroApi(res.data)
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+  }, [matriculas, onShowAlert, anioFiltrar, tiempoFiltrar]);
 
 const onRefrescar = () => {
     dispatch(obtenerMatriculas());
@@ -71,6 +119,9 @@ const onRefrescar = () => {
 const onGenerarInforme = () => {
   setMostrarFiltroInforme(!mostrarFiltroInforme)
 }
+const onGenerarFiltro = () => {
+  setMostrarFiltro(!mostrarFiltro)
+}
 const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
 
 
@@ -78,7 +129,7 @@ const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
     return [
       { Header: 'Cédula Estudiante', accessor: 'cedulaEstudiante', sortable: true, headerClassName: 'text-small text-uppercase w-10' },
       { Header: 'Nombre Completo', accessor: 'nombreCompleto', sortable: true, headerClassName: 'text-small text-uppercase w-10' },
-      { Header: 'Pais de procedencia', accessor: 'nacionalidad', sortable: true, headerClassName: 'text-small text-uppercase w-10' },
+      { Header: 'Fecha Creación', accessor: 'fechaCreacionMatricula', sortable: true, headerClassName: 'text-small text-uppercase w-10' },
       { Header: 'Estado Matricula', accessor: 'estadoMatriculaAdmin', sortable: true, headerClassName: 'text-small text-uppercase w-10',
       Cell: ({ cell }) => {
         if (cell.value === "Pendiente") {
@@ -130,14 +181,14 @@ const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
 
   return (
     <>
-      <HtmlHead title={title} description={description} />
+      <HtmlHead title={title} description={description}/>
       {/* Title and Top Buttons Start */}
       <div className="page-title-container">
         <Row>
           {/* Title Start */}
           <Col md="7">
           <div className='form-input-hori'>
-              <h1 className="mb-0 pb-0 display-4">{(currentUser.role === 'Administrador') ? title : 'Agregar Nueva'}</h1>
+              <h1 className="mb-0 pb-0 display-4">{(currentUser.role === 'Administrador') ? `${ title } | Matriculas del año: ${ anioFiltrar }`  : 'Agregar Nueva'}</h1>
               <div className={ (currentUser.role === 'Encargado') ? 'show-element d-inline-block me-0 me-sm-3 float-start float-md-none' : 'hide-element'}>
                   {
                     ( matricularActivado == "true") && <ControlsAdd tableInstance={tableInstance} /> 
@@ -172,17 +223,20 @@ const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
               </Col>
              
               <div className={ (currentUser.role !== 'Administrador') ? 'show-element d-inline-block me-0 me-sm-3 float-start float-md-none' : 'hide-element'}>
-                <h3 className={ (currentUser.role !== 'Administrador') ? 'show-element d-inline-block mb-10 pb-0 mr-3' : 'hide-element'}>Tus Matriculas</h3> <ControlsVer tableInstance={tableInstance} />
+                <h3 className={ (currentUser.role !== 'Administrador') ? 'show-element d-inline-block mb-10 pb-0 mr-3' : 'hide-element'}> {`Tus Matriculas del año: ${ anioFiltrar }`}</h3> <ControlsVer tableInstance={tableInstance} />
               </div>
             </Row>
-            <Button variant="outline-primary" className={ (currentUser.role === 'Administrador') ? 'show-element' : 'hide-element'} onClick={ onGenerarInforme }>
-                    Mostrar Filtros Informe
+            <Button variant="outline-primary" className={ (currentUser.role === 'Administrador') ? 'show-element mr-20 mb-3' : 'hide-element'} onClick={ onGenerarInforme }>
+                    Generar Informe
+            </Button>
+            <Button variant="outline-primary" className='mb-3' onClick={ onGenerarFiltro }>
+                    Filtrar Matriculas
             </Button>
 
             {
               mostrarFiltroInforme && 
               <div className='mostrar-filtro-informe'>
-                <h1><b>CANTIDAD MATRICULAS FILTRADAS:</b> { cantidadMatriculasFiltradas }</h1>
+                <h1><b>Cantidad de matriculas en informe:</b> { cantidadMatriculasFiltradas }</h1>
                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                    Año a generar reporte
                   </label>
@@ -193,8 +247,11 @@ const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
                     className="form-select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   >
                     <option value="no-filtrar-anio">No filtrar por año</option>
-                    <option value="2022">2022</option>
-                    <option value="2023">2023</option>
+                    {
+                      aniosFiltroApi.map((item) => (
+                        <option value={ item }>{item}</option>
+                      ))
+                    }
                   </select>
 
                   <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -232,6 +289,40 @@ const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
 
               </div>
             }
+
+            {
+              mostrarFiltro && 
+              <div className='mostrar-filtro-informe'>
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                   Filtrar por año
+                  </label>
+                  <select
+                    name="anioFiltrar"
+                    value={anioFiltrar}
+                    onChange={onInputChangeFiltroAnio}
+                    className="form-select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  >
+                    {
+                      aniosFiltroApi.map((item) => (
+                        <option value={ item }>{item}</option>
+                      ))
+                    }
+                  </select>
+                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                   Filtrar por tiempo
+                  </label>
+                  <select
+                    name="tiempoFiltrar"
+                    value={tiempoFiltrar}
+                    onChange={onInputChangeFiltroTiempo}
+                    className="form-select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  >
+                     <option value="reciente">Solo las recientes</option>
+                     <option value="todas-matriculas">Todas las matriculas</option>
+                  </select>
+              </div>
+            }
+
             <Row>
               <Col xs="12">
                 <Table className="react-table rows" tableInstance={tableInstance} />
