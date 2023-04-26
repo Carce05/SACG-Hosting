@@ -189,9 +189,9 @@ const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
           <Col md="7">
           <div className='form-input-hori'>
               <h1 className="mb-0 pb-0 display-4">{`${ title } | Matriculas del año: ${ anioFiltrar }`}</h1>
-              <div className={ (currentUser.role === 'Encargado') ? 'show-element d-inline-block me-0 me-sm-3 float-start float-md-none' : 'hide-element'}>
+              <div className={ (currentUser.role === 'Administrador') ? 'show-element d-inline-block me-0 me-sm-3 float-start float-md-none' : 'hide-element'}>
                   {
-                    ( matricularActivado == "true") && <ControlsAdd tableInstance={tableInstance} /> 
+                    ( matricularActivado == "false") && <ControlsAdd tableInstance={tableInstance} /> 
                   } 
               </div>
             </div>
@@ -211,7 +211,13 @@ const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
                 </div>
               </Col>
               <Col sm="12" md="7" lg="9" xxl="10" className="text-end">
-                <div className='show-element d-inline-block me-0 me-sm-3 float-start float-md-none'>
+                <div className={ (currentUser.role === 'Administrador') ? 'show-element d-inline-block me-0 me-sm-3 float-start float-md-none' : 'hide-element'}>
+                  {
+                    ( matricularActivado == "false") && <ControlsAdd tableInstance={tableInstance} /> 
+                  } 
+                  <ControlsVer tableInstance={tableInstance} />
+                </div>
+                <div className={ (currentUser.role === 'Encargado') ? 'show-element d-inline-block me-0 me-sm-3 float-start float-md-none' : 'hide-element'}>
                   {
                     ( matricularActivado == "true") && <ControlsAdd tableInstance={tableInstance} /> 
                   } 
