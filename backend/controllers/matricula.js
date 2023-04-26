@@ -54,7 +54,7 @@ const matriculaPost = async (req, res = response) => {
 }
 
 const matriculaModificarEstado = async (req, res) => {
-    const { cedula, estadoMatriculaAdmin, seccion, nombreCompleto, correo_encargado } = req.body;
+    const { cedula, estadoMatriculaAdmin, seccion, nombre, apellido, correo_encargado } = req.body;
     try {
         if (estadoMatriculaAdmin === "Aprobado") {
             const estudianteObtenido = await Estudiante.findOne({ cedula });
@@ -68,7 +68,8 @@ const matriculaModificarEstado = async (req, res) => {
                 res.status(200).send(estudianteObtenido);
             } else {
                 const estudiante = new Estudiante( {
-                    "nombreCompleto": nombreCompleto,
+                    "nombre": nombre,
+                    "apellido": apellido,
                     "cedula": cedula,
                     "correo_encargado": correo_encargado,
                     "seccion": seccion,
