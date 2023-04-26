@@ -10,7 +10,10 @@ const MatriculaSchema = Schema({
     encargadoLegal : {
         type: String
     },
-    nombreCompleto: {
+    nombre: {
+        type: String
+    },
+    apellido: {
         type: String
     },
     fechaNacimiento: {
