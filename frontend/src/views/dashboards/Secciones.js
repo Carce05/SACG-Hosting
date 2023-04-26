@@ -276,6 +276,7 @@ const tableInstance = useTable(
                     value={materia} 
                     onChange={handleMateria} 
                     placeholder="Seleccione" 
+                    getOptionValue={option => option.label}
                   />
                 </Col>          
               </div>
@@ -293,6 +294,7 @@ const tableInstance = useTable(
                     value={seccionn} 
                     onChange={handleSeccion} 
                     placeholder="Seleccione" 
+                    getOptionValue={option => option.label}
                   />
                 </Col>
               </div>

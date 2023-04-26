@@ -8,7 +8,7 @@ import axios from "axios";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const ControlsAddMateria = ({ tableInstance, secciones, DMS, setDMS  }) => {
+const ControlsAddMateria = ({ tableInstance, secciones,  setDMS  }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
   const { selectedFlatRows, data, setData } = tableInstance;
@@ -42,7 +42,9 @@ const ControlsAddMateria = ({ tableInstance, secciones, DMS, setDMS  }) => {
       materia: values.materia,
       seccion: selectedOption,
     });
-    toast('¡Materia Agregada!', { className: 'success' });
+
+    toast.success('¡Materia Agregada!', { className: 'success' });
+
     setShowModal(false);
 
     const response = await axios.get(`http://localhost:8080/api/docentes_materias_secciones/`);
@@ -58,15 +60,17 @@ const ControlsAddMateria = ({ tableInstance, secciones, DMS, setDMS  }) => {
       });
     });
 
-    const resultsUpdate = resultsDMS.filter(x => x.seccion === data[0].seccion);
+    if (data[0]){
+      const resultsUpdate = resultsDMS.filter(x => x.seccion === data[0].seccion);
+      setData([ 
+        ...resultsUpdate
+      ])  
+    }
 
     setDMS([ 
       ...resultsDMS
     ])
 
-    setData([ 
-      ...resultsUpdate
-    ])  
 
 
     setSelectedOption((""));

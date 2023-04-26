@@ -42,10 +42,19 @@ const dmsPut = async(req, res) => {
     }
 }
 
-const dmsDelete = (req, res = response) => {
-    res.json({
-        msg: 'DELETE | CONTROLLER'
-    })
+const dmsDelete = async (req, res) => {
+    try {
+        await DMS.findByIdAndDelete({ _id: req.params.dmsId });
+        const emailLoggedGlobal = global.email;
+        bitacoraAccion.log('debug', `El usuario ${emailLoggedGlobal}, eliminó una materia bajo el ID de ${req.params.dmsId}`);
+        res.status(200).send({
+            msg: 'Eliminado con éxito'
+        });
+    }
+    catch (err) {
+        bitacora.log('error', "Fallo al eliminar la materia")
+        res.status(500).send(err);                
+    }
 }
 
 const DocenteAsignado = async (req, res) => {
