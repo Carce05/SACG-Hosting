@@ -14,7 +14,7 @@ import ButtonsCheckAll from 'views/interface/plugins/datatables/EditableRows/com
 import ButtonsAddNew from 'views/interface/plugins/datatables/EditableRows/components/ButtonsAddNew';
 import ControlsAddMateria from 'views/interface/plugins/datatables/EditableRows/components/ControlsAddMateria';
 import ControlsAsignarDocente from 'views/interface/plugins/datatables/EditableRows/components/ControlsAsignarDocente';
-import ControlsDelete from 'views/interface/plugins/datatables/EditableRows/components/ControlsDelete';
+import ControlsDeleteMateria from 'views/interface/plugins/datatables/EditableRows/components/ControlsDeleteMateria';
 import ControlsSearch from 'views/interface/plugins/datatables/EditableRows/components/ControlsSearch';
 import ModalAsignarDocente from 'views/interface/plugins/datatables/EditableRows/components/ModalAsignarDocente';
 import ModalAddMateria from 'views/interface/plugins/datatables/EditableRows/components/ModalAsignarDocente';
@@ -238,6 +238,9 @@ const AsignarDocente = (props) => {
                 <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
                   <ControlsAsignarDocente tableInstance={tableInstance} />
                 </div>
+                <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">                
+                  <ControlsDeleteMateria tableInstance={tableInstance} setDMS={setDMS} />
+                </div>                
               </Col>
             </Row>
             <Row>

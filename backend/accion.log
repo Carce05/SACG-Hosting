@@ -44,3 +44,6 @@
 {"level":"debug","message":"undefined creó un nuevo usuario con el siguiente correo: 123456780@d.com","timestamp":"2023-04-24T20:59:40.274Z"}
 {"level":"debug","message":"encargado@gmail.com actualizó datos generales del curso lectivo","timestamp":"2023-04-26T02:49:28.195Z"}
 {"level":"debug","message":"encargado@gmail.com creó un nuevo usuario con el siguiente correo: asdfg@gmail.com","timestamp":"2023-04-26T02:51:53.665Z"}
+{"level":"debug","message":"El usuario undefined, eliminó un aviso bajo el ID de 64408d14e8a3028a4045d5fa","timestamp":"2023-04-26T17:55:44.770Z"}
+{"level":"debug","message":"El usuario undefined, creó un nuevo aviso bajo el titulo de test","timestamp":"2023-04-26T18:11:14.610Z"}
+{"level":"debug","message":"El usuario undefined, eliminó un aviso bajo el ID de 64496942f079a5ffc205df1c","timestamp":"2023-04-26T18:12:11.116Z"}

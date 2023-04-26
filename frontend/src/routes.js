@@ -63,9 +63,9 @@ const routesAndMenuItems = {
     },
 
     {
-      path: `${appRoot}/notas`,
+      path: `${appRoot}/calificaciones`,
       icon: 'book',
-      label: 'menu.notas',
+      label: 'menu.calificaciones',
       exact: true,
       redirect: true,
       to: `${appRoot}/dashboards/inicio`,
@@ -86,11 +86,10 @@ const routesAndMenuItems = {
       subs: [
 
         { path: '/avisos', label: 'menu.avisos', icon: 'notification', component: dashboards.avisos },
-        { path: '/general', label: 'menu.general', icon : 'tool', component: dashboards.general },
-        { path: '/usuarios', label: 'menu.usuarios', icon : 'user', component: dashboards.usuarios },
         { path: '/asignarDocente', label: 'menu.asignarDocente', icon : 'list', component: dashboards.asignarDocente },
-        
-        
+        { path: '/general', label: 'menu.general', icon : 'tool', component: dashboards.general },
+        { path: '/usuarios', label: 'menu.usuarios', icon : 'user', component: dashboards.usuarios },        
+                
       ],
     },
 
