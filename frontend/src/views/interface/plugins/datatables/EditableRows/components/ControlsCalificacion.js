@@ -8,7 +8,7 @@ const ControlsCalificacion = ({ tableInstance }) => {
 
   if (selectedFlatRows.length !== 1) {
     return (
-      <Button variant="foreground-alternate" overlay={<Tooltip id="tooltip-top-add">Ver notas</Tooltip>} className="btn-xl btn-icon-only shadow edit-datatable" disabled>
+      <Button variant="foreground-alternate" overlay={<Tooltip id="tooltip-top-add">Ver calificaciones</Tooltip>} className="btn-xl btn-icon-only shadow edit-datatable" disabled>
         <CsLineIcons icon="diploma" />
       </Button>
     );

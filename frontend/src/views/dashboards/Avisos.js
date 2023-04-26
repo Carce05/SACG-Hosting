@@ -156,6 +156,8 @@ const SchoolDashboard = () => {
                     <Button onClick={handleAddClick} variant="foreground-alternate" className="btn-xl btn-icon-only shadow add-datatable">
                       <CsLineIcons icon="plus" />
                     </Button>
+                  </div>
+                  <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">                            
                     <ControlsDeleteAnnouncement tableInstance={tableInstance} />
                   </div>
                 </Col>

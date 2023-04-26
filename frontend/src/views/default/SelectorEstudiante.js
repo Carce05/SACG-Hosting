@@ -58,20 +58,19 @@ const SelectorEstudiante = (props) => {
     <div className="min-h-100 d-flex align-items-center">
       <div className="w-100 w-lg-75 w-xxl-60">
         <div>
-          <div className="mb-5">
+        <div className="mb-5">
             <h1 className="display-3 text-white">Bienvenido al Sistema Academico</h1>
-            <h1 className="display-3 text-white">del Liceo Diurno de Guararí</h1>
+            <h1 className="display-3 text-white">Liceo Diurno de Guararí</h1>
           </div>
-          <p className="h6 text-white lh-1-5 mb-5">
-          Ven y sigue formado parte de la Familia del Liceo Diurno de Guararí.
-            Consultas al correo: lic.diurnodeguarari@mep.go.cr   
+          <p className="h6 text-white ">
+            Ven y sigue formado parte de la Familia del Liceo Diurno de Guararí.
+          </p>
+          <p className="h6 text-white ">
+            Consultas al correo: lic.diurnodeguarari@mep.go.cr
+          </p>
+          <p className="h6 text-white ">
             Teléfono: 2237-4033
           </p>
-          {/* <div className="mb-5">
-            <Button size="lg" variant="outline-white" href="/">
-              Learn More
-            </Button>
-          </div> */}
         </div>
       </div>
     </div>

@@ -9,7 +9,8 @@ router.put('/:dmsId', dmsPut)
 
 router.post('/', dmsPost)
 
-router.delete('/', dmsDelete)
+router.delete('/:dmsId', dmsDelete)
+
 router.get('/DocenteAsignado/:docente', DocenteAsignado)
 
 module.exports = router;

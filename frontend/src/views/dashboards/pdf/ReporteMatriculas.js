@@ -29,14 +29,14 @@ return (
 
 
         <View style={{ flexDirection: 'row', borderBottom: 1, borderTop: 1, textAlign: 'center', justifyContent: 'center', backgroundColor: "#008f39", color: "#fff"  }}>
-          <Text style={{ fontSize: 10, width: '44%', borderRight: 1 }}>Cédula Encargado</Text>
+          <Text style={{ fontSize: 10, width: '44%', borderRight: 1 }}>Cédula Estudiante</Text>
           <Text style={{ fontSize: 10, width: '44%', borderRight: 1 }}>Nombre Completo</Text>
           <Text style={{ fontSize: 10, width: '44%', borderRight: 1 }}>Fecha de matricula</Text>
           <Text style={{ fontSize: 10, width: '44%' }}>Estado de la matricula</Text>
         </View>
-        {matriculas.map(({ _id:id, nombreCompleto, encargadoId, fechaCreacionMatricula, estadoMatriculaAdmin }, index) => (
+        {matriculas.map(({ _id:id, nombreCompleto, cedulaEstudiante, fechaCreacionMatricula, estadoMatriculaAdmin }, index) => (
           <View key={ id } style={{ flexDirection: 'row', borderBottom: 1, textAlign: 'center', justifyContent: 'center' }}>
-            <Text style={{ fontSize: 10, width: '44%', borderRight: 1 }}>{ encargadoId }</Text>
+            <Text style={{ fontSize: 10, width: '44%', borderRight: 1 }}>{ cedulaEstudiante }</Text>
             <Text style={{ fontSize: 10, width: '44%', borderRight: 1 }}>{ nombreCompleto }</Text>
             <Text style={{ fontSize: 10, width: '44%', borderRight: 1 }}>{ fechaCreacionMatricula }</Text>
             <Text style={{ fontSize: 10, width: '44%' }}>{ estadoMatriculaAdmin }</Text>

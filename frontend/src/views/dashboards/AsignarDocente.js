@@ -14,7 +14,7 @@ import ButtonsCheckAll from 'views/interface/plugins/datatables/EditableRows/com
 import ButtonsAddNew from 'views/interface/plugins/datatables/EditableRows/components/ButtonsAddNew';
 import ControlsAddMateria from 'views/interface/plugins/datatables/EditableRows/components/ControlsAddMateria';
 import ControlsAsignarDocente from 'views/interface/plugins/datatables/EditableRows/components/ControlsAsignarDocente';
-import ControlsDelete from 'views/interface/plugins/datatables/EditableRows/components/ControlsDelete';
+import ControlsDeleteMateria from 'views/interface/plugins/datatables/EditableRows/components/ControlsDeleteMateria';
 import ControlsSearch from 'views/interface/plugins/datatables/EditableRows/components/ControlsSearch';
 import ModalAsignarDocente from 'views/interface/plugins/datatables/EditableRows/components/ModalAsignarDocente';
 import ModalAddMateria from 'views/interface/plugins/datatables/EditableRows/components/ModalAsignarDocente';
@@ -36,6 +36,8 @@ const AsignarDocente = (props) => {
   const { handleSubmit, handleChange, materia, seccion, touched, errors } = formik;
   const { setSelectedMateria, setSeccionn } = useState();
   const [showModal, setShowModal] = useState(false);
+
+  const [selectedSeccion, setSelectedSeccion] = useState("");
   
   const { currentUser, isLogin } = useSelector((state) => state.auth);
   const docente  = currentUser.email;
@@ -128,6 +130,7 @@ const AsignarDocente = (props) => {
   const [data, setData] = React.useState(DMS);
 
   const handleSeccion = (id) => {
+    setSelectedSeccion(id.seccion);
     const dt = DMS.filter(x => x.seccion === id.seccion);
     setData(dt);
   }
@@ -203,9 +206,11 @@ const AsignarDocente = (props) => {
                 <Col xs="12" lg="12">
                   <Select classNamePrefix="react-select" 
                     options={secciones} 
-                    value={seccion} 
+                    value={secciones.find(function (option) {
+                      return option.value === selectedSeccion;})} 
                     onChange={handleSeccion} 
                     placeholder="Seleccione" 
+                    getOptionValue={option => option.label}
                   />
                 </Col>
               </div>
@@ -238,6 +243,9 @@ const AsignarDocente = (props) => {
                 <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
                   <ControlsAsignarDocente tableInstance={tableInstance} />
                 </div>
+                <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">                
+                  <ControlsDeleteMateria tableInstance={tableInstance} setDMS={setDMS} />
+                </div>                
               </Col>
             </Row>
             <Row>

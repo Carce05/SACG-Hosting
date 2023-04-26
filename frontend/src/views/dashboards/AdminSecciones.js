@@ -44,99 +44,7 @@ const AdminSecciones = (props) => {
   const formik = useFormik({ initialValues });
   const { handleSubmit, handleChange, materia, docentee, seccionn, trimestre, anio, touched, errors } = formik;
   const { setSelectedMateria, setSeccionn } = useState();
-
-  const url = apiSACG.concat('/usuarios/login');
   
-  
- 
-  
-/*
-  useEffect(() => {
-    async function fetchData() {
-      // Fetch data
-      const response = await axios.get(apiSACG.concat(`/docentes_materias_secciones/`));
-      const resultsMaterias = []
-      const resultsDocentes = []
-      const resultsSecciones = []
-
-      let contador = 0;
-      
-      
-      response.data.forEach((val) => {
-        contador = 0;
-        resultsMaterias.forEach((dup) => {
-          if (val.materia === dup.materia) {
-            contador+=1;
-          }
-        })
-        if (contador === 0)
-        resultsMaterias.push({
-          materia: val.materia,
-          label: `${val.materia}`,
-        });
-
-      });
-      
-      
-      response.data.forEach((val) => {
-        contador = 0;
-        resultsDocentes.forEach((dup) => {          
-          if (val.docente === dup.docente) {
-            contador +=1;
-          }
-        })
-        if (contador === 0)
-        resultsDocentes.push({
-          docente: val.docente,
-          materia: val.materia,
-          label: `${val.docente}`,
-        });
-      }); 
-
-      response.data.forEach((val) => {
-          resultsDocentes.forEach((dup) => {
-            contador = 0;
-            if (val.docente === dup.docente) {
-              contador+=1;
-            }
-          })
-          if (contador === 0)
-          resultsDocentes.push({
-            docente: val.docente,
-            label: `${val.docente}`,
-          });
-  
-        }); 
-
-      
-          
-      response.data.forEach((val) => {
-        resultsSecciones.push({
-          seccion: val.seccion,
-          docente: val.docente,
-          materia: val.materia,
-          label: `${val.seccion}`,
-        });
-      });
-      // Update the options state
-
-      setMaterias([ 
-        ...resultsMaterias
-      ])
-
-      setDocentes([ 
-        ...resultsDocentes
-      ])
-      setSecciones([ 
-        ...resultsSecciones
-      ])
-    }
-
-    // Trigger the fetch
-    fetchData();
-  }, []);
-  */
-
   useEffect(() => {
     async function fetchData() {
       // Fetch data
@@ -350,7 +258,7 @@ const AdminSecciones = (props) => {
 
   const handleAnio= (id) => {
     const dt = trimestres.filter(x => x.anio=== id.anio);
-    setTrimestresFiltrados(dt);
+    setTrimestresFiltrados(dt.sort((s1, s2)=>(s2.trimestre < s1.trimestre) ? 1 : (s2.trimestre > s1.trimestre) ? -1 : 0));
     handleTrimestre(id);
   }
 
@@ -367,7 +275,16 @@ const AdminSecciones = (props) => {
       { Header: 'Nombre', accessor: 'nombre', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },    
       { Header: 'Materia', accessor: 'materia', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       { Header: 'Seccion', accessor: 'seccion', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
-      { Header: 'Total', accessor: 'total', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' }
+      { Header: 'Total', accessor: 'total', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
+      {
+        Header: '',
+        id: 'action',
+        headerClassName: 'empty w-10',
+        Cell: ({ row }) => {
+          const { checked, onChange } = row.getToggleRowSelectedProps();
+          return <Form.Check className="form-check float-end mt-1" type="checkbox" checked={checked} onChange={onChange} />;
+        },
+      },
     ];
   }, []);
 
@@ -422,6 +339,7 @@ const AdminSecciones = (props) => {
                     value={anio} 
                     onChange={handleAnio} 
                     placeholder="Seleccione" 
+                    getOptionValue={option => option.label}
                   />
                 </Col>          
               </div>
@@ -439,6 +357,7 @@ const AdminSecciones = (props) => {
                     value={trimestre} 
                     onChange={handleTrimestre} 
                     placeholder="Seleccione" 
+                    getOptionValue={option => option.label}
                   />
                 </Col>          
               </div>
@@ -456,6 +375,7 @@ const AdminSecciones = (props) => {
                     value={materia} 
                     onChange={handleMateria} 
                     placeholder="Seleccione" 
+                    getOptionValue={option => option.label}
                   />
                 </Col>          
               </div>
@@ -473,6 +393,7 @@ const AdminSecciones = (props) => {
                     value={seccionn} 
                     onChange={handleSeccion} 
                     placeholder="Seleccione" 
+                    getOptionValue={option => option.label}
                   />
                 </Col>
               </div>
@@ -492,7 +413,17 @@ const AdminSecciones = (props) => {
                 <div className="d-inline-block float-md-start me-1 mb-1 mb-md-0 search-input-container w-100 shadow bg-foreground">
                   <ControlsSearch tableInstance={tableInstance} />
                 </div>
-              </Col>              
+              </Col>   
+              <Col sm="12" md="7" lg="9" xxl="10" className="text-end">
+                {/*
+                <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
+                  <Button onClick={insertarCalificaciones} variant="outline-primary" >Refrescar</Button>
+                </div>
+                */}
+                <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
+                  <ControlsCalificacion tableInstance={tableInstance} />
+                </div>
+              </Col>           
             </Row>
             <Row>
               <Col xs="12">

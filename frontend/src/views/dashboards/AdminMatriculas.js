@@ -75,7 +75,6 @@ const AdminMatricula = () => {
           setData(matriculasPerYear)
         }
       } else {
-        console.log('first')
         const matriculasPerYear = matriculas.filter(e => new Date(e.fechaCreacionMatricula).getFullYear() == anioFiltrar );
         if ( tiempoFiltrar == 'reciente') {
           const mostRecentRows = Object.values(matriculasPerYear.reduce((acc, obj) => {
@@ -129,7 +128,8 @@ const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
   const columns = React.useMemo(() => {
     return [
       { Header: 'Cédula Estudiante', accessor: 'cedulaEstudiante', sortable: true, headerClassName: 'text-small text-uppercase w-10' },
-      { Header: 'Nombre Completo', accessor: 'nombreCompleto', sortable: true, headerClassName: 'text-small text-uppercase w-10' },
+      { Header: 'Nombre', accessor: 'nombre', sortable: true, headerClassName: 'text-small text-uppercase w-10' },
+      { Header: 'Apellido/s', accessor: 'apellido', sortable: true, headerClassName: 'text-small text-uppercase w-10' },
       { Header: 'Fecha Creación', accessor: 'fechaCreacionMatricula', sortable: true, headerClassName: 'text-small text-uppercase w-10' },
       { Header: 'Estado Matricula', accessor: 'estadoMatriculaAdmin', sortable: true, headerClassName: 'text-small text-uppercase w-10',
       Cell: ({ cell }) => {
@@ -159,7 +159,7 @@ const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
         id: 'name',
         headerClassName: 'empty w-10',
         Cell: ({ row }) => (
-          <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-top-edit">Editar</Tooltip>}>
+          <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-top-edit">{ (currentUser.role === 'Administrador') ? 'Editar' :  'Ver' }</Tooltip>}>
           <Button variant="foreground-alternate" className="btn-icon btn-icon-only shadow edit-datatable">
             {
               (currentUser.role === 'Administrador') ?  <CsLineIcons icon="edit" /> :  <CsLineIcons icon="eye" /> 
@@ -189,10 +189,10 @@ const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
           {/* Title Start */}
           <Col md="7">
           <div className='form-input-hori'>
-              <h1 className="mb-0 pb-0 display-4">{(currentUser.role === 'Administrador') ? `${ title } | Matriculas del año: ${ anioFiltrar }`  : 'Agregar Nueva'}</h1>
-              <div className={ (currentUser.role === 'Encargado') ? 'show-element d-inline-block me-0 me-sm-3 float-start float-md-none' : 'hide-element'}>
+              <h1 className="mb-0 pb-0 display-4">{`${ title } | Matriculas del año: ${ anioFiltrar }`}</h1>
+              <div className={ (currentUser.role === 'Administrador') ? 'show-element d-inline-block me-0 me-sm-3 float-start float-md-none' : 'hide-element'}>
                   {
-                    ( matricularActivado == "true") && <ControlsAdd tableInstance={tableInstance} /> 
+                    ( matricularActivado == "false") && <ControlsAdd tableInstance={tableInstance} /> 
                   } 
               </div>
             </div>
@@ -207,25 +207,27 @@ const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
           <div> 
             <Row className="mb-3">
               <Col sm="12" md="5" lg="3" xxl="2">
-                <div className={ (currentUser.role === 'Administrador') ? 'show-element d-inline-block float-md-start me-1 mb-1 mb-md-0 search-input-container w-100 shadow bg-foreground' : 'hide-element' }>
+                <div className='show-element d-inline-block float-md-start me-1 mb-1 mb-md-0 search-input-container w-100 shadow bg-foreground'>
                   <ControlsSearch tableInstance={tableInstance}/>
                 </div>
               </Col>
               <Col sm="12" md="7" lg="9" xxl="10" className="text-end">
                 <div className={ (currentUser.role === 'Administrador') ? 'show-element d-inline-block me-0 me-sm-3 float-start float-md-none' : 'hide-element'}>
                   {
+                    ( matricularActivado == "false") && <ControlsAdd tableInstance={tableInstance} /> 
+                  } 
+                  <ControlsVer tableInstance={tableInstance} />
+                </div>
+                <div className={ (currentUser.role === 'Encargado') ? 'show-element d-inline-block me-0 me-sm-3 float-start float-md-none' : 'hide-element'}>
+                  {
                     ( matricularActivado == "true") && <ControlsAdd tableInstance={tableInstance} /> 
                   } 
                   <ControlsVer tableInstance={tableInstance} />
                 </div>
-                <Button variant="outline-primary" className={ (currentUser.role === 'Administrador') ? 'show-element' : 'hide-element'} onClick={ onRefrescar }>
+                <Button variant="outline-primary" onClick={ onRefrescar }>
                     Refrescar
                 </Button>
               </Col>
-             
-              <div className={ (currentUser.role !== 'Administrador') ? 'show-element d-inline-block me-0 me-sm-3 float-start float-md-none' : 'hide-element'}>
-                <h3 className={ (currentUser.role !== 'Administrador') ? 'show-element d-inline-block mb-10 pb-0 mr-3' : 'hide-element'}> {`Tus Matriculas del año: ${ anioFiltrar }`}</h3> <ControlsVer tableInstance={tableInstance} />
-              </div>
             </Row>
             <Button variant="outline-primary" className={ (currentUser.role === 'Administrador') ? 'show-element mr-20 mb-3' : 'hide-element'} onClick={ onGenerarInforme }>
                     Generar Informe

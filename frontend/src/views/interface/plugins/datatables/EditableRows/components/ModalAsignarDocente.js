@@ -50,7 +50,7 @@ const ModalAsignarDocente = ({ tableInstance, docentes, setDocentes, DMS, setDMS
         materia: materiaRes,
         seccion: seccionRes
       });
-      toast.success('¡Docente asignado exitosamente!', { className: 'success' });
+      toast.success('¡Docente Asignado!', { className: 'success' });
       setIsOpenAddEditModal(false);
       
       axios

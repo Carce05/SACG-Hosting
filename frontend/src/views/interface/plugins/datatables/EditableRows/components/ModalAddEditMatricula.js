@@ -22,7 +22,8 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
     encargadoId : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoId : currentUser.personalId,
     encargadoCorreo : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoCorreo : currentUser.email,
     encargadoLegal : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoLegal : currentUser.name,
-    nombreCompleto : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.nombreCompleto : '',
+    nombre : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.nombre : '',
+    apellido : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.apellido : '',
     fechaNacimiento : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.fechaNacimiento : '',
     edadCumplidaAnios : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.edadCumplidaAnios : '',
     edadCumplidaMeses : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.edadCumplidaMeses : '',
@@ -47,7 +48,8 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
       encargadoId : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoId : currentUser.personalId,
       encargadoCorreo : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoCorreo : currentUser.email,
       encargadoLegal : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoLegal : currentUser.name,
-      nombreCompleto : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.nombreCompleto : '',
+      nombre : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.nombre : '',
+      apellido : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.apellido : '',
       fechaNacimiento : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.fechaNacimiento : '',
       edadCumplidaAnios : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.edadCumplidaAnios : '',
       edadCumplidaMeses : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.edadCumplidaMeses : '',
@@ -67,7 +69,13 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
       cedulaEstudiante : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.cedulaEstudiante : '',
     })
     const matriculasPorUsuarioFiltradas = matriculas.filter(element => element.encargadoId === currentUser.personalId);
-    setMatriculasPorUsuario(matriculasPorUsuarioFiltradas);
+    const mostRecentRows = Object.values(matriculasPorUsuarioFiltradas.reduce((acc, obj) => {
+      if (!acc[obj.cedulaEstudiante] || obj.fechaCreacionMatricula > acc[obj.cedulaEstudiante].fechaCreacionMatricula) {
+        acc[obj.cedulaEstudiante] = obj;
+      }
+      return acc;
+    }, {}));
+    setMatriculasPorUsuario(mostRecentRows);
   }, [selectedFlatRows])
   
   const [selectedItem, setSelectedItem] = useState(initialValues);
@@ -76,7 +84,12 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
   const cedulaRegExp = /^[0-9]{9}$/;
 
   const validationSchema = Yup.object().shape({
-    nombreCompleto: Yup.string()
+    nombre: Yup.string()
+    .required('Nombre Completo es requerido')
+    .min(2, 'Nombre debe tener al menos 2 caracteres')
+    .max(50, 'Nombre no debe tener mas de 50 caracteres')
+    .matches(/^[a-zA-Z ]+$/, 'Nombre solo debe tener palabras y espacios'),
+    apellido: Yup.string()
     .required('Nombre Completo es requerido')
     .min(2, 'Nombre debe tener al menos 2 caracteres')
     .max(50, 'Nombre no debe tener mas de 50 caracteres')
@@ -122,7 +135,8 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
     } else {
       const {_id: id} = selectedFlatRows[0].original;
       const matriculaEstado  = {
-        "nombreCompleto": values.nombreCompleto,
+        "nombre": values.nombre,
+        "apellido": values.apellido,
         "estadoMatriculaAdmin": values.estadoMatriculaAdmin,
         "cedula": values.cedulaEstudiante,
         "correo_encargado": values.encargadoCorreo,
@@ -150,7 +164,8 @@ const onCargarExistenteMatricula = ({ target }) => {
       encargadoId : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoId : currentUser.personalId,
       encargadoCorreo : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoCorreo : currentUser.email,
       encargadoLegal : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.encargadoLegal : currentUser.name,
-      nombreCompleto : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.nombreCompleto : '',
+      nombre : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.nombre : '',
+      apellido : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.apellido : '',
       fechaNacimiento : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.fechaNacimiento : '',
       edadCumplidaAnios : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.edadCumplidaAnios : '',
       edadCumplidaMeses : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.edadCumplidaMeses : '',
@@ -170,12 +185,13 @@ const onCargarExistenteMatricula = ({ target }) => {
       cedulaEstudiante : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.cedulaEstudiante : '',
     })
   } else {
-    const { encargadoId, encargadoCorreo, nombreCompleto, encargadoLegal, fechaNacimiento, edadCumplidaAnios, edadCumplidaMeses, nacionalidad, telefono, domicilio, centroEducativoProcedencia, nivelAnterior, matricularNivelDe, estudianteConviveCon, estudianteConviveConOtros, tieneAdecuancion, cualAdecuancion, razonesEntrar, estadoMatriculaAdmin, seccionMatriculaAdmin, cedulaEstudiante } = matriculas.find(({ _id:id }) => id === value );
+    const { encargadoId, encargadoCorreo, nombre, apellido, encargadoLegal, fechaNacimiento, edadCumplidaAnios, edadCumplidaMeses, nacionalidad, telefono, domicilio, centroEducativoProcedencia, nivelAnterior, matricularNivelDe, estudianteConviveCon, estudianteConviveConOtros, tieneAdecuancion, cualAdecuancion, razonesEntrar, estadoMatriculaAdmin, seccionMatriculaAdmin, cedulaEstudiante } = matriculas.find(({ _id:id }) => id === value );
     setInitialValues({
       encargadoId,
       encargadoCorreo,
       encargadoLegal,
-      nombreCompleto,
+      nombre,
+      apellido,
       fechaNacimiento,
       edadCumplidaAnios,
       edadCumplidaMeses,
@@ -281,8 +297,8 @@ const onCargarExistenteMatricula = ({ target }) => {
                       >
                         <option value="seleccionar-prellenado">Nuevo Ingreso</option>
                         {
-                          matriculasPorUsuario.map(({ nombreCompleto, fechaCreacionMatricula, _id  }) => (
-                            <option key={_id} value={ _id }>Estudiante: { nombreCompleto } - Fecha de creación de la matricula: { fechaCreacionMatricula }</option>
+                          matriculasPorUsuario.map(({ nombre, fechaCreacionMatricula, _id  }) => (
+                            <option key={_id} value={ _id }>Estudiante: { nombre } - Fecha de creación de la matricula: { fechaCreacionMatricula }</option>
                           ))
                         }
                       </Form.Select>
@@ -310,24 +326,38 @@ const onCargarExistenteMatricula = ({ target }) => {
                 </div>
               </Form.Group>
               <Form.Group controlId="name" className='form-input-hori label-arriba'>
-                <p>1. Nombre completo </p>
+                <p>Nombre </p>
                 <div className="mb-3 form-group tooltip-end-top invalid-tooltip-matricula-container">
                   <Form.Control
                     type="text"
-                    name="nombreCompleto"
-                    value={values.nombreCompleto}
+                    name="nombre"
+                    value={values.nombre}
                     onChange={handleChange}
                     disabled={ selectedFlatRows.length === 1 }
                     style={{ width: '650px' }}
                   />
-                  {errors.nombreCompleto && touched.nombreCompleto && (
-                    <div className="invalid-tooltip-matricula">{errors.nombreCompleto}</div>
+                  {errors.nombre && touched.nombre && (
+                    <div className="invalid-tooltip-matricula">{errors.nombre}</div>
+                  )}
+                </div>
+                <p>Apellidos</p>
+                <div className="mb-3 form-group tooltip-end-top invalid-tooltip-matricula-container">
+                  <Form.Control
+                    type="text"
+                    name="apellido"
+                    value={values.apellido}
+                    onChange={handleChange}
+                    disabled={ selectedFlatRows.length === 1 }
+                    style={{ width: '650px' }}
+                  />
+                  {errors.apellido && touched.apellido && (
+                    <div className="invalid-tooltip-matricula">{errors.apellido}</div>
                   )}
                 </div>
               </Form.Group>
               <div className='form-input-hori'>
                 <div className='form-input-hori label-arriba mr-40px'>
-                  <p>2. Fecha de Nacimiento </p>
+                  <p>1. Fecha de Nacimiento </p>
                   <Form.Group controlId="name">
                     <div className="mb-3 form-group tooltip-end-top">
                       <Form.Control
@@ -393,7 +423,7 @@ const onCargarExistenteMatricula = ({ target }) => {
               </div>
               <div className='form-input-hori'>
               <div className='form-input-hori label-arriba mr-40px'>
-                <p>3. Pais de procedencia </p>
+                <p>2. Pais de procedencia </p>
                 <Form.Group controlId="name">
                   <div className="mb-3 form-group tooltip-end-top">
                     <Form.Select 
@@ -438,7 +468,7 @@ const onCargarExistenteMatricula = ({ target }) => {
 
 
               <Form.Group controlId="name" className='form-input-hori label-arriba'>
-              <p>4. Domicilio </p>
+              <p>3. Domicilio </p>
                 <div className="mb-3 form-group tooltip-end-top">
                   <Form.Control
                     type="text"
@@ -455,7 +485,7 @@ const onCargarExistenteMatricula = ({ target }) => {
               </Form.Group>
               <div className='form-input-hori'>
               <div className='form-input-hori label-arriba mr-40px'>
-              <p>5. Centro Educativo de procendencia </p>
+              <p>4. Centro Educativo de procendencia </p>
                 <Form.Group controlId="name">
                   <div className="mb-3 form-group tooltip-end-top">
                     <Form.Control
@@ -501,7 +531,7 @@ const onCargarExistenteMatricula = ({ target }) => {
               </div>
 
               <Form.Group controlId="name" className='form-input-hori label-arriba'>
-              <p>6. Nivel a matricular</p>
+              <p>5. Nivel a matricular</p>
                 <div className="mb-3 form-group tooltip-end-top">
                 <Form.Select 
                     name="matricularNivelDe"
@@ -523,7 +553,7 @@ const onCargarExistenteMatricula = ({ target }) => {
               </Form.Group>
               <div className='form-input-hori'>
               <div className='form-input-hori label-arriba'>
-              <p>7. La persona estudiante Convive Con </p>
+              <p>6. La persona estudiante Convive Con </p>
               <Form.Group controlId="name">
               <div className="mb-3 form-group tooltip-end-top form-input-hori">
                     <Form.Select 
@@ -566,7 +596,7 @@ const onCargarExistenteMatricula = ({ target }) => {
               </div>
               <div className='form-input-hori'>
               <div className='form-input-hori label-arriba'>
-              <p>8. Posee algun tipo de adecuación </p>
+              <p>7. Posee algun tipo de adecuación </p>
               <Form.Group controlId="name">
                 <div className="mb-3 form-group tooltip-end-top form-input-hori">
                   <Form.Select 
@@ -610,7 +640,7 @@ const onCargarExistenteMatricula = ({ target }) => {
               </div>
 
               <Form.Group controlId="name">
-              <p>9. Cuales son las razones por las que desea que su hijo (a) ingrese al liceo Diurno de Guarari?: </p>
+              <p>8. Cuales son las razones por las que desea que su hijo (a) ingrese al liceo Diurno de Guarari?: </p>
                 <div className="mb-3 form-group tooltip-end-top">
                   <Form.Control
                     type="textaArea"
@@ -633,15 +663,17 @@ const onCargarExistenteMatricula = ({ target }) => {
                 >
                   {selectedFlatRows.length === 1 ? 'Actualizar' : 'Agregar Matrícula'}
                 </Button>
-
-                <Button
-                  variant="primary"
-                  className={(selectedFlatRows.length) !== 1 ? 'hide-element' : ''}
-                  type="submit"
-                >
-                  Modificar estado
-                </Button>
-
+                  {
+                    (selectedFlatRows.length === 1 && currentUser.role === 'Administrador') && (
+                      <Button
+                      variant="primary"
+                      className={(selectedFlatRows.length) !== 1 ? 'hide-element' : ''}
+                      type="submit"
+                    >
+                      Modificar estado
+                    </Button>
+                    )
+                  }
                 <Button
                   variant="outline-primary"
                   onClick={() => setIsOpenAddEditModal(false) || cancelRegister()}

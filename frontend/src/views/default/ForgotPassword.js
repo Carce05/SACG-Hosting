@@ -62,11 +62,15 @@ const ForgotPassword = () => {
         <div>
           <div className="mb-5">
             <h1 className="display-3 text-white">Bienvenido al Sistema Academico</h1>
-            <h1 className="display-3 text-white">del Liceo Diurno de Guararí</h1>
+            <h1 className="display-3 text-white">Liceo Diurno de Guararí</h1>
           </div>
-          <p className="h6 text-white lh-1-5 mb-5">
+          <p className="h6 text-white ">
             Ven y sigue formado parte de la Familia del Liceo Diurno de Guararí.
+          </p>
+          <p className="h6 text-white ">
             Consultas al correo: lic.diurnodeguarari@mep.go.cr
+          </p>
+          <p className="h6 text-white ">
             Teléfono: 2237-4033
           </p>
         </div>
