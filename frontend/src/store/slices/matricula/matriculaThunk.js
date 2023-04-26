@@ -4,13 +4,23 @@ import { setMatriculas, setMatriculasFiltradas, setMatriculasLoaded, setMatricul
 
 const agregarMatricula = (matricula) => {
   return async (dispatch, getState) => {
+    const now = new Date();
+    const year = now.getFullYear().toString().padStart(4, '0');
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+    const day = now.getDate().toString().padStart(2, '0');
+    const hour = now.getHours().toString().padStart(2, '0');
+    const minute = now.getMinutes().toString().padStart(2, '0');
+    const second = now.getSeconds().toString().padStart(2, '0');
+
+    const formattedDateTime = `${year}-${month}-${day} ${hour}:${minute}:${second}`;
+
     const { data } = await mainEndpoint.post(
       `matricula`,
       {
         ...matricula,
         estadoMatriculaAdmin: "Pendiente",
         seccionMatriculaAdmin: "",
-        fechaCreacionMatricula: new Date().toISOString().slice(0, 10)
+        fechaCreacionMatricula: formattedDateTime
       },
     );
     dispatch(setMatriculasLoaded())
