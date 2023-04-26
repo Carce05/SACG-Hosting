@@ -146,7 +146,7 @@ const history = useHistory();
         total,
         observaciones  
       });
-      toast('Calificación Actualizada!', { className: 'success' });
+      toast.success('¡Calificación Actualizada!', { className: 'success' });
       setIsOpenAddEditModal(false);
       
       axios
@@ -156,26 +156,44 @@ const history = useHistory();
             })
             .catch((err) => {
                console.error(err);
-             });
+             });     
+             
+      const resultsUpdate = [];
 
-      /*
-      estudiantes.forEach((val) => {
-        calificaciones.forEach((cali) => {
-          if (val.cedula === cali.estudiante && val.materia === cali.materia) {
-            val.total = cali.total;
-          }
-        })
-      });    
-      */         
+      data.forEach((val) => {
+        if (val.cedula === selectedFlatRows[0].original.cedula){
+          resultsUpdate.push({
+            cedula: val.cedula,
+            apellido: val.apellido,
+            nombre: val.nombre,
+            materia: val.materia,
+            seccion: val.seccion,
+            total: total,
+          });
+        } else {
+          resultsUpdate.push({
+            cedula: val.cedula,
+            apellido: val.apellido,
+            nombre: val.nombre,
+            materia: val.materia,
+            seccion: val.seccion,
+            total: val.total,
+          });
+        }
+      });
+
+      setData([ 
+        ...resultsUpdate
+      ])      
 
     } catch (e) {
       console.log(e.message);
       if (e.response && e.response.status === 400) {
         console.log(e.response.data.msg);
-        alert(e.response.data.msg);
+       // alert(e.response.data.msg);
         setIsOpenAddEditModal(true);
       }  else {
-        alert('Problema al actualizar la calificación');
+        toast.error('¡Hubo un problema al actualizar la calificación!');
         setIsOpenAddEditModal(true);
       }
     }
@@ -208,7 +226,7 @@ const history = useHistory();
         trimestre: periodoActual,
         seccion: seccionRes
     });
-    toast('Calificación Actualizada!', { className: 'success' });
+    toast.success('¡Calificación actualizada!', { className: 'success' });
           setIsOpenAddEditModal(false);
           axios
           .get(apiSACG.concat("/calificaciones"))
@@ -226,6 +244,7 @@ const history = useHistory();
         alert(e.response.data.msg, { onDismiss: () => setIsOpenAddEditModal(true) });
       } 
       else {
+        toast.error('¡Problema al guardar el usuario!', { className: 'danger' });
         alert('Problema al guardar el usuario', { onDismiss: () => setIsOpenAddEditModal(true) });
         setIsOpenAddEditModal(true);
       }
@@ -408,13 +427,13 @@ const history = useHistory();
 
               <div>
                 <Row className="g-6">
-                  <Col md="3">
-                    <Button variant="primary" type="submit">Subir</Button>
-                  </Col>
-                  <Col md="3">
-                    <Button variant="outline-primary" onClick={() => setIsOpenAddEditModal(false) || cancelRegister()}>
+                  <Col md="4">
+                    <Button variant="outline-primary" onClick={() => setIsOpenAddEditModal(false) || cancelRegister()} >
                     Cancelar
                     </Button>
+                  </Col>
+                  <Col md="2">
+                    <Button variant="primary" type="submit" >Subir</Button>
                   </Col>
                 </Row>
               </div>

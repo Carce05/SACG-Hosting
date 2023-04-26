@@ -3,7 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   isLogin: false,
   currentUser: {},
-  isUpdated: false
+  isUpdated: false,
+  cedulaExiste: false
 };
 
 const authSlice = createSlice({
@@ -19,11 +20,14 @@ const authSlice = createSlice({
     },
     setUpdatedUserFalse(state, action) {
       state.isUpdated = false;
+    },
+    setCedulaExiste(state, action) {
+      state.cedulaExiste = action.payload;
     }
   },
 });
 
-export const { setCurrentUser, setUpdatedUser, setUpdatedUserFalse } = authSlice.actions;
+export const { setCurrentUser, setUpdatedUser, setUpdatedUserFalse, setCedulaExiste } = authSlice.actions;
 const authReducer = authSlice.reducer;
 
 export default authReducer;

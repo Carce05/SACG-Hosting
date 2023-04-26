@@ -27,7 +27,6 @@ const ModalAsignarDocente = ({ tableInstance, docentes, setDocentes, DMS, setDMS
     seccionRes = selectedFlatRows[0].original.seccion;
   }
 
-  
   const initialValues = {
     docente:''
   };
@@ -35,8 +34,6 @@ const ModalAsignarDocente = ({ tableInstance, docentes, setDocentes, DMS, setDMS
   const validationSchema = Yup.object().shape({
     docente: Yup.string().required('Un docente es requerido')
   });
-
-  //const { docente } = Formik;
 
   const handleTypeSelect = (e) => {
     setSelectedOption(e.value);
@@ -53,7 +50,7 @@ const ModalAsignarDocente = ({ tableInstance, docentes, setDocentes, DMS, setDMS
         materia: materiaRes,
         seccion: seccionRes
       });
-      toast('¡Docente Asignado!', { className: 'success' });
+      toast.success('¡Docente asignado exitosamente!', { className: 'success' });
       setIsOpenAddEditModal(false);
       
       axios
@@ -65,24 +62,40 @@ const ModalAsignarDocente = ({ tableInstance, docentes, setDocentes, DMS, setDMS
                console.error(err);
              });
 
-      /*
-      estudiantes.forEach((val) => {
-        calificaciones.forEach((cali) => {
-          if (val.cedula === cali.estudiante && val.materia === cali.materia) {
-            val.total = cali.total;
-          }
-        })
-      });    
-      */         
+      const resultsUpdate = [];
+
+      data.forEach((val) => {
+        if (val._id === selectedFlatRows[0].original._id){
+          resultsUpdate.push({
+            _id: val._id,
+            docente: selectedOption,
+            materia: val.materia,
+            seccion: val.seccion,
+          });
+        } else {
+          resultsUpdate.push({
+            _id: val._id,
+            docente: val.docente,
+            materia: val.materia,
+            seccion: val.seccion,
+          });
+        }
+      });  
+      
+      setData([ 
+        ...resultsUpdate
+      ])   
+
+      setSelectedOption((""));
 
     } catch (e) {
       console.log(e.message);
       if (e.response && e.response.status === 400) {
         console.log(e.response.data.msg);
-        alert(e.response.data.msg);
+        //alert(e.response.data.msg);
         setIsOpenAddEditModal(true);
       }  else {
-        alert('Problema al actualizar la calificación');
+        toast.error('¡Hubo un problema al asignar el docente!');
         setIsOpenAddEditModal(true);
       }
     }
@@ -115,11 +128,11 @@ const ModalAsignarDocente = ({ tableInstance, docentes, setDocentes, DMS, setDMS
               <br/>
               <Row className="mb-3">
                   <Col className="text-center">
-                    <Button variant="primary" onClick={() => onSubmit()} style={{ marginRight: '10px' }}>
-                      Actualizar
-                    </Button>
-                    <Button variant="outline-primary" onClick={() => setIsOpenAddEditModal(false) || cancelRegister()} style={{ marginLeft: '10px' }}>
+                  <Button variant="outline-primary" onClick={() => setIsOpenAddEditModal(false) || cancelRegister()} style={{ marginRight: '10px' }}>
                       Cancelar
+                    </Button>
+                    <Button variant="primary" onClick={() => onSubmit()} style={{ marginLeft: '10px' }}>
+                      Asignar
                     </Button>
                   </Col>
                 </Row>

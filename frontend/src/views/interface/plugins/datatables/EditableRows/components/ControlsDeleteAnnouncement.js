@@ -20,7 +20,7 @@ const ControlsDeleteAnnouncement = ({ tableInstance, announcementId  }) => {
     axios.delete(apiSACG.concat(`/comunicados/${id}`))
       .then(response => {
         setData(data.filter((x, index) => selectedRowIds[index] !== true));
-        toast('¡Aviso eliminado con exitosamente!'),{className:'success'};})
+        toast.success('¡Aviso eliminado con exitosamente!'),{className:'success'};})
       .catch(error => {
         console.log(error);
       });

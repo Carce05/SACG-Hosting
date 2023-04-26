@@ -98,9 +98,9 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
     centroEducativoProcedencia : Yup.string().required('Centro Educativo Procedencia es requerido'),
     nivelAnterior: Yup.number()
     .required('Nivel anterior es requerido')
-    .min(1, 'Ingrese un Nivel valido valida')
+    .min(0, 'Ingrese un Nivel valido valida')
     .max(12, 'Ingrese un Nivel valido valida'),
-    matricularNivelDe : Yup.string().required('Matricula en nivel requerido'),
+    matricularNivelDe : Yup.number().min(Yup.ref('nivelAnterior'), 'El nivel a matricular debe ser mayor que el nivel anterior').required('Nivel anterior es requerido'),
     estudianteConviveCon : Yup.string().required('Convive con es requerido'),
     tieneAdecuancion : Yup.string().required('Tiene adecuación es requerido'),
     razonesEntrar : Yup.string().required('Razones son requeridas'),
@@ -118,7 +118,7 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
       dispatch(setMatriculasLoading())
       dispatch(agregarMatricula(values));
       dispatch(onShowAlert());
-      toast('¡Matricula agregada con éxito!')
+      toast.success('¡Matricula agregada con éxito!')
     } else {
       const {_id: id} = selectedFlatRows[0].original;
       const matriculaEstado  = {
@@ -129,7 +129,7 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
         "seccion": values.estadoMatriculaAdmin === "Aprobado" ? values.seccionMatriculaAdmin : ""
       }
       dispatch(matriculaModificarEstado(id, matriculaEstado));
-      toast('¡Estado de la matricula, actualizado!')
+      toast.success('¡Estado de la matricula, actualizado!');
     }
     dispatch(setMatriculasLoading());
     dispatch(onShowAlert());
@@ -318,6 +318,7 @@ const onCargarExistenteMatricula = ({ target }) => {
                     value={values.nombreCompleto}
                     onChange={handleChange}
                     disabled={ selectedFlatRows.length === 1 }
+                    style={{ width: '650px' }}
                   />
                   {errors.nombreCompleto && touched.nombreCompleto && (
                     <div className="invalid-tooltip-matricula">{errors.nombreCompleto}</div>
@@ -368,6 +369,7 @@ const onCargarExistenteMatricula = ({ target }) => {
                     onChange={handleChange}
                     disabled={ selectedFlatRows.length === 1 }
                     >
+                      <option value="1">0</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
                       <option value="3">3</option>
@@ -391,7 +393,7 @@ const onCargarExistenteMatricula = ({ target }) => {
               </div>
               <div className='form-input-hori'>
               <div className='form-input-hori label-arriba mr-40px'>
-                <p>3. Nacionalidad </p>
+                <p>3. Pais de procedencia </p>
                 <Form.Group controlId="name">
                   <div className="mb-3 form-group tooltip-end-top">
                     <Form.Select 
@@ -423,6 +425,7 @@ const onCargarExistenteMatricula = ({ target }) => {
                       value={values.telefono}
                       onChange={handleChange}
                        disabled={ selectedFlatRows.length === 1 }
+                       style={{ width: '275px' }}
                     />
                   {errors.telefono && touched.telefono && (
                     <div className="invalid-tooltip-matricula">{errors.telefono}</div>
@@ -443,6 +446,7 @@ const onCargarExistenteMatricula = ({ target }) => {
                     value={values.domicilio}
                     onChange={handleChange}
                     disabled={ selectedFlatRows.length === 1 }
+                    style={{ width: '655px' }}
                   />
                   {errors.domicilio && touched.domicilio && (
                     <div className="invalid-tooltip-matricula">{errors.domicilio}</div>
@@ -460,6 +464,7 @@ const onCargarExistenteMatricula = ({ target }) => {
                       value={values.centroEducativoProcedencia}
                       onChange={handleChange}
                        disabled={ selectedFlatRows.length === 1 }
+                       style={{ width: '450px' }}
                     />
                   {errors.centroEducativoProcedencia && touched.centroEducativoProcedencia && (
                     <div className="invalid-tooltip-matricula">{errors.centroEducativoProcedencia}</div>
@@ -477,7 +482,10 @@ const onCargarExistenteMatricula = ({ target }) => {
                     defaultValue={values.nivelAnterior}
                     onChange={handleChange}
                     disabled={ selectedFlatRows.length === 1 }
+                    style={{ width: '155px' }}
                     >
+                      <option value="0">Seleccionar</option>
+                      <option value="1">Escuela</option>
                       <option value="7">7</option>
                       <option value="8">8</option>
                       <option value="9">9</option>
@@ -493,7 +501,7 @@ const onCargarExistenteMatricula = ({ target }) => {
               </div>
 
               <Form.Group controlId="name" className='form-input-hori label-arriba'>
-              <p>6. Que nivel voy a matricular</p>
+              <p>6. Nivel a matricular</p>
                 <div className="mb-3 form-group tooltip-end-top">
                 <Form.Select 
                     name="matricularNivelDe"
@@ -501,6 +509,7 @@ const onCargarExistenteMatricula = ({ target }) => {
                     onChange={handleChange}
                     disabled={ selectedFlatRows.length === 1 }
                     >
+                      <option value="0">Seleccionar</option>
                       <option value="7">7</option>
                       <option value="8">8</option>
                       <option value="9">9</option>
@@ -565,6 +574,7 @@ const onCargarExistenteMatricula = ({ target }) => {
                       defaultValue={values.tieneAdecuancion}
                       onChange={handleChange}
                        disabled={ selectedFlatRows.length === 1 }
+                       style={{ width: '150px' }}
                     >
                       <option>Seleccionar</option>
                       <option value="true">Si</option>
@@ -581,6 +591,7 @@ const onCargarExistenteMatricula = ({ target }) => {
                               value={values.cualAdecuancion}
                               onChange={handleChange}
                               disabled={ selectedFlatRows.length === 1 }
+                              style={{ width: '465px' }}
                             />
                             {errors.cualAdecuancion && touched.cualAdecuancion && (
                             <div className="invalid-tooltip-matricula">{errors.cualAdecuancion}</div>
@@ -614,11 +625,30 @@ const onCargarExistenteMatricula = ({ target }) => {
                   )}
                 </div>
               </Form.Group>
-              <Button variant="primary" className={(selectedFlatRows.length) === 1 ? 'hide-element' : ''} type="submit">{selectedFlatRows.length === 1 ? 'Actualizar' : 'Agregar Matricula'}</Button>
-              <Button variant="primary" className={(selectedFlatRows.length) !== 1 ? 'hide-element' : ''} type="submit">Modificar estado</Button>
-              <Button variant="outline-primary" onClick={() => setIsOpenAddEditModal(false) || cancelRegister()}>
-                Cerrar
-              </Button>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '15px' }}>
+                <Button
+                  variant="primary"
+                  className={(selectedFlatRows.length) === 1 ? 'hide-element' : ''}
+                  type="submit"
+                >
+                  {selectedFlatRows.length === 1 ? 'Actualizar' : 'Agregar Matrícula'}
+                </Button>
+
+                <Button
+                  variant="primary"
+                  className={(selectedFlatRows.length) !== 1 ? 'hide-element' : ''}
+                  type="submit"
+                >
+                  Modificar estado
+                </Button>
+
+                <Button
+                  variant="outline-primary"
+                  onClick={() => setIsOpenAddEditModal(false) || cancelRegister()}
+                >
+                  Cerrar
+                </Button>
+              </div>
             </form>
           )}
         </Formik>

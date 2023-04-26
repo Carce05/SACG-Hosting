@@ -16,8 +16,8 @@ const ProfileSettings = () => {
   const ref = useRef();
   const { currentUser, isUpdated } = useSelector((state) => state.auth);
   const { id, name, email, role, thumb, pass } = currentUser;
-  const title = 'Profile Settings';
-  const description = 'Profile Settings';
+  const title = 'Perfil de Usuario';
+  const description = 'Información del Usuario';
 
   const genderOptions = [
     { value: 'Encargado', label: 'Encargado' },
@@ -43,7 +43,7 @@ const ProfileSettings = () => {
       dispatch(actualizarUsuario({...formState, formPass: pass}, id));
     }
     ref.current.handleSubmit()
-    toast('¡Perfil Actualizado!');
+    toast.success('¡Perfil Actualizado!');
   }
 
   return (

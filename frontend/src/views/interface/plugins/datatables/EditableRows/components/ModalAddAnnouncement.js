@@ -41,16 +41,21 @@ const ModalAddAnnouncement = ({ showModal, setShowModal, setData, setShowSuccess
           setShowSuccessAlert(true);
         })
         .catch((err) => {
+          toast.error('¡Un error ha ocurrido al intentar agregar el aviso!');
           console.error(err);
         });
         toast.success('¡Aviso Agregado con Éxito!');
       // setShowModal(false);
     } catch (e) {
       if (e.response && e.response.status === 400) {
+
+        toast.error('¡Un error ha ocurrido al intentar agregar el aviso!');
         // console.log(e.response.data.msg);
         setShowDangerAlert(true);
       }
       else {
+
+        toast.error('¡Un error ha ocurrido al intentar agregar el aviso!');
         setShowDangerAlert(true);
       }
     }

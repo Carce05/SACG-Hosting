@@ -31,12 +31,12 @@ const ForgotPassword = () => {
   const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
-		e.preventDefault();
-		try {
-			const url = apiSACG.concat(`/reset-password`);
+    e.preventDefault();
+    try {
+      const url = apiSACG.concat(`/reset-password`);
 			const { data } = await axios.post(url, { email });
 			setMsg(data.message);
-      toast('Correo de Restablecimiento Enviado!');
+      toast.success('¡Correo de Restablecimiento Enviado!');
       setError("");
     } catch (ec) {
       if (

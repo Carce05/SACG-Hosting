@@ -89,7 +89,6 @@ const Secciones = (props) => {
     fetchData();
   }, []);
   
-
   // Llamados de Estudiantes
   useEffect(() => {
     async function fetchData() {
@@ -124,7 +123,7 @@ const Secciones = (props) => {
   async function fetchData() {
 
     await axios
-    .get("http://localhost:8080/api/general/643f20fe9a24456baf1c57b1")
+    .get(apiSACG.concat('/general/643f20fe9a24456baf1c57b1'))
     .then((res) => {
       anioActual = res.data[0].anio;
       periodoActual = res.data[0].periodo; 
@@ -203,12 +202,8 @@ const Secciones = (props) => {
   }
 
 
-
-
-
   const title = 'Mis Secciones';
   const description = 'Secciones del profesor logueado.';
-
   
 
   const columns = React.useMemo(() => {
@@ -217,19 +212,8 @@ const Secciones = (props) => {
       { Header: 'Apellido', accessor: 'apellido', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       { Header: 'Nombre', accessor: 'nombre', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },    
       { Header: 'Materia', accessor: 'materia', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
-      { Header: 'Seccion', accessor: 'seccion', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
+      { Header: 'Sección', accessor: 'seccion', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       { Header: 'Total', accessor: 'total', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
-      /*
-      {
-        Header: '',
-        id: 'action',
-        headerClassName: 'empty w-10',
-        Cell: ({ row }) => {
-          const { checked, onChange } = row.getToggleRowSelectedProps();
-          return <Button onClick={() => handleCalificacion(row) } variant="outline-primary" >Nota</Button>;
-        },
-      },
-      */
       {
         Header: '',
         id: 'action',

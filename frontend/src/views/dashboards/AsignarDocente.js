@@ -12,11 +12,12 @@ import { useTable, useGlobalFilter, useSortBy, usePagination, useRowSelect, useR
 import Table from 'views/interface/plugins/datatables/EditableRows/components/Table';
 import ButtonsCheckAll from 'views/interface/plugins/datatables/EditableRows/components/ButtonsCheckAll';
 import ButtonsAddNew from 'views/interface/plugins/datatables/EditableRows/components/ButtonsAddNew';
-import ControlsAdd from 'views/interface/plugins/datatables/EditableRows/components/ControlsAdd';
+import ControlsAddMateria from 'views/interface/plugins/datatables/EditableRows/components/ControlsAddMateria';
 import ControlsAsignarDocente from 'views/interface/plugins/datatables/EditableRows/components/ControlsAsignarDocente';
 import ControlsDelete from 'views/interface/plugins/datatables/EditableRows/components/ControlsDelete';
 import ControlsSearch from 'views/interface/plugins/datatables/EditableRows/components/ControlsSearch';
 import ModalAsignarDocente from 'views/interface/plugins/datatables/EditableRows/components/ModalAsignarDocente';
+import ModalAddMateria from 'views/interface/plugins/datatables/EditableRows/components/ModalAsignarDocente';
 import TablePagination from 'views/interface/plugins/datatables/EditableRows/components/TablePagination';
 import axios from "axios";
 import { useFormik } from 'formik';
@@ -34,6 +35,7 @@ const AsignarDocente = (props) => {
   const formik = useFormik({ initialValues });
   const { handleSubmit, handleChange, materia, seccion, touched, errors } = formik;
   const { setSelectedMateria, setSeccionn } = useState();
+  const [showModal, setShowModal] = useState(false);
   
   const { currentUser, isLogin } = useSelector((state) => state.auth);
   const docente  = currentUser.email;
@@ -90,29 +92,17 @@ const AsignarDocente = (props) => {
     fetchData();
   }, []);
   
-  
-  /*
-  useEffect(() => {
-
-    axios
-      .get("http://localhost:8080/api/estudiantes/")
-      .then((res) => {
-        setData(res.data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, []);
-*/
-
-
-  
   useEffect(() => {
     async function fetchData() {
       // Fetch data
       const response = await axios.get(apiSACG.concat("/usuarios/"));
       const resultsDocentes = []
+      
       // Store results in the results array
+      resultsDocentes.push({           
+        value: "",
+        label: "SIN ASIGNAR",
+      });
       response.data.forEach((val) => {
         if (val.role === "Profesor" && val.status === "Activo"){
           resultsDocentes.push({           
@@ -132,9 +122,6 @@ const AsignarDocente = (props) => {
     // Trigger the fetch
     fetchData();
   }, []);
-
-
-
 
   const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
 
@@ -170,7 +157,7 @@ const AsignarDocente = (props) => {
 
   
 
-const tableInstance = useTable(
+  const tableInstance = useTable(
     { columns, data, setData, stateReducer: (state, action) => {
       if (action.type === 'toggleRowSelected' && Object.keys(state.selectedRowIds).length) {
          const newState = { ...state };
@@ -245,11 +232,9 @@ const tableInstance = useTable(
                 </div>
               </Col>
               <Col sm="12" md="7" lg="9" xxl="10" className="text-end">
-                {/*
                 <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
-                  <Button onClick={insertarCalificaciones} variant="outline-primary" >Refrescar</Button>
+                  <ControlsAddMateria tableInstance={tableInstance} secciones={secciones} setDMS={setDMS}/>
                 </div>
-                */}
                 <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
                   <ControlsAsignarDocente tableInstance={tableInstance} />
                 </div>

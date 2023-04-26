@@ -16,13 +16,14 @@ const styles = StyleSheet.create({
 });
 
 // Create Document Component
-const ReporteMatriculas = ({ matriculas, filtroSettings }) => {
+const ReporteMatriculas = ({ matriculas, filtroSettings, cantidadMatriculasFiltradas}) => {
 console.log('sds', filtroSettings.anioMostrarInforme )
 return (
   <Document>
     <Page size="A4">
     <View style={styles.section}>
     <Text style={{ fontSize: 15 }}>Informe de Matriculas</Text>
+    <Text style={{ fontSize: 10 }}>Cantidad de matriculas: {cantidadMatriculasFiltradas}</Text>
     <Text style={{ fontSize: 10 }}>Filtrando por año: { filtroSettings.anioMostrarInforme === "no-filtrar-anio" ? 'No filtrado por año' : filtroSettings.anioMostrarInforme }</Text>
     <Text style={{ fontSize: 10, marginBottom: 10 }}>Filtrando por estado de matricula: { filtroSettings.estadoMostrarInforme === "no-filtrar-estado" ? 'No filtrado por estado de matricula' : filtroSettings.estadoMostrarInforme }</Text>
 
