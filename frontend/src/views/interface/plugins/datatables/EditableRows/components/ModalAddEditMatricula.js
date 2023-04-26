@@ -67,7 +67,13 @@ const ModalAddEditMatricula = ({ tableInstance }) => {
       cedulaEstudiante : selectedFlatRows.length === 1 ? selectedFlatRows[0].original.cedulaEstudiante : '',
     })
     const matriculasPorUsuarioFiltradas = matriculas.filter(element => element.encargadoId === currentUser.personalId);
-    setMatriculasPorUsuario(matriculasPorUsuarioFiltradas);
+    const mostRecentRows = Object.values(matriculasPorUsuarioFiltradas.reduce((acc, obj) => {
+      if (!acc[obj.cedulaEstudiante] || obj.fechaCreacionMatricula > acc[obj.cedulaEstudiante].fechaCreacionMatricula) {
+        acc[obj.cedulaEstudiante] = obj;
+      }
+      return acc;
+    }, {}));
+    setMatriculasPorUsuario(mostRecentRows);
   }, [selectedFlatRows])
   
   const [selectedItem, setSelectedItem] = useState(initialValues);
@@ -633,15 +639,17 @@ const onCargarExistenteMatricula = ({ target }) => {
                 >
                   {selectedFlatRows.length === 1 ? 'Actualizar' : 'Agregar Matrícula'}
                 </Button>
-
-                <Button
-                  variant="primary"
-                  className={(selectedFlatRows.length) !== 1 ? 'hide-element' : ''}
-                  type="submit"
-                >
-                  Modificar estado
-                </Button>
-
+                  {
+                    (selectedFlatRows.length === 1 && currentUser.role === 'Administrador') && (
+                      <Button
+                      variant="primary"
+                      className={(selectedFlatRows.length) !== 1 ? 'hide-element' : ''}
+                      type="submit"
+                    >
+                      Modificar estado
+                    </Button>
+                    )
+                  }
                 <Button
                   variant="outline-primary"
                   onClick={() => setIsOpenAddEditModal(false) || cancelRegister()}
