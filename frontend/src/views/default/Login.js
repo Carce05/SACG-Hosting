@@ -30,7 +30,7 @@ const Login = () => {
   const [error, setError] = useState(false)
 
   const validationSchema = Yup.object().shape({
-    email: Yup.string().email().required('Se requiere la identificación'),
+    email: Yup.string().email('Ingresa un correo electrónico válido').required('Se requiere la identificación'),
     password: Yup.string().min(6, 'Se debe de tener almenos 6 caracteres').required('Se requiere la contraseña'),
   });
   const initialValues = { email: '', password: '' };
