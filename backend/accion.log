@@ -44,3 +44,6 @@
 {"level":"debug","message":"undefined creó un nuevo usuario con el siguiente correo: 123456780@d.com","timestamp":"2023-04-24T20:59:40.274Z"}
 {"level":"debug","message":"encargado@gmail.com actualizó datos generales del curso lectivo","timestamp":"2023-04-26T02:49:28.195Z"}
 {"level":"debug","message":"encargado@gmail.com creó un nuevo usuario con el siguiente correo: asdfg@gmail.com","timestamp":"2023-04-26T02:51:53.665Z"}
+{"level":"debug","message":"yuliana.jimenez@hotmail.com actualizó datos del usuario con el siguiente correo: encargado@gmail.com","timestamp":"2023-04-26T16:30:14.572Z"}
+{"level":"debug","message":"yuliana.jimenez@hotmail.com actualizó datos del usuario con el siguiente correo: encargado@gmail.com","timestamp":"2023-04-26T16:32:02.541Z"}
+{"level":"debug","message":"encargado@gmail.com actualizó datos del usuario con el siguiente correo: encargado@gmail.com","timestamp":"2023-04-26T17:12:39.200Z"}
