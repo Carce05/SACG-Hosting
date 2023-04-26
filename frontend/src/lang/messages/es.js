@@ -162,8 +162,8 @@ const enMessages = {
   'menu.tickets': 'Tickets',
   'menu.tickets-detail': 'Teicket Detail',
 
-  'menu.secciones' : 'Secciones (Docente)',
-  'menu.admin_secciones' : 'Secciones (Administrador)',
+  'menu.secciones' : 'Secciones',
+  'menu.admin_secciones' : 'Secciones',
   'menu.asignarDocente' : 'Docentes',
   'menu.usuarios' : 'Usuarios',
   'menu.contacto': 'Contacto',

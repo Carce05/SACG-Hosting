@@ -201,13 +201,17 @@ const MainMenuItem = memo(({ item, id, isSubItem = false, menuPlacement = DEFAUL
         <></>
       );
     }
-    return (
-      <li className={(item.label === 'menu.matricular-modulo' && currentUser.role === 'Profesor') ? 'hide-element' : ''}>
-        <NavLink to={item.path} className={classNames({ active: isActive })} activeClassName="">
-          {getLabel(item.icon, item.label)}
-        </NavLink>
-      </li>
-    );
+    if (currentUser.role === 'Profesor' && item.label === 'menu.matricula'){
+      return (
+        <></>
+      );
+    }
+    if (currentUser.role === 'Profesor' && item.label === 'menu.calificacion'){
+      return (
+        <></>
+      );
+    }
+    
   }
   if (menuPlacement === MENU_PLACEMENT.Horizontal && item.megaParent) {
     return (
