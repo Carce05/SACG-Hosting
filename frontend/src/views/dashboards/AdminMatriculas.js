@@ -187,7 +187,7 @@ const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
           {/* Title Start */}
           <Col md="7">
           <div className='form-input-hori'>
-              <h1 className="mb-0 pb-0 display-4">{(currentUser.role === 'Administrador') ? `${ title } | Matriculas del año: ${ anioFiltrar }`  : 'Agregar Nueva'}</h1>
+              <h1 className="mb-0 pb-0 display-4">{`${ title } | Matriculas del año: ${ anioFiltrar }`}</h1>
               <div className={ (currentUser.role === 'Encargado') ? 'show-element d-inline-block me-0 me-sm-3 float-start float-md-none' : 'hide-element'}>
                   {
                     ( matricularActivado == "true") && <ControlsAdd tableInstance={tableInstance} /> 
@@ -205,25 +205,21 @@ const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
           <div> 
             <Row className="mb-3">
               <Col sm="12" md="5" lg="3" xxl="2">
-                <div className={ (currentUser.role === 'Administrador') ? 'show-element d-inline-block float-md-start me-1 mb-1 mb-md-0 search-input-container w-100 shadow bg-foreground' : 'hide-element' }>
+                <div className='show-element d-inline-block float-md-start me-1 mb-1 mb-md-0 search-input-container w-100 shadow bg-foreground'>
                   <ControlsSearch tableInstance={tableInstance}/>
                 </div>
               </Col>
               <Col sm="12" md="7" lg="9" xxl="10" className="text-end">
-                <div className={ (currentUser.role === 'Administrador') ? 'show-element d-inline-block me-0 me-sm-3 float-start float-md-none' : 'hide-element'}>
+                <div className='show-element d-inline-block me-0 me-sm-3 float-start float-md-none'>
                   {
                     ( matricularActivado == "true") && <ControlsAdd tableInstance={tableInstance} /> 
                   } 
                   <ControlsVer tableInstance={tableInstance} />
                 </div>
-                <Button variant="outline-primary" className={ (currentUser.role === 'Administrador') ? 'show-element' : 'hide-element'} onClick={ onRefrescar }>
+                <Button variant="outline-primary" onClick={ onRefrescar }>
                     Refrescar
                 </Button>
               </Col>
-             
-              <div className={ (currentUser.role !== 'Administrador') ? 'show-element d-inline-block me-0 me-sm-3 float-start float-md-none' : 'hide-element'}>
-                <h3 className={ (currentUser.role !== 'Administrador') ? 'show-element d-inline-block mb-10 pb-0 mr-3' : 'hide-element'}> {`Tus Matriculas del año: ${ anioFiltrar }`}</h3> <ControlsVer tableInstance={tableInstance} />
-              </div>
             </Row>
             <Button variant="outline-primary" className={ (currentUser.role === 'Administrador') ? 'show-element mr-20 mb-3' : 'hide-element'} onClick={ onGenerarInforme }>
                     Generar Informe
