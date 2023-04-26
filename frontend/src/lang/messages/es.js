@@ -30,7 +30,7 @@ const enMessages = {
   'menu.search': 'Search',
   'menu.mailing': 'Mailing',
   'menu.empty': 'Empty',
-  'menu.notas': 'Notas',
+  'menu.calificaciones': 'Calificaciones',
   'menu.profile': 'Profile',
   'menu.standard': 'Standard',
   'menu.settings': 'Settings',

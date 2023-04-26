@@ -5,7 +5,7 @@ import axios from "axios";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const ControlsDeleteAnnouncement = ({ tableInstance, announcementId  }) => {
+const ControlsDeleteMateria = ({ tableInstance, setDMS }) => {
   const [showModal, setShowModal] = useState(false);
   const {
     selectedFlatRows,
@@ -14,16 +14,58 @@ const ControlsDeleteAnnouncement = ({ tableInstance, announcementId  }) => {
     state: { selectedRowIds },
   } = tableInstance;
 
-  const onConfirmDelete  = () => {
-    const {_id: id} = selectedFlatRows[0].original;
-    axios.delete(`http://localhost:8080/api/comunicados/${id}`)
+  let dmsId = "";
+
+
+  if (selectedFlatRows.length === 1) {
+    dmsId = selectedFlatRows[0].original._id;
+  }
+
+  const onConfirmDelete  = async () => {
+    try{
+
+       await axios.delete(`http://localhost:8080/api/docentes_materias_secciones/${dmsId}`)
       .then(response => {
         setData(data.filter((x, index) => selectedRowIds[index] !== true));
-        toast.success('¡Aviso eliminado exitosamente!'),{className:'success'};})
+      })
       .catch(error => {
         console.log(error);
       });
+
+      toast.success('¡Materia Eliminada!') , { className:'success' };
+      
+      setShowModal(false);
+
+      const response = await axios.get(`http://localhost:8080/api/docentes_materias_secciones/`);
+      const resultsDMS = [];
+
+      /* eslint no-underscore-dangle: 0 */
+      response.data.forEach((val) => {
+        resultsDMS.push({
+          _id: val._id,
+          docente: val.docente,
+          materia: val.materia,
+          seccion: val.seccion
+        });
+      });
+
+      const resultsUpdate = resultsDMS.filter(x => x.seccion === data[0].seccion);
+
+      setDMS([ 
+        ...resultsDMS
+      ])
+
+      setData([ 
+        ...resultsUpdate
+      ])  
+
+    } catch {
+
+    }
+
+
   };
+
   const onCancelDelete = () => {
     setShowModal(false);
   };
@@ -51,7 +93,7 @@ const ControlsDeleteAnnouncement = ({ tableInstance, announcementId  }) => {
         <Modal.Header closeButton>
           <Modal.Title>Confirmar eliminación</Modal.Title>
         </Modal.Header>
-        <Modal.Body>¿Está seguro de que desea eliminar el aviso?</Modal.Body>
+        <Modal.Body>¿Está seguro de que desea eliminar la materia?</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={onCancelDelete}>
             Cancelar
@@ -64,4 +106,4 @@ const ControlsDeleteAnnouncement = ({ tableInstance, announcementId  }) => {
     </>
   );
 };
-export default ControlsDeleteAnnouncement;
+export default ControlsDeleteMateria;

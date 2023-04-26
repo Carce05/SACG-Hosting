@@ -7,6 +7,7 @@ import { NavLink, Redirect, useHistory } from 'react-router-dom';
 import axios from "axios";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useSelector } from 'react-redux';
 
 const ModalCalificacion = ({ tableInstance, calificaciones, setCalificaciones, estudiantes, setEstudiantes}) => {
 const history = useHistory();
@@ -30,41 +31,9 @@ const history = useHistory();
   let anioActual = "";
   let periodoActual = "";
 
-  // const [calificacion, setCalificaciones] = useState([]);
+  const { currentUser } = useSelector((state) => state.auth);
 
-
-
-  /*
-  async function updateCalificaciones(cedulaP, materiaP) {
-    const response = await axios.get('http://localhost:8080/api/calificaciones/buscarCalificacion', {
-      params: {
-        estudiante: cedulaP,
-        materia: materiaP
-      }
-    });
-
-    eslint no-underscore-dangle: 0 
-    idRes = response.data[0]._id;
-    cotidianoRes = response.data[0].cotidiano;
-    tareaRes = response.data[0].tarea;
-    examen1Res = response.data[0].examen1;
-    examen2Res = response.data[0].examen2;
-    proyectoRes = response.data[0].proyecto;
-    asistenciaRes = response.data[0].asistencia;
-    observacionesRes = response.data[0].observaciones;
-
-    initialValues = {
-      cotidiano: cotidianoRes,
-      tarea: tareaRes, 
-      examen1: examen1Res,
-      examen2: examen2Res,
-      proyecto: proyectoRes,
-      asistencia: asistenciaRes,
-      observaciones: observacionesRes
-    };
-
-  }
-  */
+  const rol  = currentUser.role;
 
   if (selectedFlatRows.length === 1) {
     cedula = selectedFlatRows[0].original.cedula;
@@ -104,16 +73,6 @@ const history = useHistory();
     total: totalRes,
     observaciones: observacionesRes
   };
-
-
-
-  // const {coti} = calificaciones.length === 2 ? calificaciones[0].cotidiano :'';
-
-
-  // const estudiante = selectedFlatRows[0].original.cedula;
-
-
-  // const [selectedItem, setSelectedItem] = useState(initialValues);
 
   const validationSchema = Yup.object().shape({
     cotidiano: Yup.string().min(1,'La nota no puede ser menor a 0').required('Nota de cotidiano requerida'),
@@ -258,6 +217,7 @@ const history = useHistory();
     console.error(err);
   });
   */
+ 
 
 
 
@@ -289,11 +249,13 @@ const history = useHistory();
                   
                   <CsLineIcons icon="book-open" />
                   <Form.Control
+                    id='cotidiano'              
                     type="text"
                     name="cotidiano"
                     placeholder="Cotidiano"
                     value={values.cotidiano}
                     onChange={handleChange}
+                    readOnly={(currentUser.role === "Administrador")}
                   />
                   {errors.cotidiano && touched.cotidiano && (
                     <div className="d-block invalid-tooltip">{errors.cotidiano}</div>
@@ -311,6 +273,7 @@ const history = useHistory();
                     placeholder="Tarea"
                     value={values.tarea}
                     onChange={handleChange}
+                    readOnly={(currentUser.role === "Administrador")}
                   />
                   {errors.tarea && touched.tarea && (
                     <div className="d-block invalid-tooltip">{errors.tarea}</div>
@@ -328,6 +291,7 @@ const history = useHistory();
                     placeholder="Examen 1"
                     value={values.examen1}
                     onChange={handleChange}
+                    readOnly={(currentUser.role === "Administrador")}
                   />
                   {errors.examen1 && touched.examen1 && (
                     <div className="d-block invalid-tooltip">{errors.examen1}</div>
@@ -345,6 +309,7 @@ const history = useHistory();
                     placeholder="Examen 2"
                     value={values.examen2}
                     onChange={handleChange}
+                    readOnly={(currentUser.role === "Administrador")}
                   />
                   {errors.examen2 && touched.examen2 && (
                     <div className="d-block invalid-tooltip">{errors.examen2}</div>
@@ -362,6 +327,7 @@ const history = useHistory();
                     placeholder="Proyecto"
                     value={values.proyecto}
                     onChange={handleChange}
+                    readOnly={(currentUser.role === "Administrador")}
                   />
                   {errors.proyecto && touched.proyecto && (
                     <div className="d-block invalid-tooltip">{errors.proyecto}</div>
@@ -379,6 +345,7 @@ const history = useHistory();
                     placeholder="Asistencia"
                     value={values.asistencia}
                     onChange={handleChange}
+                    readOnly={(currentUser.role === "Administrador")}
                   />
                   {errors.asistencia && touched.asistencia && (
                     <div className="d-block invalid-tooltip">{errors.asistencia}</div>
@@ -396,6 +363,7 @@ const history = useHistory();
                     placeholder="Total"
                     value={values.total}
                     onChange={handleChange}
+                    readOnly={(currentUser.role === "Administrador")}
                   />
                   {errors.total && touched.total && (
                     <div className="d-block invalid-tooltip">{errors.total}</div>
@@ -415,6 +383,7 @@ const history = useHistory();
                     placeholder="Observaciones"
                     value={values.observaciones}
                     onChange={handleChange}
+                    readOnly={(currentUser.role === "Administrador")}
                   />
                   {errors.observaciones && touched.observaciones && (
                     <div className="d-block invalid-tooltip">{errors.observaciones}</div>
@@ -425,12 +394,12 @@ const history = useHistory();
               <div>
                 <Row className="g-6">
                   <Col md="4">
-                    <Button variant="outline-primary" onClick={() => setIsOpenAddEditModal(false) || cancelRegister()} >
+                    <Button variant="outline-primary" onClick={() => setIsOpenAddEditModal(false) || cancelRegister()} hidden={(currentUser.role === "Administrador")} >
                     Cancelar
                     </Button>
                   </Col>
                   <Col md="2">
-                    <Button variant="primary" type="submit" >Subir</Button>
+                    <Button variant="primary" type="submit" hidden={(currentUser.role === "Administrador")}>Subir</Button>
                   </Col>
                 </Row>
               </div>

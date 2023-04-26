@@ -47,3 +47,6 @@
 {"level":"debug","message":"yuliana.jimenez@hotmail.com actualizó datos del usuario con el siguiente correo: encargado@gmail.com","timestamp":"2023-04-26T16:30:14.572Z"}
 {"level":"debug","message":"yuliana.jimenez@hotmail.com actualizó datos del usuario con el siguiente correo: encargado@gmail.com","timestamp":"2023-04-26T16:32:02.541Z"}
 {"level":"debug","message":"encargado@gmail.com actualizó datos del usuario con el siguiente correo: encargado@gmail.com","timestamp":"2023-04-26T17:12:39.200Z"}
+{"level":"debug","message":"El usuario undefined, eliminó un aviso bajo el ID de 64408d14e8a3028a4045d5fa","timestamp":"2023-04-26T17:55:44.770Z"}
+{"level":"debug","message":"El usuario undefined, creó un nuevo aviso bajo el titulo de test","timestamp":"2023-04-26T18:11:14.610Z"}
+{"level":"debug","message":"El usuario undefined, eliminó un aviso bajo el ID de 64496942f079a5ffc205df1c","timestamp":"2023-04-26T18:12:11.116Z"}
