@@ -139,6 +139,7 @@ const Calificacion = (props) => {
   }
 
   const handleEstudiante = (id) => {
+    // setSelectedAnio(null);
     const dt = anios.filter(x => x.estudiante === id.value);
 
     let contador = 0;
