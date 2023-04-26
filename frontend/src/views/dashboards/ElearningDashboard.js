@@ -7,11 +7,13 @@ import HtmlHead from 'components/html-head/HtmlHead';
 import BreadcrumbList from 'components/breadcrumb-list/BreadcrumbList';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import YourTimeChart from './components/YourTimeChart';
+import { useSelector } from 'react-redux';
 
 const ElearningDashboard = () => {
   const [announcements, setAnnouncements] = useState([]);
   const title = 'Inicio';
   const description = 'Inicio del Sistema Acádemico';
+  const { currentUser } = useSelector((state) => state.auth);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -288,7 +290,7 @@ const ElearningDashboard = () => {
             <Col xs="6" xl="6" className="sh-19">
               <Card className="h-100 hover-scale-up">
                 <Card.Body className="text-center">
-                  <NavLink to="#">
+                <NavLink to="/notas/calificacion">
                     <CsLineIcons icon="book" className="text-primary" />
                     <p className="heading mt-3 text-body">Calificaciones</p>
 
@@ -299,7 +301,7 @@ const ElearningDashboard = () => {
             <Col xs="6" xl="6" className="sh-19">
               <Card className="h-100 hover-scale-up">
                 <Card.Body className="text-center">
-                  <NavLink to="#">
+                <NavLink to="/matricular/matricula">
                     <CsLineIcons icon="news" className="text-primary" />
                     <p className="heading mt-3 text-body">Matricula</p>
                   </NavLink>
@@ -309,23 +311,27 @@ const ElearningDashboard = () => {
             <Col xs="6" xl="6" className="sh-19">
               <Card className="h-100 hover-scale-up">
                 <Card.Body className="text-center">
-                  <NavLink to="#">
+                  <NavLink to="/admin/avisos">
                     <CsLineIcons icon="notification" className="text-primary" />
                     <p className="heading mt-3 text-body">Avisos</p>
                   </NavLink>
                 </Card.Body>
               </Card>
             </Col>
+            {currentUser.role !== 'Administrador' ? (
+            <></>
+          ) : (
             <Col xs="6" xl="6" className="sh-19">
               <Card className="h-100 hover-scale-up">
                 <Card.Body className="text-center">
-                  <NavLink to="#">
+                  <NavLink to="/admin/usuarios">
                     <CsLineIcons icon="user" className="text-primary" />
                     <p className="heading mt-3 text-body">Usuarios</p>
                   </NavLink>
                 </Card.Body>
               </Card>
             </Col>
+          )}
           </Row>
         </Col>
         {/* Related Subjects End */}
