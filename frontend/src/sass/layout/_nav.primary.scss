@@ -204,11 +204,10 @@ html[data-placement="vertical"] {
     .logo {
       img,
       .img {
-        width: 100px;
-        min-height: 35px;
         object-position: left;
-        object-fit: cover;
+        object-fit: contain;
         transition: width var(--transition-time), height var(--transition-time);
+        width: 100%;
       }
 
       .img {
@@ -228,6 +227,7 @@ html[data-placement="vertical"] {
       &.wide {
         width: calc(var(--nav-size) - calc(var(--main-spacing-vertical)));
         padding: 20px 30px 20px 30px;
+        transform: translate3d(15px, 247px, 0px) !important;
       }
     }
   }
@@ -764,7 +764,7 @@ html[data-placement="horizontal"][data-dimension="mobile"] {
     }
 
     .logo a {
-      width: 30px;
+      width: 75%;
     }
 
     .menu-icons,
@@ -831,7 +831,6 @@ html[data-placement="vertical"][data-behaviour="unpinned"][data-menu-animate="hi
 
     .logo a {
       transition-duration: var(--transition-time);
-      transition-property: width;
     }
 
     .user {
@@ -893,7 +892,6 @@ html[data-placement="vertical"][data-behaviour="unpinned"][data-menu-animate="sh
 
     .logo a {
       transition-duration: var(--transition-time);
-      transition-property: width;
     }
   }
 }

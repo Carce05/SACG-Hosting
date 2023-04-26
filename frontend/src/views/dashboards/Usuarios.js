@@ -1,4 +1,4 @@
-import { Row, Col, Card, Button, Badge, Dropdown, Form } from 'react-bootstrap';
+import { Row, Col, Card, Button, Badge, Alert, Form } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import Rating from 'react-rating';
 import HtmlHead from 'components/html-head/HtmlHead';
@@ -12,7 +12,6 @@ import { useTable, useGlobalFilter, useSortBy, usePagination, useRowSelect, useR
 import Table from 'views/interface/plugins/datatables/EditableRows/components/Table';
 import ButtonsCheckAll from 'views/interface/plugins/datatables/EditableRows/components/ButtonsCheckAll';
 import ButtonsAddNew from 'views/interface/plugins/datatables/EditableRows/components/ButtonsAddNew';
-import ControlsPageSize from 'views/interface/plugins/datatables/EditableRows/components/ControlsPageSize';
 import ControlsAdd from 'views/interface/plugins/datatables/EditableRows/components/ControlsAdd';
 import ControlsEdit from 'views/interface/plugins/datatables/EditableRows/components/ControlsEdit';
 import ControlsDelete from 'views/interface/plugins/datatables/EditableRows/components/ControlsDelete';
@@ -20,39 +19,22 @@ import ControlsSearch from 'views/interface/plugins/datatables/EditableRows/comp
 import ModalAddEdit from 'views/interface/plugins/datatables/EditableRows/components/ModalAddEdit';
 import TablePagination from 'views/interface/plugins/datatables/EditableRows/components/TablePagination';
 import axios from "axios";
-
-/* const dummyData = [
-  { id: 1, name: 'Basler Brot', email: 213, cedula: 392310440, role: 'Sourdough', tag: 'New' },
-  { id: 2, name: 'Bauernbrot', email: 633, cedula: 129234013, role: 'Multigrain', tag: 'Done' },
-  { id: 3, name: 'Kommissbrot', email: 2321, cedula: 561017657, role: 'Whole Wheat', tag: '' },
-  { id: 4, name: 'Lye Roll', email: 973, cedula: 127580420, role: 'Sourdough', tag: '' },
-  { id: 5, name: 'Panettone', email: 563, cedula: 789313762, role: 'Sourdough', tag: 'Done' },
-  { id: 6, name: 'Saffron Bun', email: 98, cedula: 129074548, role: 'Whole Wheat', tag: '' },
-  { id: 7, name: 'Ruisreikäleipä', email: 459, cedula: 904716276, role: 'Whole Wheat', tag: '' },
-  { id: 8, name: 'Rúgbrauð', email: 802, cedula: 797307649, role: 'Whole Wheat', tag: '' },
-  { id: 9, name: 'Yeast Karavai', email: 345, cedula: 680078801, role: 'Multigrain', tag: '' },
-  { id: 10, name: 'Brioche', email: 334, cedula: 378937746, role: 'Sourdough', tag: '' },
-  { id: 11, name: 'Pullman Loaf', email: 456, cedula: 461638720, role: 'Multigrain', tag: '' },
-  { id: 12, name: 'Soda Bread', email: 1152, cedula: 348536477, role: 'Whole Wheat', tag: '' },
-  { id: 13, name: 'Barmbrack', email: 854, cedula: 591276986, role: 'Sourdough', tag: '' },
-  { id: 14, name: 'Buccellato di Lucca', email: 1298, cedula: 980925057, role: 'Multigrain', tag: '' },
-  { id: 15, name: 'Toast Bread', email: 2156, cedula: 220171422, role: 'Multigrain', tag: '' },
-  { id: 16, name: 'Cheesymite Scroll', email: 452, cedula: 545847219, role: 'Sourdough', tag: '' },
-  { id: 17, name: 'Baguette', email: 456, cedula: 553121944, role: 'Sourdough', tag: '' },
-  { id: 18, name: 'Guernsey Gâche', email: 1958, cedula: 371226430, role: 'Multigrain', tag: '' },
-  { id: 19, name: 'Bazlama', email: 858, cedula: 384036275, role: 'Whole Wheat', tag: '' },
-  { id: 20, name: 'Bolillo', email: 333, cedula: 484876903, role: 'Whole Wheat', tag: '' },
-]; */
-
-
+import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';;
 
 const Usuarios = () => {
+  const { currentUser, isUpdated } = useSelector((state) => state.auth);
   const [data, setData] = useState([]);
   const title = 'Usuarios';
   const description = 'Administración de usuarios';
-
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showDangerAlert, setShowDangerAlert] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const handleEditClick = () => {
+    setShowModal(true);
+  };
   useEffect(() => {
-    
     axios
       .get("http://localhost:8080/api/usuarios")
       .then((res) => {
@@ -61,17 +43,34 @@ const Usuarios = () => {
       .catch((err) => {
         console.error(err);
       });
-  }, []);
+    console.log(showSuccessAlert)
+  }, [isUpdated, showSuccessAlert]);
 
+
+
+  const validUrl = (link = '') => {
+    return link.includes('profile_upload');
+  }
 
   const columns = React.useMemo(() => {
     return [
-      { Header: 'Cédula', accessor: 'personal_id', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
+      {
+        Header: '',
+        accessor: 'thumb',
+        sortable: false,
+        headerClassName: 'text-muted text-small text-uppercase w-10',
+        Cell: ({ cell }) => {
+          return (
+            <img className="user-admin-images" src={validUrl(cell.value) ? cell.value : 'https://cdn3.iconfinder.com/data/icons/vector-icons-6/96/256-512.png'} alt={cell.value} />
+          );
+        },
+      },
+      { Header: 'Cédula', accessor: 'personalId', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       {
         Header: 'Nombre',
         accessor: 'name',
         sortable: true,
-        headerClassName: 'text-muted text-small text-uppercase w-30',
+        headerClassName: 'text-muted text-small text-uppercase w-10',
         Cell: ({ cell }) => {
           return (
             <a
@@ -85,10 +84,10 @@ const Usuarios = () => {
             </a>
           );
         },
-      },    
+      },
       { Header: 'Email', accessor: 'email', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
-      { Header: 'Rol', accessor: 'role', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-20' },
-      { Header: 'Estado', accessor: 'status', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-20' },
+      { Header: 'Rol', accessor: 'role', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
+      { Header: 'Estado', accessor: 'status', sortable: true, headerClassName: 'text-muted text-small text-uppercase w-10' },
       {
         Header: '',
         id: 'action',
@@ -102,7 +101,6 @@ const Usuarios = () => {
   }, []);
 
   const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
-
   const tableInstance = useTable(
     { columns, data, setData, isOpenAddEditModal, setIsOpenAddEditModal, initialState: { pageIndex: 0 } },
     useGlobalFilter,
@@ -127,7 +125,7 @@ const Usuarios = () => {
           {/* Title End */}
         </Row>
       </div>
-    
+
       <Row>
         <Col>
           <div>
@@ -138,14 +136,30 @@ const Usuarios = () => {
                 </div>
               </Col>
               <Col sm="12" md="7" lg="9" xxl="10" className="text-end">
-                <div className="d-inline-block me-0 me-sm-3 float-start float-md-none">
-                  <ControlsAdd tableInstance={tableInstance} /> <ControlsEdit tableInstance={tableInstance} /> <ControlsDelete tableInstance={tableInstance} />
+                <div className="d-inline-block me-2">
+                  <ControlsAdd tableInstance={tableInstance} />
                 </div>
-                <div className="d-inline-block">
-                  <ControlsPageSize tableInstance={tableInstance} />
+                <div className="d-inline-block me-2">
+                  <ControlsEdit tableInstance={tableInstance} />
                 </div>
               </Col>
             </Row>
+            {/*
+            <Col className="mb-3 d-flex align-items-center justify-content-center">
+              {showSuccessAlert && (
+                <Alert variant="success" onClose={() => setShowSuccessAlert(false)} dismissible>
+                  Usuario guardado correctamente.
+                </Alert>
+              )}
+            </Col>
+            <Col className="mb-3 d-flex align-items-center justify-content-center">
+              {showDangerAlert && (
+                <Alert variant="danger" onClose={() => setShowDangerAlert(false)} dismissible>
+                  Ocurrio un error al intentar guardar la información favor revisar el correo o cedula.
+                </Alert>
+              )}
+            </Col>
+            */}
             <Row>
               <Col xs="12">
                 <Table className="react-table rows" tableInstance={tableInstance} />
@@ -155,7 +169,7 @@ const Usuarios = () => {
               </Col>
             </Row>
           </div>
-          <ModalAddEdit tableInstance={tableInstance} />
+          <ModalAddEdit tableInstance={tableInstance} setShowSuccessAlert={setShowSuccessAlert} setShowDangerAlert={setShowDangerAlert} />
         </Col>
       </Row>
     </>

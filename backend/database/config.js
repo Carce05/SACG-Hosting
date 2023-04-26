@@ -9,6 +9,7 @@ const dbConnection = async () => {
         useNewUrlParser: true,
         useUnifiedTopology: true,
        })
+       console.log('BASE DE DATOS CONECTADA')
 
     } catch (err) {
         console.log(err)

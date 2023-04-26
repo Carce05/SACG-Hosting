@@ -101,3 +101,91 @@ html[data-placement='vertical'] {
     scroll-margin-top: var(--main-spacing-vertical);
   }
 }
+
+
+.settings-profile-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 10px;
+}
+
+.user-admin-images {
+  width: 50px;
+  height: 50px;
+  border-radius: 30px;
+}
+
+.upload-image-container {
+  width: 150px;
+  height: 150px;
+  border-radius: 150px;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  img {
+    width: 100%;
+  }
+  input[type="file"] {
+    display: none;
+  }
+  .custom-file-upload {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    position: absolute;
+    transition: all var(--transition-time);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    svg {
+      width: 50px;
+      height: 50px;
+      display: none;
+    }
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.3);
+      transition: all var(--transition-time);
+      svg {
+        display: block;
+      }
+    }
+  }
+}
+
+.matricula-estado {
+  background-color: #008f39;
+  max-width: 85px;
+  border-radius: 10px;
+  padding: 5px 10px;
+  color: #fff;
+  font-weight: bold;
+  margin: 0;
+  &.matricula-pendiente {
+    background-color: #0000FF;
+  }
+  &.matricula-rechazada {
+    background-color: #ff0000;
+  }
+}
+
+.mostrar-filtro-informe {
+  padding: 10px 20px;
+  border-radius: 10px;
+  margin-top: 10px;
+  border: 2px dashed  var(--primary);
+  h1 {
+    font-weight: bolder;
+    b {
+      color: var(--primary);
+    } 
+  }
+  select {
+    max-width: 200px;
+  }
+}
+
+.mr-20 {
+  margin-right: 10px;
+} 

@@ -1,0 +1,5 @@
+frontend/public/css/styles.css
+/backend/node_modules
+/public/node_modules
+/backend/public/images
+backend/info.log

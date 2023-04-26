@@ -5,37 +5,22 @@ import { DEFAULT_PATHS } from 'config.js';
 
 const dashboards = {
   elearning: lazy(() => import('views/dashboards/ElearningDashboard')),
-  school: lazy(() => import('views/dashboards/SchoolDashboard')),
+  secciones: lazy(() => import('views/dashboards/Secciones')),
   usuarios: lazy(() => import('views/dashboards/Usuarios')),
   estudiantes: lazy(() => import('views/dashboards/Estudiantes')),
   perfil: lazy(() => import('views/dashboards/ProfileSettings')),
   avisos: lazy(() => import('views/dashboards/Avisos')),
+  general: lazy(() => import('views/dashboards/General')),
   calificacion: lazy(() => import('views/dashboards/Calificacion')),
-};
-const courses = {
-  explore: lazy(() => import('views/courses/CoursesExplore')),
-  list: lazy(() => import('views/courses/CoursesList')),
-  detail: lazy(() => import('views/courses/CoursesDetail')),
-};
-const quiz = {
-  list: lazy(() => import('views/quiz/QuizList')),
-  detail: lazy(() => import('views/quiz/QuizDetail')),
-  result: lazy(() => import('views/quiz/QuizResult')),
-};
-const paths = {
-  list: lazy(() => import('views/paths/PathsList')),
-  detail: lazy(() => import('views/paths/PathsDetail')),
-};
+  matricula: lazy(() => import('views/dashboards/AdminMatriculas')),
+  adminSecciones : lazy(() => import('views/dashboards/AdminSecciones')),
+  contacto: lazy(() => import('views/dashboards/Contacto')),
+  asignarDocente: lazy(() => import('views/dashboards/AsignarDocente'))
 
-const instructor = {
-  list: lazy(() => import('views/instructor/InstructorList')),
-  detail: lazy(() => import('views/instructor/InstructorDetail')),
 };
-const misc = {
-  player: lazy(() => import('views/misc/Player')),
-  material: lazy(() => import('views/misc/Material')),
-  syllabus: lazy(() => import('views/misc/Syllabus')),
-};
+const footer = {
+  contacto: lazy(() => import('views/dashboards/Contacto'))
+}
 
 const appRoot = DEFAULT_PATHS.APP.endsWith('/') ? DEFAULT_PATHS.APP.slice(1, DEFAULT_PATHS.APP.length) : DEFAULT_PATHS.APP;
 
@@ -47,87 +32,77 @@ const routesAndMenuItems = {
       redirect: true,
       to: `${appRoot}/login`,
     },
+
     {
       path: `${appRoot}/dashboards`,
       icon: 'home-garage',
       label: 'menu.dashboards',
       exact: true,
       redirect: true,
-      to: `${appRoot}/dashboards/elearning`,
+      to: `${appRoot}/dashboards/inicio`,
       subs: [
-        { path: '/elearning', label: 'menu.elearning', component: dashboards.elearning },
-        { path: '/school', label: 'menu.secciones', component: dashboards.school },
-        { path: '/usuarios', label: 'menu.usuarios', component: dashboards.usuarios },
-        { path: '/estudiantes', label: 'menu.estudiantes', component: dashboards.estudiantes },
-        { path: '/perfil', label: 'menu.perfil', component: dashboards.perfil },
-        { path: '/avisos', label: 'menu.avisos', component: dashboards.avisos },
-        { path: '/calificacion', label: 'menu.calificacion', component: dashboards.calificacion },
+        { path: '/inicio', label: 'menu.elearning', icon: 'home', component: dashboards.elearning },
+        { path: '/mi-perfil', label: 'menu.perfil', icon: 'user', component: dashboards.perfil }
+      
+        
+        
+        
       ],
     },
     {
-      path: `${appRoot}/courses`,
-      label: 'menu.courses',
-      icon: 'online-class',
+      path: `${appRoot}/matricular`,
+      icon: 'news',
+      label: 'menu.matricular-modulo',
       exact: true,
       redirect: true,
-      to: `${appRoot}/courses/explore`,
+      to: `${appRoot}/dashboards/inicio`,
       subs: [
-        { path: '/explore', label: 'menu.explore', component: courses.explore },
-        { path: '/list', label: 'menu.list', component: courses.list },
-        { path: '/detail', label: 'menu.detail', component: courses.detail },
+        { path: '/matricula', label: 'menu.matricula', icon : 'content',  component: dashboards.matricula },
+        // { path: '/estudiantes-por-matricular', label: 'menu.estudiantes', icon : 'clock',  component: dashboards.estudiantes },
       ],
     },
+
     {
-      path: `${appRoot}/quiz`,
-      label: 'menu.quiz',
-      icon: 'quiz',
+      path: `${appRoot}/notas`,
+      icon: 'book',
+      label: 'menu.notas',
       exact: true,
       redirect: true,
-      to: `${appRoot}/quiz/list`,
+      to: `${appRoot}/dashboards/inicio`,
       subs: [
-        { path: '/list', label: 'menu.list', component: quiz.list },
-        { path: '/detail', label: 'menu.detail', component: quiz.detail },
-        { path: '/result', label: 'menu.result', component: quiz.result },
+        { path: '/calificacion', label: 'menu.calificacion', icon: 'note', component: dashboards.calificacion },
+        { path: '/secciones-admin', label: 'menu.admin_secciones', icon: 'folders', component: dashboards.adminSecciones },
+        { path: '/secciones', label: 'menu.secciones', icon: 'folders', component: dashboards.secciones },
       ],
     },
+
     {
-      //path: `${appRoot}/paths`,
-      //label: 'menu.paths',
-      //icon: 'destination',
-      //exact: true,
-      //redirect: true,
-      //to: `${appRoot}/paths/list`,
-     // subs: [
-       // { path: '/list', label: 'menu.list', component: paths.list },
-       // { path: '/detail', label: 'menu.detail', component: paths.detail },
-     // ],
-    },
-    {
-      path: `${appRoot}/instructor`,
-      label: 'menu.instructor',
-      icon: 'lecture',
+      path: `${appRoot}/admin`,
+      icon: 'shield',
+      label: 'menu.admin',
       exact: true,
       redirect: true,
-      to: `${appRoot}/instructor/list`,
+      to: `${appRoot}/dashboards/inicio`,
       subs: [
-        { path: '/list', label: 'menu.list', component: instructor.list },
-        { path: '/detail', label: 'menu.detail', component: instructor.detail },
+
+        { path: '/avisos', label: 'menu.avisos', icon: 'notification', component: dashboards.avisos },
+        { path: '/general', label: 'menu.general', icon : 'tool', component: dashboards.general },
+        { path: '/usuarios', label: 'menu.usuarios', icon : 'user', component: dashboards.usuarios },
+        { path: '/asignarDocente', label: 'menu.asignarDocente', icon : 'list', component: dashboards.asignarDocente },
+        
+        
       ],
     },
-    {
-      path: `${appRoot}/misc`,
-      label: 'menu.misc',
-      icon: 'layout-5',
-      exact: true,
-      redirect: true,
-      to: `${appRoot}/misc/player`,
-      subs: [
-        { path: '/player', label: 'menu.player', component: misc.player },
-        { path: '/material', label: 'menu.material', component: misc.material },
-        { path: '/syllabus', label: 'menu.syllabus', component: misc.syllabus },
-      ],
-    },
+
+    
+
+
+    { path: '/contacto', label: 'menu.contacto', icon: 'phone', component: dashboards.contacto },
+
   ],
   sidebarItems: [],
+  footerItems: [
+    { path: '/contacto', label: 'menu.contacto', icon: 'phone', component: dashboards.contacto },
+  ],
 };
 export default routesAndMenuItems;

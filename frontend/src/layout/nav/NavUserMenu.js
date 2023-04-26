@@ -7,99 +7,62 @@ import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import { layoutShowingNavMenu } from 'layout/layoutSlice';
 import { NavLink } from 'react-router-dom';
 
-const NavUserMenuContent = () => (
-  <div>
-    <Row className="mb-3 ms-0 me-0">
-      <Col xs="12" className="ps-1 mb-2">
-        <div className="text-extra-small text-primary">ACCOUNT</div>
-      </Col>
-      <Col xs="6" className="ps-1 pe-1">
-        <ul className="list-unstyled">
-          <li>
-          <NavLink to="/profile-settings">
-                Restablecer
-              </NavLink>
-            {/* <a href="/">User Info</a> */}
-          </li>
-          <li>
-            <a href="#/!">Preferences</a>
-          </li>
-          <li>
-            <a href="#/!">Calendar</a>
-          </li>
-        </ul>
-      </Col>
-      <Col xs="6" className="ps-1 pe-1">
-        <ul className="list-unstyled">
-          <li>
-            <a href="#/!">Security</a>
-          </li>
-          <li>
-            <a href="#/!">Billing</a>
-          </li>
-        </ul>
-      </Col>
-    </Row>
-    <Row className="mb-1 ms-0 me-0">
-      <Col xs="12" className="p-1 mb-2 pt-2">
-        <div className="text-extra-small text-primary">APPLICATION</div>
-      </Col>
-      <Col xs="6" className="ps-1 pe-1">
-        <ul className="list-unstyled">
-          <li>
-            <a href="#/!">Themes</a>
-          </li>
-          <li>
-            <a href="#/!">Language</a>
-          </li>
-        </ul>
-      </Col>
-      <Col xs="6" className="pe-1 ps-1">
-        <ul className="list-unstyled">
-          <li>
-            <a href="#/!">Devices</a>
-          </li>
-          <li>
-            <a href="#/!">Storage</a>
-          </li>
-        </ul>
-      </Col>
-    </Row>
-    <Row className="mb-1 ms-0 me-0">
-      <Col xs="12" className="p-1 mb-3 pt-3">
-        <div className="separator-light" />
-      </Col>
-      <Col xs="6" className="ps-1 pe-1">
-        <ul className="list-unstyled">
-          <li>
-            <a href="#/!">
-              <CsLineIcons icon="help" className="me-2" size="17" /> <span className="align-middle">Help</span>
-            </a>
-          </li>
-          <li>
-            <a href="/selector-estudiante">
-              <CsLineIcons icon="sync-horizontal" className="me-0" size="17" /> <span className="align-middle">Cambiar Estudiante</span>
-            </a>
-          </li>
-        </ul>
-      </Col>
-      <Col xs="6" className="pe-1 ps-1">
-        <ul className="list-unstyled">
-          <li>
-            <a href="#/!">
-              <CsLineIcons icon="gear" className="me-0" size="17" /> <span className="align-middle">Settings</span>
-            </a>
-          </li>
-          <li>
-            <a href="/login">
-              <CsLineIcons icon="logout" className="me-2" size="17" /> <span className="align-middle">Cerrar Sesión</span>
-            </a>
-          </li>
-        </ul>
-      </Col>
-    </Row>
-  </div>
-);
+const NavUserMenuContent = () => {
+
+  const onLogout = () => {
+    localStorage.removeItem("loginState"); 
+  }
+  const { currentUser } = useSelector((state) => state.auth);
+  return( 
+    <div>
+      <Row className="mb-3 ms-0 me-0">
+        <Col xs="12" className="ps-1 mb-2">
+          <div className="text-extra-small text-primary">CUENTA</div>
+        </Col>
+        <Col xs="6" className="ps-1 pe-1">
+          <ul className="list-unstyled">
+            <li>
+              <a href="/dashboards/mi-perfil">
+              <CsLineIcons icon="online-class" className="me-2" size="18" /> <span className="align-middle">Perfil</span>
+              </a>
+            </li>
+          </ul>
+        </Col>
+        {currentUser.role !== 'Administrador' ? (
+            <></>
+          ) : (
+        <Col xs="6" className="ps-1 pe-1">
+          <ul className="list-unstyled">
+            <li>
+              <a href="/admin/general">
+                <CsLineIcons icon="tool" className="me-2" size="17" /> <span className="align-middle">General</span>
+              </a>
+            </li>
+          </ul>
+        </Col>
+        )}
+      </Row>
+      <Row className="mb-1 ms-0 me-0">
+        <Col xs="12" className="p-1 mb-3 pt-3">
+          <div className="separator-light" />
+        </Col>
+        <Col xs="10" className="ps-1 pe-1">
+          <ul className="list-unstyled">
+           
+            <li>
+              <a onClick={ onLogout } href="/login">
+                <CsLineIcons icon="logout" className="me-2" size="17" /> <span className="align-middle">Cerrar Sesión</span>
+              </a>
+            </li>
+          </ul>
+        </Col>
+      </Row>
+    </div>
+  )};
+
+const validUrl = (link) => {
+  return link.includes('profile_upload');
+}
 
 const NavUserMenuDropdownToggle = React.memo(
   React.forwardRef(({ onClick, expanded = false, user = {} }, ref) => (
@@ -115,7 +78,7 @@ const NavUserMenuDropdownToggle = React.memo(
         onClick(e);
       }}
     >
-      <img className="profile" alt={user.name} src={user.thumb} />
+      <img className="profile" alt={user.name} src={ validUrl(user.thumb) ? user.thumb : 'https://cdn3.iconfinder.com/data/icons/vector-icons-6/96/256-512.png' } />
       <div className="name">{user.name}</div>
     </a>
   ))
@@ -137,6 +100,7 @@ NavUserMenuDropdownMenu.displayName = 'NavUserMenuDropdownMenu';
 const MENU_NAME = 'NavUserMenu';
 
 const NavUserMenu = () => {
+
   const dispatch = useDispatch();
   const {
     placementStatus: { view: placement },

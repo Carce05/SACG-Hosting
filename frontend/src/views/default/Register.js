@@ -20,6 +20,7 @@ const Register = () => {
     terms: Yup.bool().required().oneOf([true], 'Terms must be accepted'),
   });
   const initialValues = { name: '', thumb: '', email: '', password: '', terms: false };
+  
   const onSubmit = async ({ name, thumb, email, password }) => { 
     const rawResponse = await fetch('http://localhost:8080/api/usuarios', {
       method: 'POST',
@@ -91,7 +92,7 @@ const Register = () => {
             <div className="mb-3 filled form-group tooltip-end-top">
               <CsLineIcons icon="user" />
               <Form.Control type="text" name="thumb" placeholder="thumb" value={values.thumb} onChange={handleChange} />
-              {errors.thumb && touched.thumb && <div classthumb="d-block invalid-tooltip">{errors.thumb}</div>}
+              {/* {errors.thumb && touched.thumb && <div classthumb="d-block invalid-tooltip">{errors.thumb}</div>} */}
             </div>
             <div className="mb-3 filled form-group tooltip-end-top">
               <CsLineIcons icon="email" />

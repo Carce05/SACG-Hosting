@@ -108,8 +108,40 @@
       max-width: 530px;
     }
   }
+  &.full-screen {
+    .modal-dialog {
+      max-width: 100%;
+    }
+  }
+  &.large-xl {
+    .modal-dialog {
+      max-width: 730px;
+    }
+  }
 }
 
+.form-input-hori {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  &.label-arriba {
+    flex-direction: column;
+    align-items: start; 
+    p {
+      margin: 0;
+    }
+  }
+}
+.mr-40px {
+  margin-right: 40px;
+}
+.hide-element {
+  display: none;
+}
+
+.invalid-tooltip-matricula {
+  color: var(--primary-darker);
+}
 .modal-left {
   padding-left: 0 !important;
 

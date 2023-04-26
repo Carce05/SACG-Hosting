@@ -164,8 +164,45 @@ const MainMenuItem = memo(({ item, id, isSubItem = false, menuPlacement = DEFAUL
     );
   }
   if (!isSubItem || menuPlacement === MENU_PLACEMENT.Vertical) {
+    const { currentUser } = useSelector((state) => state.auth);
+
+    if (item.label === 'menu.usuarios' && currentUser.role !== 'Administrador'){
+      return (
+        <></>
+      );
+    }
+    if (item.label === 'menu.general' && currentUser.role !== 'Administrador'){
+      return (
+        <></>
+      );
+    }
+    if (item.label === 'menu.asignarDocente' && currentUser.role !== 'Administrador'){
+      return (
+        <></>
+      );
+    }
+    if (item.label === 'menu.admin_secciones' && currentUser.role === 'Profesor'){
+      return (
+        <></>
+      );
+    }
+    if (item.label === 'menu.secciones' && currentUser.role === 'Administrador'){
+      return (
+        <></>
+      );
+    }
+    if (item.label === 'menu.secciones' && currentUser.role === 'Encargado'){
+      return (
+        <></>
+      );
+    }
+    if (item.label === 'menu.admin_secciones' && currentUser.role === 'Encargado'){
+      return (
+        <></>
+      );
+    }
     return (
-      <li>
+      <li className={(item.label === 'menu.matricular-modulo' && currentUser.role === 'Profesor') ? 'hide-element' : ''}>
         <NavLink to={item.path} className={classNames({ active: isActive })} activeClassName="">
           {getLabel(item.icon, item.label)}
         </NavLink>

@@ -7,6 +7,9 @@ import { useFormik } from 'formik';
 import LayoutFullpage from 'layout/LayoutFullpage';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import HtmlHead from 'components/html-head/HtmlHead';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const ResetPassword = () => {
   const title = 'Reestablecer contraseña';
@@ -15,24 +18,23 @@ const ResetPassword = () => {
 	const [password, setPassword] = useState("");
 	const [msg, setMsg] = useState("");
 	const [error, setError] = useState("");
-	const param = useParams();
-   /* Mandando los parametros como undefined */
-	const url = `http://localhost:8080/api/reset-password/${param.id}/${param.token}`;
+  const queryParameters = new URLSearchParams(window.location.search)
+  const id = queryParameters.get("id")
+  const token = queryParameters.get("token")
+  
+	const url = `http://localhost:8080/api/reset-password/${id}/${token}`;
 
-
+  
  
 
   const validationSchema = Yup.object().shape({
     password: Yup.string().min(6, 'La contraseña debe de tener al menos 6 caracteres').required('Contraseña requerida'),
-    passwordConfirm: Yup.string()
-      .required('Es necesario confirmar tu contraseña')
-      .oneOf([Yup.ref('password'), null], 'Ambas contraseñas deben coincidir'),
+
   });
 
-  const initialValues = { password: '', passwordConfirm: '' };
-  const onSubmit = (values) => console.log('submit form', values);
+  const initialValues = { password: ''};
 
-  const formik = useFormik({ initialValues, validationSchema, onSubmit });
+  const formik = useFormik({ initialValues, validationSchema});
   const {handleChange, values, touched, errors } = formik;
 
 
@@ -48,7 +50,7 @@ const ResetPassword = () => {
 			}
 		};
 		verifyUrl();
-	}, [param, url]);
+	}, [ url]);
 
 
 
@@ -68,6 +70,7 @@ const ResetPassword = () => {
 			) {
 				setError(ec.response.data.message);
 				setMsg("Error al reestablecer contraseña");
+        toast.error(msg, { className: 'danger' });
 			}
 		}
 	};
@@ -86,11 +89,6 @@ const ResetPassword = () => {
             Consultas al correo: lic.diurnodeguarari@mep.go.cr   
             Teléfono: 2237-4033
           </p>
-          {/* <div className="mb-5">
-            <Button size="lg" variant="outline-white" href="/">
-              Learn More
-            </Button>
-          </div> */}
         </div>
       </div>
     </div>
@@ -102,15 +100,21 @@ const ResetPassword = () => {
       <div className="sw-lg-50 px-5">
         <div className="sh-11">
           <NavLink to="/">
+            <center>
           <img src="/img/logo/image2vector.svg" alt="Logo" width="75" height="75"/>
+           </center>
           </NavLink>
         </div>
         <div className="mb-5">
+          <center>
           <h2 className="cta-1 mb-0 text-primary">¿Desea cambiar su contraseña?</h2>
           <h2 className="cta-1 text-primary">¡Restablézcala aquí!</h2>
+          </center>
         </div>
         <div className="mb-5">
+          <center>
           <p className="h6">Por favor ingrese su nueva contraseña</p>
+          </center>
         </div>
         <div>
           <form id="resetForm" className="tooltip-end-bottom" onSubmit={handleSubmit}>

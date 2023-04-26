@@ -3,8 +3,10 @@ const Token = require("../models/token");
 const sendEmail = require("../controllers/sendEmail");
 const crypto = require("crypto");
 const Joi = require("joi");
-const express = require("express");
-const router = express.Router();
+const router = require("express").Router();
+const mongoose = require('mongoose');
+const bitacora = require("../controllers/bitacora");
+const bcrypt = require('bcryptjs')
 
 //Enviar email de reset de contraseña
 router.post("/", async (req, res) => {
@@ -31,26 +33,27 @@ router.post("/", async (req, res) => {
 
         res.send("Enlace de restablecimiento de contraseña enviado a su cuenta de correo electrónico");
     } catch (error) {
-        res.send("Ocurrió un error");
+        console.log("Falló el envío del enlace de restablecimiento de contraseña a su correo electrónico");
+        res.send("Falló el envío del enlace de restablecimiento de contraseña a su correo electrónico");
         console.log(error);
     }
 });
 
-// verify password reset link
+// verificar link de pass reset
 router.get("/:userId/:token", async (req, res) => {
 	try {
 		const user = await Usuario.findOne({ _id: req.params.id });
-		if (!user) return res.status(400).send({ message: "Invalid link" });
+		if (!user) return res.status(400).send({ message: "Enlace invalido" });
 
 		const token = await Token.findOne({
 			userId: user._id,
 			token: req.params.token,
 		});
-		if (!token) return res.status(400).send({ message: "Invalid link" });
+		if (!token) return res.status(400).send({ message: "Enlace invalido" });
 
-		res.status(200).send("Valid Url");
+		res.status(200).send("URL Valida");
 	} catch (error) {
-		res.status(500).send({ message: "Internal Server Error" });
+		res.status(500).send({ message: "Error interno de servidor" });
 	}
 });
 
@@ -61,8 +64,12 @@ router.post("/:userId/:token", async (req, res) => {
         const { error } = schema.validate(req.body);
         if (error) return res.status(400).send(error.details[0].message);
 
-        const user = await Usuario.findById(req.params.userId);
-        if (!user) return res.status(400).send("Link invalido o expirado");
+        const user = await Usuario.findOne(_id = mongoose.Types.ObjectId (req.params.userId)  );
+        if (!user) {
+            bitacora.log('error', "Usuario al que se desea reestablecer la contraseña no encontrado");
+            console.log('error', "Usuario al que se desea reestablecer la contraseña no encontrado");
+            return res.status(400).send("Usuario no encontrado");
+        }
 
         const token = await Token.findOne({
             userId: user._id,
@@ -70,13 +77,18 @@ router.post("/:userId/:token", async (req, res) => {
         });
         if (!token) return res.status(400).send("Link invalido o expirado");
 
-        user.password = req.body.password;
+        const salt = await bcrypt.genSalt(Number(process.env.SALT));
+		const hashPassword = await bcrypt.hash(req.body.password, salt);
+
+   
+        user.password = hashPassword;
         await user.save();
         await token.delete();
 
         res.send("Contraseña reestablecida exitosamente.");
     } catch (error) {
-        res.send("Ocurrió un error");
+        bitacora.log('error', "Falló el reestablecimiento de contraseña");
+        res.send('error', "Falló el reestablecimiento de contraseña");
         console.log(error);
     }
 });

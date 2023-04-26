@@ -1,8 +1,5 @@
 import React, { useMemo } from 'react';
-import { Redirect } from "react-router-dom";
-
-// import redux for auth guard
-import { useSelector } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
 // import layout
 import Layout from 'layout/Layout';
@@ -12,19 +9,23 @@ import RouteIdentifier from 'routing/components/RouteIdentifier';
 import { getRoutes } from 'routing/helper';
 import routesAndMenuItems from 'routes.js';
 import Loading from 'components/loading/Loading';
+import { useLogin } from 'hooks/useLogin';
 
 const App = () => {
-  const { currentUser, isLogin } = useSelector((state) => state.auth);
-
-  const routes = useMemo(() => getRoutes({ data: routesAndMenuItems, isLogin, userRole: currentUser.role }), [isLogin, currentUser]);
-  if(isLogin) {
-    if (routes) {
-      return (
-        <Layout>
-          <RouteIdentifier routes={routes} fallback={<Loading />} />
-        </Layout>
-      );
-    }
+  if (localStorage.getItem('loginState') !== null) {
+    const { currentUser = '' } = JSON.parse(localStorage.getItem('loginState'));
+    const { onCheckLogin } = useLogin();
+    const isLogged = onCheckLogin();
+      const routes = useMemo(() => getRoutes({ data: routesAndMenuItems, isLogged, userRole: currentUser.role }), [isLogged, currentUser]);
+      if(isLogged) {
+        if (routes) {
+          return (
+            <Layout>
+              <RouteIdentifier routes={routes} fallback={<Loading />} />
+            </Layout>
+          );
+        }
+      }
   }
   return <Redirect to="/login"/>;
 };
