@@ -158,7 +158,7 @@ const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false);
         id: 'name',
         headerClassName: 'empty w-10',
         Cell: ({ row }) => (
-          <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-top-edit">Editar</Tooltip>}>
+          <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-top-edit">{ (currentUser.role === 'Administrador') ? 'Editar' :  'Ver' }</Tooltip>}>
           <Button variant="foreground-alternate" className="btn-icon btn-icon-only shadow edit-datatable">
             {
               (currentUser.role === 'Administrador') ?  <CsLineIcons icon="edit" /> :  <CsLineIcons icon="eye" /> 
