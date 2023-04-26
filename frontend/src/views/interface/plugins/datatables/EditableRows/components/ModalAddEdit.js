@@ -119,6 +119,7 @@ const ModalAddEdit = ({ tableInstance, setShowSuccessAlert, setShowDangerAlert }
         }
       }
     }
+   }
     axios
       .get(apiSACG.concat("/usuarios"))
       .then((res) => {
