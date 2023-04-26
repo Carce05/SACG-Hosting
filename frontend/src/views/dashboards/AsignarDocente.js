@@ -36,6 +36,8 @@ const AsignarDocente = (props) => {
   const { handleSubmit, handleChange, materia, seccion, touched, errors } = formik;
   const { setSelectedMateria, setSeccionn } = useState();
   const [showModal, setShowModal] = useState(false);
+
+  const [selectedSeccion, setSelectedSeccion] = useState("");
   
   const { currentUser, isLogin } = useSelector((state) => state.auth);
   const docente  = currentUser.email;
@@ -128,6 +130,7 @@ const AsignarDocente = (props) => {
   const [data, setData] = React.useState(DMS);
 
   const handleSeccion = (id) => {
+    setSelectedSeccion(id.seccion);
     const dt = DMS.filter(x => x.seccion === id.seccion);
     setData(dt);
   }
@@ -203,9 +206,11 @@ const AsignarDocente = (props) => {
                 <Col xs="12" lg="12">
                   <Select classNamePrefix="react-select" 
                     options={secciones} 
-                    value={seccion} 
+                    value={secciones.find(function (option) {
+                      return option.value === selectedSeccion;})} 
                     onChange={handleSeccion} 
                     placeholder="Seleccione" 
+                    getOptionValue={option => option.label}
                   />
                 </Col>
               </div>

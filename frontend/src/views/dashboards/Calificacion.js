@@ -285,6 +285,7 @@ const Calificacion = (props) => {
                     value={estudiante} 
                     onChange={handleEstudiante} 
                     placeholder="Seleccione" 
+                    getOptionValue={option => option.label}
                   />
                 </Col>          
               </div>
@@ -303,6 +304,7 @@ const Calificacion = (props) => {
                       return option.value === selectedAnio;})} 
                     placeholder="Seleccione" 
                     onChange={handleSelectedAnio} 
+                    getOptionValue={option=>option.label}
                   />
                 </Col>          
               </div>
@@ -320,7 +322,8 @@ const Calificacion = (props) => {
                     value={trimestre.find(function (option) {
                       return option.value === selectedPeriodo;})} 
                     placeholder="Seleccione"
-                    onChange={handleSelectedPeriodo}                     
+                    onChange={handleSelectedPeriodo}     
+                    getOptionValue={option => option.label}                
                   />
                 </Col>
               </div>

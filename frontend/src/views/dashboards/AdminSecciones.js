@@ -419,6 +419,7 @@ const AdminSecciones = (props) => {
                     value={anio} 
                     onChange={handleAnio} 
                     placeholder="Seleccione" 
+                    getOptionValue={option => option.label}
                   />
                 </Col>          
               </div>
@@ -436,6 +437,7 @@ const AdminSecciones = (props) => {
                     value={trimestre} 
                     onChange={handleTrimestre} 
                     placeholder="Seleccione" 
+                    getOptionValue={option => option.label}
                   />
                 </Col>          
               </div>
@@ -453,6 +455,7 @@ const AdminSecciones = (props) => {
                     value={materia} 
                     onChange={handleMateria} 
                     placeholder="Seleccione" 
+                    getOptionValue={option => option.label}
                   />
                 </Col>          
               </div>
@@ -470,6 +473,7 @@ const AdminSecciones = (props) => {
                     value={seccionn} 
                     onChange={handleSeccion} 
                     placeholder="Seleccione" 
+                    getOptionValue={option => option.label}
                   />
                 </Col>
               </div>
