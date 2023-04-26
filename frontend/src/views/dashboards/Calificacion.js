@@ -32,7 +32,9 @@ const Calificacion = (props) => {
   const formik = useFormik({ initialValues });
   const { handleSubmit, handleChange, anioo, trimestree, estudiante, touched, errors } = formik;
   const { currentUser, isLogin, isUpdated } = useSelector((state) => state.auth);
-  const encargado  = currentUser.email;
+
+  const [selectedAnio, setSelectedAnio] = useState("");
+  const [selectedPeriodo, setSelectedPeriodo] = useState("");
 
   // const usuario  = userInfo?.email;
   const usuario  = currentUser.email;
@@ -118,47 +120,7 @@ const Calificacion = (props) => {
       
       // Trigger the fetch
       fetchData();
-    }, []);
-
-
-/*
-  useEffect(() => {
-    async function fetchData() {
-      // Fetch data
-      const response = await axios.get("http://localhost:8080/api/calificaciones/");
-      const resultsCalificaciones = []
-
-     
-
-          response.data.forEach((val) => {
-            resultsCalificaciones.push({
-              estudiante: val.estudiante,
-              materia: val.materia,
-              cotidiano: val.cotidiano,
-              tarea: val.tarea,
-              examen1: val.examen1,
-              examen2: val.examen2,
-              asistencia: val.asistencia,
-              total: val.total,
-              anio: val.anio.toString(),
-              trimestre: val.trimestre,
-              observaciones: val.observaciones,
-            });
-  
-        });
-
-       
-
-        setCalificaciones([ 
-          ...resultsCalificaciones
-        ])
-        
-      }
-      
-      // Trigger the fetch
-      fetchData();
-    }, []);
-*/
+  }, []);
 
 
   const [data, setData] = React.useState(calificaciones);
@@ -170,7 +132,7 @@ const Calificacion = (props) => {
   }
 
   const handleAnio= (id) => {
-    const dt = periodos.filter(x => x.anio === id.anio && x.estudiante === id.estudiante);
+    const dt = periodos.filter(x => x.anio === selectedAnio && x.estudiante === id.estudiante);
     setTrimestre(dt);
     handlePeriodo(id);
    
@@ -179,12 +141,43 @@ const Calificacion = (props) => {
   const handleEstudiante = (id) => {
     const dt = anios.filter(x => x.estudiante === id.value);
 
-    setAniosFiltrados(dt);
+    let contador = 0;
+    const td = [];
+
+    dt.forEach((val) => {
+      contador = 0;
+      td.forEach((dup) => {
+        if (val.anio === dup.anio) {
+          contador+=1;
+        }
+      })
+      if (contador === 0)
+      td.push({
+        anio: val.anio.toString(),
+        estudiante: val.estudiante,
+        label: `${val.anio}`,
+      });
+    });
+
+    td.sort((s1, s2)=>(s2.anio < s1.anio) ? 1 : (s2.anio > s1.anio) ? -1 : 0);
+
+    setAniosFiltrados(td);
+    
     handleAnio(id);
   }
 
-  
+  const handleSelectedAnio = (e) => {
+    setSelectedAnio(e.anio);
+    const dt = periodos.filter(x => x.anio === e.anio && x.estudiante === e.estudiante);
+    setTrimestre(dt);
+    handlePeriodo(e);
+  };
 
+  const handleSelectedPeriodo = (e) => {
+    setSelectedPeriodo(e.trimestre);
+    const dt = calificaciones.filter(x => x.anio === e.anio && x.trimestre === e.trimestre && x.estudiante === e.estudiante);
+    setData(dt);
+  };
 
   const title = 'Calificación';
   const description = 'Pantalla de calificación';
@@ -243,8 +236,6 @@ const Calificacion = (props) => {
 
     ];
   }, []);
-
- 
 
   const tableInstance = useTable(
     { columns, data, setData, stateReducer: (state, action) => {
@@ -308,9 +299,10 @@ const Calificacion = (props) => {
                 <Col xs="12" lg="12">
                   <Select classNamePrefix="react-select" 
                     options={aniosFiltrados} 
-                    value={anioo} 
-                    onChange={handleAnio} 
+                    value={aniosFiltrados.find(function (option) {
+                      return option.value === selectedAnio;})} 
                     placeholder="Seleccione" 
+                    onChange={handleSelectedAnio} 
                   />
                 </Col>          
               </div>
@@ -325,9 +317,10 @@ const Calificacion = (props) => {
                 <Col xs="12" lg="12">
                   <Select classNamePrefix="react-select" 
                     options={trimestre} 
-                    value={trimestree} 
-                    onChange={handlePeriodo} 
-                    placeholder="Seleccione" 
+                    value={trimestre.find(function (option) {
+                      return option.value === selectedPeriodo;})} 
+                    placeholder="Seleccione"
+                    onChange={handleSelectedPeriodo}                     
                   />
                 </Col>
               </div>
